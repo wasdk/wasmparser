@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "outDir": "./dist/",
+        "sourceMap": true,
+        "module": "umd",
+        "moduleResolution": "classic"
+    },
+    "exclude": [
+        "node_modules"
+    ],
+    "files": [
+        "src/WasmParser.ts",
+        "src/WasmDis.ts"
+    ]
+}
