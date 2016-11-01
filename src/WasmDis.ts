@@ -14,7 +14,7 @@
  */
 
 import {
-  BinaryReader, BinaryReaderState, SectionCode, IExportEntry, 
+  BinaryReader, BinaryReaderState, SectionCode, IExportEntry, IMemoryAddress,
   ExternalKind, IFunctionType, IFunctionEntry, IFunctionInformation,
   IImportEntry, IOperatorInformation, Type, OperatorCode, Int64 
 } from './WasmParser';
@@ -32,6 +32,11 @@ function typeToString(type: number) : string {
     case Type.f64: return 'f64';
     default: throw new Error('Unexpected type');
   }
+}
+
+function memoryAddressToString(address: IMemoryAddress) : string {
+  // TODO hide default flags
+  return `flags=${address.flags} offset=${address.offset}`;
 }
 
 export class WasmDisassembler {
@@ -184,7 +189,14 @@ export class WasmDisassembler {
                 break;  
             }
           }
-          // TODO brTable, globalIndex, memory
+          if (operator.memoryAddress !== undefined) {
+            this._buffer.push(` ${memoryAddressToString(operator.memoryAddress)}`);
+          }
+          if (operator.brTable !== undefined) {
+            for (var i = 0; i < operator.brTable.length; i++)
+              this._buffer.push(` ${operator.brTable[i]}`);
+          }
+          // TODO globalIndex
           this._buffer.push('\n');
           switch (operator.code) {
             case OperatorCode.if:

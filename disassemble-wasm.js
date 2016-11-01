@@ -21,6 +21,6 @@ var wasmPath = process.argv[2];
 var data = new Uint8Array(fs.readFileSync(wasmPath));
 
 var parser = new wasmparser.BinaryReader(data);
-parser.setLength(data.length, true);
+parser.setData(data.buffer, 0, data.length);
 var dis = new wasmdis.WasmDisassembler();
 console.log(dis.disassemble(parser));

@@ -280,12 +280,14 @@ export interface IGlobalVariable {
   type: IGlobalType;
 }
 
+type ImportEntryType = ITableType | IMemoryType | IGlobalType;
+
 export interface IImportEntry { 
   module: Uint8Array; 
   field: Uint8Array; 
   kind: ExternalKind; 
   funcTypeIndex?: number; 
-  type?: (ITableType|IMemoryType|IGlobalType); 
+  type?: ImportEntryType; 
 }
 
 export interface IExportEntry {
@@ -337,7 +339,7 @@ export interface IOperatorInformation {
   localIndex?: number;
   globalIndex?: number;
   memoryAddress?: IMemoryAddress;
-  literal?: (number|Int64);
+  literal?: number | Int64;
 }
 
 export class Int64 {
@@ -350,7 +352,7 @@ export class Int64 {
   public toInt32() : number {
     return this.data[0] | (this.data[1] << 8) | (this.data[2] << 16) | (this.data[3] << 24);
   }
-  
+
   public toDouble() : number {
     var power = 1;
     var sum;
@@ -367,25 +369,41 @@ export class Int64 {
   }
 }
 
+type BinaryReaderResult = 
+  IImportEntry | IExportEntry | IFunctionEntry | IFunctionType | IModuleHeader |
+  IOperatorInformation | IMemoryType | ITableType | IGlobalVariable;
+
 export class BinaryReader {
-  private _data;
-  private pos: number;
-  private length: number;
-  private eof: boolean;
+  private _data: Uint8Array;
+  private _pos: number;
+  private _length: number;
+  private _eof: boolean;
 
   public state: BinaryReaderState;
-  public result: (IImportEntry|IExportEntry|IFunctionEntry|IFunctionType|IModuleHeader|IOperatorInformation|IMemoryType|ITableType|IGlobalVariable);
+  public result: BinaryReaderResult;
   public error: Error;
   public currentSection: ISectionInformation;
   public currentFunction: IFunctionInformation;
 
   private _sectionEntriesLeft: number;
   
-  constructor(data: Uint8Array, pos?: number) {
-    this._data = data;
-    this.pos = pos || 0;
-    this.length = this.pos;
-    this.eof = false;
+  public get data(): Uint8Array {
+    return this._data;
+  }
+
+  public get position() : number {
+    return this._pos;
+  }
+
+  public get length() : number {
+    return this._length;
+  }
+
+  constructor() {
+    this._data = null;
+    this._pos = 0;
+    this._length = 0;
+    this._eof = false;
     this.state = BinaryReaderState.INITIAL;
     this.result = null;
     this.error = null;
@@ -395,30 +413,42 @@ export class BinaryReader {
     this._sectionEntriesLeft = 0;
   }
 
-  public setLength(length: number, eof?: boolean) : void {
-    this.length = length;
-    this.eof = !!eof;
+  public setData(buffer: ArrayBuffer, pos: number, length: number, eof?: boolean) : void {
+    var posDelta = pos - this._pos;
+    this._data = new Uint8Array(buffer);
+    this._pos = pos;
+    this._length = length;
+    this._eof = eof === undefined ? true : eof;
+
+    if (this.currentSection) {
+      this.currentSection.payloadStart += posDelta;
+      this.currentSection.payloadEnd += posDelta;
+    }
+    if (this.currentFunction) {
+      this.currentFunction.bodyStart += posDelta;
+      this.currentFunction.bodyEnd += posDelta;
+    }
   }
 
   private hasBytes(n: number) : boolean {
-    return this.pos + n <= this.length;
+    return this._pos + n <= this._length;
   }
   
   private readUint8() : number {
-    return this._data[this.pos++];
+    return this._data[this._pos++];
   }
   
   private readUint16() : number {
-    var b1 = this._data[this.pos++];
-    var b2 = this._data[this.pos++];
+    var b1 = this._data[this._pos++];
+    var b2 = this._data[this._pos++];
     return b1 | (b2 << 8);
   }
   
   private readInt32() : number {
-    var b1 = this._data[this.pos++];
-    var b2 = this._data[this.pos++];
-    var b3 = this._data[this.pos++];
-    var b4 = this._data[this.pos++];
+    var b1 = this._data[this._pos++];
+    var b2 = this._data[this._pos++];
+    var b3 = this._data[this._pos++];
+    var b4 = this._data[this._pos++];
     return b1 | (b2 << 8) | (b3 << 16) | (b4 << 24);
   }
   
@@ -427,8 +457,8 @@ export class BinaryReader {
   }
   
   private hasVarIntBytes() : boolean {
-    var pos = this.pos;
-    while (pos < this.length) {
+    var pos = this._pos;
+    while (pos < this._length) {
       if ((this._data[pos++] & 0x80) == 0)
         return true;
     }
@@ -502,23 +532,23 @@ export class BinaryReader {
   
   private readStringBytes() : Uint8Array {
     var length = this.readVarUint32() >>> 0;
-    var result = this._data.subarray(this.pos, this.pos + length);
-    this.pos += length;
+    var result = this._data.subarray(this._pos, this._pos + length);
+    this._pos += length;
     return result;
   }
   
   private hasStringBytes() : boolean {
     if (!this.hasVarIntBytes())
       return false;
-    var pos = this.pos;
+    var pos = this._pos;
     var length = this.readVarUint32() >>> 0;
     var result = this.hasBytes(length);
-    this.pos = pos;
+    this._pos = pos;
     return result;
   }
 
   private hasSectionPayload() : boolean {
-    return this.hasBytes(this.currentSection.payloadEnd - this.pos);
+    return this.hasBytes(this.currentSection.payloadEnd - this._pos);
   }
 
   private readFuncType() : IFunctionType {
@@ -686,7 +716,7 @@ export class BinaryReader {
 
   private readCodeOperator() : boolean {
     if (this.state === BinaryReaderState.CODE_OPERATOR &&
-        this.pos >= this.currentFunction.bodyEnd) {
+        this._pos >= this.currentFunction.bodyEnd) {
       this.skipFunctionBody();
       return this.read();
     } else if (this.state === BinaryReaderState.INIT_EXPRESSION_OPERATOR &&
@@ -695,7 +725,7 @@ export class BinaryReader {
       this.result = null;
       return true;
     }
-    var code = this._data[this.pos++];
+    var code = this._data[this._pos++];
     var blockType, brDepth, brTable, funcIndex, typeIndex,
         localIndex, globalIndex, memoryAddress, literal, reserved;
     switch (code) {
@@ -766,12 +796,12 @@ export class BinaryReader {
         literal = this.readVarInt64();
         break;
       case OperatorCode.f32_const:
-        literal = new DataView(this._data.buffer, this._data.byteOffset).getFloat32(this.pos, true);
-        this.pos += 4;
+        literal = new DataView(this._data.buffer, this._data.byteOffset).getFloat32(this._pos, true);
+        this._pos += 4;
         break;
       case OperatorCode.f64_const:
-        literal = new DataView(this._data.buffer, this._data.byteOffset).getFloat64(this.pos, true);
-        this.pos += 8;
+        literal = new DataView(this._data.buffer, this._data.byteOffset).getFloat64(this._pos, true);
+        this._pos += 8;
         break;
     }
     this.result = { code: code,
@@ -788,13 +818,13 @@ export class BinaryReader {
     }
     if (!this.hasVarIntBytes())
       return false;
-    var pos = this.pos;
+    var pos = this._pos;
     var size = this.readVarUint32() >>> 0;
     if (!this.hasBytes(size)) {
-      this.pos = pos;
+      this._pos = pos;
       return false;
     }
-    var bodyEnd = this.pos + size;
+    var bodyEnd = this._pos + size;
     var localCount = this.readVarUint32() >>> 0;
     var locals: Array<ILocals> = [];
     for (var i = 0; i < localCount; i++) {
@@ -803,7 +833,7 @@ export class BinaryReader {
         type: this.readVarInt7()
       });
     }
-    var bodyStart = this.pos;
+    var bodyStart = this._pos;
     this.state = BinaryReaderState.BEGIN_FUNCTION_BODY;
     this.currentFunction = {
       locals: locals,
@@ -815,7 +845,7 @@ export class BinaryReader {
   }
 
   private readSectionHeader() : boolean {
-    if (this.pos >= this.length && this.eof) {
+    if (this._pos >= this._length && this._eof) {
       this.currentSection = null;
       this.result = null;
       this.state = BinaryReaderState.END_WASM;
@@ -823,30 +853,30 @@ export class BinaryReader {
     }
     if (!this.hasVarIntBytes())
       return false;
-    var sectionStart = this.pos;
+    var sectionStart = this._pos;
     var id = this.readVarUint7();
     if (!this.hasVarIntBytes()) {
-      this.pos = sectionStart;
+      this._pos = sectionStart;
       return false;
     }
     var payloadLength = this.readVarUint32() >>> 0;
     var name = null;
-    var payloadEnd = this.pos + payloadLength;
+    var payloadEnd = this._pos + payloadLength;
     if (id == 0) {
       if (!this.hasStringBytes()) {
-        this.pos = sectionStart;
+        this._pos = sectionStart;
         return false;
       }
       name = this.readStringBytes();
     }
-    this.currentSection = {id: id, name: name, payloadStart: this.pos, payloadEnd: payloadEnd };
+    this.currentSection = {id: id, name: name, payloadStart: this._pos, payloadEnd: payloadEnd };
     this.result = null;
     this.state = BinaryReaderState.BEGIN_SECTION;
     return true;
   }
 
   private readSectionBody() : boolean {
-    if (this.pos >= this.currentSection.payloadEnd) {
+    if (this._pos >= this.currentSection.payloadEnd) {
       this.result = null;
       this.state = BinaryReaderState.END_SECTION;
       return true;
@@ -929,13 +959,13 @@ export class BinaryReader {
           return false;
         }
         this.state = BinaryReaderState.END_SECTION;
-        this.pos = this.currentSection.payloadEnd;
+        this._pos = this.currentSection.payloadEnd;
         this.result = null;
         return true;
 
       case BinaryReaderState.SKIPPING_FUNCTION_BODY:
         this.state = BinaryReaderState.END_FUNCTION_BODY;
-        this.pos = this.currentFunction.bodyEnd;
+        this._pos = this.currentFunction.bodyEnd;
         this.currentFunction = null;
         this.result = null;
         return true;
