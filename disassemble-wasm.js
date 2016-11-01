@@ -13,11 +13,11 @@
  * limitations under the License.
  */
 
-var wasmparser = require('WasmParser');
-var wasmdis = require('WasmDis');
+var wasmparser = require('./dist/WasmParser.js');
+var wasmdis = require('./dist/WasmDis.js');
 var fs = require('fs');
 
-var wasmPath = args[2];
+var wasmPath = process.argv[2];
 var data = new Uint8Array(fs.readFileSync(wasmPath));
 
 var parser = new wasmparser.BinaryReader(data);

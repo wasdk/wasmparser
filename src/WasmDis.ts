@@ -17,7 +17,7 @@ import {
   BinaryReader, BinaryReaderState, SectionCode, IExportEntry, 
   ExternalKind, IFunctionType, IFunctionEntry, IFunctionInformation,
   IImportEntry, IOperatorInformation, Type, OperatorCode, Int64 
-} from 'WasmParser';
+} from './WasmParser';
 
 function binToString(b: Uint8Array) : string {
   // FIXME utf-8
