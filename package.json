@@ -1,6 +1,6 @@
 {
   "name": "wasmparser",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Binary WebAssembly file parser.",
   "main": "./dist/WasmParser.js",
   "bin": {
@@ -8,8 +8,7 @@
   },
   "scripts": {
     "test": "node ./disassemble-wasm.js test/malloc.wasm",
-    "build": "node_modules/.bin/tsc",
-    "postinstall": "npm run build"
+    "build": "node_modules/.bin/tsc"
   },
   "author": "",
   "license": "Apache-2.0",
