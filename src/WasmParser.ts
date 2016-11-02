@@ -233,6 +233,7 @@ export enum BinaryReaderState {
   MEMORY_SECTION_ENTRY = 15,
   GLOBAL_SECTION_ENTRY = 16,
   EXPORT_SECTION_ENTRY = 17,
+  NAME_SECTION_ENTRY = 19,
   BEGIN_FUNCTION_BODY = 20,
   END_FUNCTION_BODY = 30,
   READING_FUNCTION_HEADER = 31,
@@ -278,6 +279,10 @@ export interface IExportEntry {
    field: Uint8Array;
    kind: ExternalKind;
    index: number;
+}
+export interface INameEntry {
+  funcName: Uint8Array;
+  localNames: Array<Uint8Array>;
 }
 export interface IFunctionEntry {
   typeIndex: number;
@@ -343,7 +348,7 @@ export class Int64 {
 }
 type BinaryReaderResult =
   IImportEntry | IExportEntry | IFunctionEntry | IFunctionType | IModuleHeader |
-  IOperatorInformation | IMemoryType | ITableType | IGlobalVariable;
+  IOperatorInformation | IMemoryType | ITableType | IGlobalVariable | INameEntry;
 export class BinaryReader {
   private _data: Uint8Array;
   private _pos: number;
@@ -646,6 +651,23 @@ export class BinaryReader {
     var offset = this.readVarUint32() >>> 0;
     return { flags: flags, offset: offset };
   }
+  private readNameEntry() : boolean {
+    if (this._sectionEntriesLeft === 0) {
+      this.skipSection();
+      return this.read();
+    }
+    var funcName = this.readStringBytes();
+    var localCount = this.readVarUint32() >>> 0;
+    var localNames : Array<Uint8Array> = [];
+    for (var i = 0; i < localCount; i++)
+      localNames.push(this.readStringBytes());
+    this.state = BinaryReaderState.NAME_SECTION_ENTRY;
+    this.result = {
+      funcName: funcName,
+      localNames: localNames
+    };
+    return true;
+  }
   private readCodeOperator() : boolean {
     if (this.state === BinaryReaderState.CODE_OPERATOR &&
         this._pos >= this.currentFunction.bodyEnd) {
@@ -852,6 +874,18 @@ export class BinaryReader {
         this._sectionEntriesLeft = this.readVarUint32() >>> 0;
         this.state = BinaryReaderState.READING_FUNCTION_HEADER;
         return this.readFunctionBody();
+      case SectionCode.Custom:
+        if (this.currentSection.name.length == 4 &&
+            this.currentSection[0] == 0x6e /* 'n' */ && 
+            this.currentSection[0] == 0x61 /* 'a' */ && 
+            this.currentSection[0] == 0x6d /* 'm' */ && 
+            this.currentSection[0] == 0x65 /* 'e' */) {
+          if (!this.hasVarIntBytes())
+            return false;
+          this._sectionEntriesLeft = this.readVarUint32() >>> 0;
+          return this.readNameEntry();
+        }
+        /* fallthru as unknown */
       default:
         this.error = new Error(`Unsupported section: ${this.currentSection.id}`);
         this.state = BinaryReaderState.ERROR;
@@ -911,6 +945,8 @@ export class BinaryReader {
         return this.readInitExpressionBody();
       case BinaryReaderState.END_INIT_EXPRESSION_BODY:
         return this.readGlobalEntry();
+      case BinaryReaderState.NAME_SECTION_ENTRY:
+        return this.readNameEntry();
       case BinaryReaderState.READING_FUNCTION_HEADER:
       case BinaryReaderState.END_FUNCTION_BODY:
         return this.readFunctionBody();
@@ -948,4 +984,11 @@ export class BinaryReader {
     while (this.state === BinaryReaderState.INIT_EXPRESSION_OPERATOR)
       this.readCodeOperator();
   }
+}
+
+declare var escape: (string) => string;
+
+export function bytesToString(b: Uint8Array) : string {
+  var str = String.fromCharCode.apply(null, b);
+  return decodeURIComponent(escape(str));
 }

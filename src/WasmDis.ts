@@ -12,19 +12,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 import {
   BinaryReader, BinaryReaderState, SectionCode, IExportEntry, IMemoryAddress,
   ExternalKind, IFunctionType, IFunctionEntry, IFunctionInformation,
   IImportEntry, IOperatorInformation, Type, OperatorCode, Int64,
   ITableType, IMemoryType, IGlobalType, IResizableLimits
 } from './WasmParser';
-
 function binToString(b: Uint8Array) : string {
   // FIXME utf-8
   return String.fromCharCode.apply(null, b);
 }
-
 function typeToString(type: number) : string {
   switch (type) {
     case Type.i32: return 'i32';
@@ -35,24 +32,20 @@ function typeToString(type: number) : string {
     default: throw new Error('Unexpected type');
   }
 }
-
 function memoryAddressToString(address: IMemoryAddress) : string {
   // TODO hide default flags
   return `flags=${address.flags} offset=${address.offset}`;
 }
-
 function limitsToString(limits: IResizableLimits) : string {
   return limits.initial + (limits.maximum !== undefined ? ' ' + limits.maximum : '');
 }
-
 export class WasmDisassembler {
   private _buffer: Array<string>;
   private _types: Array<IFunctionType>;
   private _funcIndex: number;
   private _funcTypes: Array<number>;
   private _importCount: number;
-  private _indent: string; 
-
+  private _indent: string;
   constructor() {
     this._buffer = [];
     this._types = [];
@@ -61,14 +54,12 @@ export class WasmDisassembler {
     this._importCount = 0;
     this._indent = null;
   }
-
   private printType(typeIndex: number) : string {
     var type = this._types[typeIndex];
     if (type.form !== Type.func)
       throw new Error('NYI other function form');
     return `(func${this.printFuncType(type, false)})`;
   }
-
   private printFuncType(type: IFunctionType, printVars: boolean) : string {
     var result = [];
     if (printVars) {
@@ -85,15 +76,12 @@ export class WasmDisassembler {
     }
     return result.join('');
   }
-
   private increaseIndent() : void {
     this._indent += '  ';
   }
-
   private decreaseIndent() : void {
     this._indent = this._indent.slice(0, -2);
   }
-
   public disassemble(reader: BinaryReader) : string {
     while (true) {
       if (!reader.read())
@@ -148,11 +136,11 @@ export class WasmDisassembler {
               this._buffer.push(` (table ${limitsToString(tableImportInfo.limits)} ${typeToString(tableImportInfo.elementType)})`);
               break;
             case ExternalKind.Memory:
-              var memoryImportInfo = <IMemoryType>importInfo.type; 
+              var memoryImportInfo = <IMemoryType>importInfo.type;
               this._buffer.push(` (memory ${limitsToString(memoryImportInfo.limits)})`);
               break;
             case ExternalKind.Global:
-              var globalImportInfo = <IGlobalType>importInfo.type; 
+              var globalImportInfo = <IGlobalType>importInfo.type;
               this._buffer.push(` (global ${typeToString(globalImportInfo.contentType)})`);
               break;
             default:
@@ -168,7 +156,7 @@ export class WasmDisassembler {
           break;
         case BinaryReaderState.FUNCTION_SECTION_ENTRY:
           this._funcTypes.push((<IFunctionEntry>reader.result).typeIndex);
-          break;    
+          break;
         case BinaryReaderState.BEGIN_FUNCTION_BODY:
           var func = reader.currentFunction;
           var type = this._types[this._funcTypes[this._funcIndex]];
@@ -177,7 +165,7 @@ export class WasmDisassembler {
           var localIndex = type.params.length;
           for (var l of func.locals) {
             for (var i = 0; i < l.count; i++) {
-              this._buffer.push(`    (local $var${localIndex++})\n`);  
+              this._buffer.push(`    (local $var${localIndex++})\n`);
             }
           }
           this._funcIndex++;
@@ -204,14 +192,14 @@ export class WasmDisassembler {
           }
           if (operator.literal !== undefined) {
             switch (operator.code) {
-              case OperatorCode.i32_const:  
-              case OperatorCode.f32_const:  
+              case OperatorCode.i32_const:
+              case OperatorCode.f32_const:
               case OperatorCode.f64_const:
                 this._buffer.push(` ${(<number>operator.literal).toString()}`);
-                break;  
+                break;
               case OperatorCode.i64_const:
                 this._buffer.push(` ${(<Int64>operator.literal).toDouble()}`);
-                break;  
+                break;
             }
           }
           if (operator.memoryAddress !== undefined) {
@@ -231,14 +219,13 @@ export class WasmDisassembler {
               this.increaseIndent();
               break;
           }
-          break; 
+          break;
         case BinaryReaderState.END_FUNCTION_BODY:
           this._buffer.push(`  )\n`);
           break;
-        
         default:
           throw new Error(`Expectected state: ${reader.state}`);
       }
-    } 
+    }
   }
 }
