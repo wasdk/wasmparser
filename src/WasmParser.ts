@@ -267,7 +267,7 @@ export interface IGlobalType {
 export interface IGlobalVariable {
   type: IGlobalType;
 }
-type ImportEntryType = ITableType | IMemoryType | IGlobalType;
+export type ImportEntryType = ITableType | IMemoryType | IGlobalType;
 export interface IImportEntry {
   module: Uint8Array;
   field: Uint8Array;
@@ -346,7 +346,7 @@ export class Int64 {
     return sum;
   }
 }
-type BinaryReaderResult =
+export type BinaryReaderResult =
   IImportEntry | IExportEntry | IFunctionEntry | IFunctionType | IModuleHeader |
   IOperatorInformation | IMemoryType | ITableType | IGlobalVariable | INameEntry;
 export class BinaryReader {

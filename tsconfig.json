@@ -2,6 +2,7 @@
     "compilerOptions": {
         "outDir": "./dist/",
         "sourceMap": true,
+        "declaration": true,
         "target": "es5",
         "module": "umd",
         "moduleResolution": "classic"
