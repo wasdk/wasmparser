@@ -12,12 +12,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 // See https://github.com/WebAssembly/design/blob/master/BinaryEncoding.md
-
 const WASM_MAGIC_NUMBER = 0x6d736100;
 const WASM_SUPPORTED_VERSION = 0xd;
-
 export enum SectionCode {
   Unknown = -1,
   Custom = 0,
@@ -33,7 +30,6 @@ export enum SectionCode {
   Code = 10, // Function bodies (code)
   Data = 11, // Data segments
 }
-
 export enum OperatorCode {
   unreachable = 0x00,
   nop = 0x01,
@@ -208,14 +204,12 @@ export enum OperatorCode {
   f32_reinterpret_i32 = 0xbe,
   f64_reinterpret_i64 = 0xbf,
 };
-
 export enum ExternalKind {
   Function = 0,
   Table = 1,
   Memory = 2,
   Global = 3,
 }
-
 export enum Type {
   i32 = -0x01,
   i64 = -0x02,
@@ -225,7 +219,6 @@ export enum Type {
   func = -0x20,
   empty_block_type = -0x40,
 }
-
 export enum BinaryReaderState {
   ERROR = -1,
   INITIAL = 0,
@@ -250,109 +243,89 @@ export enum BinaryReaderState {
   END_INIT_EXPRESSION_BODY = 41,
   INIT_EXPRESSION_OPERATOR = 42,
 }
-
 export interface IModuleHeader {
   magicNumber: number;
   version: number;
 }
-
 export interface IResizableLimits {
   flags: number;
   initial: number;
   maximum?: number;
 }
-
 export interface ITableType {
   elementType: number;
   limits: IResizableLimits;
 }
-
 export interface IMemoryType {
   limits: IResizableLimits;
 }
-
 export interface IGlobalType {
   contentType: number;
   mutability: number;
 }
-
 export interface IGlobalVariable {
   type: IGlobalType;
 }
-
 type ImportEntryType = ITableType | IMemoryType | IGlobalType;
-
-export interface IImportEntry { 
-  module: Uint8Array; 
-  field: Uint8Array; 
-  kind: ExternalKind; 
-  funcTypeIndex?: number; 
-  type?: ImportEntryType; 
+export interface IImportEntry {
+  module: Uint8Array;
+  field: Uint8Array;
+  kind: ExternalKind;
+  funcTypeIndex?: number;
+  type?: ImportEntryType;
 }
-
 export interface IExportEntry {
    field: Uint8Array;
    kind: ExternalKind;
    index: number;
 }
-
 export interface IFunctionEntry {
   typeIndex: number;
 }
-
 export interface IFunctionType {
   form: number;
   params: Int8Array;
   returns: Int8Array;
 }
-
 export interface ISectionInformation {
   id: SectionCode;
   name: Uint8Array;
   payloadStart: number;
   payloadEnd: number;
 }
-
 export interface ILocals {
   count: number;
   type: number;
 }
-
 export interface IFunctionInformation {
   locals: Array<ILocals>;
   bodyStart: number;
   bodyEnd: number;
 }
-
 export interface IMemoryAddress {
-  flags: number; 
+  flags: number;
   offset: number;
 }
-
 export interface IOperatorInformation {
-  code: OperatorCode; 
-  blockType?: number; 
-  brDepth?: number; 
-  brTable?: Array<number>; 
-  funcIndex?: number; 
-  typeIndex?: number; 
+  code: OperatorCode;
+  blockType?: number;
+  brDepth?: number;
+  brTable?: Array<number>;
+  funcIndex?: number;
+  typeIndex?: number;
   localIndex?: number;
   globalIndex?: number;
   memoryAddress?: IMemoryAddress;
   literal?: number | Int64;
 }
-
 export class Int64 {
   private data: Uint8Array;
-
   constructor (data) {
     this.data = data || new Uint8Array(8);
   }
-
   public toInt32() : number {
     return this.data[0] | (this.data[1] << 8) | (this.data[2] << 16) | (this.data[3] << 24);
   }
-
   public toDouble() : number {
     var power = 1;
     var sum;
@@ -368,37 +341,29 @@ export class Int64 {
     return sum;
   }
 }
-
-type BinaryReaderResult = 
+type BinaryReaderResult =
   IImportEntry | IExportEntry | IFunctionEntry | IFunctionType | IModuleHeader |
   IOperatorInformation | IMemoryType | ITableType | IGlobalVariable;
-
 export class BinaryReader {
   private _data: Uint8Array;
   private _pos: number;
   private _length: number;
   private _eof: boolean;
-
   public state: BinaryReaderState;
   public result: BinaryReaderResult;
   public error: Error;
   public currentSection: ISectionInformation;
   public currentFunction: IFunctionInformation;
-
   private _sectionEntriesLeft: number;
-  
   public get data(): Uint8Array {
     return this._data;
   }
-
   public get position() : number {
     return this._pos;
   }
-
   public get length() : number {
     return this._length;
   }
-
   constructor() {
     this._data = null;
     this._pos = 0;
@@ -409,17 +374,14 @@ export class BinaryReader {
     this.error = null;
     this.currentSection = null;
     this.currentFunction = null;
-
     this._sectionEntriesLeft = 0;
   }
-
   public setData(buffer: ArrayBuffer, pos: number, length: number, eof?: boolean) : void {
     var posDelta = pos - this._pos;
     this._data = new Uint8Array(buffer);
     this._pos = pos;
     this._length = length;
     this._eof = eof === undefined ? true : eof;
-
     if (this.currentSection) {
       this.currentSection.payloadStart += posDelta;
       this.currentSection.payloadEnd += posDelta;
@@ -429,21 +391,17 @@ export class BinaryReader {
       this.currentFunction.bodyEnd += posDelta;
     }
   }
-
   private hasBytes(n: number) : boolean {
     return this._pos + n <= this._length;
   }
-  
   private readUint8() : number {
     return this._data[this._pos++];
   }
-  
   private readUint16() : number {
     var b1 = this._data[this._pos++];
     var b2 = this._data[this._pos++];
     return b1 | (b2 << 8);
   }
-  
   private readInt32() : number {
     var b1 = this._data[this._pos++];
     var b2 = this._data[this._pos++];
@@ -451,11 +409,9 @@ export class BinaryReader {
     var b4 = this._data[this._pos++];
     return b1 | (b2 << 8) | (b3 << 16) | (b4 << 24);
   }
-  
   private readUint32() : number {
     return this.readInt32();
   }
-  
   private hasVarIntBytes() : boolean {
     var pos = this._pos;
     while (pos < this._length) {
@@ -464,19 +420,15 @@ export class BinaryReader {
     }
     return false;
   }
-  
   private readVarUint1() : number {
     return this.readUint8();
   }
-  
   private readVarInt7() : number {
     return (this.readUint8() << 25) >> 25;
   }
-  
   private readVarUint7() : number {
     return this.readUint8();
   }
-  
   private readVarInt32() : number {
     var result = 0;
     var shift = 0;
@@ -490,7 +442,6 @@ export class BinaryReader {
     var ashift = (32 - shift);
     return (result << ashift) >> ashift;
   }
-  
   private readVarUint32() : number {
     var result = 0;
     var shift = 0;
@@ -503,7 +454,6 @@ export class BinaryReader {
     }
     return result;
   }
-  
   private readVarInt64() : Int64 {
     var result = new Uint8Array(8);
     var i = 0;
@@ -529,14 +479,12 @@ export class BinaryReader {
     }
     return new Int64(result);
   }
-  
   private readStringBytes() : Uint8Array {
     var length = this.readVarUint32() >>> 0;
     var result = this._data.subarray(this._pos, this._pos + length);
     this._pos += length;
     return result;
   }
-  
   private hasStringBytes() : boolean {
     if (!this.hasVarIntBytes())
       return false;
@@ -546,11 +494,9 @@ export class BinaryReader {
     this._pos = pos;
     return result;
   }
-
   private hasSectionPayload() : boolean {
     return this.hasBytes(this.currentSection.payloadEnd - this._pos);
   }
-
   private readFuncType() : IFunctionType {
     var form = this.readVarInt7();
     var paramCount = this.readVarUint32() >>> 0;
@@ -561,14 +507,12 @@ export class BinaryReader {
     var returnTypes = new Int8Array(returnCount);
     for (var i = 0; i < returnCount; i++)
       returnTypes[i] = this.readVarInt7();
-
     return {
       form: form,
       params: paramTypes,
       returns: returnTypes
     };
   }
-
   private readResizableLimits() : IResizableLimits {
     var flags = this.readVarUint32() >>> 0;
     var initial = this.readVarUint32() >>> 0;
@@ -578,23 +522,19 @@ export class BinaryReader {
     }
     return { flags: flags, initial: initial, maximum: maximum };
   }
-
   private readTableType() : ITableType{
     var elementType = this.readVarInt7();
     var limits = this.readResizableLimits();
     return { elementType: elementType, limits: limits };
   }
-
   private readMemoryType() : IMemoryType {
     return { limits: this.readResizableLimits() };
   }
-
   private readGlobalType() : IGlobalType {
     var contentType = this.readVarInt7();
     var mutability = this.readVarUint1();
     return { contentType: contentType, mutability: mutability };
   }
-
   private readTypeEntry() {
     if (this._sectionEntriesLeft === 0) {
       this.skipSection();
@@ -605,7 +545,6 @@ export class BinaryReader {
     this._sectionEntriesLeft--;
     return true;
   }
-
   private readImportEntry() {
     if (this._sectionEntriesLeft === 0) {
       this.skipSection();
@@ -626,6 +565,7 @@ export class BinaryReader {
         break;
       case ExternalKind.Memory:
         type = this.readMemoryType();
+        break;
       case ExternalKind.Global:
         type = this.readGlobalType();
         break;
@@ -640,7 +580,6 @@ export class BinaryReader {
     this._sectionEntriesLeft--;
     return true;
   }
-
   private readExportEntry() : boolean {
     if (this._sectionEntriesLeft === 0) {
       this.skipSection();
@@ -654,7 +593,6 @@ export class BinaryReader {
     this._sectionEntriesLeft--;
     return true;
   }
-
   private readFunctionEntry() : boolean {
     if (this._sectionEntriesLeft === 0) {
       this.skipSection();
@@ -666,7 +604,6 @@ export class BinaryReader {
     this._sectionEntriesLeft--;
     return true;
   }
-
   private readTableEntry() : boolean {
     if (this._sectionEntriesLeft === 0) {
       this.skipSection();
@@ -677,7 +614,6 @@ export class BinaryReader {
     this._sectionEntriesLeft--;
     return true;
   }
-
   private readMemoryEntry() : boolean {
     if (this._sectionEntriesLeft === 0) {
       this.skipSection();
@@ -688,7 +624,6 @@ export class BinaryReader {
     this._sectionEntriesLeft--;
     return true;
   }
-
   private readGlobalEntry() : boolean {
     if (this._sectionEntriesLeft === 0) {
       this.skipSection();
@@ -701,19 +636,16 @@ export class BinaryReader {
     this._sectionEntriesLeft--;
     return true;
   }
-
   private readInitExpressionBody(): boolean {
     this.state = BinaryReaderState.BEGIN_INIT_EXPRESSION_BODY;
     this.result = null;
     return true;
   }
-
   private readMemoryImmediate() : IMemoryAddress {
     var flags = this.readVarUint32() >>> 0;
     var offset = this.readVarUint32() >>> 0;
     return { flags: flags, offset: offset };
   }
-
   private readCodeOperator() : boolean {
     if (this.state === BinaryReaderState.CODE_OPERATOR &&
         this._pos >= this.currentFunction.bodyEnd) {
@@ -810,7 +742,6 @@ export class BinaryReader {
       globalIndex: globalIndex, memoryAddress: memoryAddress, literal: literal};
     return true;
   }
-
   private readFunctionBody() : boolean {
     if (this._sectionEntriesLeft === 0) {
       this.skipSection();
@@ -843,7 +774,6 @@ export class BinaryReader {
     this._sectionEntriesLeft--;
     return true;
   }
-
   private readSectionHeader() : boolean {
     if (this._pos >= this._length && this._eof) {
       this.currentSection = null;
@@ -874,7 +804,6 @@ export class BinaryReader {
     this.state = BinaryReaderState.BEGIN_SECTION;
     return true;
   }
-
   private readSectionBody() : boolean {
     if (this._pos >= this.currentSection.payloadEnd) {
       this.result = null;
@@ -928,8 +857,7 @@ export class BinaryReader {
         this.state = BinaryReaderState.ERROR;
         return true;
     }
-  } 
-
+  }
   public read() : boolean {
     switch (this.state) {
       case BinaryReaderState.INITIAL:
@@ -953,7 +881,6 @@ export class BinaryReader {
          return this.readSectionHeader();
       case BinaryReaderState.BEGIN_SECTION:
         return this.readSectionBody();
-
       case BinaryReaderState.SKIPPING_SECTION:
         if (!this.hasSectionPayload()) {
           return false;
@@ -962,14 +889,12 @@ export class BinaryReader {
         this._pos = this.currentSection.payloadEnd;
         this.result = null;
         return true;
-
       case BinaryReaderState.SKIPPING_FUNCTION_BODY:
         this.state = BinaryReaderState.END_FUNCTION_BODY;
         this._pos = this.currentFunction.bodyEnd;
         this.currentFunction = null;
         this.result = null;
         return true;
-
       case BinaryReaderState.TYPE_SECTION_ENTRY:
         return this.readTypeEntry();
       case BinaryReaderState.IMPORT_SECTION_ENTRY:
@@ -979,9 +904,9 @@ export class BinaryReader {
       case BinaryReaderState.FUNCTION_SECTION_ENTRY:
         return this.readFunctionEntry();
       case BinaryReaderState.TABLE_SECTION_ENTRY:
-        return this.readTableEntry();  
+        return this.readTableEntry();
       case BinaryReaderState.MEMORY_SECTION_ENTRY:
-        return this.readMemoryEntry();  
+        return this.readMemoryEntry();
       case BinaryReaderState.GLOBAL_SECTION_ENTRY:
         return this.readInitExpressionBody();
       case BinaryReaderState.END_INIT_EXPRESSION_BODY:
@@ -998,14 +923,12 @@ export class BinaryReader {
       case BinaryReaderState.CODE_OPERATOR:
       case BinaryReaderState.INIT_EXPRESSION_OPERATOR:
         return this.readCodeOperator();
-
       default:
         this.error = new Error(`Unsupported state: ${this.state}`);
         this.state = BinaryReaderState.ERROR;
         return true;
     }
   }
-
   public skipSection() : void {
     if (this.state === BinaryReaderState.ERROR ||
         this.state === BinaryReaderState.INITIAL ||
@@ -1015,14 +938,12 @@ export class BinaryReader {
       return;
     this.state = BinaryReaderState.SKIPPING_SECTION;
   }
-
   public skipFunctionBody() : void {
     if (this.state !== BinaryReaderState.BEGIN_FUNCTION_BODY &&
         this.state !== BinaryReaderState.CODE_OPERATOR)
       return;
     this.state = BinaryReaderState.SKIPPING_FUNCTION_BODY;
   }
-
   public skipInitExpression(): void {
     while (this.state === BinaryReaderState.INIT_EXPRESSION_OPERATOR)
       this.readCodeOperator();

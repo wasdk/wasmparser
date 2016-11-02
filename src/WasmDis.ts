@@ -16,7 +16,8 @@
 import {
   BinaryReader, BinaryReaderState, SectionCode, IExportEntry, IMemoryAddress,
   ExternalKind, IFunctionType, IFunctionEntry, IFunctionInformation,
-  IImportEntry, IOperatorInformation, Type, OperatorCode, Int64 
+  IImportEntry, IOperatorInformation, Type, OperatorCode, Int64,
+  ITableType, IMemoryType, IGlobalType, IResizableLimits
 } from './WasmParser';
 
 function binToString(b: Uint8Array) : string {
@@ -30,6 +31,7 @@ function typeToString(type: number) : string {
     case Type.i64: return 'i64';
     case Type.f32: return 'f32';
     case Type.f64: return 'f64';
+    case Type.anyfunc: return 'anyfunc';
     default: throw new Error('Unexpected type');
   }
 }
@@ -37,6 +39,10 @@ function typeToString(type: number) : string {
 function memoryAddressToString(address: IMemoryAddress) : string {
   // TODO hide default flags
   return `flags=${address.flags} offset=${address.offset}`;
+}
+
+function limitsToString(limits: IResizableLimits) : string {
+  return limits.initial + (limits.maximum !== undefined ? ' ' + limits.maximum : '');
 }
 
 export class WasmDisassembler {
@@ -131,9 +137,28 @@ export class WasmDisassembler {
           break;
         case BinaryReaderState.IMPORT_SECTION_ENTRY:
           var importInfo = <IImportEntry>reader.result;
-          if (importInfo.kind != ExternalKind.Function)
-            throw new Error('NYI other import types');
-          this._importCount++;
+          this._buffer.push(`  (import "${binToString(importInfo.module)}" "${binToString(importInfo.field)}"`);
+          switch (importInfo.kind) {
+            case ExternalKind.Function:
+              this._importCount++;
+              this._buffer.push(` ${this.printType(importInfo.funcTypeIndex)}`);
+              break;
+            case ExternalKind.Table:
+              var tableImportInfo = <ITableType>importInfo.type;
+              this._buffer.push(` (table ${limitsToString(tableImportInfo.limits)} ${typeToString(tableImportInfo.elementType)})`);
+              break;
+            case ExternalKind.Memory:
+              var memoryImportInfo = <IMemoryType>importInfo.type; 
+              this._buffer.push(` (memory ${limitsToString(memoryImportInfo.limits)})`);
+              break;
+            case ExternalKind.Global:
+              var globalImportInfo = <IGlobalType>importInfo.type; 
+              this._buffer.push(` (global ${typeToString(globalImportInfo.contentType)})`);
+              break;
+            default:
+              throw new Error(`NYI other import types: ${importInfo.kind}`);
+          }
+          this._buffer.push(')\n');
           break;
         case BinaryReaderState.TYPE_SECTION_ENTRY:
           var funcType = <IFunctionType>reader.result;
