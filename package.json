@@ -7,7 +7,9 @@
     "disassemble-wasm": "./disassemble-wasm.js"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node ./disassemble-wasm.js test/malloc.wasm",
+    "build": "node_modules/.bin/tsc",
+    "postinstall": "npm run build"
   },
   "author": "",
   "license": "Apache-2.0",
