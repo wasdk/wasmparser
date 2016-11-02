@@ -16,7 +16,7 @@
 import {
   BinaryReader, BinaryReaderState, SectionCode, IExportEntry, IMemoryAddress,
   ExternalKind, IFunctionType, IFunctionEntry, IFunctionInformation,
-  IImportEntry, IOperatorInformation, Type, OperatorCode, Int64,
+  IImportEntry, IOperatorInformation, Type, OperatorCode, OperatorCodeNames, Int64,
   ITableType, IMemoryType, IGlobalType, IResizableLimits
 } from './WasmParser';
 
@@ -191,7 +191,7 @@ export class WasmDisassembler {
               this.decreaseIndent();
               break;
           }
-          var str = OperatorCode[operator.code].replace(/^([if](32|64))_/, "$1.").replace(/_([if](32|64))$/, "\/$1");
+          var str = OperatorCodeNames[operator.code].replace(/^([if](32|64))_/, "$1.").replace(/_([if](32|64))$/, "\/$1");
           this._buffer.push(this._indent, str);
           if (operator.localIndex !== undefined) {
             this._buffer.push(` $var${operator.localIndex}`);
