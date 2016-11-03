@@ -89,7 +89,12 @@ export class WasmDisassembler {
       switch (reader.state) {
         case BinaryReaderState.END_WASM:
           this._buffer.push(')\n');
-          return this._buffer.join('');
+          if (!reader.hasMoreBytes()) {
+            let result = this._buffer.join('');
+            this._buffer.length = 0;
+            return result;
+          }
+          break;
         case BinaryReaderState.ERROR:
           throw reader.error;
         case BinaryReaderState.BEGIN_WASM:
@@ -116,11 +121,17 @@ export class WasmDisassembler {
             case ExternalKind.Function:
               this._buffer.push(`  (export "${binToString(exportInfo.field)}" $func${exportInfo.index})\n`);
               break;
+            case ExternalKind.Table:
+              this._buffer.push(`  (table)\n`);
+              break;
             case ExternalKind.Memory:
               this._buffer.push(`  (export "memory" memory)\n`);
               break;
+            case ExternalKind.Global:
+              this._buffer.push(`  (global)\n`);
+              break;
             default:
-              throw new Error('Unsupported export');
+              throw new Error(`Unsupported export ${exportInfo.kind}`);
           }
           break;
         case BinaryReaderState.IMPORT_SECTION_ENTRY:
