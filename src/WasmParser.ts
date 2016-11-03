@@ -821,6 +821,7 @@ export class BinaryReader {
       this.state = BinaryReaderState.END_WASM;
       return true;
     }
+    // TODO: Handle _eof.
     if (this._pos < this._length - 4) {
       var magicNumber = this.peekInt32();
       if (magicNumber === WASM_MAGIC_NUMBER) {
@@ -944,7 +945,7 @@ export class BinaryReader {
         this.state = BinaryReaderState.BEGIN_WASM;
         if (this.hasMoreBytes()) {
           this.state = BinaryReaderState.INITIAL;
-          return true;
+          return this.read();
         }
         return false;
       case BinaryReaderState.ERROR:
