@@ -87,6 +87,9 @@ export class WasmDisassembler {
       if (!reader.read())
         return null;
       switch (reader.state) {
+        case BinaryReaderState.INITIAL:
+          this._buffer.push('\n');
+          break;
         case BinaryReaderState.END_WASM:
           this._buffer.push(')\n');
           return this._buffer.join('');

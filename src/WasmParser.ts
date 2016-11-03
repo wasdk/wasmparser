@@ -422,6 +422,16 @@ export class BinaryReader {
   private readUint32() : number {
     return this.readInt32();
   }
+  private peekInt32() : number {
+    var b1 = this._data[this._pos];
+    var b2 = this._data[this._pos + 1];
+    var b3 = this._data[this._pos + 2];
+    var b4 = this._data[this._pos + 3];
+    return b1 | (b2 << 8) | (b3 << 16) | (b4 << 24);
+  }
+  private peekUint32() : number {
+    return this.peekInt32();
+  }
   private hasVarIntBytes() : boolean {
     var pos = this._pos;
     while (pos < this._length) {
@@ -807,6 +817,15 @@ export class BinaryReader {
       this.result = null;
       this.state = BinaryReaderState.END_WASM;
       return true;
+    }
+    if (this._pos < this._length - 4) {
+      var magicNumber = this.peekInt32();
+      if (magicNumber === WASM_MAGIC_NUMBER) {
+        this.currentSection = null;
+        this.result = null;
+        this.state = BinaryReaderState.INITIAL;
+        return true;
+      }
     }
     if (!this.hasVarIntBytes())
       return false;
