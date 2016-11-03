@@ -903,9 +903,14 @@ export class BinaryReader {
         if (!this.hasBytes(8))
           return false;
         var magicNumber = this.readUint32();
+        if (magicNumber != WASM_MAGIC_NUMBER) {
+          this.error = new Error('Bad magic number');
+          this.state = BinaryReaderState.ERROR;
+          return true;
+        }
         var version = this.readUint32();
-        if (magicNumber != WASM_MAGIC_NUMBER || version != WASM_SUPPORTED_VERSION) {
-          this.error = new Error('Bad magic number or version number');
+        if (version != WASM_SUPPORTED_VERSION) {
+          this.error = new Error(`Bad version number ${version}`);
           this.state = BinaryReaderState.ERROR;
           return true;
         }
