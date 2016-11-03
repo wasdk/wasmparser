@@ -51,7 +51,7 @@
     drop
   end
   )
-
+)
 (module
   (type $type1 (func (params i32)))
   (import "spectest" "print" (func (params i32)))
@@ -105,7 +105,7 @@
     drop
   end
   )
-
+)
 (module
   (type $type2 (func))
   (type $type3 (func (return i32)))
@@ -421,7 +421,7 @@
     i32.eq
   end
   )
-
+)
 (module
   (type $type4 (func))
   (type $type5 (func (return i32)))
@@ -737,7 +737,7 @@
     i32.eq
   end
   )
-
+)
 (module
   (type $type6 (func))
   (type $type7 (func (params i32) (return i32)))
@@ -997,7 +997,7 @@
     i32.add
   end
   )
-
+)
 (module
   (type $type10 (func))
   (type $type11 (func (return i32)))
@@ -1644,7 +1644,7 @@
     i32.add
   end
   )
-
+)
 (module
   (type $type18 (func))
   (type $type19 (func (params i32) (return i32)))
@@ -1904,7 +1904,7 @@
     i32.add
   end
   )
-
+)
 (module
   (type $type22 (func))
   (type $type23 (func (return i32)))
@@ -2551,7 +2551,7 @@
     i32.add
   end
   )
-
+)
 (module
   (type $type30 (func))
   (export "br" $func0)
@@ -2577,7 +2577,7 @@
     end
   end
   )
-
+)
 (module
   (type $type31 (func))
   (export "br" $func0)
@@ -2603,7 +2603,7 @@
     end
   end
   )
-
+)
 (module
   (type $type32 (func (return i32)))
   (type $type33 (func (return i64)))
@@ -2835,7 +2835,7 @@
     call $func30
   end
   )
-
+)
 (module
   (type $type47 (func (return i32)))
   (type $type48 (func (return i64)))
@@ -3067,23 +3067,23 @@
     call $func30
   end
   )
-
+)
 (module
-
+)
 (module
-
+)
 (module
-
+)
 (module
-
+)
 (module
-
+)
 (module
-
+)
 (module
-
+)
 (module
-
+)
 (module
   (type $type62 (func))
   (type $type63 (func (return i32)))
@@ -3358,7 +3358,7 @@
     call_indirect
   end
   )
-
+)
 (module
   (type $type80 (func))
   (type $type81 (func (return i32)))
@@ -3633,7 +3633,7 @@
     call_indirect
   end
   )
-
+)
 (module
   (type $type98 (func))
   (type $type99 (func (return i32)))
@@ -4491,7 +4491,7 @@
     end
   end
   )
-
+)
 (module
   (type $type107 (func (params i32 i32)))
   (type $type108 (func (params i32 i64)))
@@ -4742,7 +4742,7 @@
     f64.reinterpret/i64
   end
   )
-
+)
 (module
   (type $type114 (func (params i32 i32)))
   (type $type115 (func (params i32 i64)))
@@ -4993,14 +4993,14 @@
     f64.reinterpret/i64
   end
   )
-
+)
 (module
   (type $type121 (func))
   (export "a" $func0)
   (func $func448 (param $var0 i32)
   end
   )
-
+)
 (module
   (type $type122 (func))
   (export "a" $func0)
@@ -5008,7 +5008,7 @@
   (func $func449 (param $var0 i32)
   end
   )
-
+)
 (module
   (type $type123 (func))
   (export "a" $func0)
@@ -5019,49 +5019,49 @@
   (func $func451 (param $var0 i32)
   end
   )
-
+)
 (module
   (type $type124 (func))
   (export "a" $func0)
   (func $func452 (param $var0 i32)
   end
   )
-
+)
 (module
   (type $type125 (func))
   (export "a" $func0)
   (func $func453 (param $var0 i32)
   end
   )
-
+)
 (module
   (type $type126 (func))
   (export "a" $func0)
   (func $func454 (param $var0 i32)
   end
   )
-
+)
 (module
   (type $type127 (func))
   (export "a" $func0)
   (func $func455 (param $var0 i32)
   end
   )
-
+)
 (module
   (type $type128 (func))
   (export "a" $func0)
   (func $func456 (param $var0 i32)
   end
   )
-
+)
 (module
   (type $type129 (func))
   (export "a" $func0)
   (func $func457 (param $var0 i32)
   end
   )
-
+)
 (module
   (type $type130 (func (params i32) (return i32)))
   (export "e" $func0)
@@ -5072,133 +5072,133 @@
     return
   end
   )
-
+)
 (module
-
+)
 (module
-
-(module
-  (global)
-
+)
 (module
   (global)
-  (global)
-
+)
 (module
   (global)
   (global)
-
+)
 (module
   (global)
-
+  (global)
+)
 (module
   (global)
-
+)
 (module
   (global)
-
+)
 (module
   (global)
-
+)
 (module
   (global)
-
+)
 (module
   (global)
-
+)
 (module
   (global)
-
+)
 (module
-
+  (global)
+)
 (module
-
+)
 (module
-  (table)
-
-(module
-  (table)
-  (table)
-
+)
 (module
   (table)
-
+)
 (module
   (table)
-
+  (table)
+)
 (module
   (table)
-
+)
 (module
   (table)
-
+)
 (module
   (table)
-
+)
 (module
   (table)
-
+)
 (module
   (table)
-
+)
 (module
   (table)
-
+)
 (module
   (table)
-
+)
 (module
   (table)
-
+)
 (module
   (table)
-
+)
 (module
   (table)
-
+)
+(module
+  (table)
+)
+(module
+  (table)
+)
 (module
   (export "memory" memory)
-
+)
 (module
   (export "memory" memory)
   (export "memory" memory)
-
+)
 (module
   (export "memory" memory)
-
+)
 (module
   (export "memory" memory)
-
+)
 (module
   (export "memory" memory)
-
+)
 (module
   (export "memory" memory)
-
+)
 (module
   (export "memory" memory)
-
+)
 (module
   (export "memory" memory)
-
+)
 (module
   (export "memory" memory)
-
+)
 (module
   (export "memory" memory)
-
+)
 (module
   (export "memory" memory)
-
+)
 (module
   (export "memory" memory)
-
+)
 (module
   (export "memory" memory)
-
+)
 (module
   (export "memory" memory)
-
+)
 (module
   (type $type131 (func (params i32) (return i64)))
   (type $type132 (func (params i64) (return i32)))
@@ -5362,7 +5362,7 @@
     i64.reinterpret/f64
   end
   )
-
+)
 (module
   (type $type143 (func (params i32) (return i64)))
   (type $type144 (func (params i64) (return i32)))
@@ -5526,14 +5526,14 @@
     i64.reinterpret/f64
   end
   )
-
+)
 (module
   (type $type155 (func))
   (export "a" $func0)
   (func $func509 (param $var0 i32)
   end
   )
-
+)
 (module
   (type $type156 (func))
   (export "a" $func0)
@@ -5541,7 +5541,7 @@
   (func $func510 (param $var0 i32)
   end
   )
-
+)
 (module
   (type $type157 (func))
   (export "a" $func0)
@@ -5552,49 +5552,49 @@
   (func $func512 (param $var0 i32)
   end
   )
-
+)
 (module
   (type $type158 (func))
   (export "a" $func0)
   (func $func513 (param $var0 i32)
   end
   )
-
+)
 (module
   (type $type159 (func))
   (export "a" $func0)
   (func $func514 (param $var0 i32)
   end
   )
-
+)
 (module
   (type $type160 (func))
   (export "a" $func0)
   (func $func515 (param $var0 i32)
   end
   )
-
+)
 (module
   (type $type161 (func))
   (export "a" $func0)
   (func $func516 (param $var0 i32)
   end
   )
-
+)
 (module
   (type $type162 (func))
   (export "a" $func0)
   (func $func517 (param $var0 i32)
   end
   )
-
+)
 (module
   (type $type163 (func))
   (export "a" $func0)
   (func $func518 (param $var0 i32)
   end
   )
-
+)
 (module
   (type $type164 (func (params i32) (return i32)))
   (export "e" $func0)
@@ -5605,133 +5605,133 @@
     return
   end
   )
-
+)
 (module
-
+)
 (module
-
-(module
-  (global)
-
+)
 (module
   (global)
-  (global)
-
+)
 (module
   (global)
   (global)
-
+)
 (module
   (global)
-
+  (global)
+)
 (module
   (global)
-
+)
 (module
   (global)
-
+)
 (module
   (global)
-
+)
 (module
   (global)
-
+)
 (module
   (global)
-
+)
 (module
   (global)
-
+)
 (module
-
+  (global)
+)
 (module
-
+)
 (module
-  (table)
-
-(module
-  (table)
-  (table)
-
+)
 (module
   (table)
-
+)
 (module
   (table)
-
+  (table)
+)
 (module
   (table)
-
+)
 (module
   (table)
-
+)
 (module
   (table)
-
+)
 (module
   (table)
-
+)
 (module
   (table)
-
+)
 (module
   (table)
-
+)
 (module
   (table)
-
+)
 (module
   (table)
-
+)
 (module
   (table)
-
+)
 (module
   (table)
-
+)
+(module
+  (table)
+)
+(module
+  (table)
+)
 (module
   (export "memory" memory)
-
+)
 (module
   (export "memory" memory)
   (export "memory" memory)
-
+)
 (module
   (export "memory" memory)
-
+)
 (module
   (export "memory" memory)
-
+)
 (module
   (export "memory" memory)
-
+)
 (module
   (export "memory" memory)
-
+)
 (module
   (export "memory" memory)
-
+)
 (module
   (export "memory" memory)
-
+)
 (module
   (export "memory" memory)
-
+)
 (module
   (export "memory" memory)
-
+)
 (module
   (export "memory" memory)
-
+)
 (module
   (export "memory" memory)
-
+)
 (module
   (export "memory" memory)
-
+)
 (module
   (export "memory" memory)
-
+)
 (module
   (type $type165 (func))
   (type $type166 (func (return i32)))
@@ -6589,7 +6589,7 @@
     end
   end
   )
-
+)
 (module
   (type $type174 (func (params f32 f32) (return f32)))
   (type $type175 (func (params f32) (return f32)))
@@ -6684,7 +6684,7 @@
     f32.copysign
   end
   )
-
+)
 (module
   (type $type176 (func (params f32 f32) (return f32)))
   (type $type177 (func (params f32) (return f32)))
@@ -6779,7 +6779,7 @@
     f32.copysign
   end
   )
-
+)
 (module
   (type $type178 (func (params f32 f32) (return i32)))
   (export "eq" $func0)
@@ -6824,7 +6824,7 @@
     f32.ge
   end
   )
-
+)
 (module
   (type $type179 (func (params f32 f32) (return i32)))
   (export "eq" $func0)
@@ -6869,7 +6869,7 @@
     f32.ge
   end
   )
-
+)
 (module
   (type $type180 (func (params f64 f64) (return f64)))
   (type $type181 (func (params f64) (return f64)))
@@ -6964,7 +6964,7 @@
     f64.copysign
   end
   )
-
+)
 (module
   (type $type182 (func (params i64) (return i64)))
   (export "fac-rec" $func0)
@@ -7095,7 +7095,7 @@
     get_local $var1
   end
   )
-
+)
 (module
   (type $type183 (func (params f64 f64) (return f64)))
   (type $type184 (func (params f64) (return f64)))
@@ -7190,7 +7190,7 @@
     f64.copysign
   end
   )
-
+)
 (module
   (type $type185 (func (params i64) (return i64)))
   (export "fac-rec" $func0)
@@ -7321,7 +7321,7 @@
     get_local $var1
   end
   )
-
+)
 (module
   (type $type186 (func (params f64 f64) (return i32)))
   (export "eq" $func0)
@@ -7366,7 +7366,7 @@
     f64.ge
   end
   )
-
+)
 (module
   (type $type187 (func (return i32)))
   (type $type188 (func (return i64)))
@@ -7730,7 +7730,7 @@
     i64.reinterpret/f64
   end
   )
-
+)
 (module
   (type $type189 (func (return i32)))
   (type $type190 (func (return i64)))
@@ -8094,7 +8094,7 @@
     i64.reinterpret/f64
   end
   )
-
+)
 (module
   (type $type191 (func (return f32)))
   (type $type192 (func (return i32)))
@@ -8132,7 +8132,7 @@
     i32.store flags=2 offset=0
   end
   )
-
+)
 (module
   (type $type194 (func (return f64)))
   (type $type195 (func (return i64)))
@@ -8170,7 +8170,7 @@
     i64.store flags=3 offset=0
   end
   )
-
+)
 (module
   (type $type197 (func (return f32)))
   (type $type198 (func (return i32)))
@@ -8208,7 +8208,7 @@
     i32.store flags=2 offset=0
   end
   )
-
+)
 (module
   (type $type200 (func (return f64)))
   (type $type201 (func (return i64)))
@@ -8246,7 +8246,7 @@
     i64.store flags=3 offset=0
   end
   )
-
+)
 (module
   (type $type203 (func (return f32)))
   (type $type204 (func (return i32)))
@@ -8284,7 +8284,7 @@
     i32.store flags=2 offset=0
   end
   )
-
+)
 (module
   (type $type206 (func (return f64)))
   (type $type207 (func (return i64)))
@@ -8322,7 +8322,7 @@
     i64.store flags=3 offset=0
   end
   )
-
+)
 (module
   (type $type209 (func (params f64 f64) (return i32)))
   (export "eq" $func0)
@@ -8367,7 +8367,7 @@
     f64.ge
   end
   )
-
+)
 (module
   (type $type210 (func (return f32)))
   (type $type211 (func (return i32)))
@@ -8405,7 +8405,7 @@
     i32.store flags=2 offset=0
   end
   )
-
+)
 (module
   (type $type213 (func (return f64)))
   (type $type214 (func (return i64)))
@@ -8443,7 +8443,7 @@
     i64.store flags=3 offset=0
   end
   )
-
+)
 (module
   (type $type216 (func (return f32)))
   (type $type217 (func (return i32)))
@@ -8481,7 +8481,7 @@
     i32.store flags=2 offset=0
   end
   )
-
+)
 (module
   (type $type219 (func (return f64)))
   (type $type220 (func (return i64)))
@@ -8519,7 +8519,7 @@
     i64.store flags=3 offset=0
   end
   )
-
+)
 (module
   (type $type222 (func (return f32)))
   (type $type223 (func (return i32)))
@@ -8557,7 +8557,7 @@
     i32.store flags=2 offset=0
   end
   )
-
+)
 (module
   (type $type225 (func (return f64)))
   (type $type226 (func (return i64)))
@@ -8595,7 +8595,7 @@
     i64.store flags=3 offset=0
   end
   )
-
+)
 (module
   (type $type228 (func (params i32) (return i32)))
   (export "even" $func0)
@@ -8628,7 +8628,7 @@
     end
   end
   )
-
+)
 (module
   (type $type229 (func (params i32) (return i32)))
   (export "even" $func0)
@@ -8661,7 +8661,7 @@
     end
   end
   )
-
+)
 (module
   (type $type230 (func))
   (type $type231 (func (params i32)))
@@ -9201,7 +9201,7 @@
     call_indirect
   end
   )
-
+)
 (module
   (type $type249 (func))
   (type $type250 (func (params i32)))
@@ -9741,7 +9741,7 @@
     call_indirect
   end
   )
-
+)
 (module
   (type $type268 (func))
   (type $type269 (func))
@@ -9782,7 +9782,7 @@
     call $func0
   end
   )
-
+)
 (module
   (type $type275 (func (return i32)))
   (type $type276 (func (return i32)))
@@ -9819,7 +9819,7 @@
     call_indirect
   end
   )
-
+)
 (module
   (type $type278 (func (return i32)))
   (type $type279 (func (params i32) (return i32)))
@@ -9837,7 +9837,7 @@
     call_indirect
   end
   )
-
+)
 (module
   (type $type280 (func))
   (type $type281 (func))
@@ -9878,7 +9878,7 @@
     call $func0
   end
   )
-
+)
 (module
   (type $type287 (func (return i32)))
   (type $type288 (func (return i32)))
@@ -9915,7 +9915,7 @@
     call_indirect
   end
   )
-
+)
 (module
   (type $type290 (func (return i32)))
   (type $type291 (func (params i32) (return i32)))
@@ -9933,7 +9933,7 @@
     call_indirect
   end
   )
-
+)
 (module
   (type $type292 (func (return i32)))
   (type $type293 (func (return i64)))
@@ -10062,7 +10062,7 @@
     f64.add
   end
   )
-
+)
 (module
   (type $type302 (func (return i32)))
   (type $type303 (func (return i64)))
@@ -10191,7 +10191,7 @@
     f64.add
   end
   )
-
+)
 (module
   (type $type312 (func (params f32 f32) (return f32)))
   (type $type313 (func (params f32) (return f32)))
@@ -10379,7 +10379,7 @@
     f64.max
   end
   )
-
+)
 (module
   (type $type316 (func (return i32)))
   (type $type317 (func (return i64)))
@@ -10453,7 +10453,7 @@
     set_global
   end
   )
-
+)
 (module
   (type $type324 (func (return i32)))
   (type $type325 (func (return i64)))
@@ -10527,7 +10527,7 @@
     set_global
   end
   )
-
+)
 (module
   (type $type332 (func (params f32 f32) (return f32)))
   (type $type333 (func (params f32) (return f32)))
@@ -10715,7 +10715,7 @@
     f64.max
   end
   )
-
+)
 (module
   (type $type336 (func (params i32 i32) (return i32)))
   (type $type337 (func (params i32) (return i32)))
@@ -10918,7 +10918,7 @@
     i32.ge_u
   end
   )
-
+)
 (module
   (type $type338 (func (params i32 i32) (return i32)))
   (type $type339 (func (params i32) (return i32)))
@@ -11121,7 +11121,7 @@
     i32.ge_u
   end
   )
-
+)
 (module
   (type $type340 (func (params i64 i64) (return i64)))
   (type $type341 (func (params i64) (return i64)))
@@ -11326,7 +11326,7 @@
     i64.ge_u
   end
   )
-
+)
 (module
   (type $type344 (func (params f64 f64 f64) (return f64)))
   (export "f64.no_contraction" $func0)
@@ -11338,7 +11338,7 @@
     f64.add
   end
   )
-
+)
 (module
   (type $type345 (func (params f32 f32 f32) (return f32)))
   (type $type346 (func (params f64 f64 f64) (return f64)))
@@ -11360,7 +11360,7 @@
     f64.add
   end
   )
-
+)
 (module
   (type $type347 (func (params f32) (return f32)))
   (type $type348 (func (params f64) (return f64)))
@@ -11378,7 +11378,7 @@
     f64.add
   end
   )
-
+)
 (module
   (type $type349 (func (params f32) (return f32)))
   (type $type350 (func (params f64) (return f64)))
@@ -11396,7 +11396,7 @@
     f64.sub
   end
   )
-
+)
 (module
   (type $type351 (func (params f32) (return f32)))
   (type $type352 (func (params f64) (return f64)))
@@ -11414,7 +11414,7 @@
     f64.sub
   end
   )
-
+)
 (module
   (type $type353 (func (params f32) (return f32)))
   (type $type354 (func (params f64) (return f64)))
@@ -11432,7 +11432,7 @@
     f64.mul
   end
   )
-
+)
 (module
   (type $type355 (func (params f32) (return f32)))
   (type $type356 (func (params f64) (return f64)))
@@ -11450,7 +11450,7 @@
     f64.mul
   end
   )
-
+)
 (module
   (type $type357 (func (params f32) (return f32)))
   (type $type358 (func (params f64) (return f64)))
@@ -11468,7 +11468,7 @@
     f64.div
   end
   )
-
+)
 (module
   (type $type359 (func (params f32) (return f32)))
   (type $type360 (func (params f64) (return f64)))
@@ -11486,7 +11486,7 @@
     f64.div
   end
   )
-
+)
 (module
   (type $type361 (func (params f32) (return f32)))
   (type $type362 (func (params f64) (return f64)))
@@ -11504,7 +11504,7 @@
     f64.div
   end
   )
-
+)
 (module
   (type $type363 (func (params f32) (return f32)))
   (type $type364 (func (params f64) (return f64)))
@@ -11522,7 +11522,7 @@
     f64.sub
   end
   )
-
+)
 (module
   (type $type365 (func (params f32) (return f32)))
   (type $type366 (func (params f64) (return f64)))
@@ -11540,7 +11540,7 @@
     f64.mul
   end
   )
-
+)
 (module
   (type $type367 (func (params f32) (return i32)))
   (type $type368 (func (params f64) (return i32)))
@@ -11558,7 +11558,7 @@
     f64.eq
   end
   )
-
+)
 (module
   (type $type369 (func (params f32) (return i32)))
   (type $type370 (func (params f64) (return i32)))
@@ -11576,7 +11576,7 @@
     f64.ne
   end
   )
-
+)
 (module
   (type $type371 (func (params f32) (return f32)))
   (type $type372 (func (params f64) (return f64)))
@@ -11594,7 +11594,7 @@
     f64.sub
   end
   )
-
+)
 (module
   (type $type373 (func (params f32) (return f32)))
   (type $type374 (func (params f64) (return f64)))
@@ -11612,7 +11612,7 @@
     f64.div
   end
   )
-
+)
 (module
   (type $type375 (func (params f32 f32 f32) (return f32)))
   (type $type376 (func (params f64 f64 f64) (return f64)))
@@ -11638,7 +11638,7 @@
     f64.add
   end
   )
-
+)
 (module
   (type $type377 (func (params f32 f32 f32) (return f32)))
   (type $type378 (func (params f64 f64 f64) (return f64)))
@@ -11660,7 +11660,7 @@
     f64.mul
   end
   )
-
+)
 (module
   (type $type379 (func (params f32 f32 f32) (return f32)))
   (type $type380 (func (params f64 f64 f64) (return f64)))
@@ -11682,7 +11682,7 @@
     f64.mul
   end
   )
-
+)
 (module
   (type $type381 (func (params f32 f32 f32) (return f32)))
   (type $type382 (func (params f64 f64 f64) (return f64)))
@@ -11704,7 +11704,7 @@
     f64.div
   end
   )
-
+)
 (module
   (type $type383 (func (params f32 f32 f32 f32) (return f32)))
   (type $type384 (func (params f64 f64 f64 f64) (return f64)))
@@ -11730,7 +11730,7 @@
     f64.add
   end
   )
-
+)
 (module
   (type $type385 (func (params f32 f32 f32 f32) (return f32)))
   (type $type386 (func (params f64 f64 f64 f64) (return f64)))
@@ -11756,7 +11756,7 @@
     f64.mul
   end
   )
-
+)
 (module
   (type $type387 (func (params f32) (return f32)))
   (type $type388 (func (params f64) (return f64)))
@@ -11774,7 +11774,7 @@
     f64.div
   end
   )
-
+)
 (module
   (type $type389 (func (params f32) (return f32)))
   (type $type390 (func (params f64) (return f64)))
@@ -11792,7 +11792,7 @@
     f64.div
   end
   )
-
+)
 (module
   (type $type391 (func (params f32 f32) (return f32)))
   (type $type392 (func (params f64 f64) (return f64)))
@@ -11820,7 +11820,7 @@
     f64.sqrt
   end
   )
-
+)
 (module
   (type $type393 (func (params f32) (return f32)))
   (export "f32.no_approximate_reciprocal" $func0)
@@ -11830,7 +11830,7 @@
     f32.div
   end
   )
-
+)
 (module
   (type $type394 (func (params f32) (return f32)))
   (type $type395 (func (params f64) (return f64)))
@@ -11850,7 +11850,7 @@
     f64.div
   end
   )
-
+)
 (module
   (type $type396 (func (params f32) (return f32)))
   (export "f32.no_approximate_sqrt_reciprocal" $func0)
@@ -11861,7 +11861,7 @@
     f32.sqrt
   end
   )
-
+)
 (module
   (type $type397 (func (params i32) (return i32)))
   (type $type398 (func (params i64) (return i64)))
@@ -11893,7 +11893,7 @@
     i64.trunc_u/f64
   end
   )
-
+)
 (module
   (type $type399 (func (params f32 f32) (return f32)))
   (type $type400 (func (params f64 f64) (return f64)))
@@ -11915,7 +11915,7 @@
     f64.sub
   end
   )
-
+)
 (module
   (type $type401 (func (params f32 f32) (return f32)))
   (type $type402 (func (params f64 f64) (return f64)))
@@ -11937,7 +11937,7 @@
     f64.add
   end
   )
-
+)
 (module
   (type $type403 (func (params f32 f32) (return f32)))
   (type $type404 (func (params f64 f64) (return f64)))
@@ -11959,7 +11959,7 @@
     f64.div
   end
   )
-
+)
 (module
   (type $type405 (func (params f32 f32) (return f32)))
   (type $type406 (func (params f64 f64) (return f64)))
@@ -11981,7 +11981,7 @@
     f64.mul
   end
   )
-
+)
 (module
   (type $type407 (func (params f64) (return f64)))
   (export "no_fold_demote_promote" $func0)
@@ -11991,7 +11991,7 @@
     f64.promote/f32
   end
   )
-
+)
 (module
   (type $type408 (func (params f32) (return f32)))
   (export "no_fold_promote_demote" $func0)
@@ -12001,7 +12001,7 @@
     f32.demote/f64
   end
   )
-
+)
 (module
   (type $type409 (func (params f64 f32) (return f32)))
   (type $type410 (func (params f32 f64) (return f32)))
@@ -12023,7 +12023,7 @@
     f32.demote/f64
   end
   )
-
+)
 (module
   (type $type411 (func (params f64 f32) (return f32)))
   (export "no_demote_mixed_sub" $func0)
@@ -12035,7 +12035,7 @@
     f32.demote/f64
   end
   )
-
+)
 (module
   (type $type412 (func (params f32) (return f32)))
   (type $type413 (func (params f64) (return f64)))
@@ -12151,7 +12151,7 @@
     f64.convert_u/i64
   end
   )
-
+)
 (module
   (type $type414 (func (params i32 f32)))
   (type $type415 (func (params i32) (return f32)))
@@ -12191,7 +12191,7 @@
     f32.load flags=2 offset=0
   end
   )
-
+)
 (module
   (type $type416 (func (params i32 f64)))
   (type $type417 (func (params i32) (return f64)))
@@ -12231,7 +12231,7 @@
     f64.load flags=3 offset=0
   end
   )
-
+)
 (module
   (type $type418 (func (params f32 f32) (return i32)))
   (type $type419 (func (params f64 f64) (return i32)))
@@ -12299,7 +12299,7 @@
     i32.eqz
   end
   )
-
+)
 (module
   (type $type420 (func (params f32 f32) (return f32)))
   (type $type421 (func (params f64 f64) (return f64)))
@@ -12383,7 +12383,7 @@
     select
   end
   )
-
+)
 (module
   (type $type422 (func (params f32 f32) (return f32)))
   (type $type423 (func (params f64 f64) (return f64)))
@@ -12483,7 +12483,7 @@
     end
   end
   )
-
+)
 (module
   (type $type424 (func (params f32) (return f32)))
   (type $type425 (func (params f64) (return f64)))
@@ -12575,7 +12575,7 @@
     select
   end
   )
-
+)
 (module
   (type $type426 (func (params f32) (return f32)))
   (type $type427 (func (params f64) (return f64)))
@@ -12683,7 +12683,7 @@
     end
   end
   )
-
+)
 (module
   (type $type428 (func (return f32)))
   (export "incorrect_correction" $func0)
@@ -12697,7 +12697,7 @@
     f32.sub
   end
   )
-
+)
 (module
   (type $type429 (func (return f64)))
   (export "incorrect_correction" $func0)
@@ -12711,7 +12711,7 @@
     f64.sub
   end
   )
-
+)
 (module
   (type $type430 (func (return f32)))
   (export "calculate" $func0)
@@ -12759,7 +12759,7 @@
     get_local $var4
   end
   )
-
+)
 (module
   (type $type431 (func (return f64)))
   (export "calculate" $func0)
@@ -12807,7 +12807,7 @@
     get_local $var4
   end
   )
-
+)
 (module
   (type $type432 (func (params f32) (return f32)))
   (export "llvm_pr26746" $func0)
@@ -12819,7 +12819,7 @@
     f32.sub
   end
   )
-
+)
 (module
   (type $type433 (func (params i32) (return f32)))
   (export "llvm_pr27153" $func0)
@@ -12832,7 +12832,7 @@
     f32.add
   end
   )
-
+)
 (module
   (type $type434 (func (params i32 i32) (return f32)))
   (export "llvm_pr27036" $func0)
@@ -12848,7 +12848,7 @@
     f32.add
   end
   )
-
+)
 (module
   (type $type435 (func (params f64 f64 f64 f64) (return f64)))
   (type $type436 (func (params f64 f64 f64) (return f64)))
@@ -12882,7 +12882,7 @@
     f32.mul
   end
   )
-
+)
 (module
   (type $type438 (func (params f32) (return f32)))
   (export "inverse" $func0)
@@ -12892,7 +12892,7 @@
     f32.div
   end
   )
-
+)
 (module
   (type $type439 (func (params f32) (return f32)))
   (type $type440 (func (params f64) (return f64)))
@@ -12912,7 +12912,7 @@
     f64.sub
   end
   )
-
+)
 (module
   (type $type441 (func (params f32) (return f32)))
   (type $type442 (func (params f64) (return f64)))
@@ -12934,7 +12934,7 @@
     f64.div
   end
   )
-
+)
 (module
   (type $type443 (func (params f32 f32) (return f32)))
   (type $type444 (func (params f64 f64) (return f64)))
@@ -12960,7 +12960,7 @@
     f64.mul
   end
   )
-
+)
 (module
   (type $type445 (func (params f32 f32) (return f32)))
   (type $type446 (func (params f64 f64) (return f64)))
@@ -12986,7 +12986,7 @@
     f64.sub
   end
   )
-
+)
 (module
   (type $type447 (func (params i32 i32) (return f32)))
   (export "f32.kahan_sum" $func0)
@@ -13050,7 +13050,7 @@
     get_local $var2
   end
   )
-
+)
 (module
   (type $type448 (func (params i32 i32) (return f64)))
   (export "f64.kahan_sum" $func0)
@@ -13114,7 +13114,7 @@
     get_local $var2
   end
   )
-
+)
 (module
   (type $type449 (func (params f32 f32) (return f32)))
   (type $type450 (func (params f64 f64) (return f64)))
@@ -13134,7 +13134,7 @@
     f64.neg
   end
   )
-
+)
 (module
   (type $type451 (func (params f32) (return f32)))
   (type $type452 (func (params f64) (return f64)))
@@ -13154,7 +13154,7 @@
     f64.add
   end
   )
-
+)
 (module
   (type $type453 (func (params f32) (return f32)))
   (type $type454 (func (params f64) (return f64)))
@@ -13188,7 +13188,7 @@
     f64.add
   end
   )
-
+)
 (module
   (type $type455 (func (params f32 f32 f32) (return f32)))
   (type $type456 (func (params f64 f64 f64) (return f64)))
@@ -13210,7 +13210,7 @@
     f64.div
   end
   )
-
+)
 (module
   (type $type457 (func (params f32 f32 f32 f32) (return f32)))
   (type $type458 (func (params f64 f64 f64 f64) (return f64)))
@@ -13236,7 +13236,7 @@
     f64.mul
   end
   )
-
+)
 (module
   (type $type459 (func (params f32 f32 f32) (return f32)))
   (type $type460 (func (params f64 f64 f64) (return f64)))
@@ -13262,7 +13262,7 @@
     f64.add
   end
   )
-
+)
 (module
   (type $type461 (func (params f32) (return f32)))
   (type $type462 (func (params f64) (return f64)))
@@ -13282,7 +13282,7 @@
     f64.sqrt
   end
   )
-
+)
 (module
   (type $type463 (func (params f32 f32) (return f32)))
   (type $type464 (func (params f64 f64) (return f64)))
@@ -13304,7 +13304,7 @@
     f64.mul
   end
   )
-
+)
 (module
   (type $type465 (func (params f32 f32) (return f32)))
   (type $type466 (func (params f64 f64) (return f64)))
@@ -13326,7 +13326,7 @@
     f64.div
   end
   )
-
+)
 (module
   (type $type467 (func (params f32 f32) (return f32)))
   (type $type468 (func (params f64 f64) (return f64)))
@@ -13350,7 +13350,7 @@
     f64.div
   end
   )
-
+)
 (module
   (type $type469 (func (params f32 f32 f32) (return f32)))
   (type $type470 (func (params f64 f64 f64) (return f64)))
@@ -13372,7 +13372,7 @@
     f64.mul
   end
   )
-
+)
 (module
   (type $type471 (func (params f32 f32) (return i32)))
   (type $type472 (func (params f64 f64) (return i32)))
@@ -13439,7 +13439,7 @@
     f32.mul
   end
   )
-
+)
 (module
   (type $type474 (func (params f32 f32 f32) (return i32)))
   (type $type475 (func (params f64 f64 f64) (return i32)))
@@ -13461,7 +13461,7 @@
     f64.eq
   end
   )
-
+)
 (module
   (type $type476 (func (params f32) (return f32)))
   (type $type477 (func (params f64) (return f64)))
@@ -13487,7 +13487,7 @@
     f64.add
   end
   )
-
+)
 (module
   (type $type478 (func (params f32) (return f32)))
   (type $type479 (func (params f32 f32 f32 f32) (return f32)))
@@ -13603,7 +13603,7 @@
     f64.div
   end
   )
-
+)
 (module
   (type $type484 (func (params f32 f32) (return f32)))
   (type $type485 (func (params f64 f64) (return f64)))
@@ -13677,7 +13677,7 @@
     get_local $var1
   end
   )
-
+)
 (module
   (type $type486 (func (params f32 f32) (return f32)))
   (type $type487 (func (params f64 f64) (return f64)))
@@ -13703,7 +13703,7 @@
     f64.add
   end
   )
-
+)
 (module
   (type $type488 (func (params f32 f32 f32) (return i32)))
   (type $type489 (func (params f64 f64 f64) (return i32)))
@@ -13751,7 +13751,7 @@
     f64.ge
   end
   )
-
+)
 (module
   (type $type490 (func (params f32 f32) (return i32)))
   (type $type491 (func (params f64 f64) (return i32)))
@@ -13819,7 +13819,7 @@
     i32.eqz
   end
   )
-
+)
 (module
   (type $type492 (func (return f32)))
   (type $type493 (func (return f64)))
@@ -13849,7 +13849,7 @@
     f64.sub
   end
   )
-
+)
 (module
   (type $type494 (func (params f32 f32) (return i32)))
   (type $type495 (func (params f64 f64) (return i32)))
@@ -13941,7 +13941,7 @@
     i32.or
   end
   )
-
+)
 (module
   (type $type496 (func (params i64 i64) (return i64)))
   (type $type497 (func (params i64) (return i64)))
@@ -14146,7 +14146,7 @@
     i64.ge_u
   end
   )
-
+)
 (module
   (type $type500 (func (params f64 f64 f64) (return f64)))
   (export "f64.no_contraction" $func0)
@@ -14158,7 +14158,7 @@
     f64.add
   end
   )
-
+)
 (module
   (type $type501 (func (params f32 f32 f32) (return f32)))
   (type $type502 (func (params f64 f64 f64) (return f64)))
@@ -14180,7 +14180,7 @@
     f64.add
   end
   )
-
+)
 (module
   (type $type503 (func (params f32) (return f32)))
   (type $type504 (func (params f64) (return f64)))
@@ -14198,7 +14198,7 @@
     f64.add
   end
   )
-
+)
 (module
   (type $type505 (func (params f32) (return f32)))
   (type $type506 (func (params f64) (return f64)))
@@ -14216,7 +14216,7 @@
     f64.sub
   end
   )
-
+)
 (module
   (type $type507 (func (params f32) (return f32)))
   (type $type508 (func (params f64) (return f64)))
@@ -14234,7 +14234,7 @@
     f64.sub
   end
   )
-
+)
 (module
   (type $type509 (func (params f32) (return f32)))
   (type $type510 (func (params f64) (return f64)))
@@ -14252,7 +14252,7 @@
     f64.mul
   end
   )
-
+)
 (module
   (type $type511 (func (params f32) (return f32)))
   (type $type512 (func (params f64) (return f64)))
@@ -14270,7 +14270,7 @@
     f64.mul
   end
   )
-
+)
 (module
   (type $type513 (func (params f32) (return f32)))
   (type $type514 (func (params f64) (return f64)))
@@ -14288,7 +14288,7 @@
     f64.div
   end
   )
-
+)
 (module
   (type $type515 (func (params f32) (return f32)))
   (type $type516 (func (params f64) (return f64)))
@@ -14306,7 +14306,7 @@
     f64.div
   end
   )
-
+)
 (module
   (type $type517 (func (params f32) (return f32)))
   (type $type518 (func (params f64) (return f64)))
@@ -14324,7 +14324,7 @@
     f64.div
   end
   )
-
+)
 (module
   (type $type519 (func (params f32) (return f32)))
   (type $type520 (func (params f64) (return f64)))
@@ -14342,7 +14342,7 @@
     f64.sub
   end
   )
-
+)
 (module
   (type $type521 (func (params f32) (return f32)))
   (type $type522 (func (params f64) (return f64)))
@@ -14360,7 +14360,7 @@
     f64.mul
   end
   )
-
+)
 (module
   (type $type523 (func (params f32) (return i32)))
   (type $type524 (func (params f64) (return i32)))
@@ -14378,7 +14378,7 @@
     f64.eq
   end
   )
-
+)
 (module
   (type $type525 (func (params f32) (return i32)))
   (type $type526 (func (params f64) (return i32)))
@@ -14396,7 +14396,7 @@
     f64.ne
   end
   )
-
+)
 (module
   (type $type527 (func (params f32) (return f32)))
   (type $type528 (func (params f64) (return f64)))
@@ -14414,7 +14414,7 @@
     f64.sub
   end
   )
-
+)
 (module
   (type $type529 (func (params f32) (return f32)))
   (type $type530 (func (params f64) (return f64)))
@@ -14432,7 +14432,7 @@
     f64.div
   end
   )
-
+)
 (module
   (type $type531 (func (params f32 f32 f32) (return f32)))
   (type $type532 (func (params f64 f64 f64) (return f64)))
@@ -14458,7 +14458,7 @@
     f64.add
   end
   )
-
+)
 (module
   (type $type533 (func (params f32 f32 f32) (return f32)))
   (type $type534 (func (params f64 f64 f64) (return f64)))
@@ -14480,7 +14480,7 @@
     f64.mul
   end
   )
-
+)
 (module
   (type $type535 (func (params f32 f32 f32) (return f32)))
   (type $type536 (func (params f64 f64 f64) (return f64)))
@@ -14502,7 +14502,7 @@
     f64.mul
   end
   )
-
+)
 (module
   (type $type537 (func (params f32 f32 f32) (return f32)))
   (type $type538 (func (params f64 f64 f64) (return f64)))
@@ -14524,7 +14524,7 @@
     f64.div
   end
   )
-
+)
 (module
   (type $type539 (func (params f32 f32 f32 f32) (return f32)))
   (type $type540 (func (params f64 f64 f64 f64) (return f64)))
@@ -14550,7 +14550,7 @@
     f64.add
   end
   )
-
+)
 (module
   (type $type541 (func (params f32 f32 f32 f32) (return f32)))
   (type $type542 (func (params f64 f64 f64 f64) (return f64)))
@@ -14576,7 +14576,7 @@
     f64.mul
   end
   )
-
+)
 (module
   (type $type543 (func (params f32) (return f32)))
   (type $type544 (func (params f64) (return f64)))
@@ -14594,7 +14594,7 @@
     f64.div
   end
   )
-
+)
 (module
   (type $type545 (func (params f32) (return f32)))
   (type $type546 (func (params f64) (return f64)))
@@ -14612,7 +14612,7 @@
     f64.div
   end
   )
-
+)
 (module
   (type $type547 (func (params f32 f32) (return f32)))
   (type $type548 (func (params f64 f64) (return f64)))
@@ -14640,7 +14640,7 @@
     f64.sqrt
   end
   )
-
+)
 (module
   (type $type549 (func (params f32) (return f32)))
   (export "f32.no_approximate_reciprocal" $func0)
@@ -14650,7 +14650,7 @@
     f32.div
   end
   )
-
+)
 (module
   (type $type550 (func (params f32) (return f32)))
   (type $type551 (func (params f64) (return f64)))
@@ -14670,7 +14670,7 @@
     f64.div
   end
   )
-
+)
 (module
   (type $type552 (func (params f32) (return f32)))
   (export "f32.no_approximate_sqrt_reciprocal" $func0)
@@ -14681,7 +14681,7 @@
     f32.sqrt
   end
   )
-
+)
 (module
   (type $type553 (func (params i32) (return i32)))
   (type $type554 (func (params i64) (return i64)))
@@ -14713,7 +14713,7 @@
     i64.trunc_u/f64
   end
   )
-
+)
 (module
   (type $type555 (func (params f32 f32) (return f32)))
   (type $type556 (func (params f64 f64) (return f64)))
@@ -14735,7 +14735,7 @@
     f64.sub
   end
   )
-
+)
 (module
   (type $type557 (func (params f32 f32) (return f32)))
   (type $type558 (func (params f64 f64) (return f64)))
@@ -14757,7 +14757,7 @@
     f64.add
   end
   )
-
+)
 (module
   (type $type559 (func (params f32 f32) (return f32)))
   (type $type560 (func (params f64 f64) (return f64)))
@@ -14779,7 +14779,7 @@
     f64.div
   end
   )
-
+)
 (module
   (type $type561 (func (params f32 f32) (return f32)))
   (type $type562 (func (params f64 f64) (return f64)))
@@ -14801,7 +14801,7 @@
     f64.mul
   end
   )
-
+)
 (module
   (type $type563 (func (params f64) (return f64)))
   (export "no_fold_demote_promote" $func0)
@@ -14811,7 +14811,7 @@
     f64.promote/f32
   end
   )
-
+)
 (module
   (type $type564 (func (params f32) (return f32)))
   (export "no_fold_promote_demote" $func0)
@@ -14821,7 +14821,7 @@
     f32.demote/f64
   end
   )
-
+)
 (module
   (type $type565 (func (params f64 f32) (return f32)))
   (type $type566 (func (params f32 f64) (return f32)))
@@ -14843,7 +14843,7 @@
     f32.demote/f64
   end
   )
-
+)
 (module
   (type $type567 (func (params f64 f32) (return f32)))
   (export "no_demote_mixed_sub" $func0)
@@ -14855,7 +14855,7 @@
     f32.demote/f64
   end
   )
-
+)
 (module
   (type $type568 (func (params f32) (return f32)))
   (type $type569 (func (params f64) (return f64)))
@@ -14971,7 +14971,7 @@
     f64.convert_u/i64
   end
   )
-
+)
 (module
   (type $type570 (func (params i32 f32)))
   (type $type571 (func (params i32) (return f32)))
@@ -15011,7 +15011,7 @@
     f32.load flags=2 offset=0
   end
   )
-
+)
 (module
   (type $type572 (func (params i32 f64)))
   (type $type573 (func (params i32) (return f64)))
@@ -15051,7 +15051,7 @@
     f64.load flags=3 offset=0
   end
   )
-
+)
 (module
   (type $type574 (func (params f32 f32) (return i32)))
   (type $type575 (func (params f64 f64) (return i32)))
@@ -15119,7 +15119,7 @@
     i32.eqz
   end
   )
-
+)
 (module
   (type $type576 (func (params f32 f32) (return f32)))
   (type $type577 (func (params f64 f64) (return f64)))
@@ -15203,7 +15203,7 @@
     select
   end
   )
-
+)
 (module
   (type $type578 (func (params f32 f32) (return f32)))
   (type $type579 (func (params f64 f64) (return f64)))
@@ -15303,7 +15303,7 @@
     end
   end
   )
-
+)
 (module
   (type $type580 (func (params f32) (return f32)))
   (type $type581 (func (params f64) (return f64)))
@@ -15395,7 +15395,7 @@
     select
   end
   )
-
+)
 (module
   (type $type582 (func (params f32) (return f32)))
   (type $type583 (func (params f64) (return f64)))
@@ -15503,7 +15503,7 @@
     end
   end
   )
-
+)
 (module
   (type $type584 (func (return f32)))
   (export "incorrect_correction" $func0)
@@ -15517,7 +15517,7 @@
     f32.sub
   end
   )
-
+)
 (module
   (type $type585 (func (return f64)))
   (export "incorrect_correction" $func0)
@@ -15531,7 +15531,7 @@
     f64.sub
   end
   )
-
+)
 (module
   (type $type586 (func (return f32)))
   (export "calculate" $func0)
@@ -15579,7 +15579,7 @@
     get_local $var4
   end
   )
-
+)
 (module
   (type $type587 (func (return f64)))
   (export "calculate" $func0)
@@ -15627,7 +15627,7 @@
     get_local $var4
   end
   )
-
+)
 (module
   (type $type588 (func (params f32) (return f32)))
   (export "llvm_pr26746" $func0)
@@ -15639,7 +15639,7 @@
     f32.sub
   end
   )
-
+)
 (module
   (type $type589 (func (params i32) (return f32)))
   (export "llvm_pr27153" $func0)
@@ -15652,7 +15652,7 @@
     f32.add
   end
   )
-
+)
 (module
   (type $type590 (func (params i32 i32) (return f32)))
   (export "llvm_pr27036" $func0)
@@ -15668,7 +15668,7 @@
     f32.add
   end
   )
-
+)
 (module
   (type $type591 (func (params f64 f64 f64 f64) (return f64)))
   (type $type592 (func (params f64 f64 f64) (return f64)))
@@ -15702,7 +15702,7 @@
     f32.mul
   end
   )
-
+)
 (module
   (type $type594 (func (params f32) (return f32)))
   (export "inverse" $func0)
@@ -15712,7 +15712,7 @@
     f32.div
   end
   )
-
+)
 (module
   (type $type595 (func (params f32) (return f32)))
   (type $type596 (func (params f64) (return f64)))
@@ -15732,7 +15732,7 @@
     f64.sub
   end
   )
-
+)
 (module
   (type $type597 (func (params f32) (return f32)))
   (type $type598 (func (params f64) (return f64)))
@@ -15754,7 +15754,7 @@
     f64.div
   end
   )
-
+)
 (module
   (type $type599 (func (params f32 f32) (return f32)))
   (type $type600 (func (params f64 f64) (return f64)))
@@ -15780,7 +15780,7 @@
     f64.mul
   end
   )
-
+)
 (module
   (type $type601 (func (params f32 f32) (return f32)))
   (type $type602 (func (params f64 f64) (return f64)))
@@ -15806,7 +15806,7 @@
     f64.sub
   end
   )
-
+)
 (module
   (type $type603 (func (params i32 i32) (return f32)))
   (export "f32.kahan_sum" $func0)
@@ -15870,7 +15870,7 @@
     get_local $var2
   end
   )
-
+)
 (module
   (type $type604 (func (params i32 i32) (return f64)))
   (export "f64.kahan_sum" $func0)
@@ -15934,7 +15934,7 @@
     get_local $var2
   end
   )
-
+)
 (module
   (type $type605 (func (params f32 f32) (return f32)))
   (type $type606 (func (params f64 f64) (return f64)))
@@ -15954,7 +15954,7 @@
     f64.neg
   end
   )
-
+)
 (module
   (type $type607 (func (params f32) (return f32)))
   (type $type608 (func (params f64) (return f64)))
@@ -15974,7 +15974,7 @@
     f64.add
   end
   )
-
+)
 (module
   (type $type609 (func (params f32) (return f32)))
   (type $type610 (func (params f64) (return f64)))
@@ -16008,7 +16008,7 @@
     f64.add
   end
   )
-
+)
 (module
   (type $type611 (func (params f32 f32 f32) (return f32)))
   (type $type612 (func (params f64 f64 f64) (return f64)))
@@ -16030,7 +16030,7 @@
     f64.div
   end
   )
-
+)
 (module
   (type $type613 (func (params f32 f32 f32 f32) (return f32)))
   (type $type614 (func (params f64 f64 f64 f64) (return f64)))
@@ -16056,7 +16056,7 @@
     f64.mul
   end
   )
-
+)
 (module
   (type $type615 (func (params f32 f32 f32) (return f32)))
   (type $type616 (func (params f64 f64 f64) (return f64)))
@@ -16082,7 +16082,7 @@
     f64.add
   end
   )
-
+)
 (module
   (type $type617 (func (params f32) (return f32)))
   (type $type618 (func (params f64) (return f64)))
@@ -16102,7 +16102,7 @@
     f64.sqrt
   end
   )
-
+)
 (module
   (type $type619 (func (params f32 f32) (return f32)))
   (type $type620 (func (params f64 f64) (return f64)))
@@ -16124,7 +16124,7 @@
     f64.mul
   end
   )
-
+)
 (module
   (type $type621 (func (params f32 f32) (return f32)))
   (type $type622 (func (params f64 f64) (return f64)))
@@ -16146,7 +16146,7 @@
     f64.div
   end
   )
-
+)
 (module
   (type $type623 (func (params f32 f32) (return f32)))
   (type $type624 (func (params f64 f64) (return f64)))
@@ -16170,7 +16170,7 @@
     f64.div
   end
   )
-
+)
 (module
   (type $type625 (func (params f32 f32 f32) (return f32)))
   (type $type626 (func (params f64 f64 f64) (return f64)))
@@ -16192,7 +16192,7 @@
     f64.mul
   end
   )
-
+)
 (module
   (type $type627 (func (params f32 f32) (return i32)))
   (type $type628 (func (params f64 f64) (return i32)))
@@ -16259,7 +16259,7 @@
     f32.mul
   end
   )
-
+)
 (module
   (type $type630 (func (params f32 f32 f32) (return i32)))
   (type $type631 (func (params f64 f64 f64) (return i32)))
@@ -16281,7 +16281,7 @@
     f64.eq
   end
   )
-
+)
 (module
   (type $type632 (func (params f32) (return f32)))
   (type $type633 (func (params f64) (return f64)))
@@ -16307,7 +16307,7 @@
     f64.add
   end
   )
-
+)
 (module
   (type $type634 (func (params f32) (return f32)))
   (type $type635 (func (params f32 f32 f32 f32) (return f32)))
@@ -16423,7 +16423,7 @@
     f64.div
   end
   )
-
+)
 (module
   (type $type640 (func (params f32 f32) (return f32)))
   (type $type641 (func (params f64 f64) (return f64)))
@@ -16497,7 +16497,7 @@
     get_local $var1
   end
   )
-
+)
 (module
   (type $type642 (func (params f32 f32) (return f32)))
   (type $type643 (func (params f64 f64) (return f64)))
@@ -16523,7 +16523,7 @@
     f64.add
   end
   )
-
+)
 (module
   (type $type644 (func (params f32 f32 f32) (return i32)))
   (type $type645 (func (params f64 f64 f64) (return i32)))
@@ -16571,7 +16571,7 @@
     f64.ge
   end
   )
-
+)
 (module
   (type $type646 (func (params f32 f32) (return i32)))
   (type $type647 (func (params f64 f64) (return i32)))
@@ -16639,7 +16639,7 @@
     i32.eqz
   end
   )
-
+)
 (module
   (type $type648 (func (return f32)))
   (type $type649 (func (return f64)))
@@ -16669,7 +16669,7 @@
     f64.sub
   end
   )
-
+)
 (module
   (type $type650 (func (params f32 f32) (return i32)))
   (type $type651 (func (params f64 f64) (return i32)))
@@ -16761,7 +16761,7 @@
     i32.or
   end
   )
-
+)
 (module
   (type $type652 (func (return i32)))
   (type $type653 (func (return i64)))
@@ -16901,7 +16901,7 @@
     return
   end
   )
-
+)
 (module
   (type $type654 (func (return i32)))
   (type $type655 (func (return i64)))
@@ -17041,7 +17041,7 @@
     return
   end
   )
-
+)
 (module
   (type $type656 (func (params i32 i32) (return i32)))
   (type $type657 (func (params i64 i64) (return i32)))
@@ -17089,7 +17089,7 @@
     i64.lt_u
   end
   )
-
+)
 (module
   (type $type658 (func (params i64) (return i64)))
   (export "i64.no_fold_wrap_extend_s" $func0)
@@ -17099,7 +17099,7 @@
     i64.extend_s/i32
   end
   )
-
+)
 (module
   (type $type659 (func (params i64) (return i64)))
   (export "i64.no_fold_wrap_extend_u" $func0)
@@ -17109,7 +17109,7 @@
     i64.extend_u/i32
   end
   )
-
+)
 (module
   (type $type660 (func (params i32) (return i32)))
   (type $type661 (func (params i64) (return i64)))
@@ -17149,7 +17149,7 @@
     i64.shr_u
   end
   )
-
+)
 (module
   (type $type662 (func (params i32) (return i32)))
   (type $type663 (func (params i64) (return i64)))
@@ -17189,7 +17189,7 @@
     i64.shl
   end
   )
-
+)
 (module
   (type $type664 (func (params i32) (return i32)))
   (type $type665 (func (params i64) (return i64)))
@@ -17229,7 +17229,7 @@
     i64.mul
   end
   )
-
+)
 (module
   (type $type666 (func (params i32) (return i32)))
   (type $type667 (func (params i64) (return i64)))
@@ -17269,7 +17269,7 @@
     i64.div_u
   end
   )
-
+)
 (module
   (type $type668 (func (params i32) (return i32)))
   (type $type669 (func (params i64) (return i64)))
@@ -17287,7 +17287,7 @@
     i64.div_s
   end
   )
-
+)
 (module
   (type $type670 (func (params i32) (return i32)))
   (type $type671 (func (params i64) (return i64)))
@@ -17305,7 +17305,7 @@
     i64.rem_s
   end
   )
-
+)
 (module
   (type $type672 (func (params i32) (return i32)))
   (type $type673 (func (params i64) (return i64)))
@@ -17337,7 +17337,7 @@
     i64.div_u
   end
   )
-
+)
 (module
   (type $type674 (func (params i32) (return i32)))
   (type $type675 (func (params i64) (return i64)))
@@ -17369,7 +17369,7 @@
     i64.div_u
   end
   )
-
+)
 (module
   (type $type676 (func (params i32) (return i32)))
   (type $type677 (func (params i64) (return i64)))
@@ -17401,7 +17401,7 @@
     i64.div_u
   end
   )
-
+)
 (module
   (type $type678 (func (params i32) (return i32)))
   (type $type679 (func (params i64) (return i64)))
@@ -17433,7 +17433,7 @@
     i64.div_u
   end
   )
-
+)
 (module
   (type $type680 (func (params i32) (return i32)))
   (type $type681 (func (params i64) (return i64)))
@@ -17465,7 +17465,7 @@
     i64.rem_u
   end
   )
-
+)
 (module
   (type $type682 (func (params i32) (return i32)))
   (type $type683 (func (params i64) (return i64)))
@@ -17497,7 +17497,7 @@
     i64.rem_u
   end
   )
-
+)
 (module
   (type $type684 (func (params i32) (return i32)))
   (type $type685 (func (params i64) (return i64)))
@@ -17529,7 +17529,7 @@
     i64.rem_u
   end
   )
-
+)
 (module
   (type $type686 (func (return i32)))
   (type $type687 (func (params i32) (return i32)))
@@ -17992,7 +17992,7 @@
     end
   end
   )
-
+)
 (module
   (type $type688 (func (params i32 i32) (return i32)))
   (type $type689 (func (params i64 i64) (return i32)))
@@ -18040,7 +18040,7 @@
     i64.lt_u
   end
   )
-
+)
 (module
   (type $type690 (func (params i64) (return i64)))
   (export "i64.no_fold_wrap_extend_s" $func0)
@@ -18050,7 +18050,7 @@
     i64.extend_s/i32
   end
   )
-
+)
 (module
   (type $type691 (func (params i64) (return i64)))
   (export "i64.no_fold_wrap_extend_u" $func0)
@@ -18060,7 +18060,7 @@
     i64.extend_u/i32
   end
   )
-
+)
 (module
   (type $type692 (func (params i32) (return i32)))
   (type $type693 (func (params i64) (return i64)))
@@ -18100,7 +18100,7 @@
     i64.shr_u
   end
   )
-
+)
 (module
   (type $type694 (func (params i32) (return i32)))
   (type $type695 (func (params i64) (return i64)))
@@ -18140,7 +18140,7 @@
     i64.shl
   end
   )
-
+)
 (module
   (type $type696 (func (params i32) (return i32)))
   (type $type697 (func (params i64) (return i64)))
@@ -18180,7 +18180,7 @@
     i64.mul
   end
   )
-
+)
 (module
   (type $type698 (func (params i32) (return i32)))
   (type $type699 (func (params i64) (return i64)))
@@ -18220,7 +18220,7 @@
     i64.div_u
   end
   )
-
+)
 (module
   (type $type700 (func (params i32) (return i32)))
   (type $type701 (func (params i64) (return i64)))
@@ -18238,7 +18238,7 @@
     i64.div_s
   end
   )
-
+)
 (module
   (type $type702 (func (params i32) (return i32)))
   (type $type703 (func (params i64) (return i64)))
@@ -18256,7 +18256,7 @@
     i64.rem_s
   end
   )
-
+)
 (module
   (type $type704 (func (params i32) (return i32)))
   (type $type705 (func (params i64) (return i64)))
@@ -18288,7 +18288,7 @@
     i64.div_u
   end
   )
-
+)
 (module
   (type $type706 (func (params i32) (return i32)))
   (type $type707 (func (params i64) (return i64)))
@@ -18320,7 +18320,7 @@
     i64.div_u
   end
   )
-
+)
 (module
   (type $type708 (func (params i32) (return i32)))
   (type $type709 (func (params i64) (return i64)))
@@ -18352,7 +18352,7 @@
     i64.div_u
   end
   )
-
+)
 (module
   (type $type710 (func (params i32) (return i32)))
   (type $type711 (func (params i64) (return i64)))
@@ -18384,7 +18384,7 @@
     i64.div_u
   end
   )
-
+)
 (module
   (type $type712 (func (params i32) (return i32)))
   (type $type713 (func (params i64) (return i64)))
@@ -18416,7 +18416,7 @@
     i64.rem_u
   end
   )
-
+)
 (module
   (type $type714 (func (params i32) (return i32)))
   (type $type715 (func (params i64) (return i64)))
@@ -18448,7 +18448,7 @@
     i64.rem_u
   end
   )
-
+)
 (module
   (type $type716 (func (params i32) (return i32)))
   (type $type717 (func (params i64) (return i64)))
@@ -18480,7 +18480,7 @@
     i64.rem_u
   end
   )
-
+)
 (module
   (type $type718 (func (return i32)))
   (type $type719 (func (params i32) (return i32)))
@@ -18943,7 +18943,7 @@
     end
   end
   )
-
+)
 (module
   (type $type720 (func (params i32 i32) (return i32)))
   (type $type721 (func (params i64 i64) (return i32)))
@@ -20144,7 +20144,7 @@
     end
   end
   )
-
+)
 (module
   (type $type733 (func))
   (type $type734 (func (return i32)))
@@ -20642,7 +20642,7 @@
     get_local $var3
   end
   )
-
+)
 (module
   (type $type737 (func (params i32 i32) (return i32)))
   (type $type738 (func (params i64 i64) (return i32)))
@@ -21843,7 +21843,7 @@
     end
   end
   )
-
+)
 (module
   (type $type750 (func))
   (type $type751 (func (return i32)))
@@ -22341,7 +22341,7 @@
     get_local $var3
   end
   )
-
+)
 (module
   (type $type754 (func))
   (type $type755 (func (return i32)))
@@ -22407,7 +22407,7 @@
     get_local $var0
   end
   )
-
+)
 (module
   (type $type757 (func))
   (type $type758 (func (return i32)))
@@ -22473,7 +22473,7 @@
     get_local $var0
   end
   )
-
+)
 (module
   (type $type760 (func (return i32)))
   (type $type761 (func (params i32 i32)))
@@ -22507,7 +22507,7 @@
     grow_memory
   end
   )
-
+)
 (module
   (type $type763 (func (return i32)))
   (type $type764 (func (params i32 i32)))
@@ -22541,7 +22541,7 @@
     grow_memory
   end
   )
-
+)
 (module
   (type $type766 (func (return i32)))
   (export "foo" $func0)
@@ -22549,7 +22549,7 @@
     i32.const 0
   end
   )
-
+)
 (module
   (type $type767 (func (return i32)))
   (export "foo" $func0)
@@ -22557,7 +22557,7 @@
     i32.const 1
   end
   )
-
+)
 (module
   (type $type768 (func (return f32)))
   (export "" $func0)
@@ -22620,7 +22620,7 @@
     f32.const 6.3125
   end
   )
-
+)
 (module
   (type $type769 (func (params i32)))
   (type $type770 (func (params i32 i32)))
@@ -22634,7 +22634,7 @@
     call $func1
   end
   )
-
+)
 (module
   (type $type771 (func (return i32)))
   (export "foo" $func0)
@@ -22642,7 +22642,7 @@
     i32.const 0
   end
   )
-
+)
 (module
   (type $type772 (func (return i32)))
   (export "foo" $func0)
@@ -22650,7 +22650,7 @@
     i32.const 1
   end
   )
-
+)
 (module
   (type $type773 (func (return f32)))
   (export "" $func0)
@@ -22713,7 +22713,7 @@
     f32.const 6.3125
   end
   )
-
+)
 (module
   (type $type774 (func (params i32)))
   (type $type775 (func (params i32 i32)))
@@ -22727,7 +22727,7 @@
     call $func1
   end
   )
-
+)
 (module
   (type $type776 (func (return i32)))
   (type $type777 (func))
@@ -22769,7 +22769,7 @@
     current_memory
   end
   )
-
+)
 (module
   (type $type779 (func (params i32) (return i32)))
   (export "grow" $func0)
@@ -22778,7 +22778,7 @@
     grow_memory
   end
   )
-
+)
 (module
   (type $type780 (func (params i32) (return i32)))
   (export "grow" $func0)
@@ -22787,7 +22787,7 @@
     grow_memory
   end
   )
-
+)
 (module
   (type $type781 (func (return i32)))
   (type $type782 (func))
@@ -22829,7 +22829,7 @@
     current_memory
   end
   )
-
+)
 (module
   (type $type784 (func (params i32) (return i32)))
   (export "grow" $func0)
@@ -22838,7 +22838,7 @@
     grow_memory
   end
   )
-
+)
 (module
   (type $type785 (func (params i32) (return i32)))
   (export "grow" $func0)
@@ -22847,7 +22847,7 @@
     grow_memory
   end
   )
-
+)
 (module
   (type $type786 (func))
   (type $type787 (func (params i32 i32 i32) (return i32)))
@@ -23321,7 +23321,7 @@
     grow_memory
   end
   )
-
+)
 (module
   (type $type791 (func))
   (type $type792 (func (params i32 i32 i32) (return i32)))
@@ -23795,7 +23795,7 @@
     grow_memory
   end
   )
-
+)
 (module
   (type $type796 (func))
   (type $type797 (func (return f64)))
@@ -24272,7 +24272,7 @@
     grow_memory
   end
   )
-
+)
 (module
   (type $type804 (func))
   (type $type805 (func (return f64)))
@@ -24749,7 +24749,7 @@
     grow_memory
   end
   )
-
+)
 (module
   (type $type812 (func (params i32 i32 i32) (return i32)))
   (type $type813 (func (params i64 i64 i32) (return i64)))
@@ -24804,7 +24804,7 @@
     select
   end
   )
-
+)
 (module
   (type $type817 (func (params i32 i32 i32) (return i32)))
   (type $type818 (func (params i64 i64 i32) (return i64)))
@@ -24859,7 +24859,7 @@
     select
   end
   )
-
+)
 (module
   (type $type822 (func))
   (type $type823 (func (params i32)))
@@ -24991,7 +24991,7 @@
     i64.trunc_s/f64
   end
   )
-
+)
 (module
   (type $type829 (func))
   (type $type830 (func (params i32)))
@@ -25123,7 +25123,7 @@
     i64.trunc_s/f64
   end
   )
-
+)
 (module
   (type $type836 (func (params i64) (return i64)))
   (export "fac-expr" $func0)
@@ -25283,7 +25283,7 @@
     get_local $var2
   end
   )
-
+)
 (module
   (type $type837 (func (params i64) (return i64)))
   (export "fac-expr" $func0)
@@ -25443,7 +25443,7 @@
     get_local $var2
   end
   )
-
+)
 (module
   (type $type838 (func (params i32)))
   (type $type839 (func))
@@ -32858,7 +32858,7 @@
     i64.store flags=0 offset=1055
   end
   )
-
+)
 (module
   (type $type840 (func))
   (type $type841 (func (return i32)))
@@ -32885,7 +32885,7 @@
     call $func0
   end
   )
-
+)
 (module
   (type $type842 (func))
   (type $type843 (func (return i32)))
@@ -32912,7 +32912,7 @@
     call $func0
   end
   )
-
+)
 (module
   (type $type844 (func (params i32)))
   (type $type845 (func))
@@ -32922,7 +32922,7 @@
     call $func0
   end
   )
-
+)
 (module
   (type $type846 (func (params i32)))
   (type $type847 (func))
@@ -32932,14 +32932,14 @@
     call $func0
   end
   )
-
+)
 (module
   (type $type848 (func))
   (func $func2530 (param $var0 i32)
     unreachable
   end
   )
-
+)
 (module
   (type $type849 (func))
   (type $type850 (func (return i32)))
@@ -32966,7 +32966,7 @@
     call $func0
   end
   )
-
+)
 (module
   (type $type851 (func))
   (type $type852 (func (return i32)))
@@ -32993,7 +32993,7 @@
     call $func0
   end
   )
-
+)
 (module
   (type $type853 (func (params i32)))
   (type $type854 (func))
@@ -33003,7 +33003,7 @@
     call $func0
   end
   )
-
+)
 (module
   (type $type855 (func (params i32)))
   (type $type856 (func))
@@ -33013,14 +33013,14 @@
     call $func0
   end
   )
-
+)
 (module
   (type $type857 (func))
   (func $func2541 (param $var0 i32)
     unreachable
   end
   )
-
+)
 (module
   (type $type858 (func (params i32)))
   (type $type859 (func))
@@ -40435,7 +40435,7 @@
     i64.store flags=0 offset=1055
   end
   )
-
+)
 (module
   (type $type860 (func (params i32) (return i32)))
   (type $type861 (func (params i64) (return i64)))
@@ -40565,7 +40565,7 @@
     i32.const 1
   end
   )
-
+)
 (module
   (type $type863 (func (params i32 i32) (return i32)))
   (type $type864 (func (params i64 i64) (return i64)))
@@ -40597,7 +40597,7 @@
     i64.div_u
   end
   )
-
+)
 (module
   (type $type865 (func (params i32 i32) (return i32)))
   (type $type866 (func (params i64 i64) (return i64)))
@@ -40629,7 +40629,7 @@
     i64.rem_u
   end
   )
-
+)
 (module
   (type $type867 (func (params f32) (return i32)))
   (type $type868 (func (params f64) (return i32)))
@@ -40683,7 +40683,7 @@
     i64.trunc_u/f64
   end
   )
-
+)
 (module
   (type $type871 (func (params i32) (return i32)))
   (type $type872 (func (params i32) (return i64)))
@@ -40713,7 +40713,7 @@
     f64.load flags=3 offset=0
   end
   )
-
+)
 (module
   (type $type875 (func (params i32) (return i32)))
   (type $type876 (func (params i64) (return i64)))
@@ -40843,7 +40843,7 @@
     i32.const 1
   end
   )
-
+)
 (module
   (type $type878 (func (params i32 i32) (return i32)))
   (type $type879 (func (params i64 i64) (return i64)))
@@ -40875,7 +40875,7 @@
     i64.div_u
   end
   )
-
+)
 (module
   (type $type880 (func (params i32 i32) (return i32)))
   (type $type881 (func (params i64 i64) (return i64)))
@@ -40907,7 +40907,7 @@
     i64.rem_u
   end
   )
-
+)
 (module
   (type $type882 (func (params f32) (return i32)))
   (type $type883 (func (params f64) (return i32)))
@@ -40961,7 +40961,7 @@
     i64.trunc_u/f64
   end
   )
-
+)
 (module
   (type $type886 (func (params i32) (return i32)))
   (type $type887 (func (params i32) (return i64)))
@@ -40991,7 +40991,7 @@
     f64.load flags=3 offset=0
   end
   )
-
+)
 (module
   (type $type890 (func (return i32)))
   (type $type891 (func (return i64)))
@@ -41192,7 +41192,7 @@
     f64.add
   end
   )
-
+)
 (module
   (type $type901 (func (return i32)))
   (type $type902 (func (return i64)))
@@ -41393,7 +41393,7 @@
     f64.add
   end
   )
-
+)
 (module
   (type $type912 (func))
   (type $type913 (func (return i32)))
@@ -41776,7 +41776,7 @@
     end
   end
   )
-
+)
 (module
   (type $type914 (func))
   (type $type915 (func (params i32 i32 i32)))
@@ -42205,7 +42205,7 @@
     grow_memory
   end
   )
-
+)
 (module
   (type $type922 (func))
   (type $type923 (func (return i32)))
@@ -42588,7 +42588,7 @@
     end
   end
   )
-
+)
 (module
   (type $type924 (func))
   (type $type925 (func (params i32 i32 i32)))

@@ -404,6 +404,9 @@ export class BinaryReader {
   private hasBytes(n: number) : boolean {
     return this._pos + n <= this._length;
   }
+  public hasMoreBytes() {
+    return this.hasBytes(1);
+  }
   private readUint8() : number {
     return this._data[this._pos++];
   }
@@ -823,7 +826,7 @@ export class BinaryReader {
       if (magicNumber === WASM_MAGIC_NUMBER) {
         this.currentSection = null;
         this.result = null;
-        this.state = BinaryReaderState.INITIAL;
+        this.state = BinaryReaderState.END_WASM;
         return true;
       }
     }
@@ -900,9 +903,9 @@ export class BinaryReader {
         return this.readFunctionBody();
       case SectionCode.Custom:
         if (this.currentSection.name.length == 4 &&
-            this.currentSection[0] == 0x6e /* 'n' */ && 
-            this.currentSection[0] == 0x61 /* 'a' */ && 
-            this.currentSection[0] == 0x6d /* 'm' */ && 
+            this.currentSection[0] == 0x6e /* 'n' */ &&
+            this.currentSection[0] == 0x61 /* 'a' */ &&
+            this.currentSection[0] == 0x6d /* 'm' */ &&
             this.currentSection[0] == 0x65 /* 'e' */) {
           if (!this.hasVarIntBytes())
             return false;
@@ -937,6 +940,13 @@ export class BinaryReader {
         this.state = BinaryReaderState.BEGIN_WASM;
         return true;
       case BinaryReaderState.END_WASM:
+        this.result = null;
+        this.state = BinaryReaderState.BEGIN_WASM;
+        if (this.hasMoreBytes()) {
+          this.state = BinaryReaderState.INITIAL;
+          return true;
+        }
+        return false;
       case BinaryReaderState.ERROR:
         return true;
       case BinaryReaderState.BEGIN_WASM:
