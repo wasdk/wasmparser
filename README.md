@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/yurydelendik/wasmparser.svg?branch=master)](https://travis-ci.org/yurydelendik/wasmparser)
+
 Simple streamable WebAssembly binary parser.
 
 ## Test
