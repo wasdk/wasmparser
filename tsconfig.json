@@ -3,6 +3,7 @@
         "outDir": "./dist/",
         "sourceMap": true,
         "declaration": true,
+        "preserveConstEnums": true,
         "target": "es5",
         "module": "umd",
         "moduleResolution": "classic"
