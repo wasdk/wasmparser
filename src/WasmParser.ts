@@ -14,7 +14,8 @@
  */
 // See https://github.com/WebAssembly/design/blob/master/BinaryEncoding.md
 const WASM_MAGIC_NUMBER = 0x6d736100;
-const WASM_SUPPORTED_VERSION = 0xd;
+const WASM_SUPPORTED_EXPERIMENTAL_VERSION = 0xd;
+const WASM_SUPPORTED_VERSION = 0x1;
 export const enum SectionCode {
   Unknown = -1,
   Custom = 0,
@@ -932,7 +933,8 @@ export class BinaryReader {
           return true;
         }
         var version = this.readUint32();
-        if (version != WASM_SUPPORTED_VERSION) {
+        if (version != WASM_SUPPORTED_VERSION &&
+            version != WASM_SUPPORTED_EXPERIMENTAL_VERSION) {
           this.error = new Error(`Bad version number ${version}`);
           this.state = BinaryReaderState.ERROR;
           return true;
