@@ -685,6 +685,7 @@ export class BinaryReader {
       funcName: funcName,
       localNames: localNames
     };
+    this._sectionEntriesLeft--;
     return true;
   }
   private readCodeOperator() : boolean {
