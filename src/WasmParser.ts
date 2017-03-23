@@ -685,6 +685,7 @@ export class BinaryReader {
       funcName: funcName,
       localNames: localNames
     };
+    this._sectionEntriesLeft--;
     return true;
   }
   private readCodeOperator() : boolean {
@@ -905,10 +906,10 @@ export class BinaryReader {
         return this.readFunctionBody();
       case SectionCode.Custom:
         if (this.currentSection.name.length == 4 &&
-            this.currentSection[0] == 0x6e /* 'n' */ &&
-            this.currentSection[0] == 0x61 /* 'a' */ &&
-            this.currentSection[0] == 0x6d /* 'm' */ &&
-            this.currentSection[0] == 0x65 /* 'e' */) {
+            this.currentSection.name[0] == 0x6e /* 'n' */ &&
+            this.currentSection.name[1] == 0x61 /* 'a' */ &&
+            this.currentSection.name[2] == 0x6d /* 'm' */ &&
+            this.currentSection.name[3] == 0x65 /* 'e' */) {
           if (!this.hasVarIntBytes())
             return false;
           this._sectionEntriesLeft = this.readVarUint32() >>> 0;
