@@ -1,0 +1,55 @@
+(module
+  (type $type0 (func (param i32)))
+  (import $func0 "spectest" "print" (func (param i32)))
+(memory 1)
+  (export "good" $func1)
+  (export "bad" $func2)
+  (func $func1 (param $var0 i32)
+    block
+      get_local $var0
+      i32.load8_u offset=0
+      call $func0
+      get_local $var0
+      i32.load8_u offset=1
+      call $func0
+      get_local $var0
+      i32.load8_u offset=2
+      call $func0
+      get_local $var0
+      i32.load8_u offset=25
+      call $func0
+      get_local $var0
+      i32.load16_u offset=0
+      call $func0
+      get_local $var0
+      i32.load16_u align=1
+      call $func0
+      get_local $var0
+      i32.load16_u offset=1 align=1
+      call $func0
+      get_local $var0
+      i32.load16_u offset=2
+      call $func0
+      get_local $var0
+      i32.load16_u offset=25 align=1
+      call $func0
+      get_local $var0
+      i32.load offset=0
+      call $func0
+      get_local $var0
+      i32.load offset=1 align=1
+      call $func0
+      get_local $var0
+      i32.load offset=2 align=2
+      call $func0
+      get_local $var0
+      i32.load offset=25 align=1
+      call $func0
+    end
+  )
+  (func $func2 (param $var0 i32)
+    get_local $var0
+    i32.load offset=4294967295
+    drop
+  )
+)

@@ -1,0 +1,23 @@
+(module
+  (type $type0 (func))
+  (export "br" $func0)
+  (export "br_if" $func1)
+  (export "br_table" $func2)
+  (func $func0
+    block
+      br 0
+    end
+  )
+  (func $func1
+    block
+      i32.const 1
+      br_if 0
+    end
+  )
+  (func $func2
+    block
+      i32.const 0
+      br_table 0
+    end
+  )
+)

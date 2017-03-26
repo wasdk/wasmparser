@@ -1,0 +1,118 @@
+(module
+  (type $type0 (func (result i32)))
+  (type $type1 (func (result i64)))
+  (export "i32.test" $func0)
+  (export "i32.umax" $func1)
+  (export "i32.smax" $func2)
+  (export "i32.neg_smax" $func3)
+  (export "i32.smin" $func4)
+  (export "i32.alt_smin" $func5)
+  (export "i32.inc_smin" $func6)
+  (export "i32.neg_zero" $func7)
+  (export "i32.not_octal" $func8)
+  (export "i32.unsigned_decimal" $func9)
+  (export "i32.plus_sign" $func10)
+  (export "i64.test" $func11)
+  (export "i64.umax" $func12)
+  (export "i64.smax" $func13)
+  (export "i64.neg_smax" $func14)
+  (export "i64.smin" $func15)
+  (export "i64.alt_smin" $func16)
+  (export "i64.inc_smin" $func17)
+  (export "i64.neg_zero" $func18)
+  (export "i64.not_octal" $func19)
+  (export "i64.unsigned_decimal" $func20)
+  (export "i64.plus_sign" $func21)
+  (func $func0 (result i32)
+    i32.const -3
+    return
+  )
+  (func $func1 (result i32)
+    i32.const -1
+    return
+  )
+  (func $func2 (result i32)
+    i32.const -1
+    return
+  )
+  (func $func3 (result i32)
+    i32.const 1
+    return
+  )
+  (func $func4 (result i32)
+    i32.const 0
+    return
+  )
+  (func $func5 (result i32)
+    i32.const 0
+    return
+  )
+  (func $func6 (result i32)
+    i32.const 0
+    i32.const 1
+    i32.add
+    return
+  )
+  (func $func7 (result i32)
+    i32.const 0
+    return
+  )
+  (func $func8 (result i32)
+    i32.const 10
+    return
+  )
+  (func $func9 (result i32)
+    i32.const -1
+    return
+  )
+  (func $func10 (result i32)
+    i32.const 42
+    return
+  )
+  (func $func11 (result i64)
+    i64.const 913028331277281900
+    return
+  )
+  (func $func12 (result i64)
+    i64.const -1
+    return
+  )
+  (func $func13 (result i64)
+    i64.const 9223372036854776000
+    return
+  )
+  (func $func14 (result i64)
+    i64.const -9223372036854776000
+    return
+  )
+  (func $func15 (result i64)
+    i64.const -9223372036854776000
+    return
+  )
+  (func $func16 (result i64)
+    i64.const -9223372036854776000
+    return
+  )
+  (func $func17 (result i64)
+    i64.const -9223372036854776000
+    i64.const 1
+    i64.add
+    return
+  )
+  (func $func18 (result i64)
+    i64.const 0
+    return
+  )
+  (func $func19 (result i64)
+    i64.const 10
+    return
+  )
+  (func $func20 (result i64)
+    i64.const -1
+    return
+  )
+  (func $func21 (result i64)
+    i64.const 42
+    return
+  )
+)

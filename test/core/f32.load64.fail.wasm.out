@@ -1,0 +1,8 @@
+(module
+  (type $type0 (func (param i32) (result f32)))
+(memory 1)
+  (func $func0 (param $var0 i32) (result f32)
+    get_local $var0
+    f32.load align=4
+  )
+)

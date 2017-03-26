@@ -1,0 +1,31 @@
+(module
+  (type $type0 (func (param i32) (result i32)))
+  (export "even" $func0)
+  (export "odd" $func1)
+  (func $func0 (param $var0 i32) (result i32)
+    get_local $var0
+    i32.const 0
+    i32.eq
+    if i32
+      i32.const 1
+    else
+      get_local $var0
+      i32.const 1
+      i32.sub
+      call $func1
+    end
+  )
+  (func $func1 (param $var0 i32) (result i32)
+    get_local $var0
+    i32.const 0
+    i32.eq
+    if i32
+      i32.const 0
+    else
+      get_local $var0
+      i32.const 1
+      i32.sub
+      call $func0
+    end
+  )
+)

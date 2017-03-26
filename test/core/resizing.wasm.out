@@ -1,0 +1,37 @@
+(module
+  (type $type0 (func (result i32)))
+  (type $type1 (func))
+  (type $type2 (func (param i32) (result i32)))
+(memory 0)
+  (export "load_at_zero" $func0)
+  (export "store_at_zero" $func1)
+  (export "load_at_page_size" $func2)
+  (export "store_at_page_size" $func3)
+  (export "grow" $func4)
+  (export "size" $func5)
+  (func $func0 (result i32)
+    i32.const 0
+    i32.load offset=0
+  )
+  (func $func1
+    i32.const 0
+    i32.const 2
+    i32.store offset=0
+  )
+  (func $func2 (result i32)
+    i32.const 65536
+    i32.load offset=0
+  )
+  (func $func3
+    i32.const 65536
+    i32.const 3
+    i32.store offset=0
+  )
+  (func $func4 (param $var0 i32) (result i32)
+    get_local $var0
+    grow_memory
+  )
+  (func $func5 (result i32)
+    current_memory
+  )
+)

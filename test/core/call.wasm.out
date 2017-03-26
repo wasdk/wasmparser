@@ -1,0 +1,200 @@
+(module
+  (type $type0 (func (result i32)))
+  (type $type1 (func (result i64)))
+  (type $type2 (func (result f32)))
+  (type $type3 (func (result f64)))
+  (type $type4 (func (param i32) (result i32)))
+  (type $type5 (func (param i64) (result i64)))
+  (type $type6 (func (param f32) (result f32)))
+  (type $type7 (func (param f64) (result f64)))
+  (type $type8 (func (param f32 i32) (result i32)))
+  (type $type9 (func (param i32 i64) (result i64)))
+  (type $type10 (func (param f64 f32) (result f32)))
+  (type $type11 (func (param i64 f64) (result f64)))
+  (type $type12 (func (param i64 i64) (result i64)))
+  (type $type13 (func (param i64) (result i32)))
+  (type $type14 (func))
+  (export "type-i32" $func12)
+  (export "type-i64" $func13)
+  (export "type-f32" $func14)
+  (export "type-f64" $func15)
+  (export "type-first-i32" $func16)
+  (export "type-first-i64" $func17)
+  (export "type-first-f32" $func18)
+  (export "type-first-f64" $func19)
+  (export "type-second-i32" $func20)
+  (export "type-second-i64" $func21)
+  (export "type-second-f32" $func22)
+  (export "type-second-f64" $func23)
+  (export "fac" $func24)
+  (export "fac-acc" $func25)
+  (export "fib" $func26)
+  (export "even" $func27)
+  (export "odd" $func28)
+  (export "runaway" $func29)
+  (export "mutual-runaway" $func30)
+  (func $func0 (result i32)
+    i32.const 306
+  )
+  (func $func1 (result i64)
+    i64.const 356
+  )
+  (func $func2 (result f32)
+    f32.const 3890
+  )
+  (func $func3 (result f64)
+    f64.const 3940
+  )
+  (func $func4 (param $var0 i32) (result i32)
+    get_local $var0
+  )
+  (func $func5 (param $var0 i64) (result i64)
+    get_local $var0
+  )
+  (func $func6 (param $var0 f32) (result f32)
+    get_local $var0
+  )
+  (func $func7 (param $var0 f64) (result f64)
+    get_local $var0
+  )
+  (func $func8 (param $var0 f32) (param $var1 i32) (result i32)
+    get_local $var1
+  )
+  (func $func9 (param $var0 i32) (param $var1 i64) (result i64)
+    get_local $var1
+  )
+  (func $func10 (param $var0 f64) (param $var1 f32) (result f32)
+    get_local $var1
+  )
+  (func $func11 (param $var0 i64) (param $var1 f64) (result f64)
+    get_local $var1
+  )
+  (func $func12 (result i32)
+    call $func0
+  )
+  (func $func13 (result i64)
+    call $func1
+  )
+  (func $func14 (result f32)
+    call $func2
+  )
+  (func $func15 (result f64)
+    call $func3
+  )
+  (func $func16 (result i32)
+    i32.const 32
+    call $func4
+  )
+  (func $func17 (result i64)
+    i64.const 64
+    call $func5
+  )
+  (func $func18 (result f32)
+    f32.const 1.3200000524520874
+    call $func6
+  )
+  (func $func19 (result f64)
+    f64.const 1.64
+    call $func7
+  )
+  (func $func20 (result i32)
+    f32.const 32.099998474121094
+    i32.const 32
+    call $func8
+  )
+  (func $func21 (result i64)
+    i32.const 32
+    i64.const 64
+    call $func9
+  )
+  (func $func22 (result f32)
+    f64.const 64
+    f32.const 32
+    call $func10
+  )
+  (func $func23 (result f64)
+    i64.const 64
+    f64.const 64.1
+    call $func11
+  )
+  (func $func24 (param $var0 i64) (result i64)
+    get_local $var0
+    i64.eqz
+    if i64
+      i64.const 1
+    else
+      get_local $var0
+      get_local $var0
+      i64.const 1
+      i64.sub
+      call $func24
+      i64.mul
+    end
+  )
+  (func $func25 (param $var0 i64) (param $var1 i64) (result i64)
+    get_local $var0
+    i64.eqz
+    if i64
+      get_local $var1
+    else
+      get_local $var0
+      i64.const 1
+      i64.sub
+      get_local $var0
+      get_local $var1
+      i64.mul
+      call $func25
+    end
+  )
+  (func $func26 (param $var0 i64) (result i64)
+    get_local $var0
+    i64.const 1
+    i64.le_u
+    if i64
+      i64.const 1
+    else
+      get_local $var0
+      i64.const 2
+      i64.sub
+      call $func26
+      get_local $var0
+      i64.const 1
+      i64.sub
+      call $func26
+      i64.add
+    end
+  )
+  (func $func27 (param $var0 i64) (result i32)
+    get_local $var0
+    i64.eqz
+    if i32
+      i32.const 44
+    else
+      get_local $var0
+      i64.const 1
+      i64.sub
+      call $func28
+    end
+  )
+  (func $func28 (param $var0 i64) (result i32)
+    get_local $var0
+    i64.eqz
+    if i32
+      i32.const 99
+    else
+      get_local $var0
+      i64.const 1
+      i64.sub
+      call $func27
+    end
+  )
+  (func $func29
+    call $func29
+  )
+  (func $func30
+    call $func31
+  )
+  (func $func31
+    call $func30
+  )
+)

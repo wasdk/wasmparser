@@ -1,0 +1,255 @@
+(module
+  (type $type0 (func))
+  (type $type1 (func (param i32) (result i32)))
+  (type $type2 (func (param i32)))
+  (type $type3 (func (param i32 i32)))
+  (export "as-block-first" $func1)
+  (export "as-block-mid" $func2)
+  (export "as-block-last" $func3)
+  (export "as-block-first-value" $func4)
+  (export "as-block-mid-value" $func5)
+  (export "as-block-last-value" $func6)
+  (export "as-loop-first" $func7)
+  (export "as-loop-mid" $func8)
+  (export "as-loop-last" $func9)
+  (export "as-if-then" $func10)
+  (export "as-if-else" $func11)
+  (export "nested-block-value" $func12)
+  (export "nested-br-value" $func13)
+  (export "nested-br_if-value" $func14)
+  (export "nested-br_if-value-cond" $func15)
+  (export "nested-br_table-value" $func16)
+  (export "nested-br_table-value-index" $func17)
+  (func $func0
+    nop
+  )
+  (func $func1 (param $var0 i32) (result i32)
+    block i32
+      block
+        get_local $var0
+        br_if 0
+        i32.const 2
+        return
+      end
+      i32.const 3
+    end
+  )
+  (func $func2 (param $var0 i32) (result i32)
+    block i32
+      block
+        call $func0
+        get_local $var0
+        br_if 0
+        i32.const 2
+        return
+      end
+      i32.const 3
+    end
+  )
+  (func $func3 (param $var0 i32)
+    block
+      call $func0
+      call $func0
+      get_local $var0
+      br_if 0
+    end
+  )
+  (func $func4 (param $var0 i32) (result i32)
+    block i32
+      i32.const 10
+      get_local $var0
+      br_if 0
+      drop
+      i32.const 11
+      return
+    end
+  )
+  (func $func5 (param $var0 i32) (result i32)
+    block i32
+      call $func0
+      i32.const 20
+      get_local $var0
+      br_if 0
+      drop
+      i32.const 21
+      return
+    end
+  )
+  (func $func6 (param $var0 i32) (result i32)
+    block i32
+      call $func0
+      call $func0
+      i32.const 11
+      get_local $var0
+      br_if 0
+    end
+  )
+  (func $func7 (param $var0 i32) (result i32)
+    block i32
+      block
+        loop
+          get_local $var0
+          br_if 1
+          i32.const 2
+          return
+        end
+        unreachable
+      end
+      i32.const 3
+    end
+  )
+  (func $func8 (param $var0 i32) (result i32)
+    block i32
+      block
+        loop
+          call $func0
+          get_local $var0
+          br_if 1
+          i32.const 2
+          return
+        end
+        unreachable
+      end
+      i32.const 4
+    end
+  )
+  (func $func9 (param $var0 i32)
+    block
+      loop
+        call $func0
+        get_local $var0
+        br_if 1
+      end
+    end
+  )
+  (func $func10 (param $var0 i32) (param $var1 i32)
+    block
+      get_local $var0
+      if
+        get_local $var1
+        br_if 1
+      else
+        call $func0
+      end
+    end
+  )
+  (func $func11 (param $var0 i32) (param $var1 i32)
+    block
+      get_local $var0
+      if
+        call $func0
+      else
+        get_local $var1
+        br_if 1
+      end
+    end
+  )
+  (func $func12 (param $var0 i32) (result i32)
+    i32.const 1
+    block i32
+      i32.const 2
+      drop
+      i32.const 4
+      block i32
+        i32.const 8
+        get_local $var0
+        br_if 1
+        drop
+        i32.const 16
+      end
+      i32.add
+    end
+    i32.add
+  )
+  (func $func13 (param $var0 i32) (result i32)
+    i32.const 1
+    block i32
+      i32.const 2
+      drop
+      block i32
+        i32.const 8
+        get_local $var0
+        br_if 1
+        drop
+        i32.const 4
+      end
+      br 0
+      i32.const 16
+    end
+    i32.add
+  )
+  (func $func14 (param $var0 i32) (result i32)
+    i32.const 1
+    block i32
+      i32.const 2
+      drop
+      block i32
+        i32.const 8
+        get_local $var0
+        br_if 1
+        drop
+        i32.const 4
+      end
+      i32.const 1
+      br_if 0
+      drop
+      i32.const 16
+    end
+    i32.add
+  )
+  (func $func15 (param $var0 i32) (result i32)
+    i32.const 1
+    block i32
+      i32.const 2
+      drop
+      i32.const 4
+      block i32
+        i32.const 8
+        get_local $var0
+        br_if 1
+        drop
+        i32.const 1
+      end
+      br_if 0
+      drop
+      i32.const 16
+    end
+    i32.add
+  )
+  (func $func16 (param $var0 i32) (result i32)
+    i32.const 1
+    block i32
+      i32.const 2
+      drop
+      block i32
+        i32.const 8
+        get_local $var0
+        br_if 1
+        drop
+        i32.const 4
+      end
+      i32.const 1
+      br_table 0
+      i32.const 16
+    end
+    i32.add
+  )
+  (func $func17 (param $var0 i32) (result i32)
+    i32.const 1
+    block i32
+      i32.const 2
+      drop
+      i32.const 4
+      block i32
+        i32.const 8
+        get_local $var0
+        br_if 1
+        drop
+        i32.const 1
+      end
+      br_table 0
+      i32.const 16
+    end
+    i32.add
+  )
+)

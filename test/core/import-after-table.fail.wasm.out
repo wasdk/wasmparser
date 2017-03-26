@@ -1,0 +1,4 @@
+(module
+  (type $type0 (func))
+  (import $func0 "" "" (func))
+)

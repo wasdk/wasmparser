@@ -1,0 +1,11 @@
+(module
+  (type $type0 (func (param f64 f64 f64) (result f64)))
+  (export "f64.no_contraction" $func0)
+  (func $func0 (param $var0 f64) (param $var1 f64) (param $var2 f64) (result f64)
+    get_local $var0
+    get_local $var1
+    f64.mul
+    get_local $var2
+    f64.add
+  )
+)

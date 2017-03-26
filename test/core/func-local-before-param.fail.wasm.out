@@ -1,0 +1,7 @@
+(module
+  (type $type0 (func (param i32)))
+  (func $func0 (param $var0 i32)
+    (local $var1 i32)
+    nop
+  )
+)

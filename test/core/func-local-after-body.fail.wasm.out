@@ -1,0 +1,6 @@
+(module
+  (type $type0 (func))
+  (func $func0
+    nop
+  )
+)

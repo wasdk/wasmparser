@@ -1,0 +1,42 @@
+(module
+  (type $type0 (func))
+  (type $type1 (func (param i32)))
+  (type $type2 (func (param f32)))
+  (type $type3 (func (result i32)))
+  (type $type4 (func (result f32)))
+  (type $type5 (func (param i32) (result i32)))
+  (type $type6 (func (param i64) (result i64)))
+(memory 2)
+  (export "func" $func0)
+  (export "func-i32" $func1)
+  (export "func-f32" $func2)
+  (export "func->i32" $func3)
+  (export "func->f32" $func4)
+  (export "func-i32->i32" $func5)
+  (export "func-i64->i64" $func6)
+  (global)
+  (global)
+  (table)
+  (export "memory" memory)
+  (func $func0
+    nop
+  )
+  (func $func1 (param $var0 i32)
+    nop
+  )
+  (func $func2 (param $var0 f32)
+    nop
+  )
+  (func $func3 (result i32)
+    i32.const 22
+  )
+  (func $func4 (result f32)
+    f32.const 11
+  )
+  (func $func5 (param $var0 i32) (result i32)
+    get_local $var0
+  )
+  (func $func6 (param $var0 i64) (result i64)
+    get_local $var0
+  )
+)

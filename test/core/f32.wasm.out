@@ -1,0 +1,81 @@
+(module
+  (type $type0 (func (param f32 f32) (result f32)))
+  (type $type1 (func (param f32) (result f32)))
+  (export "add" $func0)
+  (export "sub" $func1)
+  (export "mul" $func2)
+  (export "div" $func3)
+  (export "sqrt" $func4)
+  (export "min" $func5)
+  (export "max" $func6)
+  (export "ceil" $func7)
+  (export "floor" $func8)
+  (export "trunc" $func9)
+  (export "nearest" $func10)
+  (export "abs" $func11)
+  (export "neg" $func12)
+  (export "copysign" $func13)
+  (func $func0 (param $var0 f32) (param $var1 f32) (result f32)
+    get_local $var0
+    get_local $var1
+    f32.add
+  )
+  (func $func1 (param $var0 f32) (param $var1 f32) (result f32)
+    get_local $var0
+    get_local $var1
+    f32.sub
+  )
+  (func $func2 (param $var0 f32) (param $var1 f32) (result f32)
+    get_local $var0
+    get_local $var1
+    f32.mul
+  )
+  (func $func3 (param $var0 f32) (param $var1 f32) (result f32)
+    get_local $var0
+    get_local $var1
+    f32.div
+  )
+  (func $func4 (param $var0 f32) (result f32)
+    get_local $var0
+    f32.sqrt
+  )
+  (func $func5 (param $var0 f32) (param $var1 f32) (result f32)
+    get_local $var0
+    get_local $var1
+    f32.min
+  )
+  (func $func6 (param $var0 f32) (param $var1 f32) (result f32)
+    get_local $var0
+    get_local $var1
+    f32.max
+  )
+  (func $func7 (param $var0 f32) (result f32)
+    get_local $var0
+    f32.ceil
+  )
+  (func $func8 (param $var0 f32) (result f32)
+    get_local $var0
+    f32.floor
+  )
+  (func $func9 (param $var0 f32) (result f32)
+    get_local $var0
+    f32.trunc
+  )
+  (func $func10 (param $var0 f32) (result f32)
+    get_local $var0
+    f32.nearest
+  )
+  (func $func11 (param $var0 f32) (result f32)
+    get_local $var0
+    f32.abs
+  )
+  (func $func12 (param $var0 f32) (result f32)
+    get_local $var0
+    f32.neg
+  )
+  (func $func13 (param $var0 f32) (param $var1 f32) (result f32)
+    get_local $var0
+    get_local $var1
+    f32.copysign
+  )
+)

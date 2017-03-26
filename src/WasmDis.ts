@@ -32,13 +32,48 @@ function typeToString(type: number) : string {
     default: throw new Error('Unexpected type');
   }
 }
-function memoryAddressToString(address: IMemoryAddress) : string {
-  // TODO hide default flags
-  return `flags=${address.flags} offset=${address.offset}`;
+function memoryAddressToString(address: IMemoryAddress, code: OperatorCode) : string {
+  var defaultAlignFlags;
+  switch (code) {
+    case OperatorCode.i64_load:
+    case OperatorCode.i64_store:
+      defaultAlignFlags = 3;
+      break;
+    case OperatorCode.i32_load:
+    case OperatorCode.i64_load32_s:
+    case OperatorCode.i64_load32_u:
+    case OperatorCode.i32_store:
+    case OperatorCode.i64_store32:
+      defaultAlignFlags = 2;
+      break;
+    case OperatorCode.i32_load16_s:
+    case OperatorCode.i32_load16_u:
+    case OperatorCode.i64_load16_s:
+    case OperatorCode.i64_load16_u:
+    case OperatorCode.i32_store16:
+    case OperatorCode.i64_store16:
+      defaultAlignFlags = 1;
+      break;
+    case OperatorCode.i32_load8_s:
+    case OperatorCode.i32_load8_u:
+    case OperatorCode.i64_load8_s:
+    case OperatorCode.i64_load8_u:
+    case OperatorCode.i32_store8:
+    case OperatorCode.i64_store8:
+      defaultAlignFlags = 0;
+      break;
+  }
+  if (address.flags == defaultAlignFlags) // hide default flags
+    return `offset=${address.offset}`;
+  if (!address.offset) // hide default offset
+    return `align=${1 << address.flags}`;
+  return `offset=${address.offset} align=${1 << address.flags}`;
 }
 function limitsToString(limits: IResizableLimits) : string {
   return limits.initial + (limits.maximum !== undefined ? ' ' + limits.maximum : '');
 }
+const FunctionBodyInitialIndent: string = '  ';
+const FunctionBodyIndentIncrement: string = '  ';
 export class WasmDisassembler {
   private _buffer: Array<string>;
   private _types: Array<IFunctionType>;
@@ -66,21 +101,21 @@ export class WasmDisassembler {
       for (var i = 0; i < type.params.length; i++)
         result.push(` (param $var${i} ${typeToString(type.params[i])})`);
     } else if (type.params.length > 0) {
-      result.push(' (params');
+      result.push(' (param');
       for (var i = 0; i < type.params.length; i++)
         result.push(' ', typeToString(type.params[i]));
       result.push(')');
     }
     for (var i = 0; i < type.returns.length; i++) {
-      result.push(` (return ${typeToString(type.returns[i])})`);
+      result.push(` (result ${typeToString(type.returns[i])})`);
     }
     return result.join('');
   }
   private increaseIndent() : void {
-    this._indent += '  ';
+    this._indent += FunctionBodyIndentIncrement;
   }
   private decreaseIndent() : void {
-    this._indent = this._indent.slice(0, -2);
+    this._indent = this._indent.slice(0, -FunctionBodyIndentIncrement.length);
   }
   public disassemble(reader: BinaryReader) : string {
     while (true) {
@@ -109,11 +144,20 @@ export class WasmDisassembler {
             case SectionCode.Export:
             case SectionCode.Function:
             case SectionCode.Code:
+            case SectionCode.Memory:
               break; // reading known section;
             default:
               reader.skipSection();
               break;
           }
+          break;
+        case BinaryReaderState.MEMORY_SECTION_ENTRY:
+          var memoryInfo = <IMemoryType>reader.result;
+          this._buffer.push(`(memory ${memoryInfo.limits.initial}`);
+          if (memoryInfo.limits.maximum !== undefined) {
+            this._buffer.push(` ${memoryInfo.limits.maximum}`);
+          }
+          this._buffer.push(')\n');
           break;
         case BinaryReaderState.EXPORT_SECTION_ENTRY:
           var exportInfo = <IExportEntry>reader.result;
@@ -136,7 +180,7 @@ export class WasmDisassembler {
           break;
         case BinaryReaderState.IMPORT_SECTION_ENTRY:
           var importInfo = <IImportEntry>reader.result;
-          this._buffer.push(`  (import "${binToString(importInfo.module)}" "${binToString(importInfo.field)}"`);
+          this._buffer.push(`  (import $func${this._importCount} "${binToString(importInfo.module)}" "${binToString(importInfo.field)}"`);
           switch (importInfo.kind) {
             case ExternalKind.Function:
               this._importCount++;
@@ -176,11 +220,11 @@ export class WasmDisassembler {
           var localIndex = type.params.length;
           for (var l of func.locals) {
             for (var i = 0; i < l.count; i++) {
-              this._buffer.push(`    (local $var${localIndex++})\n`);
+              this._buffer.push(`    (local $var${localIndex++} ${typeToString(l.type)})\n`);
             }
           }
           this._funcIndex++;
-          this._indent = '    ';
+          this._indent = FunctionBodyInitialIndent + FunctionBodyIndentIncrement;
           break;
         case BinaryReaderState.CODE_OPERATOR:
           var operator = <IOperatorInformation>reader.result;
@@ -190,7 +234,15 @@ export class WasmDisassembler {
               this.decreaseIndent();
               break;
           }
+          if (operator.code == OperatorCode.end && this._indent == FunctionBodyInitialIndent) {
+            // reached of the function, skipping the operator
+            break;
+          }
           var str = OperatorCodeNames[operator.code].replace(/^([if](32|64))_/, "$1.").replace(/_([if](32|64))$/, "\/$1");
+          if (operator.blockType !== undefined &&
+              operator.blockType !== Type.empty_block_type) {
+            str += ' ' + typeToString(operator.blockType);
+          }
           this._buffer.push(this._indent, str);
           if (operator.localIndex !== undefined) {
             this._buffer.push(` $var${operator.localIndex}`);
@@ -214,7 +266,7 @@ export class WasmDisassembler {
             }
           }
           if (operator.memoryAddress !== undefined) {
-            this._buffer.push(` ${memoryAddressToString(operator.memoryAddress)}`);
+            this._buffer.push(` ${memoryAddressToString(operator.memoryAddress, operator.code)}`);
           }
           if (operator.brTable !== undefined) {
             for (var i = 0; i < operator.brTable.length; i++)

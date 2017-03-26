@@ -19,7 +19,7 @@ var path = require('path');
 var wasmparser = require('./dist/WasmParser.js');
 var wasmdis = require('./dist/WasmDis.js');
 
-const testFolder = './test/';
+const testFolder = './test/core';
 let failCount = 0;
 let passCount = 0;
 
