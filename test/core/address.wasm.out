@@ -1,7 +1,7 @@
 (module
   (type $type0 (func (param i32)))
   (import $func0 "spectest" "print" (func (param i32)))
-(memory 1)
+  (memory 1)
   (export "good" $func1)
   (export "bad" $func2)
   (func $func1 (param $var0 i32)
@@ -51,5 +51,11 @@
     get_local $var0
     i32.load offset=4294967295
     drop
+  )
+  (data
+    (
+      i32.const 0
+    )
+    "abcdefghijklmnopqrstuvwxyz"
   )
 )

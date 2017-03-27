@@ -16,7 +16,7 @@ import {
   BinaryReader, BinaryReaderState, SectionCode, IExportEntry, IMemoryAddress,
   ExternalKind, IFunctionType, IFunctionEntry, IFunctionInformation,
   IImportEntry, IOperatorInformation, Type, OperatorCode, OperatorCodeNames, Int64,
-  ITableType, IMemoryType, IGlobalType, IResizableLimits
+  ITableType, IMemoryType, IGlobalType, IResizableLimits, IDataSegmentBody
 } from './WasmParser';
 function binToString(b: Uint8Array) : string {
   // FIXME utf-8
@@ -72,8 +72,7 @@ function memoryAddressToString(address: IMemoryAddress, code: OperatorCode) : st
 function limitsToString(limits: IResizableLimits) : string {
   return limits.initial + (limits.maximum !== undefined ? ' ' + limits.maximum : '');
 }
-const FunctionBodyInitialIndent: string = '  ';
-const FunctionBodyIndentIncrement: string = '  ';
+const IndentIncrement: string = '  ';
 export class WasmDisassembler {
   private _buffer: Array<string>;
   private _types: Array<IFunctionType>;
@@ -81,6 +80,7 @@ export class WasmDisassembler {
   private _funcTypes: Array<number>;
   private _importCount: number;
   private _indent: string;
+  private _indentLevel: number;
   constructor() {
     this._buffer = [];
     this._types = [];
@@ -88,6 +88,7 @@ export class WasmDisassembler {
     this._funcTypes = [];
     this._importCount = 0;
     this._indent = null;
+    this._indentLevel = 0;
   }
   private printType(typeIndex: number) : string {
     var type = this._types[typeIndex];
@@ -112,10 +113,12 @@ export class WasmDisassembler {
     return result.join('');
   }
   private increaseIndent() : void {
-    this._indent += FunctionBodyIndentIncrement;
+    this._indent += IndentIncrement;
+    this._indentLevel++;
   }
   private decreaseIndent() : void {
-    this._indent = this._indent.slice(0, -FunctionBodyIndentIncrement.length);
+    this._indent = this._indent.slice(0, -IndentIncrement.length);
+    this._indentLevel--;
   }
   public disassemble(reader: BinaryReader) : string {
     while (true) {
@@ -145,6 +148,7 @@ export class WasmDisassembler {
             case SectionCode.Function:
             case SectionCode.Code:
             case SectionCode.Memory:
+            case SectionCode.Data:
               break; // reading known section;
             default:
               reader.skipSection();
@@ -153,7 +157,7 @@ export class WasmDisassembler {
           break;
         case BinaryReaderState.MEMORY_SECTION_ENTRY:
           var memoryInfo = <IMemoryType>reader.result;
-          this._buffer.push(`(memory ${memoryInfo.limits.initial}`);
+          this._buffer.push(`  (memory ${memoryInfo.limits.initial}`);
           if (memoryInfo.limits.maximum !== undefined) {
             this._buffer.push(` ${memoryInfo.limits.maximum}`);
           }
@@ -209,6 +213,24 @@ export class WasmDisassembler {
           this._types.push(funcType);
           this._buffer.push(`  (type $type${typeIndex} ${this.printType(typeIndex)})\n`);
           break;
+        case BinaryReaderState.BEGIN_DATA_SECTION_ENTRY:
+          this._buffer.push(`  (data\n`);
+          break;
+        case BinaryReaderState.DATA_SECTION_ENTRY_BODY:
+          var body = <IDataSegmentBody>reader.result;
+          this._buffer.push(`    "${binToString(body.data)}"\n`);
+          break;
+        case BinaryReaderState.END_DATA_SECTION_ENTRY:
+          this._buffer.push(`  )\n`);
+          break;
+        case BinaryReaderState.BEGIN_INIT_EXPRESSION_BODY:
+          this._indent = '      ';
+          this._indentLevel = 0;
+          this._buffer.push('    (\n');
+          break;
+        case BinaryReaderState.END_INIT_EXPRESSION_BODY:
+          this._buffer.push('    )\n');
+          break;
         case BinaryReaderState.FUNCTION_SECTION_ENTRY:
           this._funcTypes.push((<IFunctionEntry>reader.result).typeIndex);
           break;
@@ -224,19 +246,21 @@ export class WasmDisassembler {
             }
           }
           this._funcIndex++;
-          this._indent = FunctionBodyInitialIndent + FunctionBodyIndentIncrement;
+          this._indent = '    ';
+          this._indentLevel = 0;
           break;
+        case BinaryReaderState.INIT_EXPRESSION_OPERATOR:
         case BinaryReaderState.CODE_OPERATOR:
           var operator = <IOperatorInformation>reader.result;
+          if (operator.code == OperatorCode.end && this._indentLevel == 0) {
+            // reached of the function, skipping the operator
+            break;
+          }
           switch (operator.code) {
             case OperatorCode.end:
             case OperatorCode.else:
               this.decreaseIndent();
               break;
-          }
-          if (operator.code == OperatorCode.end && this._indent == FunctionBodyInitialIndent) {
-            // reached of the function, skipping the operator
-            break;
           }
           var str = OperatorCodeNames[operator.code].replace(/^([if](32|64))_/, "$1.").replace(/_([if](32|64))$/, "\/$1");
           if (operator.blockType !== undefined &&
@@ -250,8 +274,8 @@ export class WasmDisassembler {
           if (operator.funcIndex !== undefined) {
             this._buffer.push(` $func${operator.funcIndex}`);
           }
-          if (operator.brDepth !== undefined) {
-            this._buffer.push(` ${operator.brDepth}`);
+          if (operator.typeIndex !== undefined) {
+            this._buffer.push(` $type${operator.typeIndex}`);
           }
           if (operator.literal !== undefined) {
             switch (operator.code) {
@@ -267,6 +291,9 @@ export class WasmDisassembler {
           }
           if (operator.memoryAddress !== undefined) {
             this._buffer.push(` ${memoryAddressToString(operator.memoryAddress, operator.code)}`);
+          }
+          if (operator.brDepth !== undefined) {
+            this._buffer.push(` ${operator.brDepth}`);
           }
           if (operator.brTable !== undefined) {
             for (var i = 0; i < operator.brTable.length; i++)

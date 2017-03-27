@@ -6,7 +6,7 @@
   (type $type4 (func (result f32)))
   (type $type5 (func (param i32) (result i32)))
   (type $type6 (func (param i64) (result i64)))
-(memory 2)
+  (memory 2)
   (export "func" $func0)
   (export "func-i32" $func1)
   (export "func-f32" $func2)

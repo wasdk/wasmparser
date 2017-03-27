@@ -239,8 +239,12 @@ export const enum BinaryReaderState {
   MEMORY_SECTION_ENTRY = 15,
   GLOBAL_SECTION_ENTRY = 16,
   EXPORT_SECTION_ENTRY = 17,
+  DATA_SECTION_ENTRY = 18,
   NAME_SECTION_ENTRY = 19,
   BEGIN_FUNCTION_BODY = 20,
+  BEGIN_DATA_SECTION_ENTRY = 24,
+  DATA_SECTION_ENTRY_BODY = 25,
+  END_DATA_SECTION_ENTRY = 26,
   END_FUNCTION_BODY = 30,
   READING_FUNCTION_HEADER = 31,
   SKIPPING_FUNCTION_BODY = 32,
@@ -272,6 +276,12 @@ export interface IGlobalType {
 }
 export interface IGlobalVariable {
   type: IGlobalType;
+}
+export interface IDataSegment {
+  index: number;
+}
+export interface IDataSegmentBody {
+  data: Uint8Array;
 }
 export type ImportEntryType = ITableType | IMemoryType | IGlobalType;
 export interface IImportEntry {
@@ -354,7 +364,8 @@ export class Int64 {
 }
 export type BinaryReaderResult =
   IImportEntry | IExportEntry | IFunctionEntry | IFunctionType | IModuleHeader |
-  IOperatorInformation | IMemoryType | ITableType | IGlobalVariable | INameEntry;
+  IOperatorInformation | IMemoryType | ITableType | IGlobalVariable | INameEntry |
+  IDataSegment | IDataSegmentBody;
 export class BinaryReader {
   private _data: Uint8Array;
   private _pos: number;
@@ -660,6 +671,31 @@ export class BinaryReader {
     this._sectionEntriesLeft--;
     return true;
   }
+  private readDataEntry() : boolean {
+    if (this._sectionEntriesLeft === 0) {
+      this.skipSection();
+      return this.read();
+    }
+    if (!this.hasVarIntBytes()) {
+       return false;
+    }
+    this.state = BinaryReaderState.BEGIN_DATA_SECTION_ENTRY;
+    this.result = {
+      index: this.readVarUint32()
+    };
+    this._sectionEntriesLeft--;
+    return true;
+  }
+  private readDataEntryBody() : boolean {
+    if (!this.hasStringBytes()) {
+      return false;
+    }
+    this.state = BinaryReaderState.DATA_SECTION_ENTRY_BODY;
+    this.result = {
+      data: this.readStringBytes()
+    };
+    return true;
+  }
   private readInitExpressionBody(): boolean {
     this.state = BinaryReaderState.BEGIN_INIT_EXPRESSION_BODY;
     this.result = null;
@@ -694,6 +730,7 @@ export class BinaryReader {
       this.skipFunctionBody();
       return this.read();
     } else if (this.state === BinaryReaderState.INIT_EXPRESSION_OPERATOR &&
+               this.result &&
                (<IOperatorInformation>this.result).code === OperatorCode.end) {
       this.state = BinaryReaderState.END_INIT_EXPRESSION_BODY;
       this.result = null;
@@ -904,6 +941,12 @@ export class BinaryReader {
         this._sectionEntriesLeft = this.readVarUint32() >>> 0;
         this.state = BinaryReaderState.READING_FUNCTION_HEADER;
         return this.readFunctionBody();
+      case SectionCode.Data:
+        if (!this.hasVarIntBytes())
+          return false;
+        this._sectionEntriesLeft = this.readVarUint32() >>> 0;
+        this.state = BinaryReaderState.DATA_SECTION_ENTRY;
+        return this.readDataEntry();
       case SectionCode.Custom:
         if (this.currentSection.name.length == 4 &&
             this.currentSection.name[0] == 0x6e /* 'n' */ &&
@@ -986,8 +1029,25 @@ export class BinaryReader {
         return this.readMemoryEntry();
       case BinaryReaderState.GLOBAL_SECTION_ENTRY:
         return this.readInitExpressionBody();
+      case BinaryReaderState.DATA_SECTION_ENTRY:
+      case BinaryReaderState.END_DATA_SECTION_ENTRY:
+        return this.readDataEntry();
+      case BinaryReaderState.BEGIN_DATA_SECTION_ENTRY:
+        return this.readInitExpressionBody();
+      case BinaryReaderState.DATA_SECTION_ENTRY_BODY:
+        this.state = BinaryReaderState.END_DATA_SECTION_ENTRY;
+        this.result = null;
+        return true;
       case BinaryReaderState.END_INIT_EXPRESSION_BODY:
-        return this.readGlobalEntry();
+        switch (this.currentSection.id) {
+          case SectionCode.Global:
+            return this.readGlobalEntry();
+          case SectionCode.Data:
+            return this.readDataEntryBody();
+        }
+        this.error = new Error(`Unexpected section type: ${this.currentSection.id}`);
+        this.state = BinaryReaderState.ERROR;
+        return true;
       case BinaryReaderState.NAME_SECTION_ENTRY:
         return this.readNameEntry();
       case BinaryReaderState.READING_FUNCTION_HEADER:

@@ -7,7 +7,7 @@
   (type $type5 (func (param i32 i32 i32) (result i32)))
   (type $type6 (func (param i32 i32 i32) (result i32)))
   (type $type7 (func (result f32)))
-(memory 1)
+  (memory 1)
   (export "type-i32" $func1)
   (export "type-i64" $func2)
   (export "type-f32" $func3)
@@ -320,7 +320,7 @@
     i32.const 1
     i32.const 2
     i32.const 3
-    call_indirect
+    call_indirect $type6
   )
   (func $func37 (result i32)
     i32.const 0
@@ -328,7 +328,7 @@
     return
     i32.const 2
     i32.const 3
-    call_indirect
+    call_indirect $type6
   )
   (func $func38 (result i32)
     i32.const 0
@@ -336,7 +336,7 @@
     i32.const 22
     return
     i32.const 3
-    call_indirect
+    call_indirect $type6
   )
   (func $func39 (result i32)
     i32.const 0
@@ -344,7 +344,7 @@
     i32.const 2
     i32.const 23
     return
-    call_indirect
+    call_indirect $type6
   )
   (func $func40 (result i32)
     (local $var0 f32)

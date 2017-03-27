@@ -12,7 +12,7 @@
   (type $type10 (func (param i64 i64)))
   (type $type11 (func (param f32 f32)))
   (type $type12 (func (param f64 f64)))
-(memory 1)
+  (memory 1)
   (export "i32_add" $func35)
   (export "i32_sub" $func36)
   (export "i32_mul" $func37)
@@ -624,7 +624,7 @@
       call $func11
       call $func12
       call $func14
-      call_indirect
+      call_indirect $type0
       drop
       call $func10
     end
@@ -921,7 +921,7 @@
       call $func16
       call $func17
       call $func19
-      call_indirect
+      call_indirect $type1
       drop
       call $func10
     end
@@ -1091,7 +1091,7 @@
       call $func21
       call $func22
       call $func24
-      call_indirect
+      call_indirect $type2
       drop
       call $func10
     end
@@ -1261,7 +1261,7 @@
       call $func26
       call $func27
       call $func29
-      call_indirect
+      call_indirect $type3
       drop
       call $func10
     end
