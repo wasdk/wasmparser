@@ -6,6 +6,7 @@
   (type $type4 (func (result f32)))
   (type $type5 (func (param i32) (result i32)))
   (type $type6 (func (param i64) (result i64)))
+  (table $table0 10 anyfunc)
   (memory 2)
   (global $global0 i32
     (

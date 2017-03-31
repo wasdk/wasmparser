@@ -17,6 +17,7 @@
   (type $type15 (func (param f32) (result f32)))
   (type $type16 (func (param f64) (result f64)))
   (type $type17 (func (param i32) (result i64)))
+  (table $table0 23 23 anyfunc)
   (export "type-i32" $func16)
   (export "type-i64" $func17)
   (export "type-f32" $func18)
@@ -38,6 +39,12 @@
   (export "odd" $func34)
   (export "runaway" $func35)
   (export "mutual-runaway" $func36)
+  (elem
+    (
+      i32.const 0
+    )
+    $func0 $func1 $func2 $func3 $func4 $func5 $func6 $func7 $func10 $func8 $func11 $func9 $func31 $func32 $func33 $func34 $func35 $func36 $func37 $func12 $func13 $func14 $func15
+  )
   (func $func0 (result i32)
     i32.const 306
   )

@@ -17,7 +17,7 @@ import {
   ExternalKind, IFunctionType, IFunctionEntry, IFunctionInformation,
   IImportEntry, IOperatorInformation, Type, OperatorCode, OperatorCodeNames, Int64,
   ITableType, IMemoryType, IGlobalType, IResizableLimits, IDataSegmentBody,
-  IGlobalVariable
+  IGlobalVariable, IElementSegment, IElementSegmentBody
 } from './WasmParser';
 function binToString(b: Uint8Array) : string {
   // FIXME utf-8
@@ -160,6 +160,8 @@ export class WasmDisassembler {
             case SectionCode.Code:
             case SectionCode.Memory:
             case SectionCode.Data:
+            case SectionCode.Table:
+            case SectionCode.Element:
               break; // reading known section;
             default:
               reader.skipSection();
@@ -173,6 +175,10 @@ export class WasmDisassembler {
             this._buffer.push(` ${memoryInfo.limits.maximum}`);
           }
           this._buffer.push(')\n');
+          break;
+        case BinaryReaderState.TABLE_SECTION_ENTRY:
+          var tableInfo = <ITableType>reader.result;
+          this._buffer.push(`  (table $table${this._tableCount++} ${limitsToString(tableInfo.limits)} ${typeToString(tableInfo.elementType)})\n`);
           break;
         case BinaryReaderState.EXPORT_SECTION_ENTRY:
           var exportInfo = <IExportEntry>reader.result;
@@ -219,6 +225,21 @@ export class WasmDisassembler {
               throw new Error(`NYI other import types: ${importInfo.kind}`);
           }
           this._buffer.push(')\n');
+          break;
+        case BinaryReaderState.BEGIN_ELEMENT_SECTION_ENTRY:
+          var elementSegmentInfo = <IElementSegment>reader.result;
+          this._buffer.push(`  (elem\n`);
+          break;
+        case BinaryReaderState.END_ELEMENT_SECTION_ENTRY:
+          this._buffer.push('  )\n');
+          break;
+        case BinaryReaderState.ELEMENT_SECTION_ENTRY_BODY:
+          var elementSegmentBody = <IElementSegmentBody>reader.result;
+          this._buffer.push('   ');
+          elementSegmentBody.elements.forEach(funcIndex => {
+            this._buffer.push(` $func${funcIndex}`);
+          });
+          this._buffer.push('\n');
           break;
         case BinaryReaderState.BEGIN_GLOBAL_SECTION_ENTRY:
           var globalInfo = <IGlobalVariable>reader.result;

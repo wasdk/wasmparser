@@ -242,9 +242,13 @@ export const enum BinaryReaderState {
   DATA_SECTION_ENTRY = 18,
   NAME_SECTION_ENTRY = 19,
   BEGIN_FUNCTION_BODY = 20,
+  ELEMENT_SECTION_ENTRY = 21,
+  BEGIN_ELEMENT_SECTION_ENTRY = 22,
+  END_ELEMENT_SECTION_ENTRY = 23,
   BEGIN_DATA_SECTION_ENTRY = 24,
   DATA_SECTION_ENTRY_BODY = 25,
   END_DATA_SECTION_ENTRY = 26,
+  ELEMENT_SECTION_ENTRY_BODY = 27,
   END_FUNCTION_BODY = 30,
   READING_FUNCTION_HEADER = 31,
   SKIPPING_FUNCTION_BODY = 32,
@@ -278,6 +282,12 @@ export interface IGlobalType {
 }
 export interface IGlobalVariable {
   type: IGlobalType;
+}
+export interface IElementSegment {
+  index: number;
+}
+export interface IElementSegmentBody {
+  elements: Uint32Array;
 }
 export interface IDataSegment {
   index: number;
@@ -367,7 +377,7 @@ export class Int64 {
 export type BinaryReaderResult =
   IImportEntry | IExportEntry | IFunctionEntry | IFunctionType | IModuleHeader |
   IOperatorInformation | IMemoryType | ITableType | IGlobalVariable | INameEntry |
-  IDataSegment | IDataSegmentBody;
+  IElementSegment | IElementSegmentBody | IDataSegment | IDataSegmentBody;
 export class BinaryReader {
   private _data: Uint8Array;
   private _pos: number;
@@ -686,6 +696,43 @@ export class BinaryReader {
     this._sectionEntriesLeft--;
     return true;
   }
+  private readElementEntry() : boolean {
+    if (this._sectionEntriesLeft === 0) {
+      this.skipSection();
+      return this.read();
+    }
+    if (!this.hasVarIntBytes()) {
+      this.state = BinaryReaderState.ELEMENT_SECTION_ENTRY;
+      return false;
+    }
+    var tableIndex = this.readVarUint32();
+    this.state = BinaryReaderState.BEGIN_ELEMENT_SECTION_ENTRY;
+    this.result = { index: tableIndex };
+    this._sectionEntriesLeft--;
+    return true;
+  }
+  private readElementEntryBody() : boolean {
+    if (!this.hasVarIntBytes())
+      return false;
+    var pos = this._pos;
+    var numElemements = this.readVarUint32();
+    if (!this.hasBytes(numElemements)) {
+      // Shall have at least the numElemements amount of bytes.
+      this._pos = pos;
+      return false;
+    }
+    var elements = new Uint32Array(numElemements);
+    for (var i = 0; i < numElemements; i++) {
+      if (!this.hasVarIntBytes()) {
+        this._pos = pos;
+        return false;
+      }
+      elements[i] = this.readVarUint32();
+    }
+    this.state = BinaryReaderState.ELEMENT_SECTION_ENTRY_BODY;
+    this.result = { elements: elements };
+    return true;
+  }
   private readDataEntry() : boolean {
     if (this._sectionEntriesLeft === 0) {
       this.skipSection();
@@ -968,7 +1015,7 @@ export class BinaryReader {
         this._sectionEntriesLeft = this.readVarUint32() >>> 0;
         return this.readMemoryEntry();
       case SectionCode.Global:
-        if (!this.hasSectionPayload())
+        if (!this.hasVarIntBytes())
           return false;
         this._sectionEntriesLeft = this.readVarUint32() >>> 0;
         return this.readGlobalEntry();
@@ -978,6 +1025,11 @@ export class BinaryReader {
         this._sectionEntriesLeft = this.readVarUint32() >>> 0;
         this.state = BinaryReaderState.READING_FUNCTION_HEADER;
         return this.readFunctionBody();
+      case SectionCode.Element:
+        if (!this.hasVarIntBytes())
+          return false;
+        this._sectionEntriesLeft = this.readVarUint32() >>> 0;
+        return this.readElementEntry();
       case SectionCode.Data:
         if (!this.hasVarIntBytes())
           return false;
@@ -1065,11 +1117,19 @@ export class BinaryReader {
       case BinaryReaderState.MEMORY_SECTION_ENTRY:
         return this.readMemoryEntry();
       case BinaryReaderState.GLOBAL_SECTION_ENTRY:
+      case BinaryReaderState.END_GLOBAL_SECTION_ENTRY:
         return this.readGlobalEntry();
       case BinaryReaderState.BEGIN_GLOBAL_SECTION_ENTRY:
         return this.readInitExpressionBody();
-      case BinaryReaderState.END_GLOBAL_SECTION_ENTRY:
-        return this.readGlobalEntry();
+      case BinaryReaderState.ELEMENT_SECTION_ENTRY:
+      case BinaryReaderState.END_ELEMENT_SECTION_ENTRY:
+        return this.readElementEntry();
+      case BinaryReaderState.BEGIN_ELEMENT_SECTION_ENTRY:
+        return this.readInitExpressionBody();
+      case BinaryReaderState.ELEMENT_SECTION_ENTRY_BODY:
+        this.state = BinaryReaderState.END_ELEMENT_SECTION_ENTRY;
+        this.result = null;
+        return true;
       case BinaryReaderState.DATA_SECTION_ENTRY:
       case BinaryReaderState.END_DATA_SECTION_ENTRY:
         return this.readDataEntry();
@@ -1086,6 +1146,8 @@ export class BinaryReader {
             return true;
           case SectionCode.Data:
             return this.readDataEntryBody();
+          case SectionCode.Element:
+            return this.readElementEntryBody();
         }
         this.error = new Error(`Unexpected section type: ${this.currentSection.id}`);
         this.state = BinaryReaderState.ERROR;

@@ -12,6 +12,7 @@
   (type $type10 (func (param i64 i64)))
   (type $type11 (func (param f32 f32)))
   (type $type12 (func (param f64 f64)))
+  (table $table0 8 8 anyfunc)
   (memory 1)
   (export "i32_add" $func35)
   (export "i32_sub" $func36)
@@ -108,6 +109,12 @@
   (export "f64_select" $func127)
   (export "br_if" $func128)
   (export "br_table" $func129)
+  (elem
+    (
+      i32.const 0
+    )
+    $func0 $func1 $func2 $func3 $func4 $func5 $func6 $func7
+  )
   (func $func0 (param $var0 i32) (param $var1 i32) (result i32)
     i32.const -1
   )

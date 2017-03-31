@@ -18,6 +18,7 @@
   (type $type16 (func (param f64 i64 f64 i64 f64 i64 f32 i32)))
   (type $type17 (func))
   (type $type18 (func (param f64 i64 f64 i64 f64 i64 f32 i32)))
+  (table $table0 5 5 anyfunc)
   (export "f" $func2)
   (export "g" $func4)
   (export "local-first-i32" $func23)
@@ -72,6 +73,12 @@
   (export "signature-implicit-reused" $func77)
   (export "signature-explicit-duplicate" $func78)
   (export "signature-implicit-duplicate" $func79)
+  (elem
+    (
+      i32.const 0
+    )
+    $func75 $func73 $func72 $func75 $func71
+  )
   (func $func0
     nop
   )

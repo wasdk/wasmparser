@@ -7,6 +7,7 @@
   (type $type5 (func (param i32 i32 i32) (result i32)))
   (type $type6 (func (param i32 i32 i32) (result i32)))
   (type $type7 (func (result f32)))
+  (table $table0 1 1 anyfunc)
   (memory 1)
   (export "type-i32" $func1)
   (export "type-i64" $func2)
@@ -61,6 +62,12 @@
   (export "as-compare-right" $func52)
   (export "as-convert-operand" $func53)
   (export "as-grow_memory-size" $func54)
+  (elem
+    (
+      i32.const 0
+    )
+    $func32
+  )
   (func $func0
     nop
   )
