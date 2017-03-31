@@ -17,7 +17,7 @@ import {
   ExternalKind, IFunctionType, IFunctionEntry, IFunctionInformation,
   IImportEntry, IOperatorInformation, Type, OperatorCode, OperatorCodeNames, Int64,
   ITableType, IMemoryType, IGlobalType, IResizableLimits, IDataSegmentBody,
-  IGlobalVariable, IElementSegment, IElementSegmentBody
+  IGlobalVariable, IElementSegment, IElementSegmentBody, ISectionInformation
 } from './WasmParser';
 function binToString(b: Uint8Array) : string {
   // FIXME utf-8
@@ -151,7 +151,8 @@ export class WasmDisassembler {
         case BinaryReaderState.END_SECTION:
           break;
         case BinaryReaderState.BEGIN_SECTION:
-          switch (reader.currentSection.id) {
+          var sectionInfo = <ISectionInformation>reader.result;
+          switch (sectionInfo.id) {
             case SectionCode.Type:
             case SectionCode.Import:
             case SectionCode.Export:
@@ -276,7 +277,7 @@ export class WasmDisassembler {
           this._funcTypes.push((<IFunctionEntry>reader.result).typeIndex);
           break;
         case BinaryReaderState.BEGIN_FUNCTION_BODY:
-          var func = reader.currentFunction;
+          var func = <IFunctionInformation>reader.result;
           var type = this._types[this._funcTypes[this._funcIndex]];
           var printIndex = this._funcIndex + this._importCount;
           this._buffer.push(`  (func $func${printIndex}${this.printFuncType(type, true)}\n`);

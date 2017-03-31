@@ -232,6 +232,8 @@ export const enum BinaryReaderState {
   END_WASM = 2,
   BEGIN_SECTION = 3,
   END_SECTION = 4,
+  SKIPPING_SECTION = 5,
+
   TYPE_SECTION_ENTRY = 11,
   IMPORT_SECTION_ENTRY = 12,
   FUNCTION_SECTION_ENTRY = 13,
@@ -241,24 +243,40 @@ export const enum BinaryReaderState {
   EXPORT_SECTION_ENTRY = 17,
   DATA_SECTION_ENTRY = 18,
   NAME_SECTION_ENTRY = 19,
-  BEGIN_FUNCTION_BODY = 20,
-  ELEMENT_SECTION_ENTRY = 21,
-  BEGIN_ELEMENT_SECTION_ENTRY = 22,
-  END_ELEMENT_SECTION_ENTRY = 23,
-  BEGIN_DATA_SECTION_ENTRY = 24,
-  DATA_SECTION_ENTRY_BODY = 25,
-  END_DATA_SECTION_ENTRY = 26,
-  ELEMENT_SECTION_ENTRY_BODY = 27,
-  END_FUNCTION_BODY = 30,
-  READING_FUNCTION_HEADER = 31,
+  ELEMENT_SECTION_ENTRY = 20,
+
+  BEGIN_INIT_EXPRESSION_BODY = 25,
+  INIT_EXPRESSION_OPERATOR = 26,
+  END_INIT_EXPRESSION_BODY = 27,
+
+  BEGIN_FUNCTION_BODY = 28,
+  READING_FUNCTION_HEADER = 29,
+  CODE_OPERATOR = 30,
+  END_FUNCTION_BODY = 31,
   SKIPPING_FUNCTION_BODY = 32,
-  CODE_OPERATOR = 33,
-  SKIPPING_SECTION = 35,
-  BEGIN_GLOBAL_SECTION_ENTRY = 36,
-  END_GLOBAL_SECTION_ENTRY = 37,
-  BEGIN_INIT_EXPRESSION_BODY = 40,
-  END_INIT_EXPRESSION_BODY = 41,
-  INIT_EXPRESSION_OPERATOR = 42,
+
+  BEGIN_ELEMENT_SECTION_ENTRY = 33,
+  ELEMENT_SECTION_ENTRY_BODY = 34,
+  END_ELEMENT_SECTION_ENTRY = 35,
+
+  BEGIN_DATA_SECTION_ENTRY = 36,
+  DATA_SECTION_ENTRY_BODY = 37,
+  END_DATA_SECTION_ENTRY = 38,
+
+  BEGIN_GLOBAL_SECTION_ENTRY = 39,
+  END_GLOBAL_SECTION_ENTRY = 40,
+}
+class DataRange {
+  start: number;
+  end: number;
+  constructor(start: number, end: number) {
+    this.start = start;
+    this.end = end;
+  }
+  offset(delta: number) {
+    this.start += delta;
+    this.end += delta;
+  }
 }
 export interface IModuleHeader {
   magicNumber: number;
@@ -323,8 +341,6 @@ export interface IFunctionType {
 export interface ISectionInformation {
   id: SectionCode;
   name: Uint8Array;
-  payloadStart: number;
-  payloadEnd: number;
 }
 export interface ILocals {
   count: number;
@@ -332,8 +348,6 @@ export interface ILocals {
 }
 export interface IFunctionInformation {
   locals: Array<ILocals>;
-  bodyStart: number;
-  bodyEnd: number;
 }
 export interface IMemoryAddress {
   flags: number;
@@ -377,7 +391,8 @@ export class Int64 {
 export type BinaryReaderResult =
   IImportEntry | IExportEntry | IFunctionEntry | IFunctionType | IModuleHeader |
   IOperatorInformation | IMemoryType | ITableType | IGlobalVariable | INameEntry |
-  IElementSegment | IElementSegmentBody | IDataSegment | IDataSegmentBody;
+  IElementSegment | IElementSegmentBody | IDataSegment | IDataSegmentBody |
+  ISectionInformation | IFunctionInformation | ISectionInformation | IFunctionInformation;
 export class BinaryReader {
   private _data: Uint8Array;
   private _pos: number;
@@ -386,9 +401,16 @@ export class BinaryReader {
   public state: BinaryReaderState;
   public result: BinaryReaderResult;
   public error: Error;
-  public currentSection: ISectionInformation;
-  public currentFunction: IFunctionInformation;
+  public get currentSection(): ISectionInformation {
+    return <ISectionInformation>this.result; // TODO remove currentSection()
+  }
+  public get currentFunction(): IFunctionInformation {
+    return <IFunctionInformation>this.result; // TODO remove currentFunction()
+  }
   private _sectionEntriesLeft: number;
+  private _sectionId: SectionCode;
+  private _sectionRange: DataRange;
+  private _functionRange: DataRange;
   public get data(): Uint8Array {
     return this._data;
   }
@@ -406,9 +428,10 @@ export class BinaryReader {
     this.state = BinaryReaderState.INITIAL;
     this.result = null;
     this.error = null;
-    this.currentSection = null;
-    this.currentFunction = null;
     this._sectionEntriesLeft = 0;
+    this._sectionId = SectionCode.Unknown;
+    this._sectionRange = null;
+    this._functionRange = null;
   }
   public setData(buffer: ArrayBuffer, pos: number, length: number, eof?: boolean) : void {
     var posDelta = pos - this._pos;
@@ -416,14 +439,10 @@ export class BinaryReader {
     this._pos = pos;
     this._length = length;
     this._eof = eof === undefined ? true : eof;
-    if (this.currentSection) {
-      this.currentSection.payloadStart += posDelta;
-      this.currentSection.payloadEnd += posDelta;
-    }
-    if (this.currentFunction) {
-      this.currentFunction.bodyStart += posDelta;
-      this.currentFunction.bodyEnd += posDelta;
-    }
+    if (this._sectionRange)
+      this._sectionRange.offset(posDelta);
+    if (this._functionRange)
+      this._functionRange.offset(posDelta);
   }
   private hasBytes(n: number) : boolean {
     return this._pos + n <= this._length;
@@ -542,7 +561,7 @@ export class BinaryReader {
     return result;
   }
   private hasSectionPayload() : boolean {
-    return this.hasBytes(this.currentSection.payloadEnd - this._pos);
+    return this.hasBytes(this._sectionRange.end - this._pos);
   }
   private readFuncType() : IFunctionType {
     var form = this.readVarInt7();
@@ -788,7 +807,7 @@ export class BinaryReader {
   }
   private readCodeOperator() : boolean {
     if (this.state === BinaryReaderState.CODE_OPERATOR &&
-        this._pos >= this.currentFunction.bodyEnd) {
+        this._pos >= this._functionRange.end) {
       this.skipFunctionBody();
       return this.read();
     } else if (this.state === BinaryReaderState.INIT_EXPRESSION_OPERATOR &&
@@ -929,17 +948,17 @@ export class BinaryReader {
     }
     var bodyStart = this._pos;
     this.state = BinaryReaderState.BEGIN_FUNCTION_BODY;
-    this.currentFunction = {
-      locals: locals,
-      bodyStart: bodyStart,
-      bodyEnd: bodyEnd
+    this.result = {
+      locals: locals
     };
+    this._functionRange = new DataRange(bodyStart, bodyEnd);
     this._sectionEntriesLeft--;
     return true;
   }
   private readSectionHeader() : boolean {
     if (this._pos >= this._length && this._eof) {
-      this.currentSection = null;
+      this._sectionId = SectionCode.Unknown;
+      this._sectionRange = null;
       this.result = null;
       this.state = BinaryReaderState.END_WASM;
       return true;
@@ -948,7 +967,8 @@ export class BinaryReader {
     if (this._pos < this._length - 4) {
       var magicNumber = this.peekInt32();
       if (magicNumber === WASM_MAGIC_NUMBER) {
-        this.currentSection = null;
+        this._sectionId = SectionCode.Unknown;
+        this._sectionRange = null;
         this.result = null;
         this.state = BinaryReaderState.END_WASM;
         return true;
@@ -972,18 +992,22 @@ export class BinaryReader {
       }
       name = this.readStringBytes();
     }
-    this.currentSection = {id: id, name: name, payloadStart: this._pos, payloadEnd: payloadEnd };
-    this.result = null;
+    this.result = {id: id, name: name};
+    this._sectionId = id;
+    this._sectionRange = new DataRange(this._pos, payloadEnd);
     this.state = BinaryReaderState.BEGIN_SECTION;
     return true;
   }
   private readSectionBody() : boolean {
-    if (this._pos >= this.currentSection.payloadEnd) {
+    if (this._pos >= this._sectionRange.end) {
       this.result = null;
       this.state = BinaryReaderState.END_SECTION;
+      this._sectionId = SectionCode.Unknown;
+      this._sectionRange = null;
       return true;
     }
-    switch (this.currentSection.id) {
+    var currentSection = <ISectionInformation>this.result;
+    switch (currentSection.id) {
       case SectionCode.Type:
         if (!this.hasSectionPayload())
           return false;
@@ -1037,11 +1061,11 @@ export class BinaryReader {
         this.state = BinaryReaderState.DATA_SECTION_ENTRY;
         return this.readDataEntry();
       case SectionCode.Custom:
-        if (this.currentSection.name.length == 4 &&
-            this.currentSection.name[0] == 0x6e /* 'n' */ &&
-            this.currentSection.name[1] == 0x61 /* 'a' */ &&
-            this.currentSection.name[2] == 0x6d /* 'm' */ &&
-            this.currentSection.name[3] == 0x65 /* 'e' */) {
+        if (currentSection.name.length == 4 &&
+            currentSection.name[0] == 0x6e /* 'n' */ &&
+            currentSection.name[1] == 0x61 /* 'a' */ &&
+            currentSection.name[2] == 0x6d /* 'm' */ &&
+            currentSection.name[3] == 0x65 /* 'e' */) {
           if (!this.hasVarIntBytes())
             return false;
           this._sectionEntriesLeft = this.readVarUint32() >>> 0;
@@ -1049,7 +1073,7 @@ export class BinaryReader {
         }
         /* fallthru as unknown */
       default:
-        this.error = new Error(`Unsupported section: ${this.currentSection.id}`);
+        this.error = new Error(`Unsupported section: ${this._sectionId}`);
         this.state = BinaryReaderState.ERROR;
         return true;
     }
@@ -1095,13 +1119,15 @@ export class BinaryReader {
           return false;
         }
         this.state = BinaryReaderState.END_SECTION;
-        this._pos = this.currentSection.payloadEnd;
+        this._pos = this._sectionRange.end;
+        this._sectionId = SectionCode.Unknown;
+        this._sectionRange = null;
         this.result = null;
         return true;
       case BinaryReaderState.SKIPPING_FUNCTION_BODY:
         this.state = BinaryReaderState.END_FUNCTION_BODY;
-        this._pos = this.currentFunction.bodyEnd;
-        this.currentFunction = null;
+        this._pos = this._functionRange.end;
+        this._functionRange = null;
         this.result = null;
         return true;
       case BinaryReaderState.TYPE_SECTION_ENTRY:
@@ -1140,7 +1166,7 @@ export class BinaryReader {
         this.result = null;
         return true;
       case BinaryReaderState.END_INIT_EXPRESSION_BODY:
-        switch (this.currentSection.id) {
+        switch (this._sectionId) {
           case SectionCode.Global:
             this.state = BinaryReaderState.END_GLOBAL_SECTION_ENTRY;
             return true;
@@ -1149,7 +1175,7 @@ export class BinaryReader {
           case SectionCode.Element:
             return this.readElementEntryBody();
         }
-        this.error = new Error(`Unexpected section type: ${this.currentSection.id}`);
+        this.error = new Error(`Unexpected section type: ${this._sectionId}`);
         this.state = BinaryReaderState.ERROR;
         return true;
       case BinaryReaderState.NAME_SECTION_ENTRY:
