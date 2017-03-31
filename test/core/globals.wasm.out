@@ -7,6 +7,46 @@
   (type $type5 (func (result f64)))
   (type $type6 (func (param f32)))
   (type $type7 (func (param f64)))
+  (global $global0 i32
+    (
+      i32.const -2
+    )
+  )
+  (global $global1 f32
+    (
+      f32.const -3
+    )
+  )
+  (global $global2 f64
+    (
+      f64.const -4
+    )
+  )
+  (global $global3 i64
+    (
+      i64.const -5
+    )
+  )
+  (global $global4 (mul i32)
+    (
+      i32.const -12
+    )
+  )
+  (global $global5 (mul f32)
+    (
+      f32.const -13
+    )
+  )
+  (global $global6 (mul f64)
+    (
+      f64.const -14
+    )
+  )
+  (global $global7 (mul i64)
+    (
+      i64.const -15
+    )
+  )
   (export "get-a" $func0)
   (export "get-b" $func1)
   (export "get-x" $func2)
@@ -20,43 +60,43 @@
   (export "set-5" $func10)
   (export "set-6" $func11)
   (func $func0 (result i32)
-    get_global
+    get_global $global0
   )
   (func $func1 (result i64)
-    get_global
+    get_global $global3
   )
   (func $func2 (result i32)
-    get_global
+    get_global $global4
   )
   (func $func3 (result i64)
-    get_global
+    get_global $global7
   )
   (func $func4 (param $var0 i32)
     get_local $var0
-    set_global
+    set_global $global4
   )
   (func $func5 (param $var0 i64)
     get_local $var0
-    set_global
+    set_global $global7
   )
   (func $func6 (result f32)
-    get_global
+    get_global $global1
   )
   (func $func7 (result f64)
-    get_global
+    get_global $global2
   )
   (func $func8 (result f32)
-    get_global
+    get_global $global5
   )
   (func $func9 (result f64)
-    get_global
+    get_global $global6
   )
   (func $func10 (param $var0 f32)
     get_local $var0
-    set_global
+    set_global $global5
   )
   (func $func11 (param $var0 f64)
     get_local $var0
-    set_global
+    set_global $global6
   )
 )

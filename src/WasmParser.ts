@@ -250,6 +250,8 @@ export const enum BinaryReaderState {
   SKIPPING_FUNCTION_BODY = 32,
   CODE_OPERATOR = 33,
   SKIPPING_SECTION = 35,
+  BEGIN_GLOBAL_SECTION_ENTRY = 36,
+  END_GLOBAL_SECTION_ENTRY = 37,
   BEGIN_INIT_EXPRESSION_BODY = 40,
   END_INIT_EXPRESSION_BODY = 41,
   INIT_EXPRESSION_OPERATOR = 42,
@@ -566,7 +568,15 @@ export class BinaryReader {
     return { limits: this.readResizableLimits() };
   }
   private readGlobalType() : IGlobalType {
+    if (!this.hasVarIntBytes()) {
+      return null;
+    }
+    var pos = this._pos;
     var contentType = this.readVarInt7();
+    if (!this.hasVarIntBytes()) {
+      this._pos = pos;
+      return null;
+    }
     var mutability = this.readVarUint1();
     return { contentType: contentType, mutability: mutability };
   }
@@ -664,9 +674,14 @@ export class BinaryReader {
       this.skipSection();
       return this.read();
     }
-    this.state = BinaryReaderState.GLOBAL_SECTION_ENTRY;
+    var globalType = this.readGlobalType();
+    if (!globalType) {
+      this.state = BinaryReaderState.GLOBAL_SECTION_ENTRY;
+      return false;
+    }
+    this.state = BinaryReaderState.BEGIN_GLOBAL_SECTION_ENTRY;
     this.result = {
-      type: this.readGlobalType()
+      type: globalType
     };
     this._sectionEntriesLeft--;
     return true;
@@ -1050,7 +1065,11 @@ export class BinaryReader {
       case BinaryReaderState.MEMORY_SECTION_ENTRY:
         return this.readMemoryEntry();
       case BinaryReaderState.GLOBAL_SECTION_ENTRY:
+        return this.readGlobalEntry();
+      case BinaryReaderState.BEGIN_GLOBAL_SECTION_ENTRY:
         return this.readInitExpressionBody();
+      case BinaryReaderState.END_GLOBAL_SECTION_ENTRY:
+        return this.readGlobalEntry();
       case BinaryReaderState.DATA_SECTION_ENTRY:
       case BinaryReaderState.END_DATA_SECTION_ENTRY:
         return this.readDataEntry();
@@ -1063,7 +1082,8 @@ export class BinaryReader {
       case BinaryReaderState.END_INIT_EXPRESSION_BODY:
         switch (this.currentSection.id) {
           case SectionCode.Global:
-            return this.readGlobalEntry();
+            this.state = BinaryReaderState.END_GLOBAL_SECTION_ENTRY;
+            return true;
           case SectionCode.Data:
             return this.readDataEntryBody();
         }

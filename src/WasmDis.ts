@@ -16,7 +16,8 @@ import {
   BinaryReader, BinaryReaderState, SectionCode, IExportEntry, IMemoryAddress,
   ExternalKind, IFunctionType, IFunctionEntry, IFunctionInformation,
   IImportEntry, IOperatorInformation, Type, OperatorCode, OperatorCodeNames, Int64,
-  ITableType, IMemoryType, IGlobalType, IResizableLimits, IDataSegmentBody
+  ITableType, IMemoryType, IGlobalType, IResizableLimits, IDataSegmentBody,
+  IGlobalVariable
 } from './WasmParser';
 function binToString(b: Uint8Array) : string {
   // FIXME utf-8
@@ -69,6 +70,11 @@ function memoryAddressToString(address: IMemoryAddress, code: OperatorCode) : st
     return `align=${1 << address.flags}`;
   return `offset=${address.offset} align=${1 << address.flags}`;
 }
+function globalTypeToString(type: IGlobalType): string {
+  if (!type.mutability)
+    return typeToString(type.contentType)
+  return `(mul ${typeToString(type.contentType)})`;
+}
 function limitsToString(limits: IResizableLimits) : string {
   return limits.initial + (limits.maximum !== undefined ? ' ' + limits.maximum : '');
 }
@@ -79,6 +85,8 @@ export class WasmDisassembler {
   private _funcIndex: number;
   private _funcTypes: Array<number>;
   private _importCount: number;
+  private _globalCount: number;
+  private _tableCount: number;
   private _indent: string;
   private _indentLevel: number;
   constructor() {
@@ -87,6 +95,8 @@ export class WasmDisassembler {
     this._funcIndex = 0;
     this._funcTypes = [];
     this._importCount = 0;
+    this._globalCount = 0;
+    this._tableCount = 0;
     this._indent = null;
     this._indentLevel = 0;
   }
@@ -145,6 +155,7 @@ export class WasmDisassembler {
             case SectionCode.Type:
             case SectionCode.Import:
             case SectionCode.Export:
+            case SectionCode.Global:
             case SectionCode.Function:
             case SectionCode.Code:
             case SectionCode.Memory:
@@ -165,22 +176,24 @@ export class WasmDisassembler {
           break;
         case BinaryReaderState.EXPORT_SECTION_ENTRY:
           var exportInfo = <IExportEntry>reader.result;
+          this._buffer.push(`  (export "${binToString(exportInfo.field)}" `);
           switch (exportInfo.kind) {
             case ExternalKind.Function:
-              this._buffer.push(`  (export "${binToString(exportInfo.field)}" $func${exportInfo.index})\n`);
+              this._buffer.push(`$func${exportInfo.index}`);
               break;
             case ExternalKind.Table:
-              this._buffer.push(`  (table)\n`);
+              this._buffer.push(`(table $table${exportInfo.index})`);
               break;
             case ExternalKind.Memory:
-              this._buffer.push(`  (export "memory" memory)\n`);
+              this._buffer.push(`memory`);
               break;
             case ExternalKind.Global:
-              this._buffer.push(`  (global)\n`);
+              this._buffer.push(`(global $global${exportInfo.index})`);
               break;
             default:
               throw new Error(`Unsupported export ${exportInfo.kind}`);
           }
+          this._buffer.push(')\n');
           break;
         case BinaryReaderState.IMPORT_SECTION_ENTRY:
           var importInfo = <IImportEntry>reader.result;
@@ -192,7 +205,7 @@ export class WasmDisassembler {
               break;
             case ExternalKind.Table:
               var tableImportInfo = <ITableType>importInfo.type;
-              this._buffer.push(` (table ${limitsToString(tableImportInfo.limits)} ${typeToString(tableImportInfo.elementType)})`);
+              this._buffer.push(` (table $table${this._tableCount++} ${limitsToString(tableImportInfo.limits)} ${typeToString(tableImportInfo.elementType)})`);
               break;
             case ExternalKind.Memory:
               var memoryImportInfo = <IMemoryType>importInfo.type;
@@ -200,12 +213,19 @@ export class WasmDisassembler {
               break;
             case ExternalKind.Global:
               var globalImportInfo = <IGlobalType>importInfo.type;
-              this._buffer.push(` (global ${typeToString(globalImportInfo.contentType)})`);
+              this._buffer.push(` (global $global${this._globalCount++} ${globalTypeToString(globalImportInfo)})`);
               break;
             default:
               throw new Error(`NYI other import types: ${importInfo.kind}`);
           }
           this._buffer.push(')\n');
+          break;
+        case BinaryReaderState.BEGIN_GLOBAL_SECTION_ENTRY:
+          var globalInfo = <IGlobalVariable>reader.result;
+          this._buffer.push(`  (global $global${this._globalCount++} ${globalTypeToString(globalInfo.type)}\n`);
+          break;
+        case BinaryReaderState.END_GLOBAL_SECTION_ENTRY:
+          this._buffer.push('  )\n');
           break;
         case BinaryReaderState.TYPE_SECTION_ENTRY:
           var funcType = <IFunctionType>reader.result;
@@ -299,7 +319,9 @@ export class WasmDisassembler {
             for (var i = 0; i < operator.brTable.length; i++)
               this._buffer.push(` ${operator.brTable[i]}`);
           }
-          // TODO globalIndex
+          if (operator.globalIndex !== undefined) {
+            this._buffer.push(` $global${operator.globalIndex}`);
+          }
           this._buffer.push('\n');
           switch (operator.code) {
             case OperatorCode.if:

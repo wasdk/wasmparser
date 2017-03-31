@@ -7,6 +7,16 @@
   (type $type5 (func (param i32) (result i32)))
   (type $type6 (func (param i64) (result i64)))
   (memory 2)
+  (global $global0 i32
+    (
+      i32.const 55
+    )
+  )
+  (global $global1 f32
+    (
+      f32.const 44
+    )
+  )
   (export "func" $func0)
   (export "func-i32" $func1)
   (export "func-f32" $func2)
@@ -14,10 +24,10 @@
   (export "func->f32" $func4)
   (export "func-i32->i32" $func5)
   (export "func-i64->i64" $func6)
-  (global)
-  (global)
-  (table)
-  (export "memory" memory)
+  (export "global-i32" (global $global0))
+  (export "global-f32" (global $global1))
+  (export "table-10-inf" (table $table0))
+  (export "memory-2-inf" memory)
   (func $func0
     nop
   )
