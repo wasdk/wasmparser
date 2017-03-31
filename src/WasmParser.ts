@@ -736,6 +736,11 @@ export class BinaryReader {
       this.result = null;
       return true;
     }
+    const MAX_CODE_OPERATOR_SIZE = 11; // i64.const or load/store
+    var pos = this._pos;
+    if (!this._eof && pos + MAX_CODE_OPERATOR_SIZE > this._length) {
+      return false;
+    }
     var code = this._data[this._pos++];
     var blockType, brDepth, brTable, funcIndex, typeIndex,
         localIndex, globalIndex, memoryAddress, literal, reserved;
@@ -751,9 +756,19 @@ export class BinaryReader {
         break;
       case OperatorCode.br_table:
         var tableCount = this.readVarUint32() >>> 0;
+        if (!this.hasBytes(tableCount + 1)) {
+          // We need at least (tableCount + 1) bytes
+          this._pos = pos;
+          return false;
+        }
         brTable = [];
-        for (var i = 0; i <= tableCount; i++) // including default
+        for (var i = 0; i <= tableCount; i++) { // including default
+          if (!this.hasVarIntBytes()) {
+            this._pos = pos;
+            return false;
+          }
           brTable.push(this.readVarUint32() >>> 0);
+        }
         break;
       case OperatorCode.call:
         funcIndex = this.readVarUint32() >>> 0;
@@ -830,18 +845,25 @@ export class BinaryReader {
       return false;
     var pos = this._pos;
     var size = this.readVarUint32() >>> 0;
-    if (!this.hasBytes(size)) {
+    var bodyEnd = this._pos + size;
+    if (!this.hasVarIntBytes()) {
       this._pos = pos;
       return false;
     }
-    var bodyEnd = this._pos + size;
     var localCount = this.readVarUint32() >>> 0;
     var locals: Array<ILocals> = [];
     for (var i = 0; i < localCount; i++) {
-      locals.push({
-        count: this.readVarUint32() >>> 0,
-        type: this.readVarInt7()
-      });
+      if (!this.hasVarIntBytes()) {
+        this._pos = pos;
+        return false;
+      }
+      var count = this.readVarUint32() >>> 0;
+      if (!this.hasVarIntBytes()) {
+        this._pos = pos;
+        return false;
+      }
+      var type = this.readVarInt7();
+      locals.push({count: count, type: type});
     }
     var bodyStart = this._pos;
     this.state = BinaryReaderState.BEGIN_FUNCTION_BODY;
