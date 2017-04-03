@@ -17,7 +17,8 @@ import {
   IModuleHeader, ISectionInformation, IFunctionType, IImportEntry, ExternalKind,
   ITableType, IMemoryType, IGlobalType, IResizableLimits, IFunctionEntry,
   IExportEntry, IFunctionInformation, IOperatorInformation, Int64, IMemoryAddress,
-  IBinaryReaderData, IDataSegment, IDataSegmentBody, IElementSegment, IElementSegmentBody
+  IBinaryReaderData, IDataSegment, IDataSegmentBody, IElementSegment, IElementSegmentBody,
+  IGlobalVariable
 } from './WasmParser';
 
 enum EmitterState {
@@ -44,6 +45,8 @@ enum EmitterState {
   ElementSectionEntry,
   ElementSectionEntryBody,
   ElementSectionEntryEnd,
+  GlobalSectionEntry,
+  GlobalSectionEntryEnd,
 }
 
 export class Emitter {
@@ -150,6 +153,12 @@ export class Emitter {
         break;
       case BinaryReaderState.ELEMENT_SECTION_ENTRY_BODY:
         this.writeElementSectionBody(<IElementSegmentBody>result);
+        break;
+      case BinaryReaderState.BEGIN_GLOBAL_SECTION_ENTRY:
+        this.writeBeginGlobalSectionEntry(<IGlobalVariable>result);
+        break;
+      case BinaryReaderState.END_GLOBAL_SECTION_ENTRY:
+        this.writeEndGlobalSectionEntry();
         break;
       default:
         throw new Error(`Invalid state: ${state}`);
@@ -299,6 +308,10 @@ export class Emitter {
         this._state = EmitterState.ElementSection;
         this.writePatchableSectionEntriesCount();
         break;
+      case SectionCode.Global:
+        this._state = EmitterState.GlobalSection;
+        this.writePatchableSectionEntriesCount();
+        break;
     }
   }
 
@@ -445,6 +458,18 @@ export class Emitter {
     this._state = EmitterState.ElementSection;
   }
 
+  public writeBeginGlobalSectionEntry(entry: IGlobalVariable): void {
+    this.ensureState(EmitterState.GlobalSection);
+    this._sectionEntiesCount++;
+    this.writeGlobalType(entry.type);
+    this._state = EmitterState.GlobalSectionEntry;
+  }
+
+  public writeEndGlobalSectionEntry(): void {
+    this.ensureState(EmitterState.GlobalSectionEntryEnd);
+    this._state = EmitterState.GlobalSection;
+  }
+
   public writeBeginInitExpression(): void {
     switch (this._state) {
       case EmitterState.DataSectionEntry:
@@ -452,6 +477,9 @@ export class Emitter {
         break;
       case EmitterState.ElementSectionEntry:
         this._initExpressionAfterState = EmitterState.ElementSectionEntryBody;
+        break;
+      case EmitterState.GlobalSectionEntry:
+        this._initExpressionAfterState = EmitterState.GlobalSectionEntryEnd;
         break;
       default:
         throw new Error('Unexpected state ${this._initExpressionBeforeState} at writeEndInitExpression');
