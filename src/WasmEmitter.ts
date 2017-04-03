@@ -79,7 +79,7 @@ export class Emitter {
   public get data(): Uint8Array {
     return this._data;
   }
-  
+
   public write(reader: BinaryReader) : void {
     this.writeStateAndResult(reader.state, reader.result);
   }
@@ -164,7 +164,7 @@ export class Emitter {
         throw new Error(`Invalid state: ${state}`);
     }
   }
-  
+
   private writeByte(byte: number): void {
     this._buffer.push(byte);
   }
@@ -336,7 +336,7 @@ export class Emitter {
     this.writeVarUint(flags);
     this.writeVarUint(limits.initial);
     if (flags)
-      this.writeVarUint(limits.maximum);    
+      this.writeVarUint(limits.maximum);
   }
 
   private writeTableType(type: ITableType) : void {
@@ -345,7 +345,7 @@ export class Emitter {
   }
 
   private writeMemoryType(type: IMemoryType) : void {
-    this.writeResizableLimits(type.limits);    
+    this.writeResizableLimits(type.limits);
   }
 
   private writeGlobalType(type: IGlobalType) : void {
@@ -620,7 +620,7 @@ export class Emitter {
         break;
     }
   }
-  
+
   public writeMemorySectionEntry(entry: IMemoryType): void {
     this.ensureState(EmitterState.MemorySection);
     this._sectionEntiesCount++;
