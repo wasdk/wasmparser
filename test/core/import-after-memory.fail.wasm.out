@@ -1,4 +1,0 @@
-(module
-  (import "" "" (global $global0 i32))
-  (memory 0)
-)

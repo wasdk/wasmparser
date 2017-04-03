@@ -1,9 +1,0 @@
-(module
-  (type $type0 (func (param i32 i64)))
-  (memory 1)
-  (func $func0 (param $var0 i32) (param $var1 i64)
-    get_local $var0
-    get_local $var1
-    i64.store offset=0
-  )
-)
