@@ -17,7 +17,7 @@ import {
   IModuleHeader, ISectionInformation, IFunctionType, IImportEntry, ExternalKind,
   ITableType, IMemoryType, IGlobalType, IResizableLimits, IFunctionEntry,
   IExportEntry, IFunctionInformation, IOperatorInformation, Int64, IMemoryAddress,
-  IBinaryReaderData, IDataSegment, IDataSegmentBody
+  IBinaryReaderData, IDataSegment, IDataSegmentBody, IElementSegment, IElementSegmentBody
 } from './WasmParser';
 
 enum EmitterState {
@@ -41,6 +41,9 @@ enum EmitterState {
   DataSectionEntryBody,
   DataSectionEntryEnd,
   InitExpression,
+  ElementSectionEntry,
+  ElementSectionEntryBody,
+  ElementSectionEntryEnd,
 }
 
 export class Emitter {
@@ -135,6 +138,18 @@ export class Emitter {
         break;
       case BinaryReaderState.END_INIT_EXPRESSION_BODY:
         this.writeEndInitExpression();
+        break;
+      case BinaryReaderState.TABLE_SECTION_ENTRY:
+        this.writeTableSectionEntry(<ITableType>result);
+        break;
+      case BinaryReaderState.BEGIN_ELEMENT_SECTION_ENTRY:
+        this.writeBeginElementSectionEntry(<IElementSegment>result);
+        break;
+      case BinaryReaderState.END_ELEMENT_SECTION_ENTRY:
+        this.writeEndElementSectionEntry();
+        break;
+      case BinaryReaderState.ELEMENT_SECTION_ENTRY_BODY:
+        this.writeElementSectionBody(<IElementSegmentBody>result);
         break;
       default:
         throw new Error(`Invalid state: ${state}`);
@@ -276,6 +291,14 @@ export class Emitter {
         this._state = EmitterState.DataSection;
         this.writePatchableSectionEntriesCount();
         break;
+      case SectionCode.Table:
+        this._state = EmitterState.TableSection;
+        this.writePatchableSectionEntriesCount();
+        break;
+      case SectionCode.Element:
+        this._state = EmitterState.ElementSection;
+        this.writePatchableSectionEntriesCount();
+        break;
     }
   }
 
@@ -395,10 +418,40 @@ export class Emitter {
     this._state = EmitterState.DataSection;
   }
 
+  public writeTableSectionEntry(entry: ITableType): void {
+    this.ensureState(EmitterState.TableSection);
+    this._sectionEntiesCount++;
+    this.writeVarInt(entry.elementType);
+    this.writeResizableLimits(entry.limits);
+  }
+
+  public writeBeginElementSectionEntry(entry: IElementSegment): void {
+    this.ensureState(EmitterState.ElementSection);
+    this._sectionEntiesCount++;
+    this.writeVarUint(entry.index);
+    this._state = EmitterState.ElementSectionEntry;
+  }
+
+  public writeElementSectionBody(body: IElementSegmentBody): void {
+    this.ensureState(EmitterState.ElementSectionEntryBody);
+    this.writeVarUint(body.elements.length);
+    for (var i = 0; i < body.elements.length; i++)
+      this.writeVarUint(body.elements[i]);
+    this._state = EmitterState.ElementSectionEntryEnd;
+  }
+
+  public writeEndElementSectionEntry(): void {
+    this.ensureState(EmitterState.ElementSectionEntryEnd);
+    this._state = EmitterState.ElementSection;
+  }
+
   public writeBeginInitExpression(): void {
     switch (this._state) {
       case EmitterState.DataSectionEntry:
         this._initExpressionAfterState = EmitterState.DataSectionEntryBody;
+        break;
+      case EmitterState.ElementSectionEntry:
+        this._initExpressionAfterState = EmitterState.ElementSectionEntryBody;
         break;
       default:
         throw new Error('Unexpected state ${this._initExpressionBeforeState} at writeEndInitExpression');
@@ -531,6 +584,8 @@ export class Emitter {
       case EmitterState.MemorySection:
       case EmitterState.GlobalSection:
       case EmitterState.DataSection:
+      case EmitterState.TableSection:
+      case EmitterState.ElementSection:
         this.patchVarUint32(this._sectionEntiesCountBytes, this._sectionEntiesCount);
         break;
       default:
