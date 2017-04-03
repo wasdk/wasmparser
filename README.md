@@ -4,6 +4,16 @@ Simple streamable WebAssembly binary parser.
 
 ## Test
 
+### Compiling Code
+
+```
+npm run build
+```
+
+### Examples
+
+See the `examples/` folder.
+
 ### Running Tests
 
 ```
