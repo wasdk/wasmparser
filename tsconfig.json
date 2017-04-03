@@ -13,6 +13,7 @@
     ],
     "files": [
         "src/WasmParser.ts",
+        "src/WasmEmitter.ts",
         "src/WasmDis.ts"
     ]
 }

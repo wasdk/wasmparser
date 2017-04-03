@@ -366,26 +366,29 @@ export interface IOperatorInformation {
   literal?: number | Int64;
 }
 export class Int64 {
-  private data: Uint8Array;
+  private _data: Uint8Array;
   constructor (data) {
-    this.data = data || new Uint8Array(8);
+    this._data = data || new Uint8Array(8);
   }
   public toInt32() : number {
-    return this.data[0] | (this.data[1] << 8) | (this.data[2] << 16) | (this.data[3] << 24);
+    return this._data[0] | (this._data[1] << 8) | (this._data[2] << 16) | (this._data[3] << 24);
   }
   public toDouble() : number {
     var power = 1;
     var sum;
-    if (this.data[7] & 0x80) {
+    if (this._data[7] & 0x80) {
       sum = -1;
       for (var i = 0; i < 8; i++, power *= 256)
-        sum -= power * (0xFF ^ this.data[i]);
+        sum -= power * (0xFF ^ this._data[i]);
     } else {
       sum = 0;
       for (var i = 0; i < 8; i++, power *= 256)
-        sum += power * this.data[i];
+        sum += power * this._data[i];
     }
     return sum;
+  }
+  public get data(): Uint8Array {
+    return this._data;
   }
 }
 export type BinaryReaderResult =
@@ -1224,4 +1227,9 @@ declare var escape: (string) => string;
 export function bytesToString(b: Uint8Array) : string {
   var str = String.fromCharCode.apply(null, b);
   return decodeURIComponent(escape(str));
+}
+
+export interface IBinaryReaderData {
+  state: BinaryReaderState;
+  result?: BinaryReaderResult;
 }
