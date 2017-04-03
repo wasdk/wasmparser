@@ -472,18 +472,43 @@ export class Emitter {
   }
 
   private writeVarInt64(n: Int64): void {
-    this.writeBytes(n.data, 0, 8);
+    var pos = 0, end = 7;
+    var highBit = n.data[end] & 0x80;
+    var optionalBits = highBit ? 0xFF : 0;
+    while (end > 0 && n.data[end] === optionalBits) {
+      end--;
+    }
+    var buffer = n.data[pos], buffered = 8;
+    do {
+      this.writeByte(0x80 | (buffer & 0x7F));
+      buffer >>= 7;
+      buffered -= 7;
+      if (buffered > 7)
+        continue;
+      if (pos < end) {
+        ++pos;
+        buffer |= n.data[pos] << buffered;
+        buffered += 8;
+      } else if (pos == end && buffer === 7 &&
+                 (n.data[pos] & 0x80) !== highBit) {
+        ++pos;
+        buffer |= optionalBits << buffered;
+        buffered += 8;
+      }
+    } while (buffered > 7);
+    buffer |= optionalBits << buffered;
+    this.writeByte(buffer & 0x7f);
   }
 
   private writeFloat32(n: number): void {
     var data = new Uint8Array(4);
-    new DataView(data.buffer, 0).getFloat32(0, true);
+    new DataView(data.buffer, 0).setFloat32(0, n, true);
     this.writeBytes(data, 0, data.length);
   }
 
   private writeFloat64(n: number): void {
     var data = new Uint8Array(8);
-    new DataView(data.buffer, 0).getFloat64(0, true);
+    new DataView(data.buffer, 0).setFloat64(0, n, true);
     this.writeBytes(data, 0, data.length);
   }
 
