@@ -554,7 +554,7 @@ export class BinaryReader {
     var length = this.readVarUint32() >>> 0;
     var result = this._data.subarray(this._pos, this._pos + length);
     this._pos += length;
-    return result;
+    return new Uint8Array(result); // making a clone of the data
   }
   private hasStringBytes() : boolean {
     if (!this.hasVarIntBytes())
