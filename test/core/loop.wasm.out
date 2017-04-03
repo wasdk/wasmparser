@@ -420,7 +420,7 @@
       block
         loop
           get_local $var0
-          f32.const 0
+          f32.const 0.0
           f32.eq
           br_if 1
           get_local $var1
@@ -428,11 +428,11 @@
           block
             loop
               get_local $var2
-              f32.const 0
+              f32.const 0.0
               f32.eq
               br_if 1
               get_local $var2
-              f32.const 0
+              f32.const 0.0
               f32.lt
               br_if 3
               get_local $var3

@@ -263,7 +263,7 @@
       i32.const 8
       i32.const 1
       i32.store8 offset=0
-      f32.const 0
+      f32.const 0.0
     end
   )
   (func $func22 (result f32)
@@ -308,7 +308,7 @@
       i32.const 8
       i32.const 1
       i32.store8 offset=0
-      f64.const 0
+      f64.const 0.0
     end
   )
   (func $func27 (result f64)

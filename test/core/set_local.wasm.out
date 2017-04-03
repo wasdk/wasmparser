@@ -28,12 +28,12 @@
   )
   (func $func2
     (local $var0 f32)
-    f32.const 0
+    f32.const 0.0
     set_local $var0
   )
   (func $func3
     (local $var0 f64)
-    f64.const 0
+    f64.const 0.0
     set_local $var0
   )
   (func $func4 (param $var0 i32)
@@ -60,21 +60,21 @@
     block
       i64.const 0
       set_local $var0
-      f32.const 0
+      f32.const 0.0
       set_local $var1
-      f64.const 0
+      f64.const 0.0
       set_local $var2
       i32.const 0
       set_local $var3
       i32.const 0
       set_local $var4
-      f32.const 0
+      f32.const 0.0
       set_local $var7
       i64.const 0
       set_local $var5
       i64.const 0
       set_local $var6
-      f64.const 0
+      f64.const 0.0
       set_local $var8
     end
   )

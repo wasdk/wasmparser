@@ -480,33 +480,33 @@
   )
   (func $func77
     block
-      f64.const 0
+      f64.const 0.0
       i64.const 0
-      f64.const 0
+      f64.const 0.0
       i64.const 0
-      f64.const 0
+      f64.const 0.0
       i64.const 0
-      f32.const 0
+      f32.const 0.0
       i32.const 0
       i32.const 0
       call_indirect $type16
-      f64.const 0
+      f64.const 0.0
       i64.const 0
-      f64.const 0
+      f64.const 0.0
       i64.const 0
-      f64.const 0
+      f64.const 0.0
       i64.const 0
-      f32.const 0
+      f32.const 0.0
       i32.const 0
       i32.const 2
       call_indirect $type16
-      f64.const 0
+      f64.const 0.0
       i64.const 0
-      f64.const 0
+      f64.const 0.0
       i64.const 0
-      f64.const 0
+      f64.const 0.0
       i64.const 0
-      f32.const 0
+      f32.const 0.0
       i32.const 0
       i32.const 3
       call_indirect $type16
@@ -517,13 +517,13 @@
     call_indirect $type17
   )
   (func $func79
-    f64.const 0
+    f64.const 0.0
     i64.const 0
-    f64.const 0
+    f64.const 0.0
     i64.const 0
-    f64.const 0
+    f64.const 0.0
     i64.const 0
-    f32.const 0
+    f32.const 0.0
     i32.const 0
     i32.const 0
     call_indirect $type18

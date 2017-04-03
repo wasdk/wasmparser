@@ -33,6 +33,45 @@ function typeToString(type: number) : string {
     default: throw new Error('Unexpected type');
   }
 }
+function formatFloat32(n: number) : string {
+  if (n === 0)
+    return (1 / n) < 0 ? '-0.0' : '0.0';
+  if (isFinite(n))
+    return n.toString();
+  if (!isNaN(n))
+    return n < 0 ? '-infinity' : 'infinity';
+  var view = new DataView(new ArrayBuffer(8));
+  view.setFloat32(0, n, true);
+  var data = view.getInt32(0, true);
+  var payload = data & 0x7FFFFF;
+  const canonicalBits = 4194304; // 0x800..0
+  if (data > 0 && payload === canonicalBits)
+    return 'nan'; // canonical NaN;
+  else if (payload === canonicalBits)
+    return '-nan';
+  return (data < 0 ? '-' : '+') + 'nan:0x' + payload.toString(16);
+}
+
+function formatFloat64(n: number) : string {
+  if (n === 0)
+    return (1 / n) < 0 ? '-0.0' : '0.0';
+  if (isFinite(n))
+    return n.toString();
+  if (!isNaN(n))
+    return n < 0 ? '-infinity' : 'infinity';
+  var view = new DataView(new ArrayBuffer(8));
+  view.setFloat64(0, n, true);
+  var data1 = view.getUint32(0, true);
+  var data2 = view.getInt32(4, true);
+  var payload = data1 + (data2 & 0xFFFFF) * 4294967296;
+  const canonicalBits = 524288 * 4294967296; // 0x800..0
+  if (data2 > 0 && payload === canonicalBits)
+    return 'nan'; // canonical NaN;
+  else if (payload === canonicalBits)
+    return '-nan';
+  return (data2 < 0 ? '-' : '+') + 'nan:0x' + payload.toString(16);
+}
+
 function memoryAddressToString(address: IMemoryAddress, code: OperatorCode) : string {
   var defaultAlignFlags;
   switch (code) {
@@ -322,9 +361,13 @@ export class WasmDisassembler {
           if (operator.literal !== undefined) {
             switch (operator.code) {
               case OperatorCode.i32_const:
-              case OperatorCode.f32_const:
-              case OperatorCode.f64_const:
                 this._buffer.push(` ${(<number>operator.literal).toString()}`);
+                break;
+              case OperatorCode.f32_const:
+                this._buffer.push(` ${formatFloat32(<number>operator.literal)}`);
+                break;
+              case OperatorCode.f64_const:
+                this._buffer.push(` ${formatFloat64(<number>operator.literal)}`);
                 break;
               case OperatorCode.i64_const:
                 this._buffer.push(` ${(<Int64>operator.literal).toDouble()}`);
