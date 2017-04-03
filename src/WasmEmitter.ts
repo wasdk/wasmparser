@@ -17,7 +17,7 @@ import {
   IModuleHeader, ISectionInformation, IFunctionType, IImportEntry, ExternalKind,
   ITableType, IMemoryType, IGlobalType, IResizableLimits, IFunctionEntry,
   IExportEntry, IFunctionInformation, IOperatorInformation, Int64, IMemoryAddress,
-  IBinaryReaderData
+  IBinaryReaderData, IDataSegment, IDataSegmentBody
 } from './WasmParser';
 
 enum EmitterState {
@@ -37,6 +37,10 @@ enum EmitterState {
   CodeSection,
   DataSection,
   FunctionBody,
+  DataSectionEntry,
+  DataSectionEntryBody,
+  DataSectionEntryEnd,
+  InitExpression,
 }
 
 export class Emitter {
@@ -49,6 +53,8 @@ export class Emitter {
   private _bodyStart: number;
   private _bodySizeBytes: number;
   private _data: Uint8Array;
+  private _endWritten: boolean; // TODO replace by block indent level
+  private _initExpressionAfterState: EmitterState;
 
   public constructor() {
     this._buffer = [];
@@ -60,6 +66,8 @@ export class Emitter {
     this._bodyStart = 0;
     this._bodySizeBytes = 0;
     this._data = null;
+    this._endWritten = false;
+    this._initExpressionAfterState = EmitterState.Initial;
   }
 
   public get data(): Uint8Array {
@@ -109,8 +117,24 @@ export class Emitter {
       case BinaryReaderState.MEMORY_SECTION_ENTRY:
         this.writeMemorySectionEntry(<IMemoryType>result);
         break;
+      case BinaryReaderState.INIT_EXPRESSION_OPERATOR:
       case BinaryReaderState.CODE_OPERATOR:
         this.writeOperator(<IOperatorInformation>result);
+        break;
+      case BinaryReaderState.BEGIN_DATA_SECTION_ENTRY:
+        this.writeBeginDataSectionEntry(<IDataSegment>result);
+        break;
+      case BinaryReaderState.DATA_SECTION_ENTRY_BODY:
+        this.writeDataSectionBody(<IDataSegmentBody>result);
+        break;
+      case BinaryReaderState.END_DATA_SECTION_ENTRY:
+        this.writeEndDataSectionEntry();
+        break;
+      case BinaryReaderState.BEGIN_INIT_EXPRESSION_BODY:
+        this.writeBeginInitExpression();
+        break;
+      case BinaryReaderState.END_INIT_EXPRESSION_BODY:
+        this.writeEndInitExpression();
         break;
       default:
         throw new Error(`Invalid state: ${state}`);
@@ -184,6 +208,17 @@ export class Emitter {
     if (this._state !== state)
       throw new Error(`Unexpected state: ${this._state} (expected ${state}).`);
   }
+
+  private ensureEitherState(states: EmitterState[]): void {
+    if (states.indexOf(this._state) < 0)
+      throw new Error(`Unexpected state: ${this._state} (expected one of ${states}).`);
+  }
+
+  private ensureEndOperatorWritten(): void {
+    if (!this._endWritten)
+      throw new Error('End as a last written operator is expected.');
+  }
+
   public writeBeginWasm(header?: IModuleHeader): void {
     this.ensureState(EmitterState.Initial);
     this.writeMutiple(0x00, 0x61, 0x73, 0x6d, 0x01, 0x00, 0x00, 0x00);
@@ -235,6 +270,10 @@ export class Emitter {
         break;
       case SectionCode.Global:
         this._state = EmitterState.GlobalSection;
+        this.writePatchableSectionEntriesCount();
+        break;
+      case SectionCode.Data:
+        this._state = EmitterState.DataSection;
         this.writePatchableSectionEntriesCount();
         break;
     }
@@ -321,6 +360,7 @@ export class Emitter {
     this._sectionEntiesCount++;
     this._bodySizeBytes = this.writePatchableVarUint32();
     this._bodyStart = this._position;
+    this._endWritten = false;
     this._state = EmitterState.FunctionBody;
     this.writeVarUint(functionInfo.locals.length);
     for (var i = 0; i < functionInfo.locals.length; i++) {
@@ -331,9 +371,46 @@ export class Emitter {
 
   public writeEndFunctionBody(): void {
     this.ensureState(EmitterState.FunctionBody);
+    this.ensureEndOperatorWritten();
     var bodySize = this._position - this._bodyStart;
     this.patchVarUint32(this._bodySizeBytes, bodySize);
     this._state = EmitterState.CodeSection;
+  }
+
+  public writeBeginDataSectionEntry(entry: IDataSegment): void {
+    this.ensureState(EmitterState.DataSection);
+    this._sectionEntiesCount++;
+    this.writeVarUint(entry.index);
+    this._state = EmitterState.DataSectionEntry;
+  }
+
+  public writeDataSectionBody(body: IDataSegmentBody): void {
+    this.ensureState(EmitterState.DataSectionEntryBody);
+    this.writeString(body.data);
+    this._state = EmitterState.DataSectionEntryEnd;
+  }
+
+  public writeEndDataSectionEntry(): void {
+    this.ensureState(EmitterState.DataSectionEntryEnd);
+    this._state = EmitterState.DataSection;
+  }
+
+  public writeBeginInitExpression(): void {
+    switch (this._state) {
+      case EmitterState.DataSectionEntry:
+        this._initExpressionAfterState = EmitterState.DataSectionEntryBody;
+        break;
+      default:
+        throw new Error('Unexpected state ${this._initExpressionBeforeState} at writeEndInitExpression');
+    }
+    this._endWritten = false;
+    this._state = EmitterState.InitExpression;
+  }
+
+  public writeEndInitExpression(): void {
+    this.ensureState(EmitterState.InitExpression);
+    this.ensureEndOperatorWritten();
+    this._state = this._initExpressionAfterState;
   }
 
   private writeMemoryImmediate(address: IMemoryAddress): void {
@@ -358,8 +435,9 @@ export class Emitter {
   }
 
   public writeOperator(opInfo: IOperatorInformation): void {
-    this.ensureState(EmitterState.FunctionBody);
+    this.ensureEitherState([EmitterState.FunctionBody, EmitterState.InitExpression]);
     this.writeByte(opInfo.code);
+    this._endWritten = opInfo.code == OperatorCode.end;
     switch (opInfo.code) {
       case OperatorCode.block:
       case OperatorCode.loop:
@@ -452,6 +530,7 @@ export class Emitter {
       case EmitterState.CodeSection:
       case EmitterState.MemorySection:
       case EmitterState.GlobalSection:
+      case EmitterState.DataSection:
         this.patchVarUint32(this._sectionEntiesCountBytes, this._sectionEntiesCount);
         break;
       default:
