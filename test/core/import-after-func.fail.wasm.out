@@ -1,6 +1,6 @@
 (module
   (type $type0 (func))
-  (import $func0 "" "" (memory 0))
+  (import "" "" (memory 0))
   (func $func0
     nop
   )

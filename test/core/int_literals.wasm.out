@@ -24,7 +24,7 @@
   (export "i64.unsigned_decimal" $func20)
   (export "i64.plus_sign" $func21)
   (func $func0 (result i32)
-    i32.const -3
+    i32.const 195940365
     return
   )
   (func $func1 (result i32)
@@ -32,23 +32,23 @@
     return
   )
   (func $func2 (result i32)
-    i32.const -1
+    i32.const 2147483647
     return
   )
   (func $func3 (result i32)
-    i32.const 1
+    i32.const -2147483647
     return
   )
   (func $func4 (result i32)
-    i32.const 0
+    i32.const -2147483648
     return
   )
   (func $func5 (result i32)
-    i32.const 0
+    i32.const -2147483648
     return
   )
   (func $func6 (result i32)
-    i32.const 0
+    i32.const -2147483648
     i32.const 1
     i32.add
     return

@@ -27,22 +27,22 @@
       i64.const -5
     )
   )
-  (global $global4 (mul i32)
+  (global $global4 (mut i32)
     (
       i32.const -12
     )
   )
-  (global $global5 (mul f32)
+  (global $global5 (mut f32)
     (
       f32.const -13
     )
   )
-  (global $global6 (mul f64)
+  (global $global6 (mut f64)
     (
       f64.const -14
     )
   )
-  (global $global7 (mul i64)
+  (global $global7 (mut i64)
     (
       i64.const -15
     )

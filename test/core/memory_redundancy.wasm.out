@@ -43,7 +43,7 @@
       i32.load offset=0
       set_local $var0
       i32.const 5
-      i32.const 0
+      i32.const -2147483648
       i32.store offset=0
       i32.const 8
       i32.load offset=0
@@ -57,7 +57,7 @@
     (local $var0 f32)
     block f32
       i32.const 8
-      i32.const 3
+      i32.const 589505315
       i32.store offset=0
       i32.const 11
       f32.load align=4

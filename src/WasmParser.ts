@@ -508,6 +508,8 @@ export class BinaryReader {
       if ((byte & 0x80) === 0)
         break;
     }
+    if (shift >= 32)
+      return result;
     var ashift = (32 - shift);
     return (result << ashift) >> ashift;
   }

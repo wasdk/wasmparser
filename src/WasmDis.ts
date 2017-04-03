@@ -20,8 +20,17 @@ import {
   IGlobalVariable, IElementSegment, IElementSegmentBody, ISectionInformation
 } from './WasmParser';
 function binToString(b: Uint8Array) : string {
-  // FIXME utf-8
-  return String.fromCharCode.apply(null, b);
+  var buffer = [];
+  for (var i = 0; i < b.length; i++) {
+    var byte = b[i];
+    if (byte < 0x20 || byte >= 0x7F ||
+        byte == /* " */ 0x22 || byte == /* \ */ 0x5c) {
+      buffer.push('\\' + (byte >> 4).toString(16) + (byte & 15).toString(16));
+    } else {
+      buffer.push(String.fromCharCode(byte));
+    }
+  }
+  return buffer.join('');
 }
 function typeToString(type: number) : string {
   switch (type) {
@@ -112,7 +121,7 @@ function memoryAddressToString(address: IMemoryAddress, code: OperatorCode) : st
 function globalTypeToString(type: IGlobalType): string {
   if (!type.mutability)
     return typeToString(type.contentType)
-  return `(mul ${typeToString(type.contentType)})`;
+  return `(mut ${typeToString(type.contentType)})`;
 }
 function limitsToString(limits: IResizableLimits) : string {
   return limits.initial + (limits.maximum !== undefined ? ' ' + limits.maximum : '');
@@ -243,28 +252,26 @@ export class WasmDisassembler {
           break;
         case BinaryReaderState.IMPORT_SECTION_ENTRY:
           var importInfo = <IImportEntry>reader.result;
-          this._buffer.push(`  (import $func${this._importCount} "${binToString(importInfo.module)}" "${binToString(importInfo.field)}"`);
+          var importSource = `"${binToString(importInfo.module)}" "${binToString(importInfo.field)}"`
           switch (importInfo.kind) {
             case ExternalKind.Function:
-              this._importCount++;
-              this._buffer.push(` ${this.printType(importInfo.funcTypeIndex)}`);
+              this._buffer.push(`  (import $func${this._importCount++} ${importSource} ${this.printType(importInfo.funcTypeIndex)})\n`);
               break;
             case ExternalKind.Table:
               var tableImportInfo = <ITableType>importInfo.type;
-              this._buffer.push(` (table $table${this._tableCount++} ${limitsToString(tableImportInfo.limits)} ${typeToString(tableImportInfo.elementType)})`);
+              this._buffer.push(`  (import ${importSource} (table $table${this._tableCount++} ${limitsToString(tableImportInfo.limits)} ${typeToString(tableImportInfo.elementType)}))\n`);
               break;
             case ExternalKind.Memory:
               var memoryImportInfo = <IMemoryType>importInfo.type;
-              this._buffer.push(` (memory ${limitsToString(memoryImportInfo.limits)})`);
+              this._buffer.push(`  (import ${importSource} (memory ${limitsToString(memoryImportInfo.limits)}))\n`);
               break;
             case ExternalKind.Global:
               var globalImportInfo = <IGlobalType>importInfo.type;
-              this._buffer.push(` (global $global${this._globalCount++} ${globalTypeToString(globalImportInfo)})`);
+              this._buffer.push(`  (import ${importSource} (global $global${this._globalCount++} ${globalTypeToString(globalImportInfo)}))\n`);
               break;
             default:
               throw new Error(`NYI other import types: ${importInfo.kind}`);
           }
-          this._buffer.push(')\n');
           break;
         case BinaryReaderState.BEGIN_ELEMENT_SECTION_ENTRY:
           var elementSegmentInfo = <IElementSegment>reader.result;

@@ -1,4 +1,4 @@
 (module
-  (import $func0 "" "" (global $global0 i32))
+  (import "" "" (global $global0 i32))
   (memory 0)
 )
