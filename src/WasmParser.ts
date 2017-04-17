@@ -225,6 +225,16 @@ export const enum Type {
   func = -0x20,
   empty_block_type = -0x40,
 }
+export const enum RelocType {
+  FunctionIndex_LEB = 0,
+  TableIndex_SLEB = 1,
+  TableIndex_I32 = 2,
+  GlobalAddr_LEB = 3,
+  GlobalAddr_SLEB = 4,
+  GlobalAddr_I32 = 5,
+  TypeIndex_LEB = 6,
+  GlobalIndex_LEB = 7,
+}
 export const enum BinaryReaderState {
   ERROR = -1,
   INITIAL = 0,
@@ -265,6 +275,9 @@ export const enum BinaryReaderState {
 
   BEGIN_GLOBAL_SECTION_ENTRY = 39,
   END_GLOBAL_SECTION_ENTRY = 40,
+
+  RELOC_SECTION_HEADER = 41,
+  RELOC_SECTION_ENTRY = 42,
 }
 class DataRange {
   start: number;
@@ -329,6 +342,16 @@ export interface IExportEntry {
 export interface INameEntry {
   funcName: Uint8Array;
   localNames: Array<Uint8Array>;
+}
+export interface IRelocHeader {
+  id: SectionCode;
+  name: Uint8Array;
+}
+export interface IRelocEntry {
+  type: RelocType;
+  offset: number;
+  index: number;
+  addend?: number;
 }
 export interface IFunctionEntry {
   typeIndex: number;
@@ -395,7 +418,8 @@ export type BinaryReaderResult =
   IImportEntry | IExportEntry | IFunctionEntry | IFunctionType | IModuleHeader |
   IOperatorInformation | IMemoryType | ITableType | IGlobalVariable | INameEntry |
   IElementSegment | IElementSegmentBody | IDataSegment | IDataSegmentBody |
-  ISectionInformation | IFunctionInformation | ISectionInformation | IFunctionInformation;
+  ISectionInformation | IFunctionInformation | ISectionInformation |
+  IFunctionInformation | IRelocHeader | IRelocEntry;
 export class BinaryReader {
   private _data: Uint8Array;
   private _pos: number;
@@ -810,6 +834,77 @@ export class BinaryReader {
     this._sectionEntriesLeft--;
     return true;
   }
+  private readRelocHeader() : boolean {
+    // See https://github.com/llvm-mirror/llvm/blob/master/lib/Object/WasmObjectFile.cpp#L292
+    if (!this.hasVarIntBytes()) {
+      return false;
+    }
+    var pos = this._pos;
+    var sectionId: SectionCode = this.readVarInt7();
+    var sectionName;
+    if (sectionId === SectionCode.Custom) {
+      if (!this.hasStringBytes()) {
+        this._pos = pos;
+        return false;
+      }
+      sectionName = this.readStringBytes();
+    }
+    this.state = BinaryReaderState.RELOC_SECTION_HEADER;
+    this.result = {
+      id: sectionId,
+      name: sectionName,
+    };
+    return true;
+  }
+  private readRelocEntry() : boolean {
+    if (this._sectionEntriesLeft === 0) {
+      this.skipSection();
+      return this.read();
+    }
+    if (!this.hasVarIntBytes())
+      return false;
+    var pos = this._pos;
+    var type: RelocType = this.readVarUint7();
+    if (!this.hasVarIntBytes()) {
+      this._pos = pos;
+      return false;
+    }
+    var offset = this.readVarUint32();
+    if (!this.hasVarIntBytes()) {
+      this._pos = pos;
+      return false;
+    }
+    var index = this.readVarUint32();
+    var addend;
+    switch (type) {
+      case RelocType.FunctionIndex_LEB:
+      case RelocType.TableIndex_SLEB:
+      case RelocType.TableIndex_I32:
+        break;
+      case RelocType.GlobalAddr_LEB:
+      case RelocType.GlobalAddr_SLEB:
+      case RelocType.GlobalAddr_I32:
+        if (!this.hasVarIntBytes()) {
+          this._pos = pos;
+          return false;
+        }
+        addend = this.readVarUint32();
+        break;
+      default:
+        this.error = new Error(`Bad relocation type: ${type}`);
+        this.state = BinaryReaderState.ERROR;
+        return true;
+    }
+    this.state = BinaryReaderState.RELOC_SECTION_ENTRY;
+    this.result = {
+      type: type,
+      offset: offset,
+      index: index,
+      addend: addend
+    };
+    this._sectionEntriesLeft--;
+    return true;
+  }
   private readCodeOperator() : boolean {
     if (this.state === BinaryReaderState.CODE_OPERATOR &&
         this._pos >= this._functionRange.end) {
@@ -1076,6 +1171,15 @@ export class BinaryReader {
           this._sectionEntriesLeft = this.readVarUint32() >>> 0;
           return this.readNameEntry();
         }
+        if (currentSection.name.length >= 6 &&
+            currentSection.name[0] == 0x72 /* 'r' */ &&
+            currentSection.name[1] == 0x65 /* 'e' */ &&
+            currentSection.name[2] == 0x6c /* 'l' */ &&
+            currentSection.name[3] == 0x6f /* 'o' */ &&
+            currentSection.name[4] == 0x63 /* 'c' */ &&
+            currentSection.name[5] == 0x2e /* '.' */) {
+          return this.readRelocHeader();
+        }
         /* fallthru as unknown */
       default:
         this.error = new Error(`Unsupported section: ${this._sectionId}`);
@@ -1185,6 +1289,13 @@ export class BinaryReader {
         return true;
       case BinaryReaderState.NAME_SECTION_ENTRY:
         return this.readNameEntry();
+      case BinaryReaderState.RELOC_SECTION_HEADER:
+        if (!this.hasVarIntBytes())
+          return false;
+        this._sectionEntriesLeft = this.readVarUint32() >>> 0;
+        return this.readRelocEntry();
+      case BinaryReaderState.RELOC_SECTION_ENTRY:
+        return this.readRelocEntry();
       case BinaryReaderState.READING_FUNCTION_HEADER:
       case BinaryReaderState.END_FUNCTION_BODY:
         return this.readFunctionBody();
