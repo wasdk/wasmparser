@@ -19,7 +19,7 @@ import {
   ITableType, IMemoryType, IGlobalType, IResizableLimits, IDataSegmentBody,
   IGlobalVariable, IElementSegment, IElementSegmentBody, ISectionInformation
 } from './WasmParser';
-function binToString(b: Uint8Array) : string {
+function binToString(b: Uint8Array): string {
   var buffer = [];
   for (var i = 0; i < b.length; i++) {
     var byte = b[i];
@@ -32,7 +32,7 @@ function binToString(b: Uint8Array) : string {
   }
   return buffer.join('');
 }
-function typeToString(type: number) : string {
+function typeToString(type: number): string {
   switch (type) {
     case Type.i32: return 'i32';
     case Type.i64: return 'i64';
@@ -42,7 +42,7 @@ function typeToString(type: number) : string {
     default: throw new Error('Unexpected type');
   }
 }
-function formatFloat32(n: number) : string {
+function formatFloat32(n: number): string {
   if (n === 0)
     return (1 / n) < 0 ? '-0.0' : '0.0';
   if (isFinite(n))
@@ -61,7 +61,7 @@ function formatFloat32(n: number) : string {
   return (data < 0 ? '-' : '+') + 'nan:0x' + payload.toString(16);
 }
 
-function formatFloat64(n: number) : string {
+function formatFloat64(n: number): string {
   if (n === 0)
     return (1 / n) < 0 ? '-0.0' : '0.0';
   if (isFinite(n))
@@ -81,7 +81,7 @@ function formatFloat64(n: number) : string {
   return (data2 < 0 ? '-' : '+') + 'nan:0x' + payload.toString(16);
 }
 
-function memoryAddressToString(address: IMemoryAddress, code: OperatorCode) : string {
+function memoryAddressToString(address: IMemoryAddress, code: OperatorCode): string {
   var defaultAlignFlags;
   switch (code) {
     case OperatorCode.i64_load:
@@ -123,7 +123,7 @@ function globalTypeToString(type: IGlobalType): string {
     return typeToString(type.contentType)
   return `(mut ${typeToString(type.contentType)})`;
 }
-function limitsToString(limits: IResizableLimits) : string {
+function limitsToString(limits: IResizableLimits): string {
   return limits.initial + (limits.maximum !== undefined ? ' ' + limits.maximum : '');
 }
 const IndentIncrement: string = '  ';
@@ -148,13 +148,13 @@ export class WasmDisassembler {
     this._indent = null;
     this._indentLevel = 0;
   }
-  private printType(typeIndex: number) : string {
+  private printType(typeIndex: number): string {
     var type = this._types[typeIndex];
     if (type.form !== Type.func)
       throw new Error('NYI other function form');
     return `(func${this.printFuncType(type, false)})`;
   }
-  private printFuncType(type: IFunctionType, printVars: boolean) : string {
+  private printFuncType(type: IFunctionType, printVars: boolean): string {
     var result = [];
     if (printVars) {
       for (var i = 0; i < type.params.length; i++)
@@ -170,15 +170,15 @@ export class WasmDisassembler {
     }
     return result.join('');
   }
-  private increaseIndent() : void {
+  private increaseIndent(): void {
     this._indent += IndentIncrement;
     this._indentLevel++;
   }
-  private decreaseIndent() : void {
+  private decreaseIndent(): void {
     this._indent = this._indent.slice(0, -IndentIncrement.length);
     this._indentLevel--;
   }
-  public disassemble(reader: BinaryReader) : string {
+  public disassemble(reader: BinaryReader): string {
     while (true) {
       if (!reader.read())
         return null;

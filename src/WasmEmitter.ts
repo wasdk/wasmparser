@@ -85,7 +85,7 @@ export class Emitter {
     return this._data;
   }
 
-  public write(reader: BinaryReader) : void {
+  public write(reader: BinaryReader): void {
     this.writeStateAndResult(reader.state, reader.result);
   }
 
@@ -380,16 +380,16 @@ export class Emitter {
       this.writeVarUint(limits.maximum);
   }
 
-  private writeTableType(type: ITableType) : void {
+  private writeTableType(type: ITableType): void {
     this.writeVarInt(type.elementType);
     this.writeResizableLimits(type.limits);
   }
 
-  private writeMemoryType(type: IMemoryType) : void {
+  private writeMemoryType(type: IMemoryType): void {
     this.writeResizableLimits(type.limits);
   }
 
-  private writeGlobalType(type: IGlobalType) : void {
+  private writeGlobalType(type: IGlobalType): void {
     this.writeVarInt(type.contentType);
     this.writeVarUint(type.mutability);
   }
