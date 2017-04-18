@@ -18,7 +18,8 @@ import {
   ITableType, IMemoryType, IGlobalType, IResizableLimits, IFunctionEntry,
   IExportEntry, IFunctionInformation, IOperatorInformation, Int64, IMemoryAddress,
   IBinaryReaderData, IDataSegment, IDataSegmentBody, IElementSegment, IElementSegmentBody,
-  IGlobalVariable
+  IGlobalVariable, bytesToString, IRelocHeader, IRelocEntry, RelocType,
+  INameEntry, NameType, IFunctionNameEntry, ILocalNameEntry, INaming
 } from './WasmParser';
 
 enum EmitterState {
@@ -47,6 +48,10 @@ enum EmitterState {
   ElementSectionEntryEnd,
   GlobalSectionEntry,
   GlobalSectionEntryEnd,
+  RawDataSection,
+  NameEntry,
+  RelocHeader,
+  RelocEntry,
 }
 
 export class Emitter {
@@ -160,6 +165,18 @@ export class Emitter {
       case BinaryReaderState.END_GLOBAL_SECTION_ENTRY:
         this.writeEndGlobalSectionEntry();
         break;
+      case BinaryReaderState.SECTION_RAW_DATA:
+        this.writeSectionRawData(<Uint8Array>result);
+        break;
+      case BinaryReaderState.NAME_SECTION_ENTRY:
+        this.writeNameEntry(<INameEntry>result);
+        break;
+      case BinaryReaderState.RELOC_SECTION_HEADER:
+        this.writeRelocHeader(<IRelocHeader>result);
+        break;
+      case BinaryReaderState.RELOC_SECTION_ENTRY:
+        this.writeRelocEntry(<IRelocEntry>result);
+        break;
       default:
         throw new Error(`Invalid state: ${state}`);
     }
@@ -264,7 +281,17 @@ export class Emitter {
     switch (section.id) {
       case SectionCode.Custom:
         this.writeString(section.name);
-        /* fallthru to error */
+        var sectionName = bytesToString(section.name);
+        if (sectionName === 'name') {
+          this._state = EmitterState.NameEntry;
+          break;
+        }
+        if (sectionName.indexOf('reloc.') === 0) {
+          this._state = EmitterState.RelocHeader;
+          break;
+        }
+        this._state = EmitterState.RawDataSection;
+        break;
       default:
         this._state = EmitterState.Error;
         throw new Error(`Unexpected section ${section.id}`);
@@ -313,6 +340,20 @@ export class Emitter {
         this.writePatchableSectionEntriesCount();
         break;
     }
+  }
+
+  public writeBeginSectionRawData(section: ISectionInformation): void {
+    this.ensureState(EmitterState.Wasm);
+    this.writeVarUint(section.id);
+    if (section.id == SectionCode.Custom) {
+      this.writeString(section.name);
+    }
+    this._state = EmitterState.RawDataSection;
+  }
+
+  private writeSectionRawData(bytes: Uint8Array): void {
+    this.ensureState(EmitterState.RawDataSection);
+    this.writeBytes(bytes, 0, bytes.length);
   }
 
   private writeFuncType(type: IFunctionType): void {
@@ -482,7 +523,7 @@ export class Emitter {
         this._initExpressionAfterState = EmitterState.GlobalSectionEntryEnd;
         break;
       default:
-        throw new Error('Unexpected state ${this._initExpressionBeforeState} at writeEndInitExpression');
+        throw new Error(`Unexpected state ${this._state} at writeEndInitExpression`);
     }
     this._endWritten = false;
     this._state = EmitterState.InitExpression;
@@ -627,6 +668,68 @@ export class Emitter {
     this.writeMemoryType(entry);
   }
 
+  private writeNameMap(map: INaming[]): void {
+    this.writeVarUint(map.length);
+    map.forEach(naming => {
+      this.writeVarUint(naming.index);
+      this.writeString(naming.name);
+    });
+  }
+
+  public writeNameEntry(entry: INameEntry): void {
+    this.ensureState(EmitterState.NameEntry);
+    this.writeVarUint(entry.type);
+    var payloadLengthPatchable = this.writePatchableVarUint32();
+    var start = this._position;
+    switch (entry.type) {
+      case NameType.Function:
+        this.writeNameMap((<IFunctionNameEntry>entry).names);
+        break;
+      case NameType.Local:
+        var funcs = (<ILocalNameEntry>entry).funcs;
+        this.writeVarUint(funcs.length);
+        funcs.forEach(func => {
+          this.writeVarUint(func.index);
+          this.writeNameMap(func.locals);
+        });
+        break;
+      default:
+        throw new Error(`Unexpected name entry type ${entry.type}`);
+    }
+    this.patchVarUint32(payloadLengthPatchable, this._position - start);
+  }
+
+  public writeRelocHeader(header: IRelocHeader): void {
+    this.ensureState(EmitterState.RelocHeader);
+    this.writeVarInt(header.id);
+    if (header.id == SectionCode.Custom) {
+      this.writeString(header.name);
+    }
+    this.writePatchableSectionEntriesCount();
+    this._state = EmitterState.RelocEntry;
+  }
+
+  public writeRelocEntry(entry: IRelocEntry): void {
+    this.ensureState(EmitterState.RelocEntry);
+    this._sectionEntiesCount++;
+    this.writeVarUint(entry.type);
+    this.writeVarUint(entry.offset);
+    this.writeVarUint(entry.index);
+    switch (entry.type) {
+      case RelocType.FunctionIndex_LEB:
+      case RelocType.TableIndex_SLEB:
+      case RelocType.TableIndex_I32:
+        break;
+      case RelocType.GlobalAddr_LEB:
+      case RelocType.GlobalAddr_SLEB:
+      case RelocType.GlobalAddr_I32:
+        this.writeVarUint(entry.addend);
+        break;
+      default:
+        throw new Error(`Unexpected reloc entry type ${entry.type}`);
+    }
+  }
+
   public writeEndSection(): void {
     switch (this._state) {
       case EmitterState.TypeSection:
@@ -639,7 +742,11 @@ export class Emitter {
       case EmitterState.DataSection:
       case EmitterState.TableSection:
       case EmitterState.ElementSection:
+      case EmitterState.RelocEntry:
         this.patchVarUint32(this._sectionEntiesCountBytes, this._sectionEntiesCount);
+        break;
+      case EmitterState.NameEntry:
+      case EmitterState.RawDataSection:
         break;
       default:
         throw new Error(`Unexpected state: ${this._state} (expected section state)`);
