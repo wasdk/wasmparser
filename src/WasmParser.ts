@@ -247,6 +247,8 @@ export const enum BinaryReaderState {
   BEGIN_SECTION = 3,
   END_SECTION = 4,
   SKIPPING_SECTION = 5,
+  READING_SECTION_RAW_DATA = 6,
+  SECTION_RAW_DATA = 7,
 
   TYPE_SECTION_ENTRY = 11,
   IMPORT_SECTION_ENTRY = 12,
@@ -436,7 +438,7 @@ export type BinaryReaderResult =
   IOperatorInformation | IMemoryType | ITableType | IGlobalVariable | INameEntry |
   IElementSegment | IElementSegmentBody | IDataSegment | IDataSegmentBody |
   ISectionInformation | IFunctionInformation | ISectionInformation |
-  IFunctionInformation | IRelocHeader | IRelocEntry;
+  IFunctionInformation | IRelocHeader | IRelocEntry | Uint8Array;
 export class BinaryReader {
   private _data: Uint8Array;
   private _pos: number;
@@ -593,6 +595,9 @@ export class BinaryReader {
   }
   private readStringBytes() : Uint8Array {
     var length = this.readVarUint32() >>> 0;
+    return this.readBytes(length);
+  }
+  private readBytes(length: number) : Uint8Array {
     var result = this._data.subarray(this._pos, this._pos + length);
     this._pos += length;
     return new Uint8Array(result); // making a clone of the data
@@ -1157,6 +1162,15 @@ export class BinaryReader {
     this.state = BinaryReaderState.BEGIN_SECTION;
     return true;
   }
+  private readSectionRawData() : boolean {
+    var payloadLength = this._sectionRange.end - this._sectionRange.start;
+    if (!this.hasBytes(payloadLength)) {
+      return false;
+    }
+    this.state = BinaryReaderState.SECTION_RAW_DATA;
+    this.result = this.readBytes(payloadLength);
+    return true;
+  }
   private readSectionBody() : boolean {
     if (this._pos >= this._sectionRange.end) {
       this.result = null;
@@ -1236,7 +1250,7 @@ export class BinaryReader {
             currentSection.name[5] == 0x2e /* '.' */) {
           return this.readRelocHeader();
         }
-        /* fallthru as unknown */
+        return this.readSectionRawData();
       default:
         this.error = new Error(`Unsupported section: ${this._sectionId}`);
         this.state = BinaryReaderState.ERROR;
@@ -1364,6 +1378,12 @@ export class BinaryReader {
       case BinaryReaderState.CODE_OPERATOR:
       case BinaryReaderState.INIT_EXPRESSION_OPERATOR:
         return this.readCodeOperator();
+      case BinaryReaderState.READING_SECTION_RAW_DATA:
+        return this.readSectionRawData();
+      case BinaryReaderState.SECTION_RAW_DATA:
+        this.state = BinaryReaderState.END_SECTION;
+        this.result = null;
+        return true;
       default:
         this.error = new Error(`Unsupported state: ${this.state}`);
         this.state = BinaryReaderState.ERROR;
@@ -1388,6 +1408,14 @@ export class BinaryReader {
   public skipInitExpression(): void {
     while (this.state === BinaryReaderState.INIT_EXPRESSION_OPERATOR)
       this.readCodeOperator();
+  }
+  public fetchSectionRawData(): void {
+    if (this.state !== BinaryReaderState.BEGIN_SECTION) {
+      this.error = new Error(`Unsupported state: ${this.state}`);
+      this.state = BinaryReaderState.ERROR;
+      return;
+    }
+    this.state = BinaryReaderState.READING_SECTION_RAW_DATA;
   }
 }
 
