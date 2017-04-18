@@ -235,6 +235,10 @@ export const enum RelocType {
   TypeIndex_LEB = 6,
   GlobalIndex_LEB = 7,
 }
+export const enum NameType {
+  Function = 1,
+  Local = 2,
+}
 export const enum BinaryReaderState {
   ERROR = -1,
   INITIAL = 0,
@@ -340,8 +344,21 @@ export interface IExportEntry {
    index: number;
 }
 export interface INameEntry {
-  funcName: Uint8Array;
-  localNames: Array<Uint8Array>;
+   type: NameType;
+}
+export interface INaming {
+  index: number;
+  name: Uint8Array;
+}
+export interface IFunctionNameEntry extends INameEntry {
+  names: INaming[];
+}
+export interface ILocalName {
+  index: number;
+  locals: INaming[];
+}
+export interface ILocalNameEntry extends INameEntry {
+  funcs: ILocalName[];
 }
 export interface IRelocHeader {
   id: SectionCode;
@@ -816,22 +833,64 @@ export class BinaryReader {
     var offset = this.readVarUint32() >>> 0;
     return { flags: flags, offset: offset };
   }
+  private readNameMap(): INaming[] {
+    var count = this.readVarUint32();
+    var result: INaming[] = [];
+    for (var i = 0; i < count; i++) {
+      var index = this.readVarUint32();
+      var name = this.readStringBytes();
+      result.push({index: index, name: name});
+    }
+    return result;
+  }
   private readNameEntry() : boolean {
-    if (this._sectionEntriesLeft === 0) {
+    var pos = this._pos;
+    if (pos >= this._sectionRange.end) {
       this.skipSection();
       return this.read();
     }
-    var funcName = this.readStringBytes();
-    var localCount = this.readVarUint32() >>> 0;
-    var localNames : Array<Uint8Array> = [];
-    for (var i = 0; i < localCount; i++)
-      localNames.push(this.readStringBytes());
+    if (!this.hasVarIntBytes())
+      return false;
+    var type: NameType = this.readVarUint7();
+    if (!this.hasVarIntBytes()) {
+      this._pos = pos;
+      return false;
+    }
+    var payloadLength = this.readVarUint32();
+    if (!this.hasBytes(payloadLength)) {
+      this._pos = pos;
+      return false;
+    }
+    var result: (IFunctionNameEntry|ILocalNameEntry);
+    switch (type) {
+      case NameType.Function:
+        result = {
+          type: type,
+          names: this.readNameMap()
+        };
+        break;
+      case NameType.Local:
+        var funcsLength = this.readVarUint32();
+        var funcs: ILocalName[] = [];
+        for (var i = 0; i < funcsLength; i++) {
+          var funcIndex = this.readVarUint32();
+          funcs.push({
+            index: funcIndex,
+            locals: this.readNameMap()
+          });
+        }
+        result = {
+          type: type,
+          funcs: funcs
+        };
+        break;
+      default:
+        this.error = new Error(`Bad name entry type: ${type}`);
+        this.state = BinaryReaderState.ERROR;
+        return true;
+    }
     this.state = BinaryReaderState.NAME_SECTION_ENTRY;
-    this.result = {
-      funcName: funcName,
-      localNames: localNames
-    };
-    this._sectionEntriesLeft--;
+    this.result = result;
     return true;
   }
   private readRelocHeader() : boolean {
@@ -1166,9 +1225,6 @@ export class BinaryReader {
             currentSection.name[1] == 0x61 /* 'a' */ &&
             currentSection.name[2] == 0x6d /* 'm' */ &&
             currentSection.name[3] == 0x65 /* 'e' */) {
-          if (!this.hasVarIntBytes())
-            return false;
-          this._sectionEntriesLeft = this.readVarUint32() >>> 0;
           return this.readNameEntry();
         }
         if (currentSection.name.length >= 6 &&
