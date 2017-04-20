@@ -126,6 +126,14 @@ function globalTypeToString(type: IGlobalType): string {
 function limitsToString(limits: IResizableLimits): string {
   return limits.initial + (limits.maximum !== undefined ? ' ' + limits.maximum : '');
 }
+function formatHex(n: number, width?: number): string {
+  var s = n.toString(16).toUpperCase();
+  if (width === undefined)
+    return s;
+  while (s.length < width)
+    s = '0' + s;
+  return s;
+}
 const IndentIncrement: string = '  ';
 export class WasmDisassembler {
   private _buffer: Array<string>;
@@ -137,6 +145,8 @@ export class WasmDisassembler {
   private _tableCount: number;
   private _indent: string;
   private _indentLevel: number;
+  private _addOffsets: boolean;
+  private _nextLineToAddOffset: number;
   constructor() {
     this._buffer = [];
     this._types = [];
@@ -147,6 +157,14 @@ export class WasmDisassembler {
     this._tableCount = 0;
     this._indent = null;
     this._indentLevel = 0;
+    this._addOffsets = false;
+    this._nextLineToAddOffset = 0;
+  }
+  public get addOffsets() {
+    return this._addOffsets;
+  }
+  public set addOffsets(value: boolean) {
+    this._addOffsets = value;
   }
   private printType(typeIndex: number): string {
     var type = this._types[typeIndex];
@@ -180,6 +198,7 @@ export class WasmDisassembler {
   }
   public disassemble(reader: BinaryReader): string {
     while (true) {
+      var position = reader.position;
       if (!reader.read())
         return null;
       switch (reader.state) {
@@ -409,6 +428,16 @@ export class WasmDisassembler {
           break;
         default:
           throw new Error(`Expectected state: ${reader.state}`);
+      }
+      if (this._addOffsets && this._nextLineToAddOffset < this._buffer.length) {
+        var i = this._nextLineToAddOffset;
+        var line = this._buffer[i];
+        while (line.indexOf('\n') < 0) {
+          if (++i >= this._buffer.length) break;
+          line = this._buffer[i];
+        }
+        this._buffer[i] = line.replace(/\n/, ` ;; @${formatHex(position, 4)}\n`);
+        this._nextLineToAddOffset = this._buffer.length;
       }
     }
   }
