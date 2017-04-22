@@ -235,6 +235,9 @@ export const enum RelocType {
   TypeIndex_LEB = 6,
   GlobalIndex_LEB = 7,
 }
+export const enum LinkingType {
+  StackPointer = 1,
+}
 export const enum NameType {
   Function = 1,
   Local = 2,
@@ -260,6 +263,7 @@ export const enum BinaryReaderState {
   DATA_SECTION_ENTRY = 18,
   NAME_SECTION_ENTRY = 19,
   ELEMENT_SECTION_ENTRY = 20,
+  LINKING_SECTION_ENTRY = 21,
 
   BEGIN_INIT_EXPRESSION_BODY = 25,
   INIT_EXPRESSION_OPERATOR = 26,
@@ -284,6 +288,8 @@ export const enum BinaryReaderState {
 
   RELOC_SECTION_HEADER = 41,
   RELOC_SECTION_ENTRY = 42,
+
+  SOURCE_MAPPING_URL = 43,
 }
 class DataRange {
   start: number;
@@ -362,6 +368,10 @@ export interface ILocalName {
 export interface ILocalNameEntry extends INameEntry {
   funcs: ILocalName[];
 }
+export interface ILinkingEntry {
+  type: LinkingType;
+  index?: number;
+}
 export interface IRelocHeader {
   id: SectionCode;
   name: Uint8Array;
@@ -371,6 +381,9 @@ export interface IRelocEntry {
   offset: number;
   index: number;
   addend?: number;
+}
+export interface ISourceMappingURL {
+  url: Uint8Array;
 }
 export interface IFunctionEntry {
   typeIndex: number;
@@ -438,7 +451,8 @@ export type BinaryReaderResult =
   IOperatorInformation | IMemoryType | ITableType | IGlobalVariable | INameEntry |
   IElementSegment | IElementSegmentBody | IDataSegment | IDataSegmentBody |
   ISectionInformation | IFunctionInformation | ISectionInformation |
-  IFunctionInformation | IRelocHeader | IRelocEntry | Uint8Array;
+  IFunctionInformation | IRelocHeader | IRelocEntry | ILinkingEntry |
+  ISourceMappingURL | Uint8Array;
 export class BinaryReader {
   private _data: Uint8Array;
   private _pos: number;
@@ -899,7 +913,7 @@ export class BinaryReader {
     return true;
   }
   private readRelocHeader(): boolean {
-    // See https://github.com/llvm-mirror/llvm/blob/master/lib/Object/WasmObjectFile.cpp#L292
+    // See https://github.com/WebAssembly/tool-conventions/blob/master/Linking.md
     if (!this.hasVarIntBytes()) {
       return false;
     }
@@ -918,6 +932,42 @@ export class BinaryReader {
       id: sectionId,
       name: sectionName,
     };
+    return true;
+  }
+  private readLinkingEntry(): boolean {
+    if (this._sectionEntriesLeft === 0) {
+      this.skipSection();
+      return this.read();
+    }
+    if (!this.hasVarIntBytes())
+      return false;
+    var pos = this._pos;
+    var type: LinkingType = this.readVarUint32() >>> 0;
+    var index;
+    switch (type) {
+      case LinkingType.StackPointer:
+        if (!this.hasVarIntBytes()) {
+          this._pos = pos;
+          return false;
+        }
+        index = this.readVarUint32();
+        break;
+      default:
+        this.error = new Error(`Bad linking type: ${type}`);
+        this.state = BinaryReaderState.ERROR;
+        return true;
+    }
+    this.state = BinaryReaderState.LINKING_SECTION_ENTRY;
+    this.result = {type: type, index: index};
+    this._sectionEntriesLeft--;
+    return true;
+  }
+  private readSourceMappingURL(): boolean {
+    if (!this.hasStringBytes())
+      return false;
+    var url = this.readStringBytes();
+    this.state = BinaryReaderState.SOURCE_MAPPING_URL;
+    this.result = {url: url};
     return true;
   }
   private readRelocEntry(): boolean {
@@ -1234,21 +1284,21 @@ export class BinaryReader {
         this.state = BinaryReaderState.DATA_SECTION_ENTRY;
         return this.readDataEntry();
       case SectionCode.Custom:
-        if (currentSection.name.length == 4 &&
-            currentSection.name[0] == 0x6e /* 'n' */ &&
-            currentSection.name[1] == 0x61 /* 'a' */ &&
-            currentSection.name[2] == 0x6d /* 'm' */ &&
-            currentSection.name[3] == 0x65 /* 'e' */) {
+        var customSectionName = bytesToString(currentSection.name);
+        if (customSectionName === 'name') {
           return this.readNameEntry();
         }
-        if (currentSection.name.length >= 6 &&
-            currentSection.name[0] == 0x72 /* 'r' */ &&
-            currentSection.name[1] == 0x65 /* 'e' */ &&
-            currentSection.name[2] == 0x6c /* 'l' */ &&
-            currentSection.name[3] == 0x6f /* 'o' */ &&
-            currentSection.name[4] == 0x63 /* 'c' */ &&
-            currentSection.name[5] == 0x2e /* '.' */) {
+        if (customSectionName.indexOf('reloc.') === 0) {
           return this.readRelocHeader();
+        }
+        if (customSectionName === 'linking') {
+          if (!this.hasVarIntBytes())
+            return false;
+          this._sectionEntriesLeft = this.readVarUint32() >>> 0;
+          return this.readLinkingEntry();
+        }
+        if (customSectionName === 'sourceMappingURL') {
+          return this.readSourceMappingURL();
         }
         return this.readSectionRawData();
       default:
@@ -1364,6 +1414,12 @@ export class BinaryReader {
           return false;
         this._sectionEntriesLeft = this.readVarUint32() >>> 0;
         return this.readRelocEntry();
+      case BinaryReaderState.LINKING_SECTION_ENTRY:
+        return this.readLinkingEntry();
+      case BinaryReaderState.SOURCE_MAPPING_URL:
+        this.state = BinaryReaderState.END_SECTION;
+        this.result = null;
+        return true;
       case BinaryReaderState.RELOC_SECTION_ENTRY:
         return this.readRelocEntry();
       case BinaryReaderState.READING_FUNCTION_HEADER:
@@ -1420,10 +1476,26 @@ export class BinaryReader {
 }
 
 declare var escape: (string) => string;
+declare class TextDecoder {
+  public constructor(encoding: string);
+  public decode(bytes: Uint8Array): string;
+}
 
-export function bytesToString(b: Uint8Array): string {
-  var str = String.fromCharCode.apply(null, b);
-  return decodeURIComponent(escape(str));
+export var bytesToString: (Uint8Array) => string;
+if (typeof TextDecoder !== 'undefined') {
+  try {
+    bytesToString = function () {
+      var utf8Decoder = new TextDecoder('utf-8');
+      utf8Decoder.decode(new Uint8Array([97, 208, 144]));
+      return b => utf8Decoder.decode(b);
+    }();
+  } catch (_) { /* ignore */ }
+}
+if (!bytesToString) {
+  bytesToString = b => {
+    var str = String.fromCharCode.apply(null, b);
+    return decodeURIComponent(escape(str));
+  };
 }
 
 export interface IBinaryReaderData {

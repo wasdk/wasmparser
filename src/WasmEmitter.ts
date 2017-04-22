@@ -19,7 +19,8 @@ import {
   IExportEntry, IFunctionInformation, IOperatorInformation, Int64, IMemoryAddress,
   IBinaryReaderData, IDataSegment, IDataSegmentBody, IElementSegment, IElementSegmentBody,
   IGlobalVariable, bytesToString, IRelocHeader, IRelocEntry, RelocType,
-  INameEntry, NameType, IFunctionNameEntry, ILocalNameEntry, INaming
+  INameEntry, NameType, IFunctionNameEntry, ILocalNameEntry, INaming,
+  ILinkingEntry, LinkingType, ISourceMappingURL,
 } from './WasmParser';
 
 enum EmitterState {
@@ -52,6 +53,9 @@ enum EmitterState {
   NameEntry,
   RelocHeader,
   RelocEntry,
+  LinkingEntry,
+  SourceMappingURL,
+  SourceMappingURLEnd,
 }
 
 export class Emitter {
@@ -177,6 +181,12 @@ export class Emitter {
       case BinaryReaderState.RELOC_SECTION_ENTRY:
         this.writeRelocEntry(<IRelocEntry>result);
         break;
+      case BinaryReaderState.LINKING_SECTION_ENTRY:
+        this.writeLinkingSection(<ILinkingEntry>result);
+        break;
+      case BinaryReaderState.SOURCE_MAPPING_URL:
+        this.writeSourceMappingURL(<ISourceMappingURL>result);
+        break;
       default:
         throw new Error(`Invalid state: ${state}`);
     }
@@ -288,6 +298,14 @@ export class Emitter {
         }
         if (sectionName.indexOf('reloc.') === 0) {
           this._state = EmitterState.RelocHeader;
+          break;
+        }
+        if (sectionName === 'linking') {
+          this._state = EmitterState.LinkingEntry;
+          break;
+        }
+        if (sectionName === 'sourceMappingURL') {
+          this._state = EmitterState.SourceMappingURL;
           break;
         }
         this._state = EmitterState.RawDataSection;
@@ -730,6 +748,25 @@ export class Emitter {
     }
   }
 
+  public writeLinkingSection(entry: ILinkingEntry): void {
+    this.ensureState(EmitterState.LinkingEntry);
+    this._sectionEntiesCount++;
+    this.writeVarUint(entry.type);
+    switch (entry.type) {
+      case LinkingType.StackPointer:
+        this.writeVarUint(entry.index);
+        break;
+      default:
+        throw new Error(`Unexpected linking entry type ${entry.type}`);
+    }
+  }
+
+  public writeSourceMappingURL(url: ISourceMappingURL): void {
+    this.ensureState(EmitterState.SourceMappingURL);
+    this.writeString(url.url);
+    this._state = EmitterState.SourceMappingURLEnd;
+  }
+
   public writeEndSection(): void {
     switch (this._state) {
       case EmitterState.TypeSection:
@@ -743,9 +780,11 @@ export class Emitter {
       case EmitterState.TableSection:
       case EmitterState.ElementSection:
       case EmitterState.RelocEntry:
+      case EmitterState.LinkingEntry:
         this.patchVarUint32(this._sectionEntiesCountBytes, this._sectionEntiesCount);
         break;
       case EmitterState.NameEntry:
+      case EmitterState.SourceMappingURLEnd:
       case EmitterState.RawDataSection:
         break;
       default:
