@@ -135,7 +135,14 @@ function formatHex(n: number, width?: number): string {
   return s;
 }
 const IndentIncrement: string = '  ';
+export interface IDisassemblerResult {
+  lines: Array<string>;
+  offsets?: Array<number>
+  done: boolean;
+}
 export class WasmDisassembler {
+  private _lines: Array<string>;
+  private _offsets: Array<number>;
   private _buffer: Array<string>;
   private _types: Array<IFunctionType>;
   private _funcIndex: number;
@@ -147,7 +154,11 @@ export class WasmDisassembler {
   private _indentLevel: number;
   private _addOffsets: boolean;
   private _nextLineToAddOffset: number;
+  private _done: boolean;
+  private _currentPosition: number;
   constructor() {
+    this._lines = [];
+    this._offsets = [];
     this._buffer = [];
     this._types = [];
     this._funcIndex = 0;
@@ -158,13 +169,26 @@ export class WasmDisassembler {
     this._indent = null;
     this._indentLevel = 0;
     this._addOffsets = false;
-    this._nextLineToAddOffset = 0;
+    this._done = false;
+    this._currentPosition = 0;
   }
   public get addOffsets() {
     return this._addOffsets;
   }
   public set addOffsets(value: boolean) {
+    if (this._lines.length > 0 && this._addOffsets != value)
+      throw new Error('Cannot switch addOffsets in the middle of the chunk.');
     this._addOffsets = value;
+  }
+  private appendBuffer(s: string) {
+    this._buffer.push(s);
+  }
+  private newLine() {
+    if (this.addOffsets)
+      this._offsets.push(this._currentPosition);
+    let line = this._buffer.join('');
+    this._buffer.length = 0;
+    this._lines.push(line);
   }
   private printType(typeIndex: number): string {
     var type = this._types[typeIndex];
@@ -197,23 +221,54 @@ export class WasmDisassembler {
     this._indentLevel--;
   }
   public disassemble(reader: BinaryReader): string {
+    let done = this.disassembleChunk(reader);
+    if (!done)
+      return null;
+    let lines = this._lines;
+    if (this._addOffsets) {
+      lines = lines.map((line, index) => {
+        var position = formatHex(this._offsets[index], 4);
+        return line + ' ;; @' + position;
+      });
+    }
+    lines.push(''); // we need '\n' after last line
+    let result = lines.join('\n');
+    this._lines.length = 0;
+    this._offsets.length = 0;
+    return result;
+  }
+  public getResult(): IDisassemblerResult {
+    let result = {
+      lines: this._lines,
+      offsets: this._addOffsets ? this._offsets : undefined,
+      done: this._done,
+    };
+    this._lines = [];
+    if (this._addOffsets)
+      this._offsets = [];
+    return result;
+  }
+  public disassembleChunk(reader: BinaryReader, offsetInModule: number = 0): boolean {
+    if (this._done)
+      throw new Error('Invalid state: disassembly process was already finished.')
     while (true) {
-      var position = reader.position;
+      this._currentPosition = reader.position + offsetInModule;
       if (!reader.read())
-        return null;
+        return false;
       switch (reader.state) {
         case BinaryReaderState.END_WASM:
-          this._buffer.push(')\n');
+          this.appendBuffer(')');
+          this.newLine();
           if (!reader.hasMoreBytes()) {
-            let result = this._buffer.join('');
-            this._buffer.length = 0;
-            return result;
+            this._done = true;
+            return true;
           }
           break;
         case BinaryReaderState.ERROR:
           throw reader.error;
         case BinaryReaderState.BEGIN_WASM:
-          this._buffer.push('(module\n');
+          this.appendBuffer('(module');
+          this.newLine();
           break;
         case BinaryReaderState.END_SECTION:
           break;
@@ -238,105 +293,119 @@ export class WasmDisassembler {
           break;
         case BinaryReaderState.MEMORY_SECTION_ENTRY:
           var memoryInfo = <IMemoryType>reader.result;
-          this._buffer.push(`  (memory ${memoryInfo.limits.initial}`);
+          this.appendBuffer(`  (memory ${memoryInfo.limits.initial}`);
           if (memoryInfo.limits.maximum !== undefined) {
-            this._buffer.push(` ${memoryInfo.limits.maximum}`);
+            this.appendBuffer(` ${memoryInfo.limits.maximum}`);
           }
-          this._buffer.push(')\n');
+          this.appendBuffer(')');
+          this.newLine();
           break;
         case BinaryReaderState.TABLE_SECTION_ENTRY:
           var tableInfo = <ITableType>reader.result;
-          this._buffer.push(`  (table $table${this._tableCount++} ${limitsToString(tableInfo.limits)} ${typeToString(tableInfo.elementType)})\n`);
+          this.appendBuffer(`  (table $table${this._tableCount++} ${limitsToString(tableInfo.limits)} ${typeToString(tableInfo.elementType)})`);
+          this.newLine();
           break;
         case BinaryReaderState.EXPORT_SECTION_ENTRY:
           var exportInfo = <IExportEntry>reader.result;
-          this._buffer.push(`  (export "${binToString(exportInfo.field)}" `);
+          this.appendBuffer(`  (export "${binToString(exportInfo.field)}" `);
           switch (exportInfo.kind) {
             case ExternalKind.Function:
-              this._buffer.push(`$func${exportInfo.index}`);
+              this.appendBuffer(`$func${exportInfo.index}`);
               break;
             case ExternalKind.Table:
-              this._buffer.push(`(table $table${exportInfo.index})`);
+              this.appendBuffer(`(table $table${exportInfo.index})`);
               break;
             case ExternalKind.Memory:
-              this._buffer.push(`memory`);
+              this.appendBuffer(`memory`);
               break;
             case ExternalKind.Global:
-              this._buffer.push(`(global $global${exportInfo.index})`);
+              this.appendBuffer(`(global $global${exportInfo.index})`);
               break;
             default:
               throw new Error(`Unsupported export ${exportInfo.kind}`);
           }
-          this._buffer.push(')\n');
+          this.appendBuffer(')');
+          this.newLine();
           break;
         case BinaryReaderState.IMPORT_SECTION_ENTRY:
           var importInfo = <IImportEntry>reader.result;
           var importSource = `"${binToString(importInfo.module)}" "${binToString(importInfo.field)}"`
           switch (importInfo.kind) {
             case ExternalKind.Function:
-              this._buffer.push(`  (import $func${this._importCount++} ${importSource} ${this.printType(importInfo.funcTypeIndex)})\n`);
+              this.appendBuffer(`  (import $func${this._importCount++} ${importSource} ${this.printType(importInfo.funcTypeIndex)})`);
               break;
             case ExternalKind.Table:
               var tableImportInfo = <ITableType>importInfo.type;
-              this._buffer.push(`  (import ${importSource} (table $table${this._tableCount++} ${limitsToString(tableImportInfo.limits)} ${typeToString(tableImportInfo.elementType)}))\n`);
+              this.appendBuffer(`  (import ${importSource} (table $table${this._tableCount++} ${limitsToString(tableImportInfo.limits)} ${typeToString(tableImportInfo.elementType)}))`);
               break;
             case ExternalKind.Memory:
               var memoryImportInfo = <IMemoryType>importInfo.type;
-              this._buffer.push(`  (import ${importSource} (memory ${limitsToString(memoryImportInfo.limits)}))\n`);
+              this.appendBuffer(`  (import ${importSource} (memory ${limitsToString(memoryImportInfo.limits)}))`);
               break;
             case ExternalKind.Global:
               var globalImportInfo = <IGlobalType>importInfo.type;
-              this._buffer.push(`  (import ${importSource} (global $global${this._globalCount++} ${globalTypeToString(globalImportInfo)}))\n`);
+              this.appendBuffer(`  (import ${importSource} (global $global${this._globalCount++} ${globalTypeToString(globalImportInfo)}))`);
               break;
             default:
               throw new Error(`NYI other import types: ${importInfo.kind}`);
           }
+          this.newLine();
           break;
         case BinaryReaderState.BEGIN_ELEMENT_SECTION_ENTRY:
           var elementSegmentInfo = <IElementSegment>reader.result;
-          this._buffer.push(`  (elem\n`);
+          this.appendBuffer(`  (elem`);
+          this.newLine();
           break;
         case BinaryReaderState.END_ELEMENT_SECTION_ENTRY:
-          this._buffer.push('  )\n');
+          this.appendBuffer('  )');
+          this.newLine();
           break;
         case BinaryReaderState.ELEMENT_SECTION_ENTRY_BODY:
           var elementSegmentBody = <IElementSegmentBody>reader.result;
-          this._buffer.push('   ');
+          this.appendBuffer('   ');
           elementSegmentBody.elements.forEach(funcIndex => {
-            this._buffer.push(` $func${funcIndex}`);
+            this.appendBuffer(` $func${funcIndex}`);
           });
-          this._buffer.push('\n');
+          this.newLine();
           break;
         case BinaryReaderState.BEGIN_GLOBAL_SECTION_ENTRY:
           var globalInfo = <IGlobalVariable>reader.result;
-          this._buffer.push(`  (global $global${this._globalCount++} ${globalTypeToString(globalInfo.type)}\n`);
+          this.appendBuffer(`  (global $global${this._globalCount++} ${globalTypeToString(globalInfo.type)}`);
+          this.newLine();
           break;
         case BinaryReaderState.END_GLOBAL_SECTION_ENTRY:
-          this._buffer.push('  )\n');
+          this.appendBuffer('  )');
+          this.newLine();
           break;
         case BinaryReaderState.TYPE_SECTION_ENTRY:
           var funcType = <IFunctionType>reader.result;
           var typeIndex = this._types.length;
           this._types.push(funcType);
-          this._buffer.push(`  (type $type${typeIndex} ${this.printType(typeIndex)})\n`);
+          this.appendBuffer(`  (type $type${typeIndex} ${this.printType(typeIndex)})`);
+          this.newLine();
           break;
         case BinaryReaderState.BEGIN_DATA_SECTION_ENTRY:
-          this._buffer.push(`  (data\n`);
+          this.appendBuffer(`  (data`);
+          this.newLine();
           break;
         case BinaryReaderState.DATA_SECTION_ENTRY_BODY:
           var body = <IDataSegmentBody>reader.result;
-          this._buffer.push(`    "${binToString(body.data)}"\n`);
+          this.appendBuffer(`    "${binToString(body.data)}"`);
+          this.newLine();
           break;
         case BinaryReaderState.END_DATA_SECTION_ENTRY:
-          this._buffer.push(`  )\n`);
+          this.appendBuffer(`  )`);
+          this.newLine();
           break;
         case BinaryReaderState.BEGIN_INIT_EXPRESSION_BODY:
           this._indent = '      ';
           this._indentLevel = 0;
-          this._buffer.push('    (\n');
+          this.appendBuffer('    (');
+          this.newLine();
           break;
         case BinaryReaderState.END_INIT_EXPRESSION_BODY:
-          this._buffer.push('    )\n');
+          this.appendBuffer('    )');
+          this.newLine();
           break;
         case BinaryReaderState.FUNCTION_SECTION_ENTRY:
           this._funcTypes.push((<IFunctionEntry>reader.result).typeIndex);
@@ -345,11 +414,13 @@ export class WasmDisassembler {
           var func = <IFunctionInformation>reader.result;
           var type = this._types[this._funcTypes[this._funcIndex]];
           var printIndex = this._funcIndex + this._importCount;
-          this._buffer.push(`  (func $func${printIndex}${this.printFuncType(type, true)}\n`);
+          this.appendBuffer(`  (func $func${printIndex}${this.printFuncType(type, true)}`);
+          this.newLine();
           var localIndex = type.params.length;
           for (var l of func.locals) {
             for (var i = 0; i < l.count; i++) {
-              this._buffer.push(`    (local $var${localIndex++} ${typeToString(l.type)})\n`);
+              this.appendBuffer(`    (local $var${localIndex++} ${typeToString(l.type)})`);
+              this.newLine();
             }
           }
           this._funcIndex++;
@@ -374,46 +445,47 @@ export class WasmDisassembler {
               operator.blockType !== Type.empty_block_type) {
             str += ' ' + typeToString(operator.blockType);
           }
-          this._buffer.push(this._indent, str);
+          this.appendBuffer(this._indent);
+          this.appendBuffer(str);
           if (operator.localIndex !== undefined) {
-            this._buffer.push(` $var${operator.localIndex}`);
+            this.appendBuffer(` $var${operator.localIndex}`);
           }
           if (operator.funcIndex !== undefined) {
-            this._buffer.push(` $func${operator.funcIndex}`);
+            this.appendBuffer(` $func${operator.funcIndex}`);
           }
           if (operator.typeIndex !== undefined) {
-            this._buffer.push(` $type${operator.typeIndex}`);
+            this.appendBuffer(` $type${operator.typeIndex}`);
           }
           if (operator.literal !== undefined) {
             switch (operator.code) {
               case OperatorCode.i32_const:
-                this._buffer.push(` ${(<number>operator.literal).toString()}`);
+                this.appendBuffer(` ${(<number>operator.literal).toString()}`);
                 break;
               case OperatorCode.f32_const:
-                this._buffer.push(` ${formatFloat32(<number>operator.literal)}`);
+                this.appendBuffer(` ${formatFloat32(<number>operator.literal)}`);
                 break;
               case OperatorCode.f64_const:
-                this._buffer.push(` ${formatFloat64(<number>operator.literal)}`);
+                this.appendBuffer(` ${formatFloat64(<number>operator.literal)}`);
                 break;
               case OperatorCode.i64_const:
-                this._buffer.push(` ${(<Int64>operator.literal).toDouble()}`);
+                this.appendBuffer(` ${(<Int64>operator.literal).toDouble()}`);
                 break;
             }
           }
           if (operator.memoryAddress !== undefined) {
-            this._buffer.push(` ${memoryAddressToString(operator.memoryAddress, operator.code)}`);
+            this.appendBuffer(` ${memoryAddressToString(operator.memoryAddress, operator.code)}`);
           }
           if (operator.brDepth !== undefined) {
-            this._buffer.push(` ${operator.brDepth}`);
+            this.appendBuffer(` ${operator.brDepth}`);
           }
           if (operator.brTable !== undefined) {
             for (var i = 0; i < operator.brTable.length; i++)
-              this._buffer.push(` ${operator.brTable[i]}`);
+              this.appendBuffer(` ${operator.brTable[i]}`);
           }
           if (operator.globalIndex !== undefined) {
-            this._buffer.push(` $global${operator.globalIndex}`);
+            this.appendBuffer(` $global${operator.globalIndex}`);
           }
-          this._buffer.push('\n');
+          this.newLine();
           switch (operator.code) {
             case OperatorCode.if:
             case OperatorCode.block:
@@ -424,20 +496,11 @@ export class WasmDisassembler {
           }
           break;
         case BinaryReaderState.END_FUNCTION_BODY:
-          this._buffer.push(`  )\n`);
+          this.appendBuffer(`  )`);
+          this.newLine();
           break;
         default:
           throw new Error(`Expectected state: ${reader.state}`);
-      }
-      if (this._addOffsets && this._nextLineToAddOffset < this._buffer.length) {
-        var i = this._nextLineToAddOffset;
-        var line = this._buffer[i];
-        while (line.indexOf('\n') < 0) {
-          if (++i >= this._buffer.length) break;
-          line = this._buffer[i];
-        }
-        this._buffer[i] = line.replace(/\n/, ` ;; @${formatHex(position, 4)}\n`);
-        this._nextLineToAddOffset = this._buffer.length;
       }
     }
   }
