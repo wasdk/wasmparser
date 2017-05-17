@@ -135,6 +135,20 @@ function formatHex(n: number, width?: number): string {
   return s;
 }
 const IndentIncrement: string = '  ';
+var operatorCodeNamesCache = null;
+function getOperatorName(code: OperatorCode): string {
+  if (!operatorCodeNamesCache) {
+    operatorCodeNamesCache = Object.create(null);
+    Object.keys(OperatorCodeNames).forEach((key) => {
+      let value = OperatorCodeNames[key];
+      if (typeof value !== 'string')
+        return;
+      operatorCodeNamesCache[key] = value.replace(/^([if](32|64))_/, "$1.").replace(/_([if](32|64))$/, "\/$1");
+    })
+  }
+  return operatorCodeNamesCache[code];
+}
+
 export interface IDisassemblerResult {
   lines: Array<string>;
   offsets?: Array<number>
@@ -440,7 +454,7 @@ export class WasmDisassembler {
               this.decreaseIndent();
               break;
           }
-          var str = OperatorCodeNames[operator.code].replace(/^([if](32|64))_/, "$1.").replace(/_([if](32|64))$/, "\/$1");
+          var str = getOperatorName(operator.code);
           if (operator.blockType !== undefined &&
               operator.blockType !== Type.empty_block_type) {
             str += ' ' + typeToString(operator.blockType);
