@@ -239,6 +239,7 @@ export const enum LinkingType {
   StackPointer = 1,
 }
 export const enum NameType {
+  Module = 0,
   Function = 1,
   Local = 2,
 }
@@ -358,6 +359,9 @@ export interface INaming {
   index: number;
   name: Uint8Array;
 }
+export interface IModuleNameEntry extends INameEntry {
+  moduleName: Uint8Array;
+}
 export interface IFunctionNameEntry extends INameEntry {
   names: INaming[];
 }
@@ -452,7 +456,7 @@ export type BinaryReaderResult =
   IElementSegment | IElementSegmentBody | IDataSegment | IDataSegmentBody |
   ISectionInformation | IFunctionInformation | ISectionInformation |
   IFunctionInformation | IRelocHeader | IRelocEntry | ILinkingEntry |
-  ISourceMappingURL | Uint8Array;
+  ISourceMappingURL | IModuleNameEntry | Uint8Array;
 export class BinaryReader {
   private _data: Uint8Array;
   private _pos: number;
@@ -880,8 +884,14 @@ export class BinaryReader {
       this._pos = pos;
       return false;
     }
-    var result: (IFunctionNameEntry|ILocalNameEntry);
+    var result: (IModuleNameEntry|IFunctionNameEntry|ILocalNameEntry);
     switch (type) {
+      case NameType.Module:
+        result = {
+          type: type,
+          moduleName: this.readStringBytes()
+        };
+        break;
       case NameType.Function:
         result = {
           type: type,

@@ -19,8 +19,8 @@ import {
   IExportEntry, IFunctionInformation, IOperatorInformation, Int64, IMemoryAddress,
   IBinaryReaderData, IDataSegment, IDataSegmentBody, IElementSegment, IElementSegmentBody,
   IGlobalVariable, bytesToString, IRelocHeader, IRelocEntry, RelocType,
-  INameEntry, NameType, IFunctionNameEntry, ILocalNameEntry, INaming,
-  ILinkingEntry, LinkingType, ISourceMappingURL,
+  INameEntry, NameType, IModuleNameEntry, IFunctionNameEntry, ILocalNameEntry,
+  INaming, ILinkingEntry, LinkingType, ISourceMappingURL,
 } from './WasmParser';
 
 enum EmitterState {
@@ -700,6 +700,9 @@ export class Emitter {
     var payloadLengthPatchable = this.writePatchableVarUint32();
     var start = this._position;
     switch (entry.type) {
+      case NameType.Module:
+        this.writeString((<IModuleNameEntry>entry).moduleName);
+        break;
       case NameType.Function:
         this.writeNameMap((<IFunctionNameEntry>entry).names);
         break;

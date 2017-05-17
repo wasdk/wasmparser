@@ -27,6 +27,7 @@ export {
   IExportEntry,
   INameEntry,
   INaming,
+  IModuleNameEntry,
   IFunctionNameEntry,
   ILocalName,
   ILocalNameEntry,
