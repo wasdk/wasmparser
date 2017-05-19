@@ -126,13 +126,15 @@ function globalTypeToString(type: IGlobalType): string {
 function limitsToString(limits: IResizableLimits): string {
   return limits.initial + (limits.maximum !== undefined ? ' ' + limits.maximum : '');
 }
+var paddingCache = ['0', '00', '000'];
 function formatHex(n: number, width?: number): string {
   var s = n.toString(16).toUpperCase();
-  if (width === undefined)
+  if (width === undefined || s.length >= width)
     return s;
-  while (s.length < width)
-    s = '0' + s;
-  return s;
+  var paddingIndex = width - s.length - 1;
+  while (paddingIndex >= paddingCache.length)
+    paddingCache.push(paddingCache[paddingCache.length - 1] + '0');
+  return paddingCache[paddingIndex] + s;
 }
 const IndentIncrement: string = '  ';
 var operatorCodeNamesCache = null;
@@ -200,7 +202,11 @@ export class WasmDisassembler {
   private newLine() {
     if (this.addOffsets)
       this._offsets.push(this._currentPosition);
-    let line = this._buffer.join('');
+    if (this._buffer.length === 0) {
+      this._lines.push('');
+      return;
+    }
+    let line = this._buffer.length > 1 ? this._buffer.join('') : this._buffer[0];
     this._buffer.length = 0;
     this._lines.push(line);
   }
