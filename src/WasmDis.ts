@@ -19,19 +19,6 @@ import {
   ITableType, IMemoryType, IGlobalType, IResizableLimits, IDataSegmentBody,
   IGlobalVariable, IElementSegment, IElementSegmentBody, ISectionInformation
 } from './WasmParser';
-function binToString(b: Uint8Array): string {
-  var buffer = [];
-  for (var i = 0; i < b.length; i++) {
-    var byte = b[i];
-    if (byte < 0x20 || byte >= 0x7F ||
-        byte == /* " */ 0x22 || byte == /* \ */ 0x5c) {
-      buffer.push('\\' + (byte >> 4).toString(16) + (byte & 15).toString(16));
-    } else {
-      buffer.push(String.fromCharCode(byte));
-    }
-  }
-  return buffer.join('');
-}
 function typeToString(type: number): string {
   switch (type) {
     case Type.i32: return 'i32';
@@ -151,6 +138,48 @@ function getOperatorName(code: OperatorCode): string {
   return operatorCodeNamesCache[code];
 }
 
+export interface INameResolver {
+  getTypeName(index: number): string;
+  getTableName(index: number): string;
+  getGlobalName(index: number): string;
+  getFunctionName(index: number): string;
+  getVariableName(funcIndex: number, index: number): string;
+}
+export class DefaultNameResolver implements INameResolver {
+  public getTypeName(index: number): string {
+    return '$type' + index;
+  }
+  public getTableName(index: number): string {
+    return '$table' + index;
+  }
+  public getGlobalName(index: number): string {
+    return '$global' + index;
+  }
+  public getFunctionName(index: number): string {
+    return '$func' + index;
+  }
+  public getVariableName(funcIndex: number, index: number): string {
+    return '$var' + index;
+  }
+}
+export class NumericNameResolver implements INameResolver {
+  public getTypeName(index: number): string {
+    return '' + index;
+  }
+  public getTableName(index: number): string {
+    return '' + index;
+  }
+  public getGlobalName(index: number): string {
+    return '' + index;
+  }
+  public getFunctionName(index: number): string {
+    return '' + index;
+  }
+  public getVariableName(funcIndex: number, index: number): string {
+    return '' + index;
+  }  
+}
+
 export interface IDisassemblerResult {
   lines: Array<string>;
   offsets?: Array<number>
@@ -172,21 +201,27 @@ export class WasmDisassembler {
   private _nextLineToAddOffset: number;
   private _done: boolean;
   private _currentPosition: number;
+  private _nameResolver: INameResolver;
   constructor() {
     this._lines = [];
     this._offsets = [];
     this._buffer = [];
+    this._indent = null;
+    this._indentLevel = 0;
+    this._addOffsets = false;
+    this._done = false;
+    this._currentPosition = 0;
+    this._nameResolver = new DefaultNameResolver();
+
+    this._reset();
+  }
+  private _reset(): void {
     this._types = [];
     this._funcIndex = 0;
     this._funcTypes = [];
     this._importCount = 0;
     this._globalCount = 0;
     this._tableCount = 0;
-    this._indent = null;
-    this._indentLevel = 0;
-    this._addOffsets = false;
-    this._done = false;
-    this._currentPosition = 0;
   }
   public get addOffsets() {
     return this._addOffsets;
@@ -195,6 +230,12 @@ export class WasmDisassembler {
     if (this._lines.length > 0 && this._addOffsets != value)
       throw new Error('Cannot switch addOffsets in the middle of the chunk.');
     this._addOffsets = value;
+  }
+  public get nameResolver() {
+    return this._nameResolver;
+  }
+  public set nameResolver(resolver: INameResolver) {
+    this._nameResolver = resolver;
   }
   private appendBuffer(s: string) {
     this._buffer.push(s);
@@ -210,27 +251,46 @@ export class WasmDisassembler {
     this._buffer.length = 0;
     this._lines.push(line);
   }
-  private printType(typeIndex: number): string {
+  private printType(typeIndex: number): void {
     var type = this._types[typeIndex];
     if (type.form !== Type.func)
       throw new Error('NYI other function form');
-    return `(func${this.printFuncType(type, false)})`;
+    this.appendBuffer('(func');
+    if (type.params.length > 0) {
+      this.appendBuffer(' (param');
+      for (var i = 0; i < type.params.length; i++) {
+        this.appendBuffer(' ');
+        this.appendBuffer(typeToString(type.params[i]));
+      }
+      this.appendBuffer(')');
+    }
+    if (type.returns.length > 0) {
+      this.appendBuffer(' (result');
+      for (var i = 0; i < type.returns.length; i++) {
+        this.appendBuffer(' ');
+        this.appendBuffer(typeToString(type.returns[i]));
+      }
+      this.appendBuffer(')');
+    }
+    this.appendBuffer(')');
   }
-  private printFuncType(type: IFunctionType, printVars: boolean): string {
-    var result = [];
-    if (printVars) {
-      for (var i = 0; i < type.params.length; i++)
-        result.push(` (param $var${i} ${typeToString(type.params[i])})`);
-    } else if (type.params.length > 0) {
-      result.push(' (param');
-      for (var i = 0; i < type.params.length; i++)
-        result.push(' ', typeToString(type.params[i]));
-      result.push(')');
+  private printString(b: Uint8Array): void {
+    this.appendBuffer('\"');
+    for (var i = 0; i < b.length; i++) {
+      var byte = b[i];
+      if (byte < 0x20 || byte >= 0x7F ||
+          byte == /* " */ 0x22 || byte == /* \ */ 0x5c) {
+        this.appendBuffer('\\' + (byte >> 4).toString(16) + (byte & 15).toString(16));
+      } else {
+        this.appendBuffer(String.fromCharCode(byte));
+      }
     }
-    for (var i = 0; i < type.returns.length; i++) {
-      result.push(` (result ${typeToString(type.returns[i])})`);
-    }
-    return result.join('');
+    this.appendBuffer('\"');
+  }
+  private printImportSource(info: IImportEntry): void {
+    this.printString(info.module);
+    this.appendBuffer(' ');
+    this.printString(info.field);
   }
   private increaseIndent(): void {
     this._indent += IndentIncrement;
@@ -279,6 +339,7 @@ export class WasmDisassembler {
         case BinaryReaderState.END_WASM:
           this.appendBuffer(')');
           this.newLine();
+          this._reset();
           if (!reader.hasMoreBytes()) {
             this._done = true;
             return true;
@@ -322,24 +383,29 @@ export class WasmDisassembler {
           break;
         case BinaryReaderState.TABLE_SECTION_ENTRY:
           var tableInfo = <ITableType>reader.result;
-          this.appendBuffer(`  (table $table${this._tableCount++} ${limitsToString(tableInfo.limits)} ${typeToString(tableInfo.elementType)})`);
+          var tableName = this._nameResolver.getTableName(this._tableCount++);
+          this.appendBuffer(`  (table ${tableName} ${limitsToString(tableInfo.limits)} ${typeToString(tableInfo.elementType)})`);
           this.newLine();
           break;
         case BinaryReaderState.EXPORT_SECTION_ENTRY:
           var exportInfo = <IExportEntry>reader.result;
-          this.appendBuffer(`  (export "${binToString(exportInfo.field)}" `);
+          this.appendBuffer('  (export ');
+          this.printString(exportInfo.field);
+          this.appendBuffer(' ');
           switch (exportInfo.kind) {
             case ExternalKind.Function:
-              this.appendBuffer(`$func${exportInfo.index}`);
+              this.appendBuffer(this._nameResolver.getFunctionName(exportInfo.index));
               break;
             case ExternalKind.Table:
-              this.appendBuffer(`(table $table${exportInfo.index})`);
+              var tableName = this._nameResolver.getTableName(exportInfo.index);
+              this.appendBuffer(`(table ${tableName})`);
               break;
             case ExternalKind.Memory:
               this.appendBuffer(`memory`);
               break;
             case ExternalKind.Global:
-              this.appendBuffer(`(global $global${exportInfo.index})`);
+              var globalName = this._nameResolver.getGlobalName(exportInfo.index);
+              this.appendBuffer(`(global ${globalName})`);
               break;
             default:
               throw new Error(`Unsupported export ${exportInfo.kind}`);
@@ -349,22 +415,35 @@ export class WasmDisassembler {
           break;
         case BinaryReaderState.IMPORT_SECTION_ENTRY:
           var importInfo = <IImportEntry>reader.result;
-          var importSource = `"${binToString(importInfo.module)}" "${binToString(importInfo.field)}"`
           switch (importInfo.kind) {
             case ExternalKind.Function:
-              this.appendBuffer(`  (import $func${this._importCount++} ${importSource} ${this.printType(importInfo.funcTypeIndex)})`);
+              this._importCount++;
+              var funcName = this._nameResolver.getFunctionName(this._funcIndex++);
+              this.appendBuffer(`  (import ${funcName} `);
+              this.printImportSource(importInfo);
+              this.appendBuffer(' ');
+              this.printType(importInfo.funcTypeIndex);
+              this.appendBuffer(')');
               break;
             case ExternalKind.Table:
               var tableImportInfo = <ITableType>importInfo.type;
-              this.appendBuffer(`  (import ${importSource} (table $table${this._tableCount++} ${limitsToString(tableImportInfo.limits)} ${typeToString(tableImportInfo.elementType)}))`);
+              this.appendBuffer('  (import ');
+              this.printImportSource(importInfo);
+              var tableName = this._nameResolver.getTableName(this._tableCount++);
+              this.appendBuffer(` (table ${tableName} ${limitsToString(tableImportInfo.limits)} ${typeToString(tableImportInfo.elementType)}))`);
               break;
             case ExternalKind.Memory:
               var memoryImportInfo = <IMemoryType>importInfo.type;
-              this.appendBuffer(`  (import ${importSource} (memory ${limitsToString(memoryImportInfo.limits)}))`);
+              this.appendBuffer('  (import ');
+              this.printImportSource(importInfo);
+              this.appendBuffer(` (memory ${limitsToString(memoryImportInfo.limits)}))`);
               break;
             case ExternalKind.Global:
               var globalImportInfo = <IGlobalType>importInfo.type;
-              this.appendBuffer(`  (import ${importSource} (global $global${this._globalCount++} ${globalTypeToString(globalImportInfo)}))`);
+              this.appendBuffer('  (import ');
+              this.printImportSource(importInfo);
+              var globalName = this._nameResolver.getGlobalName(this._globalCount++);
+              this.appendBuffer(` (global ${globalName} ${globalTypeToString(globalImportInfo)}))`);
               break;
             default:
               throw new Error(`NYI other import types: ${importInfo.kind}`);
@@ -384,13 +463,15 @@ export class WasmDisassembler {
           var elementSegmentBody = <IElementSegmentBody>reader.result;
           this.appendBuffer('   ');
           elementSegmentBody.elements.forEach(funcIndex => {
-            this.appendBuffer(` $func${funcIndex}`);
+            var funcName = this._nameResolver.getFunctionName(funcIndex);
+            this.appendBuffer(` ${funcName}`);
           });
           this.newLine();
           break;
         case BinaryReaderState.BEGIN_GLOBAL_SECTION_ENTRY:
           var globalInfo = <IGlobalVariable>reader.result;
-          this.appendBuffer(`  (global $global${this._globalCount++} ${globalTypeToString(globalInfo.type)}`);
+          var globalName = this._nameResolver.getGlobalName(this._globalCount++);
+          this.appendBuffer(`  (global ${globalName} ${globalTypeToString(globalInfo.type)}`);
           this.newLine();
           break;
         case BinaryReaderState.END_GLOBAL_SECTION_ENTRY:
@@ -401,7 +482,10 @@ export class WasmDisassembler {
           var funcType = <IFunctionType>reader.result;
           var typeIndex = this._types.length;
           this._types.push(funcType);
-          this.appendBuffer(`  (type $type${typeIndex} ${this.printType(typeIndex)})`);
+          var typeName = this._nameResolver.getTypeName(typeIndex);
+          this.appendBuffer(`  (type ${typeName} `);
+          this.printType(typeIndex);
+          this.appendBuffer(')');
           this.newLine();
           break;
         case BinaryReaderState.BEGIN_DATA_SECTION_ENTRY:
@@ -410,11 +494,12 @@ export class WasmDisassembler {
           break;
         case BinaryReaderState.DATA_SECTION_ENTRY_BODY:
           var body = <IDataSegmentBody>reader.result;
-          this.appendBuffer(`    "${binToString(body.data)}"`);
+          this.appendBuffer('    ');
+          this.printString(body.data);
           this.newLine();
           break;
         case BinaryReaderState.END_DATA_SECTION_ENTRY:
-          this.appendBuffer(`  )`);
+          this.appendBuffer('  )');
           this.newLine();
           break;
         case BinaryReaderState.BEGIN_INIT_EXPRESSION_BODY:
@@ -432,18 +517,25 @@ export class WasmDisassembler {
           break;
         case BinaryReaderState.BEGIN_FUNCTION_BODY:
           var func = <IFunctionInformation>reader.result;
-          var type = this._types[this._funcTypes[this._funcIndex]];
-          var printIndex = this._funcIndex + this._importCount;
-          this.appendBuffer(`  (func $func${printIndex}${this.printFuncType(type, true)}`);
+          var type = this._types[this._funcTypes[this._funcIndex - this._importCount]];
+          this.appendBuffer('  (func ');
+          this.appendBuffer(this._nameResolver.getFunctionName(this._funcIndex));
+          for (var i = 0; i < type.params.length; i++) {
+            var paramName = this._nameResolver.getVariableName(this._funcIndex, i);
+            this.appendBuffer(` (param ${paramName} ${typeToString(type.params[i])})`);
+          }
+          for (var i = 0; i < type.returns.length; i++) {
+            this.appendBuffer(` (result ${typeToString(type.returns[i])})`);
+          }
           this.newLine();
           var localIndex = type.params.length;
           for (var l of func.locals) {
             for (var i = 0; i < l.count; i++) {
-              this.appendBuffer(`    (local $var${localIndex++} ${typeToString(l.type)})`);
+              var paramName = this._nameResolver.getVariableName(this._funcIndex, localIndex++);
+              this.appendBuffer(`    (local ${paramName} ${typeToString(l.type)})`);
               this.newLine();
             }
           }
-          this._funcIndex++;
           this._indent = '    ';
           this._indentLevel = 0;
           break;
@@ -468,13 +560,16 @@ export class WasmDisassembler {
           this.appendBuffer(this._indent);
           this.appendBuffer(str);
           if (operator.localIndex !== undefined) {
-            this.appendBuffer(` $var${operator.localIndex}`);
+            var paramName = this._nameResolver.getVariableName(this._funcIndex, operator.localIndex);
+            this.appendBuffer(` ${paramName}`);
           }
           if (operator.funcIndex !== undefined) {
-            this.appendBuffer(` $func${operator.funcIndex}`);
+            var funcName = this._nameResolver.getFunctionName(operator.funcIndex);
+            this.appendBuffer(` ${funcName}`);
           }
           if (operator.typeIndex !== undefined) {
-            this.appendBuffer(` $type${operator.typeIndex}`);
+            var typeName = this._nameResolver.getTypeName(operator.typeIndex);
+            this.appendBuffer(` ${typeName}`);
           }
           if (operator.literal !== undefined) {
             switch (operator.code) {
@@ -503,7 +598,8 @@ export class WasmDisassembler {
               this.appendBuffer(` ${operator.brTable[i]}`);
           }
           if (operator.globalIndex !== undefined) {
-            this.appendBuffer(` $global${operator.globalIndex}`);
+            var globalName = this._nameResolver.getGlobalName(operator.globalIndex);
+            this.appendBuffer(` ${globalName}`);
           }
           this.newLine();
           switch (operator.code) {
@@ -516,6 +612,7 @@ export class WasmDisassembler {
           }
           break;
         case BinaryReaderState.END_FUNCTION_BODY:
+          this._funcIndex++;
           this.appendBuffer(`  )`);
           this.newLine();
           break;

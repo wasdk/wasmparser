@@ -51,5 +51,9 @@ export {
   BinaryReaderTransform,
 } from './WasmParserTransform';
 export {
+  DefaultNameResolver,
+  NumericNameResolver,
   WasmDisassembler,
+  IDisassemblerResult,
+  INameResolver,
 } from './WasmDis';
