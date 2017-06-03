@@ -928,7 +928,7 @@ export class BinaryReader {
       return false;
     }
     var pos = this._pos;
-    var sectionId: SectionCode = this.readVarInt7();
+    var sectionId: SectionCode = this.readVarUint7();
     var sectionName;
     if (sectionId === SectionCode.Custom) {
       if (!this.hasStringBytes()) {
@@ -1004,6 +1004,8 @@ export class BinaryReader {
       case RelocType.FunctionIndex_LEB:
       case RelocType.TableIndex_SLEB:
       case RelocType.TableIndex_I32:
+      case RelocType.TypeIndex_LEB:
+      case RelocType.GlobalIndex_LEB:
         break;
       case RelocType.GlobalAddr_LEB:
       case RelocType.GlobalAddr_SLEB:
