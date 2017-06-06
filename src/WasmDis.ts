@@ -195,6 +195,7 @@ export class WasmDisassembler {
   private _importCount: number;
   private _globalCount: number;
   private _tableCount: number;
+  private _initExpression: Array<IOperatorInformation>;
   private _indent: string;
   private _indentLevel: number;
   private _addOffsets: boolean;
@@ -222,6 +223,7 @@ export class WasmDisassembler {
     this._importCount = 0;
     this._globalCount = 0;
     this._tableCount = 0;
+    this._initExpression = [];
   }
   public get addOffsets() {
     return this._addOffsets;
@@ -286,6 +288,56 @@ export class WasmDisassembler {
       }
     }
     this.appendBuffer('\"');
+  }
+  private printOperator(operator: IOperatorInformation): void {
+    this.appendBuffer(getOperatorName(operator.code));
+    if (operator.blockType !== undefined &&
+        operator.blockType !== Type.empty_block_type) {
+      this.appendBuffer(' ');
+      this.appendBuffer(typeToString(operator.blockType));
+    }
+    if (operator.localIndex !== undefined) {
+      var paramName = this._nameResolver.getVariableName(this._funcIndex, operator.localIndex);
+      this.appendBuffer(` ${paramName}`);
+    }
+    if (operator.funcIndex !== undefined) {
+      var funcName = this._nameResolver.getFunctionName(operator.funcIndex);
+      this.appendBuffer(` ${funcName}`);
+    }
+    if (operator.typeIndex !== undefined) {
+      var typeName = this._nameResolver.getTypeName(operator.typeIndex);
+      this.appendBuffer(` ${typeName}`);
+    }
+    if (operator.literal !== undefined) {
+      switch (operator.code) {
+        case OperatorCode.i32_const:
+          this.appendBuffer(` ${(<number>operator.literal).toString()}`);
+          break;
+        case OperatorCode.f32_const:
+          this.appendBuffer(` ${formatFloat32(<number>operator.literal)}`);
+          break;
+        case OperatorCode.f64_const:
+          this.appendBuffer(` ${formatFloat64(<number>operator.literal)}`);
+          break;
+        case OperatorCode.i64_const:
+          this.appendBuffer(` ${(<Int64>operator.literal).toDouble()}`);
+          break;
+      }
+    }
+    if (operator.memoryAddress !== undefined) {
+      this.appendBuffer(` ${memoryAddressToString(operator.memoryAddress, operator.code)}`);
+    }
+    if (operator.brDepth !== undefined) {
+      this.appendBuffer(` ${operator.brDepth}`);
+    }
+    if (operator.brTable !== undefined) {
+      for (var i = 0; i < operator.brTable.length; i++)
+        this.appendBuffer(` ${operator.brTable[i]}`);
+    }
+    if (operator.globalIndex !== undefined) {
+      var globalName = this._nameResolver.getGlobalName(operator.globalIndex);
+      this.appendBuffer(` ${globalName}`);
+    }
   }
   private printImportSource(info: IImportEntry): void {
     this.printString(info.module);
@@ -427,10 +479,10 @@ export class WasmDisassembler {
               break;
             case ExternalKind.Table:
               var tableImportInfo = <ITableType>importInfo.type;
-              this.appendBuffer('  (import ');
-              this.printImportSource(importInfo);
               var tableName = this._nameResolver.getTableName(this._tableCount++);
-              this.appendBuffer(` (table ${tableName} ${limitsToString(tableImportInfo.limits)} ${typeToString(tableImportInfo.elementType)}))`);
+              this.appendBuffer(`  (import ${tableName} `);
+              this.printImportSource(importInfo);
+              this.appendBuffer(` (table ${limitsToString(tableImportInfo.limits)} ${typeToString(tableImportInfo.elementType)}))`);
               break;
             case ExternalKind.Memory:
               var memoryImportInfo = <IMemoryType>importInfo.type;
@@ -440,10 +492,10 @@ export class WasmDisassembler {
               break;
             case ExternalKind.Global:
               var globalImportInfo = <IGlobalType>importInfo.type;
-              this.appendBuffer('  (import ');
-              this.printImportSource(importInfo);
               var globalName = this._nameResolver.getGlobalName(this._globalCount++);
-              this.appendBuffer(` (global ${globalName} ${globalTypeToString(globalImportInfo)}))`);
+              this.appendBuffer(`  (import ${globalName} `);
+              this.printImportSource(importInfo);
+              this.appendBuffer(` (global ${globalTypeToString(globalImportInfo)}))`);
               break;
             default:
               throw new Error(`NYI other import types: ${importInfo.kind}`);
@@ -452,30 +504,26 @@ export class WasmDisassembler {
           break;
         case BinaryReaderState.BEGIN_ELEMENT_SECTION_ENTRY:
           var elementSegmentInfo = <IElementSegment>reader.result;
-          this.appendBuffer(`  (elem`);
-          this.newLine();
+          this.appendBuffer('  (elem ');
           break;
         case BinaryReaderState.END_ELEMENT_SECTION_ENTRY:
-          this.appendBuffer('  )');
+          this.appendBuffer(')');
           this.newLine();
           break;
         case BinaryReaderState.ELEMENT_SECTION_ENTRY_BODY:
           var elementSegmentBody = <IElementSegmentBody>reader.result;
-          this.appendBuffer('   ');
           elementSegmentBody.elements.forEach(funcIndex => {
             var funcName = this._nameResolver.getFunctionName(funcIndex);
             this.appendBuffer(` ${funcName}`);
           });
-          this.newLine();
           break;
         case BinaryReaderState.BEGIN_GLOBAL_SECTION_ENTRY:
           var globalInfo = <IGlobalVariable>reader.result;
           var globalName = this._nameResolver.getGlobalName(this._globalCount++);
-          this.appendBuffer(`  (global ${globalName} ${globalTypeToString(globalInfo.type)}`);
-          this.newLine();
+          this.appendBuffer(`  (global ${globalName} ${globalTypeToString(globalInfo.type)} `);
           break;
         case BinaryReaderState.END_GLOBAL_SECTION_ENTRY:
-          this.appendBuffer('  )');
+          this.appendBuffer(')');
           this.newLine();
           break;
         case BinaryReaderState.TYPE_SECTION_ENTRY:
@@ -489,11 +537,11 @@ export class WasmDisassembler {
           this.newLine();
           break;
         case BinaryReaderState.BEGIN_DATA_SECTION_ENTRY:
-          this.appendBuffer(`  (data`);
-          this.newLine();
+          this.appendBuffer('  (data ');
           break;
         case BinaryReaderState.DATA_SECTION_ENTRY_BODY:
           var body = <IDataSegmentBody>reader.result;
+          this.newLine();
           this.appendBuffer('    ');
           this.printString(body.data);
           this.newLine();
@@ -503,14 +551,24 @@ export class WasmDisassembler {
           this.newLine();
           break;
         case BinaryReaderState.BEGIN_INIT_EXPRESSION_BODY:
-          this._indent = '      ';
-          this._indentLevel = 0;
-          this.appendBuffer('    (');
-          this.newLine();
           break;
+        case BinaryReaderState.INIT_EXPRESSION_OPERATOR:
+           this._initExpression.push(<IOperatorInformation>reader.result);
+           break;
         case BinaryReaderState.END_INIT_EXPRESSION_BODY:
-          this.appendBuffer('    )');
-          this.newLine();
+          this.appendBuffer('(');
+          // TODO fix printing when more that one operator is used.
+          this._initExpression.forEach((op, index) => {
+            if (op.code === OperatorCode.end) {
+              return; // do not print end
+            }
+            if (index > 0) {
+              this.appendBuffer(' ');
+            }
+            this.printOperator(op);
+          });
+          this.appendBuffer(')');
+          this._initExpression.length = 0;
           break;
         case BinaryReaderState.FUNCTION_SECTION_ENTRY:
           this._funcTypes.push((<IFunctionEntry>reader.result).typeIndex);
@@ -539,7 +597,6 @@ export class WasmDisassembler {
           this._indent = '    ';
           this._indentLevel = 0;
           break;
-        case BinaryReaderState.INIT_EXPRESSION_OPERATOR:
         case BinaryReaderState.CODE_OPERATOR:
           var operator = <IOperatorInformation>reader.result;
           if (operator.code == OperatorCode.end && this._indentLevel == 0) {
@@ -552,55 +609,8 @@ export class WasmDisassembler {
               this.decreaseIndent();
               break;
           }
-          var str = getOperatorName(operator.code);
-          if (operator.blockType !== undefined &&
-              operator.blockType !== Type.empty_block_type) {
-            str += ' ' + typeToString(operator.blockType);
-          }
           this.appendBuffer(this._indent);
-          this.appendBuffer(str);
-          if (operator.localIndex !== undefined) {
-            var paramName = this._nameResolver.getVariableName(this._funcIndex, operator.localIndex);
-            this.appendBuffer(` ${paramName}`);
-          }
-          if (operator.funcIndex !== undefined) {
-            var funcName = this._nameResolver.getFunctionName(operator.funcIndex);
-            this.appendBuffer(` ${funcName}`);
-          }
-          if (operator.typeIndex !== undefined) {
-            var typeName = this._nameResolver.getTypeName(operator.typeIndex);
-            this.appendBuffer(` ${typeName}`);
-          }
-          if (operator.literal !== undefined) {
-            switch (operator.code) {
-              case OperatorCode.i32_const:
-                this.appendBuffer(` ${(<number>operator.literal).toString()}`);
-                break;
-              case OperatorCode.f32_const:
-                this.appendBuffer(` ${formatFloat32(<number>operator.literal)}`);
-                break;
-              case OperatorCode.f64_const:
-                this.appendBuffer(` ${formatFloat64(<number>operator.literal)}`);
-                break;
-              case OperatorCode.i64_const:
-                this.appendBuffer(` ${(<Int64>operator.literal).toDouble()}`);
-                break;
-            }
-          }
-          if (operator.memoryAddress !== undefined) {
-            this.appendBuffer(` ${memoryAddressToString(operator.memoryAddress, operator.code)}`);
-          }
-          if (operator.brDepth !== undefined) {
-            this.appendBuffer(` ${operator.brDepth}`);
-          }
-          if (operator.brTable !== undefined) {
-            for (var i = 0; i < operator.brTable.length; i++)
-              this.appendBuffer(` ${operator.brTable[i]}`);
-          }
-          if (operator.globalIndex !== undefined) {
-            var globalName = this._nameResolver.getGlobalName(operator.globalIndex);
-            this.appendBuffer(` ${globalName}`);
-          }
+          this.printOperator(operator);
           this.newLine();
           switch (operator.code) {
             case OperatorCode.if:

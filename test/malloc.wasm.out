@@ -6,15 +6,15 @@
   (type $type4 (func (param i32) (result i32)))
   (type $type5 (func (param i32 i32)))
   (type $type6 (func (param i32 i32) (result i32)))
-  (import "env" "STACKTOP" (global $global0 i32))
-  (import "env" "STACK_MAX" (global $global1 i32))
-  (import "env" "DYNAMICTOP_PTR" (global $global2 i32))
-  (import "env" "tempDoublePtr" (global $global3 i32))
-  (import "env" "ABORT" (global $global4 i32))
-  (import "env" "gb" (global $global5 i32))
-  (import "env" "fb" (global $global6 i32))
-  (import "global" "NaN" (global $global7 f64))
-  (import "global" "Infinity" (global $global8 f64))
+  (import $global0 "env" "STACKTOP" (global i32))
+  (import $global1 "env" "STACK_MAX" (global i32))
+  (import $global2 "env" "DYNAMICTOP_PTR" (global i32))
+  (import $global3 "env" "tempDoublePtr" (global i32))
+  (import $global4 "env" "ABORT" (global i32))
+  (import $global5 "env" "gb" (global i32))
+  (import $global6 "env" "fb" (global i32))
+  (import $global7 "global" "NaN" (global f64))
+  (import $global8 "global" "Infinity" (global f64))
   (import $func0 "env" "enlargeMemory" (func (result i32)))
   (import $func1 "env" "getTotalMemory" (func (result i32)))
   (import $func2 "env" "abortOnCannotGrowMemory" (func (result i32)))
@@ -22,134 +22,34 @@
   (import $func4 "env" "_emscripten_memcpy_big" (func (param i32 i32 i32) (result i32)))
   (import $func5 "env" "___setErrNo" (func (param i32)))
   (import "env" "memory" (memory 256))
-  (import "env" "table" (table $table0 0 0 anyfunc))
-  (import "env" "memoryBase" (global $global9 i32))
-  (import "env" "tableBase" (global $global10 i32))
-  (global $global11 (mut i32)
-    (
-      get_global $global0
-    )
-  )
-  (global $global12 (mut i32)
-    (
-      get_global $global1
-    )
-  )
-  (global $global13 (mut i32)
-    (
-      get_global $global2
-    )
-  )
-  (global $global14 (mut i32)
-    (
-      get_global $global3
-    )
-  )
-  (global $global15 (mut i32)
-    (
-      get_global $global4
-    )
-  )
-  (global $global16 (mut i32)
-    (
-      get_global $global5
-    )
-  )
-  (global $global17 (mut i32)
-    (
-      get_global $global6
-    )
-  )
-  (global $global18 (mut i32)
-    (
-      i32.const 0
-    )
-  )
-  (global $global19 (mut i32)
-    (
-      i32.const 0
-    )
-  )
-  (global $global20 (mut i32)
-    (
-      i32.const 0
-    )
-  )
-  (global $global21 (mut i32)
-    (
-      i32.const 0
-    )
-  )
-  (global $global22 (mut f64)
-    (
-      get_global $global7
-    )
-  )
-  (global $global23 (mut f64)
-    (
-      get_global $global8
-    )
-  )
-  (global $global24 (mut i32)
-    (
-      i32.const 0
-    )
-  )
-  (global $global25 (mut i32)
-    (
-      i32.const 0
-    )
-  )
-  (global $global26 (mut i32)
-    (
-      i32.const 0
-    )
-  )
-  (global $global27 (mut i32)
-    (
-      i32.const 0
-    )
-  )
-  (global $global28 (mut f64)
-    (
-      f64.const 0.0
-    )
-  )
-  (global $global29 (mut i32)
-    (
-      i32.const 0
-    )
-  )
-  (global $global30 (mut i32)
-    (
-      i32.const 0
-    )
-  )
-  (global $global31 (mut i32)
-    (
-      i32.const 0
-    )
-  )
-  (global $global32 (mut f64)
-    (
-      f64.const 0.0
-    )
-  )
-  (global $global33 (mut i32)
-    (
-      i32.const 0
-    )
-  )
-  (global $global34 (mut f32)
-    (
-      f32.const 0.0
-    )
-  )
-  (global $global35 (mut f32)
-    (
-      f32.const 0.0
-    )
-  )
+  (import $table0 "env" "table" (table 0 0 anyfunc))
+  (import $global9 "env" "memoryBase" (global i32))
+  (import $global10 "env" "tableBase" (global i32))
+  (global $global11 (mut i32) (get_global $global0))
+  (global $global12 (mut i32) (get_global $global1))
+  (global $global13 (mut i32) (get_global $global2))
+  (global $global14 (mut i32) (get_global $global3))
+  (global $global15 (mut i32) (get_global $global4))
+  (global $global16 (mut i32) (get_global $global5))
+  (global $global17 (mut i32) (get_global $global6))
+  (global $global18 (mut i32) (i32.const 0))
+  (global $global19 (mut i32) (i32.const 0))
+  (global $global20 (mut i32) (i32.const 0))
+  (global $global21 (mut i32) (i32.const 0))
+  (global $global22 (mut f64) (get_global $global7))
+  (global $global23 (mut f64) (get_global $global8))
+  (global $global24 (mut i32) (i32.const 0))
+  (global $global25 (mut i32) (i32.const 0))
+  (global $global26 (mut i32) (i32.const 0))
+  (global $global27 (mut i32) (i32.const 0))
+  (global $global28 (mut f64) (f64.const 0.0))
+  (global $global29 (mut i32) (i32.const 0))
+  (global $global30 (mut i32) (i32.const 0))
+  (global $global31 (mut i32) (i32.const 0))
+  (global $global32 (mut f64) (f64.const 0.0))
+  (global $global33 (mut i32) (i32.const 0))
+  (global $global34 (mut f32) (f32.const 0.0))
+  (global $global35 (mut f32) (f32.const 0.0))
   (export "_calloc" $func14)
   (export "_realloc" $func15)
   (export "_pthread_self" $func20)
