@@ -35,6 +35,7 @@ export {
   IRelocHeader,
   IRelocEntry,
   ISourceMappingURL,
+  IStartEntry,
   IFunctionEntry,
   IFunctionType,
   ISectionInformation,

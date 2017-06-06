@@ -265,6 +265,7 @@ export const enum BinaryReaderState {
   NAME_SECTION_ENTRY = 19,
   ELEMENT_SECTION_ENTRY = 20,
   LINKING_SECTION_ENTRY = 21,
+  START_SECTION_ENTRY = 22,
 
   BEGIN_INIT_EXPRESSION_BODY = 25,
   INIT_EXPRESSION_OPERATOR = 26,
@@ -389,6 +390,9 @@ export interface IRelocEntry {
 export interface ISourceMappingURL {
   url: Uint8Array;
 }
+export interface IStartEntry {
+  index: number;
+}
 export interface IFunctionEntry {
   typeIndex: number;
 }
@@ -456,7 +460,7 @@ export type BinaryReaderResult =
   IElementSegment | IElementSegmentBody | IDataSegment | IDataSegmentBody |
   ISectionInformation | IFunctionInformation | ISectionInformation |
   IFunctionInformation | IRelocHeader | IRelocEntry | ILinkingEntry |
-  ISourceMappingURL | IModuleNameEntry | Uint8Array;
+  ISourceMappingURL | IModuleNameEntry | IStartEntry | Uint8Array;
 export class BinaryReader {
   private _data: Uint8Array;
   private _pos: number;
@@ -1278,6 +1282,12 @@ export class BinaryReader {
           return false;
         this._sectionEntriesLeft = this.readVarUint32() >>> 0;
         return this.readGlobalEntry();
+      case SectionCode.Start:
+        if (!this.hasVarIntBytes())
+          return false;
+        this.state = BinaryReaderState.START_SECTION_ENTRY;
+        this.result = { index: this.readVarUint32() };
+        return true;
       case SectionCode.Code:
         if (!this.hasVarIntBytes())
           return false;
@@ -1448,6 +1458,7 @@ export class BinaryReader {
         return this.readCodeOperator();
       case BinaryReaderState.READING_SECTION_RAW_DATA:
         return this.readSectionRawData();
+      case BinaryReaderState.START_SECTION_ENTRY:
       case BinaryReaderState.SECTION_RAW_DATA:
         this.state = BinaryReaderState.END_SECTION;
         this.result = null;
