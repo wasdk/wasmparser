@@ -458,14 +458,43 @@ export class WasmDisassembler {
     return result;
   }
   public getResult(): IDisassemblerResult {
+    let linesReady = this._lines.length;
+    if (this._backrefLabels && this._labelMode === LabelMode.WhenUsed) {
+      this._backrefLabels.some((backrefLabel) => {
+        if (backrefLabel.useLabel)
+          return false;
+        linesReady = backrefLabel.line;
+        return true;
+      });
+    }
+    if (linesReady === 0) {
+      return {
+        lines: [],
+        offsets: this._addOffsets ? [] : undefined,
+        done: this._done,
+      }
+    }
+    if (linesReady === this._lines.length) {
+      let result = {
+        lines: this._lines,
+        offsets: this._addOffsets ? this._offsets : undefined,
+        done: this._done,
+      };
+      this._lines = [];
+      if (this._addOffsets)
+        this._offsets = [];
+      return result;
+    }
     let result = {
-      lines: this._lines,
-      offsets: this._addOffsets ? this._offsets : undefined,
-      done: this._done,
+      lines: this._lines.splice(0, linesReady),
+      offsets: this._addOffsets ? this._offsets.splice(0, linesReady) : undefined,
+      done: false,
     };
-    this._lines = [];
-    if (this._addOffsets)
-      this._offsets = [];
+    if (this._backrefLabels) {
+      this._backrefLabels.forEach((backrefLabel) => {
+        backrefLabel.line -= linesReady;
+      });
+    }
     return result;
   }
   public disassembleChunk(reader: BinaryReader, offsetInModule: number = 0): boolean {
@@ -725,6 +754,7 @@ export class WasmDisassembler {
           break;
         case BinaryReaderState.END_FUNCTION_BODY:
           this._funcIndex++;
+          this._backrefLabels = null;
           this.appendBuffer(`  )`);
           this.newLine();
           break;

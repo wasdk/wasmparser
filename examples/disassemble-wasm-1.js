@@ -27,12 +27,14 @@ var data = new Uint8Array(fs.readFileSync(wasmPath));
 
 var parser = new wasmparser.BinaryReader();
 var dis = new wasmdis.WasmDisassembler();
+dis.addOffsets = true;
 
 // Buffer to hold pending data.
 var buffer = new Uint8Array(1);
 var ensureBufferSize = function (size) {
 };
 var pendingSize = 0;
+var offsetInModule = 0;
 for (var i = 0; i < data.length;i++) {
   var nextByte = data[i];
   var bufferSize = pendingSize + 1;
@@ -46,11 +48,16 @@ for (var i = 0; i < data.length;i++) {
   buffer[pendingSize] = nextByte;
 
   // Setting parser buffer and signaling it's not complete.
-  parser.setData(buffer.buffer, 0, bufferSize, false);
+  var done = i == data.length - 1;
+  parser.setData(buffer.buffer, 0, bufferSize, done);
 
   // The disassemble will attemp to fetch the data as much as possible.
-  var result = dis.disassemble(parser);
-  // The result is null here.
+  var finished = dis.disassembleChunk(parser, offsetInModule);
+
+  var result = dis.getResult();
+  result.lines.forEach(function (line, index) {
+    console.log(`${result.offsets[index]}:${index > 0 ? '.' : ' '} ${line}`);
+  });
 
   if (parser.position == 0) {
     // Parser did not consume anything.
@@ -61,10 +68,7 @@ for (var i = 0; i < data.length;i++) {
   var pending = parser.data.subarray(parser.position, parser.length);
   pendingSize = pending.length;
   buffer.set(pending);
+  offsetInModule += parser.position;
 }
-// Last chunk.
-parser.setData(buffer.buffer, 0, pendingSize, true);
 
-// Print the result and stats.
-console.log(dis.disassemble(parser));
 console.log('Max buffer used: ' + buffer.length);
