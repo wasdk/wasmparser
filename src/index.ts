@@ -55,6 +55,7 @@ export {
   DefaultNameResolver,
   NumericNameResolver,
   WasmDisassembler,
+  LabelMode,
   IDisassemblerResult,
   INameResolver,
 } from './WasmDis';

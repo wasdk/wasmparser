@@ -101,10 +101,10 @@ function memoryAddressToString(address: IMemoryAddress, code: OperatorCode): str
       break;
   }
   if (address.flags == defaultAlignFlags) // hide default flags
-    return `offset=${address.offset}`;
+    return !address.offset ? null : `offset=${address.offset | 0}`;
   if (!address.offset) // hide default offset
     return `align=${1 << address.flags}`;
-  return `offset=${address.offset} align=${1 << address.flags}`;
+  return `offset=${address.offset | 0} align=${1 << address.flags}`;
 }
 function globalTypeToString(type: IGlobalType): string {
   if (!type.mutability)
@@ -142,9 +142,11 @@ function getOperatorName(code: OperatorCode): string {
 export interface INameResolver {
   getTypeName(index: number, isRef: boolean): string;
   getTableName(index: number, isRef: boolean): string;
+  getMemoryName(index: number, isRef: boolean): string;
   getGlobalName(index: number, isRef: boolean): string;
   getFunctionName(index: number, isImport: boolean, isRef: boolean): string;
   getVariableName(funcIndex: number, index: number, isRef: boolean): string;
+  getLabel(index: number): string;
 }
 export class DefaultNameResolver implements INameResolver {
   public getTypeName(index: number, isRef: boolean): string {
@@ -152,6 +154,9 @@ export class DefaultNameResolver implements INameResolver {
   }
   public getTableName(index: number, isRef: boolean): string {
     return '$table' + index;
+  }
+  public getMemoryName(index: number, isRef: boolean): string {
+    return '$memory' + index;
   }
   public getGlobalName(index: number, isRef: boolean): string {
     return '$global' + index;
@@ -162,12 +167,18 @@ export class DefaultNameResolver implements INameResolver {
   public getVariableName(funcIndex: number, index: number, isRef: boolean): string {
     return '$var' + index;
   }
+  public getLabel(index: number): string {
+    return '$label' + index;
+  }
 }
 export class NumericNameResolver implements INameResolver {
   public getTypeName(index: number, isRef: boolean): string {
     return isRef ? '' + index : `(;${index};)`;
   }
   public getTableName(index: number, isRef: boolean): string {
+    return isRef ? '' + index : `(;${index};)`;
+  }
+  public getMemoryName(index: number, isRef: boolean): string {
     return isRef ? '' + index : `(;${index};)`;
   }
   public getGlobalName(index: number, isRef: boolean): string {
@@ -178,7 +189,16 @@ export class NumericNameResolver implements INameResolver {
   }
   public getVariableName(funcIndex: number, index: number, isRef: boolean): string {
     return isRef ? '' + index : `(;${index};)`;
-  }  
+  }
+  public getLabel(index: number): string {
+    return null;
+  }
+}
+
+export enum LabelMode {
+  Depth,
+  WhenUsed,
+  Always,
 }
 
 export interface IDisassemblerResult {
@@ -197,6 +217,8 @@ export class WasmDisassembler {
   private _globalCount: number;
   private _tableCount: number;
   private _initExpression: Array<IOperatorInformation>;
+  private _backrefLabels: Array<{line:number;position:number;useLabel:boolean;label:string}>;
+  private _labelIndex: number;
   private _indent: string;
   private _indentLevel: number;
   private _addOffsets: boolean;
@@ -204,6 +226,7 @@ export class WasmDisassembler {
   private _done: boolean;
   private _currentPosition: number;
   private _nameResolver: INameResolver;
+  private _labelMode: LabelMode;
   constructor() {
     this._lines = [];
     this._offsets = [];
@@ -214,6 +237,7 @@ export class WasmDisassembler {
     this._done = false;
     this._currentPosition = 0;
     this._nameResolver = new DefaultNameResolver();
+    this._labelMode = LabelMode.WhenUsed;
 
     this._reset();
   }
@@ -225,19 +249,31 @@ export class WasmDisassembler {
     this._globalCount = 0;
     this._tableCount = 0;
     this._initExpression = [];
+    this._backrefLabels = null;
+    this._labelIndex = 0;
   }
   public get addOffsets() {
     return this._addOffsets;
   }
   public set addOffsets(value: boolean) {
-    if (this._lines.length > 0 && this._addOffsets != value)
-      throw new Error('Cannot switch addOffsets in the middle of the chunk.');
+    if (this._currentPosition)
+      throw new Error('Cannot switch addOffsets during processing.');
     this._addOffsets = value;
+  }
+  public get labelMode() {
+    return this._labelMode;
+  }
+  public set labelMode(value: LabelMode) {
+    if (this._currentPosition)
+      throw new Error('Cannot switch labelMode during processing.');
+    this._labelMode = value;
   }
   public get nameResolver() {
     return this._nameResolver;
   }
   public set nameResolver(resolver: INameResolver) {
+    if (this._currentPosition)
+      throw new Error('Cannot switch nameResolver during processing.');
     this._nameResolver = resolver;
   }
   private appendBuffer(s: string) {
@@ -290,12 +326,56 @@ export class WasmDisassembler {
     }
     this.appendBuffer('\"');
   }
+  private useLabel(depth: number): string {
+    if (!this._backrefLabels) {
+      return '' + depth;
+    }
+    var i = this._backrefLabels.length - depth - 1;
+    if (i < 0) {
+      return '' + depth;
+    }
+    var backrefLabel = this._backrefLabels[i];
+    if (!backrefLabel.useLabel) {
+      backrefLabel.useLabel = true;
+      backrefLabel.label = this._nameResolver.getLabel(this._labelIndex);
+      var line = this._lines[backrefLabel.line];
+      this._lines[backrefLabel.line] = line.substring(0, backrefLabel.position) +
+        ' ' + backrefLabel.label + line.substring(backrefLabel.position);
+      this._labelIndex++;
+    }
+    return backrefLabel.label || '' + depth;
+  }
   private printOperator(operator: IOperatorInformation): void {
     this.appendBuffer(getOperatorName(operator.code));
-    if (operator.blockType !== undefined &&
-        operator.blockType !== Type.empty_block_type) {
-      this.appendBuffer(' ');
-      this.appendBuffer(typeToString(operator.blockType));
+    if (operator.blockType !== undefined) {
+      if (this._labelMode !== LabelMode.Depth) {
+        let backrefLabel = {
+          line: this._lines.length,
+          position: this._buffer.reduce((acc, s) => acc + s.length, 0),
+          useLabel: false,
+          label: null,
+        };
+        if (this._labelMode === LabelMode.Always) {
+          backrefLabel.useLabel = true;
+          backrefLabel.label = this._nameResolver.getLabel(this._labelIndex++);
+          if (backrefLabel.label) {
+            this.appendBuffer(' ');
+            this.appendBuffer(backrefLabel.label);
+          }
+        }
+        this._backrefLabels.push(backrefLabel);
+      }
+      if (operator.blockType !== Type.empty_block_type) {
+        this.appendBuffer(' ');
+        this.appendBuffer(typeToString(operator.blockType));
+      }
+    }
+    if (operator.code === OperatorCode.end && this._labelMode !== LabelMode.Depth) {
+      let backrefLabel = this._backrefLabels.pop();
+      if (backrefLabel.label) {
+        this.appendBuffer(' ');
+        this.appendBuffer(backrefLabel.label);
+      }
     }
     if (operator.localIndex !== undefined) {
       var paramName = this._nameResolver.getVariableName(this._funcIndex, operator.localIndex, true);
@@ -326,14 +406,21 @@ export class WasmDisassembler {
       }
     }
     if (operator.memoryAddress !== undefined) {
-      this.appendBuffer(` ${memoryAddressToString(operator.memoryAddress, operator.code)}`);
+      var memoryAddress = memoryAddressToString(operator.memoryAddress, operator.code);
+      if (memoryAddress !== null) {
+        this.appendBuffer(' ');
+        this.appendBuffer(memoryAddress);
+      }
     }
     if (operator.brDepth !== undefined) {
-      this.appendBuffer(` ${operator.brDepth}`);
+      this.appendBuffer(' ');
+      this.appendBuffer(this.useLabel(operator.brDepth));
     }
     if (operator.brTable !== undefined) {
-      for (var i = 0; i < operator.brTable.length; i++)
-        this.appendBuffer(` ${operator.brTable[i]}`);
+      for (var i = 0; i < operator.brTable.length; i++) {
+        this.appendBuffer(' ');
+        this.appendBuffer(this.useLabel(operator.brTable[i]));
+      }
     }
     if (operator.globalIndex !== undefined) {
       var globalName = this._nameResolver.getGlobalName(operator.globalIndex, true);
@@ -438,7 +525,8 @@ export class WasmDisassembler {
         case BinaryReaderState.TABLE_SECTION_ENTRY:
           var tableInfo = <ITableType>reader.result;
           var tableName = this._nameResolver.getTableName(this._tableCount++, false);
-          this.appendBuffer(`  (table ${tableName} ${limitsToString(tableInfo.limits)} ${typeToString(tableInfo.elementType)})`);
+          // TODO use tableName
+          this.appendBuffer(`  (table ${limitsToString(tableInfo.limits)} ${typeToString(tableInfo.elementType)})`);
           this.newLine();
           break;
         case BinaryReaderState.EXPORT_SECTION_ENTRY:
@@ -452,7 +540,8 @@ export class WasmDisassembler {
               break;
             case ExternalKind.Table:
               var tableName = this._nameResolver.getTableName(exportInfo.index, true);
-              this.appendBuffer(`(table ${tableName})`);
+              // TODO use tableName
+              this.appendBuffer(`(table ${exportInfo.index})`);
               break;
             case ExternalKind.Memory:
               this.appendBuffer(`memory`);
@@ -607,6 +696,8 @@ export class WasmDisassembler {
           }
           this._indent = '    ';
           this._indentLevel = 0;
+          this._labelIndex = 0;
+          this._backrefLabels = this._labelMode === LabelMode.Depth ? null : [];
           break;
         case BinaryReaderState.CODE_OPERATOR:
           var operator = <IOperatorInformation>reader.result;
