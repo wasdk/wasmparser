@@ -40,10 +40,10 @@
     i64.const 356
   )
   (func $func2 (result f32)
-    f32.const 0x1.e64000p11
+    f32.const 3890
   )
   (func $func3 (result f64)
-    f64.const 0x1.ec80000000000p11
+    f64.const 3940
   )
   (func $func4 (param $var0 i32) (result i32)
     get_local $var0
@@ -90,15 +90,15 @@
     call $func5
   )
   (func $func18 (result f32)
-    f32.const 0x1.51eb86p0
+    f32.const 1.3200000524520874
     call $func6
   )
   (func $func19 (result f64)
-    f64.const 0x1.a3d70a3d70a3dp0
+    f64.const 1.64
     call $func7
   )
   (func $func20 (result i32)
-    f32.const 0x1.00ccccp5
+    f32.const 32.099998474121094
     i32.const 32
     call $func8
   )
@@ -108,13 +108,13 @@
     call $func9
   )
   (func $func22 (result f32)
-    f64.const 0x1.0000000000000p6
-    f32.const 0x1.000000p5
+    f64.const 64
+    f32.const 32
     call $func10
   )
   (func $func23 (result f64)
     i64.const 64
-    f64.const 0x1.0066666666666p6
+    f64.const 64.1
     call $func11
   )
   (func $func24 (param $var0 i64) (result i64)

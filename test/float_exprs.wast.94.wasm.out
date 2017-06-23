@@ -10,36 +10,36 @@
       i32.const 1
       i32.lt_s
       br_if $label0
-      f64.const 0x1.0000000000000p0
+      f64.const 1
       set_local $var2
       f64.const 0.0
       set_local $var3
       loop $label1
         get_local $var1
         get_local $var2
-        f64.const 0x1.0000000000000p3
+        f64.const 8
         get_local $var3
-        f64.const 0x1.0000000000000p3
+        f64.const 8
         f64.mul
         tee_local $var4
-        f64.const 0x1.0000000000000p0
+        f64.const 1
         f64.add
         f64.div
-        f64.const 0x1.0000000000000p2
+        f64.const 4
         get_local $var4
-        f64.const 0x1.0000000000000p2
-        f64.add
-        f64.div
-        f64.sub
-        f64.const 0x1.0000000000000p1
-        get_local $var4
-        f64.const 0x1.4000000000000p2
+        f64.const 4
         f64.add
         f64.div
         f64.sub
-        f64.const 0x1.0000000000000p1
+        f64.const 2
         get_local $var4
-        f64.const 0x1.8000000000000p2
+        f64.const 5
+        f64.add
+        f64.div
+        f64.sub
+        f64.const 2
+        get_local $var4
+        f64.const 6
         f64.add
         f64.div
         f64.sub
@@ -47,11 +47,11 @@
         f64.add
         set_local $var1
         get_local $var3
-        f64.const 0x1.0000000000000p0
+        f64.const 1
         f64.add
         set_local $var3
         get_local $var2
-        f64.const 0x1.0000000000000p-4
+        f64.const 0.0625
         f64.mul
         set_local $var2
         get_local $var0

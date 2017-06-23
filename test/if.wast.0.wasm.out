@@ -171,18 +171,18 @@
     get_local $var0
     if (result f32)
       call $func0
-      f32.const 0x1.800000p1
+      f32.const 3
     else
       call $func0
-      f32.const -0x1.800000p1
+      f32.const -3
     end
     get_local $var1
     if (result f32)
       call $func0
-      f32.const 0x1.000000p2
+      f32.const 4
     else
       call $func0
-      f32.const -0x1.000000p2
+      f32.const -4
     end
     f32.gt
   )

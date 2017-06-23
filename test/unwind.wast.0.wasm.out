@@ -216,14 +216,14 @@
   )
   (func $func22 (result i32)
     f32.const 0.0
-    f64.const 0x1.0000000000000p0
+    f64.const 1
     unreachable
     i64.eq
   )
   (func $func23 (result i32)
     block $label0 (result i32)
       f32.const 0.0
-      f64.const 0x1.0000000000000p0
+      f64.const 1
       i32.const 9
       br $label0
       i64.eq
@@ -232,7 +232,7 @@
   (func $func24 (result i32)
     block $label0 (result i32)
       f32.const 0.0
-      f64.const 0x1.0000000000000p0
+      f64.const 1
       i32.const 9
       i32.const 0
       br_table $label0
@@ -241,14 +241,14 @@
   )
   (func $func25 (result i32)
     f32.const 0.0
-    f64.const 0x1.0000000000000p0
+    f64.const 1
     i32.const 9
     return
     i64.eq
   )
   (func $func26 (result i32)
     f32.const 0.0
-    f64.const 0x1.0000000000000p0
+    f64.const 1
     i64.const 0
     unreachable
     select
@@ -256,7 +256,7 @@
   (func $func27 (result i32)
     block $label0 (result i32)
       f32.const 0.0
-      f64.const 0x1.0000000000000p0
+      f64.const 1
       i64.const 0
       i32.const 9
       br $label0
@@ -266,7 +266,7 @@
   (func $func28 (result i32)
     block $label0 (result i32)
       f32.const 0.0
-      f64.const 0x1.0000000000000p0
+      f64.const 1
       i64.const 0
       i32.const 9
       i32.const 0
@@ -276,7 +276,7 @@
   )
   (func $func29 (result i32)
     f32.const 0.0
-    f64.const 0x1.0000000000000p0
+    f64.const 1
     i64.const 1
     i32.const 9
     return

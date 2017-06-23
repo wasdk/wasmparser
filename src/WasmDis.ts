@@ -74,6 +74,8 @@ function memoryAddressToString(address: IMemoryAddress, code: OperatorCode): str
   switch (code) {
     case OperatorCode.i64_load:
     case OperatorCode.i64_store:
+    case OperatorCode.f64_load:
+    case OperatorCode.f64_store:
       defaultAlignFlags = 3;
       break;
     case OperatorCode.i32_load:
@@ -81,6 +83,8 @@ function memoryAddressToString(address: IMemoryAddress, code: OperatorCode): str
     case OperatorCode.i64_load32_u:
     case OperatorCode.i32_store:
     case OperatorCode.i64_store32:
+    case OperatorCode.f32_load:
+    case OperatorCode.f32_store:
       defaultAlignFlags = 2;
       break;
     case OperatorCode.i32_load16_s:
@@ -101,7 +105,7 @@ function memoryAddressToString(address: IMemoryAddress, code: OperatorCode): str
       break;
   }
   if (address.flags == defaultAlignFlags) // hide default flags
-    return !address.offset ? null : `offset=${address.offset | 0}`;
+    return !address.offset ? null : `offset=${address.offset}`;
   if (!address.offset) // hide default offset
     return `align=${1 << address.flags}`;
   return `offset=${address.offset | 0} align=${1 << address.flags}`;
@@ -156,7 +160,8 @@ export class DefaultNameResolver implements INameResolver {
     return '$table' + index;
   }
   public getMemoryName(index: number, isRef: boolean): string {
-    return '$memory' + index;
+    // TODO '$memory' + index;
+    return isRef ? '' + index : `(;${index};)`;
   }
   public getGlobalName(index: number, isRef: boolean): string {
     return '$global' + index;
@@ -215,6 +220,7 @@ export class WasmDisassembler {
   private _funcTypes: Array<number>;
   private _importCount: number;
   private _globalCount: number;
+  private _memoryCount: number;
   private _tableCount: number;
   private _initExpression: Array<IOperatorInformation>;
   private _backrefLabels: Array<{line:number;position:number;useLabel:boolean;label:string}>;
@@ -247,6 +253,7 @@ export class WasmDisassembler {
     this._funcTypes = [];
     this._importCount = 0;
     this._globalCount = 0;
+    this._memoryCount = 0;
     this._tableCount = 0;
     this._initExpression = [];
     this._backrefLabels = null;
@@ -290,11 +297,10 @@ export class WasmDisassembler {
     this._buffer.length = 0;
     this._lines.push(line);
   }
-  private printType(typeIndex: number): void {
+  private printFuncType(typeIndex: number): void {
     var type = this._types[typeIndex];
     if (type.form !== Type.func)
       throw new Error('NYI other function form');
-    this.appendBuffer('(func');
     if (type.params.length > 0) {
       this.appendBuffer(' (param');
       for (var i = 0; i < type.params.length; i++) {
@@ -311,7 +317,6 @@ export class WasmDisassembler {
       }
       this.appendBuffer(')');
     }
-    this.appendBuffer(')');
   }
   private printString(b: Uint8Array): void {
     this.appendBuffer('\"');
@@ -366,8 +371,9 @@ export class WasmDisassembler {
         this._backrefLabels.push(backrefLabel);
       }
       if (operator.blockType !== Type.empty_block_type) {
-        this.appendBuffer(' ');
+        this.appendBuffer(' (result ');
         this.appendBuffer(typeToString(operator.blockType));
+        this.appendBuffer(')');
       }
     }
     if (operator.code === OperatorCode.end && this._labelMode !== LabelMode.Depth) {
@@ -544,7 +550,8 @@ export class WasmDisassembler {
           break;
         case BinaryReaderState.MEMORY_SECTION_ENTRY:
           var memoryInfo = <IMemoryType>reader.result;
-          this.appendBuffer(`  (memory ${memoryInfo.limits.initial}`);
+          var memoryName = this._nameResolver.getMemoryName(this._memoryCount++, false);
+          this.appendBuffer(`  (memory ${memoryName} ${memoryInfo.limits.initial}`);
           if (memoryInfo.limits.maximum !== undefined) {
             this.appendBuffer(` ${memoryInfo.limits.maximum}`);
           }
@@ -554,8 +561,7 @@ export class WasmDisassembler {
         case BinaryReaderState.TABLE_SECTION_ENTRY:
           var tableInfo = <ITableType>reader.result;
           var tableName = this._nameResolver.getTableName(this._tableCount++, false);
-          // TODO use tableName
-          this.appendBuffer(`  (table ${limitsToString(tableInfo.limits)} ${typeToString(tableInfo.elementType)})`);
+          this.appendBuffer(`  (table ${tableName} ${limitsToString(tableInfo.limits)} ${typeToString(tableInfo.elementType)})`);
           this.newLine();
           break;
         case BinaryReaderState.EXPORT_SECTION_ENTRY:
@@ -565,15 +571,16 @@ export class WasmDisassembler {
           this.appendBuffer(' ');
           switch (exportInfo.kind) {
             case ExternalKind.Function:
-              this.appendBuffer(this._nameResolver.getFunctionName(exportInfo.index, exportInfo.index < this._importCount, true));
+              var funcName = this._nameResolver.getFunctionName(exportInfo.index, exportInfo.index < this._importCount, true);
+              this.appendBuffer(`(func ${funcName})`);
               break;
             case ExternalKind.Table:
               var tableName = this._nameResolver.getTableName(exportInfo.index, true);
-              // TODO use tableName
-              this.appendBuffer(`(table ${exportInfo.index})`);
+              this.appendBuffer(`(table ${tableName})`);
               break;
             case ExternalKind.Memory:
-              this.appendBuffer(`memory`);
+              var memoryName = this._nameResolver.getMemoryName(exportInfo.index, true);
+              this.appendBuffer(`(memory ${memoryName})`);
               break;
             case ExternalKind.Global:
               var globalName = this._nameResolver.getGlobalName(exportInfo.index, true);
@@ -587,39 +594,35 @@ export class WasmDisassembler {
           break;
         case BinaryReaderState.IMPORT_SECTION_ENTRY:
           var importInfo = <IImportEntry>reader.result;
+          this.appendBuffer('  (import ');
+          this.printImportSource(importInfo);
           switch (importInfo.kind) {
             case ExternalKind.Function:
               this._importCount++;
               var funcName = this._nameResolver.getFunctionName(this._funcIndex++, true, false);
-              this.appendBuffer(`  (import ${funcName} `);
-              this.printImportSource(importInfo);
-              this.appendBuffer(' ');
-              this.printType(importInfo.funcTypeIndex);
+              this.appendBuffer(` (func ${funcName}`);
+              this.printFuncType(importInfo.funcTypeIndex);
               this.appendBuffer(')');
               break;
             case ExternalKind.Table:
               var tableImportInfo = <ITableType>importInfo.type;
               var tableName = this._nameResolver.getTableName(this._tableCount++, false);
-              this.appendBuffer(`  (import ${tableName} `);
-              this.printImportSource(importInfo);
-              this.appendBuffer(` (table ${limitsToString(tableImportInfo.limits)} ${typeToString(tableImportInfo.elementType)}))`);
+              this.appendBuffer(` (table ${tableName} ${limitsToString(tableImportInfo.limits)} ${typeToString(tableImportInfo.elementType)})`);
               break;
             case ExternalKind.Memory:
               var memoryImportInfo = <IMemoryType>importInfo.type;
-              this.appendBuffer('  (import ');
-              this.printImportSource(importInfo);
-              this.appendBuffer(` (memory ${limitsToString(memoryImportInfo.limits)}))`);
+              var memoryName = this._nameResolver.getMemoryName(this._memoryCount++, false);
+              this.appendBuffer(` (memory ${memoryName} ${limitsToString(memoryImportInfo.limits)})`);
               break;
             case ExternalKind.Global:
               var globalImportInfo = <IGlobalType>importInfo.type;
               var globalName = this._nameResolver.getGlobalName(this._globalCount++, false);
-              this.appendBuffer(`  (import ${globalName} `);
-              this.printImportSource(importInfo);
-              this.appendBuffer(` (global ${globalTypeToString(globalImportInfo)}))`);
+              this.appendBuffer(` (global ${globalName} ${globalTypeToString(globalImportInfo)})`);
               break;
             default:
               throw new Error(`NYI other import types: ${importInfo.kind}`);
           }
+          this.appendBuffer(')');
           this.newLine();
           break;
         case BinaryReaderState.BEGIN_ELEMENT_SECTION_ENTRY:
@@ -651,9 +654,9 @@ export class WasmDisassembler {
           var typeIndex = this._types.length;
           this._types.push(funcType);
           var typeName = this._nameResolver.getTypeName(typeIndex, false);
-          this.appendBuffer(`  (type ${typeName} `);
-          this.printType(typeIndex);
-          this.appendBuffer(')');
+          this.appendBuffer(`  (type ${typeName} (func`);
+          this.printFuncType(typeIndex);
+          this.appendBuffer('))');
           this.newLine();
           break;
         case BinaryReaderState.START_SECTION_ENTRY:

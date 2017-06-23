@@ -18,12 +18,12 @@
   )
   (func $func2
     i32.const 0
-    f64.const nan:0xc000000000001
+    f64.const +nan:0xc000000000001
     f64.store
   )
   (func $func3
     i32.const 0
-    i64.const 9222246136947933185
+    i64.const 9222246136947933000
     i64.store
   )
   (func $func4

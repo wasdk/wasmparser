@@ -64,7 +64,7 @@
   (export "as-compare-right" (func $func54))
   (export "as-convert-operand" (func $func55))
   (export "as-grow_memory-size" (func $func56))
-  (elem  (i32.const 0) $func1)
+  (elem (i32.const 0) $func1)
   (func $func0
   )
   (func $func1 (param $var0 i32) (param $var1 i32) (param $var2 i32)
@@ -338,7 +338,7 @@
   )
   (func $func45
     unreachable
-    f64.const 0x1.c000000000000p2
+    f64.const 7
     f64.store
   )
   (func $func46
@@ -376,11 +376,11 @@
   )
   (func $func53 (result i32)
     unreachable
-    f64.const 0x1.4000000000000p3
+    f64.const 10
     f64.le
   )
   (func $func54 (result i32)
-    f32.const 0x1.400000p3
+    f32.const 10
     unreachable
     f32.ne
   )

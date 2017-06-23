@@ -62,7 +62,7 @@
   (export "as-compare-right" (func $func52))
   (export "as-convert-operand" (func $func53))
   (export "as-grow_memory-size" (func $func54))
-  (elem  (i32.const 0) $func32)
+  (elem (i32.const 0) $func32)
   (func $func0
   )
   (func $func1
@@ -89,7 +89,7 @@
     return
   )
   (func $func6 (result f64)
-    f64.const 0x1.8000000000000p1
+    f64.const 3
     return
   )
   (func $func7 (result i32)
@@ -341,7 +341,7 @@
     i32.const -1
   )
   (func $func41 (result f32)
-    f32.const 0x1.b33334p0
+    f32.const 1.7000000476837158
     return
     f32.load
   )
@@ -353,7 +353,7 @@
   (func $func43 (result i32)
     i32.const 30
     return
-    f64.const 0x1.c000000000000p2
+    f64.const 7
     f64.store
     i32.const -1
   )
@@ -379,7 +379,7 @@
     i32.const -1
   )
   (func $func47 (result f32)
-    f32.const 0x1.b33334p1
+    f32.const 3.4000000953674316
     return
     f32.neg
   )
@@ -403,11 +403,11 @@
   (func $func51 (result i32)
     i32.const 43
     return
-    f64.const 0x1.4000000000000p3
+    f64.const 10
     f64.le
   )
   (func $func52 (result i32)
-    f32.const 0x1.400000p3
+    f32.const 10
     i32.const 42
     return
     f32.ne

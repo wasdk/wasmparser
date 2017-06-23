@@ -5,7 +5,7 @@
   (export "f64.no_fold_sub1_mul_add" (func $func1))
   (func $func0 (param $var0 f32) (param $var1 f32) (result f32)
     get_local $var0
-    f32.const 0x1.000000p0
+    f32.const 1
     f32.sub
     get_local $var1
     f32.mul
@@ -14,7 +14,7 @@
   )
   (func $func1 (param $var0 f64) (param $var1 f64) (result f64)
     get_local $var0
-    f64.const 0x1.0000000000000p0
+    f64.const 1
     f64.sub
     get_local $var1
     f64.mul

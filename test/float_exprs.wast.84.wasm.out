@@ -4,23 +4,23 @@
   (export "f32.epsilon" (func $func0))
   (export "f64.epsilon" (func $func1))
   (func $func0 (result f32)
-    f32.const 0x1.000000p0
-    f32.const 0x1.800000p1
-    f32.const 0x1.000000p2
-    f32.const 0x1.800000p1
+    f32.const 1
+    f32.const 3
+    f32.const 4
+    f32.const 3
     f32.div
-    f32.const 0x1.000000p0
+    f32.const 1
     f32.sub
     f32.mul
     f32.sub
   )
   (func $func1 (result f64)
-    f64.const 0x1.0000000000000p0
-    f64.const 0x1.8000000000000p1
-    f64.const 0x1.0000000000000p2
-    f64.const 0x1.8000000000000p1
+    f64.const 1
+    f64.const 3
+    f64.const 4
+    f64.const 3
     f64.div
-    f64.const 0x1.0000000000000p0
+    f64.const 1
     f64.sub
     f64.mul
     f64.sub

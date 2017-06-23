@@ -5,7 +5,7 @@
   (table $table0 7 7 anyfunc)
   (export "callt" (func $func5))
   (export "callu" (func $func6))
-  (elem  (i32.const 0) $func0 $func1 $func2 $func3 $func4 $func0 $func2)
+  (elem (i32.const 0) $func0 $func1 $func2 $func3 $func4 $func0 $func2)
   (func $func0 (result i32)
     i32.const 1
   )

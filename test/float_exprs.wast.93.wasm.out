@@ -5,7 +5,7 @@
     get_local $var0
     get_local $var1
     f64.div
-    f64.const 0x1.999999999999ap-2
+    f64.const 0.4
     f64.lt
   )
 )

@@ -9,7 +9,7 @@
   (table $table0 10 anyfunc)
   (memory (;0;) 2)
   (global $global0 i32 (i32.const 55))
-  (global $global1 f32 (f32.const 0x1.600000p5))
+  (global $global1 f32 (f32.const 44))
   (export "func" (func $func0))
   (export "func-i32" (func $func1))
   (export "func-f32" (func $func2))
@@ -31,7 +31,7 @@
     i32.const 22
   )
   (func $func4 (result f32)
-    f32.const 0x1.600000p3
+    f32.const 11
   )
   (func $func5 (param $var0 i32) (result i32)
     get_local $var0

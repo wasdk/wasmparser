@@ -109,7 +109,7 @@
   (export "f64_select" (func $func127))
   (export "br_if" (func $func128))
   (export "br_table" (func $func129))
-  (elem  (i32.const 0) $func0 $func1 $func2 $func3 $func4 $func5 $func6 $func7)
+  (elem (i32.const 0) $func0 $func1 $func2 $func3 $func4 $func5 $func6 $func7)
   (func $func0 (param $var0 i32) (param $var1 i32) (result i32)
     i32.const -1
   )
@@ -242,14 +242,14 @@
     i32.const 8
     i32.const 2
     i32.store8
-    f32.const 0x1.000000p0
+    f32.const 1
   )
   (func $func23 (result f32)
     call $func9
     i32.const 8
     i32.const 3
     i32.store8
-    f32.const 0x1.000000p0
+    f32.const 1
   )
   (func $func24 (result i32)
     call $func9
@@ -277,14 +277,14 @@
     i32.const 8
     i32.const 2
     i32.store8
-    f64.const 0x1.0000000000000p0
+    f64.const 1
   )
   (func $func28 (result f64)
     call $func9
     i32.const 8
     i32.const 3
     i32.store8
-    f64.const 0x1.0000000000000p0
+    f64.const 1
   )
   (func $func29 (result i32)
     call $func9

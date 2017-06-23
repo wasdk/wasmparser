@@ -6,7 +6,7 @@
   (export "tab" (table $table0))
   (export "h" (func $func1))
   (export "call" (func $func2))
-  (elem  (i32.const 2) $func0 $func0 $func0 $func0)
+  (elem (i32.const 2) $func0 $func0 $func0 $func0)
   (func $func0 (result i32)
     i32.const 4
   )

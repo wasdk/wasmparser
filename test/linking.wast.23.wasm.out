@@ -2,7 +2,7 @@
   (type $type0 (func))
   (import "Mm" "mem" (memory (;0;) 1))
   (table $table0 0 anyfunc)
-  (elem  (i32.const 0) $func0)
+  (elem (i32.const 0) $func0)
   (func $func0
   )
   (data (i32.const 0)

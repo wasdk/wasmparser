@@ -39,7 +39,7 @@
   (export "odd" (func $func34))
   (export "runaway" (func $func35))
   (export "mutual-runaway" (func $func36))
-  (elem  (i32.const 0) $func0 $func1 $func2 $func3 $func4 $func5 $func6 $func7 $func10 $func8 $func11 $func9 $func31 $func32 $func33 $func34 $func35 $func36 $func37 $func12 $func13 $func14 $func15)
+  (elem (i32.const 0) $func0 $func1 $func2 $func3 $func4 $func5 $func6 $func7 $func10 $func8 $func11 $func9 $func31 $func32 $func33 $func34 $func35 $func36 $func37 $func12 $func13 $func14 $func15)
   (func $func0 (result i32)
     i32.const 306
   )
@@ -47,10 +47,10 @@
     i64.const 356
   )
   (func $func2 (result f32)
-    f32.const 0x1.e64000p11
+    f32.const 3890
   )
   (func $func3 (result f64)
-    f64.const 0x1.ec80000000000p11
+    f64.const 3940
   )
   (func $func4 (param $var0 i32) (result i32)
     get_local $var0
@@ -120,17 +120,17 @@
     call_indirect $type6
   )
   (func $func23 (result f32)
-    f32.const 0x1.51eb86p0
+    f32.const 1.3200000524520874
     i32.const 6
     call_indirect $type7
   )
   (func $func24 (result f64)
-    f64.const 0x1.a3d70a3d70a3dp0
+    f64.const 1.64
     i32.const 7
     call_indirect $type8
   )
   (func $func25 (result i32)
-    f32.const 0x1.00ccccp5
+    f32.const 32.099998474121094
     i32.const 32
     i32.const 8
     call_indirect $type9
@@ -142,14 +142,14 @@
     call_indirect $type10
   )
   (func $func27 (result f32)
-    f64.const 0x1.0000000000000p6
-    f32.const 0x1.000000p5
+    f64.const 64
+    f32.const 32
     i32.const 10
     call_indirect $type11
   )
   (func $func28 (result f64)
     i64.const 64
-    f64.const 0x1.0066666666666p6
+    f64.const 64.1
     i32.const 11
     call_indirect $type12
   )

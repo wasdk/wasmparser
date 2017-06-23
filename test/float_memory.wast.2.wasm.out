@@ -18,7 +18,7 @@
   )
   (func $func2
     i32.const 1
-    f32.const nan:0x200000
+    f32.const +nan:0x600000
     f32.store
   )
   (func $func3

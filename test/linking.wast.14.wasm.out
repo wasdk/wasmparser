@@ -2,7 +2,7 @@
   (type $type0 (func (result i32)))
   (import "Mt" "tab" (table $table0 10 anyfunc))
   (memory (;0;) 1)
-  (elem  (i32.const 7) $func0)
+  (elem (i32.const 7) $func0)
   (func $func0 (result i32)
     i32.const 0
   )

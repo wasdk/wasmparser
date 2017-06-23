@@ -73,7 +73,7 @@
   (export "signature-implicit-reused" (func $func77))
   (export "signature-explicit-duplicate" (func $func78))
   (export "signature-implicit-duplicate" (func $func79))
-  (elem  (i32.const 0) $func75 $func73 $func72 $func75 $func71)
+  (elem (i32.const 0) $func75 $func73 $func72 $func75 $func71)
   (func $func0
   )
   (func $func1
@@ -243,10 +243,10 @@
     i64.const 7777
   )
   (func $func45 (result f32)
-    f32.const 0x1.36ccccp6
+    f32.const 77.69999694824219
   )
   (func $func46 (result f64)
-    f64.const 0x1.37147ae147ae1p6
+    f64.const 77.77
   )
   (func $func47
     block
@@ -272,11 +272,11 @@
     return
   )
   (func $func52 (result f32)
-    f32.const 0x1.3accccp6
+    f32.const 78.69999694824219
     return
   )
   (func $func53 (result f64)
-    f64.const 0x1.3b1eb851eb852p6
+    f64.const 78.78
     return
   )
   (func $func54 (result i32)
@@ -298,11 +298,11 @@
     br 0
   )
   (func $func58 (result f32)
-    f32.const 0x1.3f999ap6
+    f32.const 79.9000015258789
     br 0
   )
   (func $func59 (result f64)
-    f64.const 0x1.3f28f5c28f5c3p6
+    f64.const 79.79
     br 0
   )
   (func $func60 (result i32)

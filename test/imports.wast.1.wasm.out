@@ -18,7 +18,7 @@
   (table $table0 2 2 anyfunc)
   (export "print32" (func $func9))
   (export "print64" (func $func10))
-  (elem  (i32.const 0) $import1 $import3)
+  (elem (i32.const 0) $import1 $import3)
   (func $func9 (param $var0 i32)
     (local $var1 f32)
     get_local $var0
@@ -29,7 +29,7 @@
     get_local $var0
     i32.const 1
     i32.add
-    f32.const 0x1.500000p5
+    f32.const 42
     call $import4
     get_local $var0
     call $import1
@@ -48,9 +48,9 @@
     f64.convert_s/i64
     set_local $var1
     get_local $var1
-    f64.const 0x1.0000000000000p0
+    f64.const 1
     f64.add
-    f64.const 0x1.a800000000000p5
+    f64.const 53
     call $import5
     get_local $var1
     call $import3

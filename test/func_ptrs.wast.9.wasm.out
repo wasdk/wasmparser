@@ -3,7 +3,7 @@
   (type $type1 (func (param i32) (result i32)))
   (table $table0 2 2 anyfunc)
   (export "callt" (func $func2))
-  (elem  (i32.const 0) $func0 $func1)
+  (elem (i32.const 0) $func0 $func1)
   (func $func0 (result i32)
     i32.const 1
   )

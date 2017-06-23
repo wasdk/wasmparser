@@ -66,7 +66,7 @@
   (export "nested-br_if-value-cond" (func $func56))
   (export "nested-br_table-value" (func $func57))
   (export "nested-br_table-value-index" (func $func58))
-  (elem  (i32.const 0) $func30)
+  (elem (i32.const 0) $func30)
   (func $func0
   )
   (func $func1
@@ -113,14 +113,14 @@
   )
   (func $func7 (result f32)
     block $label0 (result f32)
-      f32.const 0x1.800000p1
+      f32.const 3
       br $label0
       f32.neg
     end $label0
   )
   (func $func8 (result f64)
     block $label0 (result f64)
-      f64.const 0x1.0000000000000p2
+      f64.const 4
       br $label0
       f64.neg
     end $label0
@@ -387,7 +387,7 @@
   )
   (func $func39 (result f32)
     block $label0 (result f32)
-      f32.const 0x1.b33334p0
+      f32.const 1.7000000476837158
       br $label0
       f32.load
     end $label0
@@ -403,7 +403,7 @@
     block $label0 (result i32)
       i32.const 30
       br $label0
-      f64.const 0x1.c000000000000p2
+      f64.const 7
       f64.store
       i32.const -1
     end $label0
@@ -437,7 +437,7 @@
   )
   (func $func45 (result f32)
     block $label0 (result f32)
-      f32.const 0x1.b33334p1
+      f32.const 3.4000000953674316
       br $label0
       f32.neg
     end $label0
@@ -469,13 +469,13 @@
     block $label0 (result i32)
       i32.const 43
       br $label0
-      f64.const 0x1.4000000000000p3
+      f64.const 10
       f64.le
     end $label0
   )
   (func $func50 (result i32)
     block $label0 (result i32)
-      f32.const 0x1.400000p3
+      f32.const 10
       i32.const 42
       br $label0
       f32.ne

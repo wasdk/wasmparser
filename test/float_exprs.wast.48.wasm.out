@@ -3,11 +3,11 @@
   (export "calculate" (func $func0))
   (func $func0 (result f32)
     (local $var0 f32) (local $var1 f32) (local $var2 f32) (local $var3 f32) (local $var4 f32)
-    f32.const 0x1.388000p7
+    f32.const 156.25
     set_local $var0
-    f32.const 0x1.a0aaaap7
+    f32.const 208.3333282470703
     set_local $var1
-    f32.const 0x1.c78e2ap0
+    f32.const 1.7795130014419556
     set_local $var2
     get_local $var1
     f32.neg

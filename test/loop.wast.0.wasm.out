@@ -185,11 +185,11 @@
   (func $func9 (result i32)
     loop (result f32)
       call $func0
-      f32.const 0x1.800000p1
+      f32.const 3
     end
     loop (result f32)
       call $func0
-      f32.const 0x1.800000p1
+      f32.const 3
     end
     f32.gt
   )
@@ -455,7 +455,7 @@
             f32.add
             set_local $var3
             get_local $var2
-            f32.const 0x1.000000p1
+            f32.const 2
             f32.sub
             set_local $var2
             br $label2
@@ -466,7 +466,7 @@
         f32.div
         set_local $var3
         get_local $var0
-        f32.const 0x1.000000p0
+        f32.const 1
         f32.sub
         set_local $var0
         br $label3

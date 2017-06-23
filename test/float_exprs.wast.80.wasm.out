@@ -9,11 +9,11 @@
       get_local $var0
       f32.add
       tee_local $var0
-      f32.const 0x1.000000p0
+      f32.const 1
       f32.add
       get_local $var0
       f32.sub
-      f32.const -0x1.000000p0
+      f32.const -1
       f32.add
       f32.const 0.0
       f32.eq
@@ -22,7 +22,7 @@
     loop $label1
       get_local $var0
       get_local $var1
-      f32.const 0x1.000000p0
+      f32.const 1
       f32.add
       tee_local $var1
       f32.add
@@ -42,11 +42,11 @@
       get_local $var0
       f64.add
       tee_local $var0
-      f64.const 0x1.0000000000000p0
+      f64.const 1
       f64.add
       get_local $var0
       f64.sub
-      f64.const -0x1.0000000000000p0
+      f64.const -1
       f64.add
       f64.const 0.0
       f64.eq
@@ -55,7 +55,7 @@
     loop $label1
       get_local $var0
       get_local $var1
-      f64.const 0x1.0000000000000p0
+      f64.const 1
       f64.add
       tee_local $var1
       f64.add

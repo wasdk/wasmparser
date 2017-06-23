@@ -5,17 +5,17 @@
   (export "f64.epsilon" (func $func1))
   (func $func0 (result f32)
     (local $var0 f32) (local $var1 f32)
-    f32.const 0x1.000000p0
+    f32.const 1
     set_local $var0
     loop $label0
       get_local $var0
       tee_local $var1
-      f32.const 0x1.000000p-1
+      f32.const 0.5
       f32.mul
       tee_local $var0
-      f32.const 0x1.000000p0
+      f32.const 1
       f32.add
-      f32.const 0x1.000000p0
+      f32.const 1
       f32.gt
       br_if $label0
     end $label0
@@ -23,17 +23,17 @@
   )
   (func $func1 (result f64)
     (local $var0 f64) (local $var1 f64)
-    f64.const 0x1.0000000000000p0
+    f64.const 1
     set_local $var0
     loop $label0
       get_local $var0
       tee_local $var1
-      f64.const 0x1.0000000000000p-1
+      f64.const 0.5
       f64.mul
       tee_local $var0
-      f64.const 0x1.0000000000000p0
+      f64.const 1
       f64.add
-      f64.const 0x1.0000000000000p0
+      f64.const 1
       f64.gt
       br_if $label0
     end $label0
