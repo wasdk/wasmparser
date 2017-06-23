@@ -1,0 +1,4 @@
+(module
+  (type $type0 (func (result i32)))
+  (import "test" "func" (func $import0 (result i32)))
+)

@@ -1,0 +1,43 @@
+(module
+  (type $type0 (func (result f32)))
+  (export "calculate" (func $func0))
+  (func $func0 (result f32)
+    (local $var0 f32) (local $var1 f32) (local $var2 f32) (local $var3 f32) (local $var4 f32)
+    f32.const 0x1.388000p7
+    set_local $var0
+    f32.const 0x1.a0aaaap7
+    set_local $var1
+    f32.const 0x1.c78e2ap0
+    set_local $var2
+    get_local $var1
+    f32.neg
+    get_local $var0
+    f32.mul
+    get_local $var0
+    get_local $var2
+    f32.mul
+    get_local $var1
+    f32.sub
+    f32.div
+    set_local $var3
+    get_local $var1
+    f32.neg
+    get_local $var0
+    f32.mul
+    get_local $var0
+    get_local $var2
+    f32.mul
+    get_local $var1
+    f32.sub
+    f32.div
+    set_local $var4
+    block $label0
+      get_local $var3
+      get_local $var4
+      f32.eq
+      br_if $label0
+      unreachable
+    end $label0
+    get_local $var4
+  )
+)

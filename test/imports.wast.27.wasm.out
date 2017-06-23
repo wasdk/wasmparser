@@ -1,0 +1,4 @@
+(module
+  (type $type0 (func (result i32)))
+  (import "test" "global-i32" (func $import0 (result i32)))
+)

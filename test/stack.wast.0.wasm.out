@@ -1,0 +1,150 @@
+(module
+  (type $type0 (func (param i64) (result i64)))
+  (export "fac-expr" (func $func0))
+  (export "fac-stack" (func $func1))
+  (export "fac-stack-raw" (func $func2))
+  (export "fac-mixed" (func $func3))
+  (export "fac-mixed-raw" (func $func4))
+  (func $func0 (param $var0 i64) (result i64)
+    (local $var1 i64) (local $var2 i64)
+    get_local $var0
+    set_local $var1
+    i64.const 1
+    set_local $var2
+    block $label0
+      loop $label1
+        get_local $var1
+        i64.const 0
+        i64.eq
+        if
+          br $label0
+        else
+          block
+            get_local $var1
+            get_local $var2
+            i64.mul
+            set_local $var2
+            get_local $var1
+            i64.const 1
+            i64.sub
+            set_local $var1
+          end
+        end
+        br $label1
+      end $label1
+    end $label0
+    get_local $var2
+  )
+  (func $func1 (param $var0 i64) (result i64)
+    (local $var1 i64) (local $var2 i64)
+    get_local $var0
+    set_local $var1
+    i64.const 1
+    set_local $var2
+    block $label0
+      loop $label1
+        get_local $var1
+        i64.const 0
+        i64.eq
+        if
+          br $label0
+        else
+          get_local $var1
+          get_local $var2
+          i64.mul
+          set_local $var2
+          get_local $var1
+          i64.const 1
+          i64.sub
+          set_local $var1
+        end
+        br $label1
+      end $label1
+    end $label0
+    get_local $var2
+  )
+  (func $func2 (param $var0 i64) (result i64)
+    (local $var1 i64) (local $var2 i64)
+    get_local $var0
+    set_local $var1
+    i64.const 1
+    set_local $var2
+    block $label0
+      loop $label1
+        get_local $var1
+        i64.const 0
+        i64.eq
+        if
+          br $label0
+        else
+          get_local $var1
+          get_local $var2
+          i64.mul
+          set_local $var2
+          get_local $var1
+          i64.const 1
+          i64.sub
+          set_local $var1
+        end
+        br $label1
+      end $label1
+    end $label0
+    get_local $var2
+  )
+  (func $func3 (param $var0 i64) (result i64)
+    (local $var1 i64) (local $var2 i64)
+    get_local $var0
+    set_local $var1
+    i64.const 1
+    set_local $var2
+    block $label0
+      loop $label1
+        get_local $var1
+        i64.const 0
+        i64.eq
+        if
+          br $label0
+        else
+          get_local $var1
+          get_local $var2
+          i64.mul
+          set_local $var2
+          get_local $var1
+          i64.const 1
+          i64.sub
+          set_local $var1
+        end
+        br $label1
+      end $label1
+    end $label0
+    get_local $var2
+  )
+  (func $func4 (param $var0 i64) (result i64)
+    (local $var1 i64) (local $var2 i64)
+    get_local $var0
+    set_local $var1
+    i64.const 1
+    set_local $var2
+    block $label0
+      loop $label1
+        get_local $var1
+        i64.const 0
+        i64.eq
+        if
+          br $label0
+        else
+          get_local $var1
+          get_local $var2
+          i64.mul
+          set_local $var2
+          get_local $var1
+          i64.const 1
+          i64.sub
+          set_local $var1
+        end
+        br $label1
+      end $label1
+    end $label0
+    get_local $var2
+  )
+)

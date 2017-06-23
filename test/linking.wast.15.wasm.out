@@ -1,0 +1,13 @@
+(module
+  (type $type0 (func (param i32) (result i32)))
+  (memory (;0;) 1 5)
+  (export "mem" (memory 0))
+  (export "load" (func $func0))
+  (func $func0 (param $var0 i32) (result i32)
+    get_local $var0
+    i32.load8_u
+  )
+  (data (i32.const 10)
+    "\00\01\02\03\04\05\06\07\08\09"
+  )
+)

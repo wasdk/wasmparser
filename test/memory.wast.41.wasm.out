@@ -1,0 +1,12 @@
+(module
+  (memory (;0;) 1 2)
+  (data (i32.const 0)
+    "a"
+  )
+  (data (i32.const 2)
+    "b"
+  )
+  (data (i32.const 1)
+    "c"
+  )
+)

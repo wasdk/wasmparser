@@ -1,0 +1,4 @@
+(module
+  (type $type0 (func (param i32) (result i32)))
+  (import "reexport_f" "print" (func $import0 (param i32) (result i32)))
+)

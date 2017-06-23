@@ -1,0 +1,3 @@
+(module
+  (import "spectest" "table" (global $global0 i32))
+)

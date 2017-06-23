@@ -1,0 +1,67 @@
+(module
+  (type $type0 (func (param i32 i32 i32) (result i32)))
+  (type $type1 (func (param i64 i64 i32) (result i64)))
+  (type $type2 (func (param f32 f32 i32) (result f32)))
+  (type $type3 (func (param f64 f64 i32) (result f64)))
+  (type $type4 (func (param i32) (result i32)))
+  (type $type5 (func))
+  (export "select_i32" (func $func0))
+  (export "select_i64" (func $func1))
+  (export "select_f32" (func $func2))
+  (export "select_f64" (func $func3))
+  (export "select_trap_l" (func $func4))
+  (export "select_trap_r" (func $func5))
+  (export "select_unreached" (func $func6))
+  (func $func0 (param $var0 i32) (param $var1 i32) (param $var2 i32) (result i32)
+    get_local $var0
+    get_local $var1
+    get_local $var2
+    select
+  )
+  (func $func1 (param $var0 i64) (param $var1 i64) (param $var2 i32) (result i64)
+    get_local $var0
+    get_local $var1
+    get_local $var2
+    select
+  )
+  (func $func2 (param $var0 f32) (param $var1 f32) (param $var2 i32) (result f32)
+    get_local $var0
+    get_local $var1
+    get_local $var2
+    select
+  )
+  (func $func3 (param $var0 f64) (param $var1 f64) (param $var2 i32) (result f64)
+    get_local $var0
+    get_local $var1
+    get_local $var2
+    select
+  )
+  (func $func4 (param $var0 i32) (result i32)
+    unreachable
+    i32.const 0
+    get_local $var0
+    select
+  )
+  (func $func5 (param $var0 i32) (result i32)
+    i32.const 0
+    unreachable
+    get_local $var0
+    select
+  )
+  (func $func6
+    unreachable
+    select
+    unreachable
+    i32.const 0
+    select
+    unreachable
+    i32.const 0
+    i32.const 0
+    select
+    unreachable
+    f32.const 0.0
+    i32.const 0
+    select
+    unreachable
+  )
+)

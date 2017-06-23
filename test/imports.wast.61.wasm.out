@@ -1,0 +1,3 @@
+(module
+  (import "spectest" "unknown" (table $table0 10 anyfunc))
+)

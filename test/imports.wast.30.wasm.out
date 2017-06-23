@@ -1,0 +1,4 @@
+(module
+  (type $type0 (func))
+  (import "spectest" "global" (func $import0))
+)

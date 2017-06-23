@@ -1,0 +1,12 @@
+(module
+  (type $type0 (func (param i32) (result f32)))
+  (export "llvm_pr27153" (func $func0))
+  (func $func0 (param $var0 i32) (result f32)
+    get_local $var0
+    i32.const 268435455
+    i32.and
+    f32.convert_s/i32
+    f32.const -0x1.000000p23
+    f32.add
+  )
+)

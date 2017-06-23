@@ -1,0 +1,11 @@
+(module
+  (type $type0 (func (param f64 f64) (result i32)))
+  (export "point_four" (func $func0))
+  (func $func0 (param $var0 f64) (param $var1 f64) (result i32)
+    get_local $var0
+    get_local $var1
+    f64.div
+    f64.const 0x1.999999999999ap-2
+    f64.lt
+  )
+)

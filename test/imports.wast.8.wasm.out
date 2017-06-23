@@ -1,0 +1,4 @@
+(module
+  (type $type0 (func (param i64) (result i64)))
+  (import "test" "func-i64->i64" (func $import0 (param i64) (result i64)))
+)

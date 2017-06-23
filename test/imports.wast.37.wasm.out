@@ -1,0 +1,3 @@
+(module
+  (import "spectest" "unknown" (global $global0 i32))
+)

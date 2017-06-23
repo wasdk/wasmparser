@@ -1,0 +1,20 @@
+(module
+  (type $type0 (func (param f64) (result f64)))
+  (type $type1 (func (param f64 f64) (result f64)))
+  (export "abs" (func $func0))
+  (export "neg" (func $func1))
+  (export "copysign" (func $func2))
+  (func $func0 (param $var0 f64) (result f64)
+    get_local $var0
+    f64.abs
+  )
+  (func $func1 (param $var0 f64) (result f64)
+    get_local $var0
+    f64.neg
+  )
+  (func $func2 (param $var0 f64) (param $var1 f64) (result f64)
+    get_local $var0
+    get_local $var1
+    f64.copysign
+  )
+)
