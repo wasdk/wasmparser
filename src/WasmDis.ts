@@ -412,86 +412,119 @@ export class WasmDisassembler {
     return backrefLabel.label || '' + depth;
   }
   private printOperator(operator: IOperatorInformation): void {
-    this.appendBuffer(getOperatorName(operator.code));
-    if (operator.blockType !== undefined) {
-      if (this._labelMode !== LabelMode.Depth) {
-        let backrefLabel = {
-          line: this._lines.length,
-          position: this._buffer.length,
-          useLabel: false,
-          label: null,
-        };
-        if (this._labelMode === LabelMode.Always) {
-          backrefLabel.useLabel = true;
-          backrefLabel.label = this._nameResolver.getLabel(this._labelIndex++);
-          if (backrefLabel.label) {
-            this.appendBuffer(' ');
-            this.appendBuffer(backrefLabel.label);
+    var code = operator.code;
+    this.appendBuffer(getOperatorName(code));
+    switch (code) {
+      case OperatorCode.block:
+      case OperatorCode.loop:
+      case OperatorCode.if:
+        if (this._labelMode !== LabelMode.Depth) {
+          let backrefLabel = {
+            line: this._lines.length,
+            position: this._buffer.length,
+            useLabel: false,
+            label: null,
+          };
+          if (this._labelMode === LabelMode.Always) {
+            backrefLabel.useLabel = true;
+            backrefLabel.label = this._nameResolver.getLabel(this._labelIndex++);
+            if (backrefLabel.label) {
+              this.appendBuffer(' ');
+              this.appendBuffer(backrefLabel.label);
+            }
           }
+          this._backrefLabels.push(backrefLabel);
         }
-        this._backrefLabels.push(backrefLabel);
-      }
-      if (operator.blockType !== Type.empty_block_type) {
-        this.appendBuffer(' (result ');
-        this.appendBuffer(typeToString(operator.blockType));
-        this.appendBuffer(')');
-      }
-    }
-    if (operator.code === OperatorCode.end && this._labelMode !== LabelMode.Depth) {
-      let backrefLabel = this._backrefLabels.pop();
-      if (backrefLabel.label) {
+        if (operator.blockType !== Type.empty_block_type) {
+          this.appendBuffer(' (result ');
+          this.appendBuffer(typeToString(operator.blockType));
+          this.appendBuffer(')');
+        }
+        break;
+      case OperatorCode.end:
+        if (this._labelMode === LabelMode.Depth) {
+          break;
+        }
+        let backrefLabel = this._backrefLabels.pop();
+        if (backrefLabel.label) {
+          this.appendBuffer(' ');
+          this.appendBuffer(backrefLabel.label);
+        }
+        break;
+      case OperatorCode.br:
+      case OperatorCode.br_if:
         this.appendBuffer(' ');
-        this.appendBuffer(backrefLabel.label);
-      }
-    }
-    if (operator.localIndex !== undefined) {
-      var paramName = this._nameResolver.getVariableName(this._funcIndex, operator.localIndex, true);
-      this.appendBuffer(` ${paramName}`);
-    }
-    if (operator.funcIndex !== undefined) {
-      var funcName = this._nameResolver.getFunctionName(operator.funcIndex, operator.funcIndex < this._importCount, true);
-      this.appendBuffer(` ${funcName}`);
-    }
-    if (operator.typeIndex !== undefined) {
-      var typeName = this._nameResolver.getTypeName(operator.typeIndex, true);
-      this.appendBuffer(` ${typeName}`);
-    }
-    if (operator.literal !== undefined) {
-      switch (operator.code) {
-        case OperatorCode.i32_const:
-          this.appendBuffer(` ${(<number>operator.literal).toString()}`);
-          break;
-        case OperatorCode.f32_const:
-          this.appendBuffer(` ${formatFloat32(<number>operator.literal)}`);
-          break;
-        case OperatorCode.f64_const:
-          this.appendBuffer(` ${formatFloat64(<number>operator.literal)}`);
-          break;
-        case OperatorCode.i64_const:
-          this.appendBuffer(` ${(<Int64>operator.literal).toDouble()}`);
-          break;
-      }
-    }
-    if (operator.memoryAddress !== undefined) {
-      var memoryAddress = memoryAddressToString(operator.memoryAddress, operator.code);
-      if (memoryAddress !== null) {
-        this.appendBuffer(' ');
-        this.appendBuffer(memoryAddress);
-      }
-    }
-    if (operator.brDepth !== undefined) {
-      this.appendBuffer(' ');
-      this.appendBuffer(this.useLabel(operator.brDepth));
-    }
-    if (operator.brTable !== undefined) {
-      for (var i = 0; i < operator.brTable.length; i++) {
-        this.appendBuffer(' ');
-        this.appendBuffer(this.useLabel(operator.brTable[i]));
-      }
-    }
-    if (operator.globalIndex !== undefined) {
-      var globalName = this._nameResolver.getGlobalName(operator.globalIndex, true);
-      this.appendBuffer(` ${globalName}`);
+        this.appendBuffer(this.useLabel(operator.brDepth));
+        break;
+      case OperatorCode.br_table:
+        for (var i = 0; i < operator.brTable.length; i++) {
+          this.appendBuffer(' ');
+          this.appendBuffer(this.useLabel(operator.brTable[i]));
+        }
+        break;
+      case OperatorCode.call:
+        var funcName = this._nameResolver.getFunctionName(operator.funcIndex, operator.funcIndex < this._importCount, true);
+        this.appendBuffer(` ${funcName}`);
+        break;
+      case OperatorCode.call_indirect:
+        var typeName = this._nameResolver.getTypeName(operator.typeIndex, true);
+        this.appendBuffer(` ${typeName}`);
+        break;
+      case OperatorCode.get_local:
+      case OperatorCode.set_local:
+      case OperatorCode.tee_local:
+        var paramName = this._nameResolver.getVariableName(this._funcIndex, operator.localIndex, true);
+        this.appendBuffer(` ${paramName}`);
+        break;
+      case OperatorCode.get_global:
+      case OperatorCode.set_global:
+        var globalName = this._nameResolver.getGlobalName(operator.globalIndex, true);
+        this.appendBuffer(` ${globalName}`);
+        break;
+      case OperatorCode.i32_load:
+      case OperatorCode.i64_load:
+      case OperatorCode.f32_load:
+      case OperatorCode.f64_load:
+      case OperatorCode.i32_load8_s:
+      case OperatorCode.i32_load8_u:
+      case OperatorCode.i32_load16_s:
+      case OperatorCode.i32_load16_u:
+      case OperatorCode.i64_load8_s:
+      case OperatorCode.i64_load8_u:
+      case OperatorCode.i64_load16_s:
+      case OperatorCode.i64_load16_u:
+      case OperatorCode.i64_load32_s:
+      case OperatorCode.i64_load32_u:
+      case OperatorCode.i32_store:
+      case OperatorCode.i64_store:
+      case OperatorCode.f32_store:
+      case OperatorCode.f64_store:
+      case OperatorCode.i32_store8:
+      case OperatorCode.i32_store16:
+      case OperatorCode.i64_store8:
+      case OperatorCode.i64_store16:
+      case OperatorCode.i64_store32:
+        var memoryAddress = memoryAddressToString(operator.memoryAddress, operator.code);
+        if (memoryAddress !== null) {
+          this.appendBuffer(' ');
+          this.appendBuffer(memoryAddress);
+        }
+        break;
+      case OperatorCode.current_memory:
+      case OperatorCode.grow_memory:
+        break;
+      case OperatorCode.i32_const:
+        this.appendBuffer(` ${(<number>operator.literal).toString()}`);
+        break;
+      case OperatorCode.i64_const:
+        this.appendBuffer(` ${(<Int64>operator.literal).toDouble()}`);
+        break;
+      case OperatorCode.f32_const:
+        this.appendBuffer(` ${formatFloat32(<number>operator.literal)}`);
+        break;
+      case OperatorCode.f64_const:
+        this.appendBuffer(` ${formatFloat64(<number>operator.literal)}`);
+        break;
     }
   }
   private printImportSource(info: IImportEntry): void {
