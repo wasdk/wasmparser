@@ -76,6 +76,16 @@ function memoryAddressToString(address: IMemoryAddress, code: OperatorCode): str
     case OperatorCode.i64_store:
     case OperatorCode.f64_load:
     case OperatorCode.f64_store:
+    case OperatorCode.i64_atomic_wait:
+    case OperatorCode.i64_atomic_load:
+    case OperatorCode.i64_atomic_store:
+    case OperatorCode.i64_atomic_rmw_add:
+    case OperatorCode.i64_atomic_rmw_sub:
+    case OperatorCode.i64_atomic_rmw_and:
+    case OperatorCode.i64_atomic_rmw_or:
+    case OperatorCode.i64_atomic_rmw_xor:
+    case OperatorCode.i64_atomic_rmw_xchg:
+    case OperatorCode.i64_atomic_rmw_cmpxchg:
       defaultAlignFlags = 3;
       break;
     case OperatorCode.i32_load:
@@ -85,6 +95,26 @@ function memoryAddressToString(address: IMemoryAddress, code: OperatorCode): str
     case OperatorCode.i64_store32:
     case OperatorCode.f32_load:
     case OperatorCode.f32_store:
+    case OperatorCode.atomic_wake:
+    case OperatorCode.i32_atomic_wait:
+    case OperatorCode.i32_atomic_load:
+    case OperatorCode.i64_atomic_load32_u:
+    case OperatorCode.i32_atomic_store:
+    case OperatorCode.i64_atomic_store32:
+    case OperatorCode.i32_atomic_rmw_add:
+    case OperatorCode.i64_atomic_rmw32_u_add:
+    case OperatorCode.i32_atomic_rmw_sub:
+    case OperatorCode.i64_atomic_rmw32_u_sub:
+    case OperatorCode.i32_atomic_rmw_and:
+    case OperatorCode.i64_atomic_rmw32_u_and:
+    case OperatorCode.i32_atomic_rmw_or:
+    case OperatorCode.i64_atomic_rmw32_u_or:
+    case OperatorCode.i32_atomic_rmw_xor:
+    case OperatorCode.i64_atomic_rmw32_u_xor:
+    case OperatorCode.i32_atomic_rmw_xchg:
+    case OperatorCode.i64_atomic_rmw32_u_xchg:
+    case OperatorCode.i32_atomic_rmw_cmpxchg:
+    case OperatorCode.i64_atomic_rmw32_u_cmpxchg:
       defaultAlignFlags = 2;
       break;
     case OperatorCode.i32_load16_s:
@@ -93,6 +123,24 @@ function memoryAddressToString(address: IMemoryAddress, code: OperatorCode): str
     case OperatorCode.i64_load16_u:
     case OperatorCode.i32_store16:
     case OperatorCode.i64_store16:
+    case OperatorCode.i32_atomic_load16_u:
+    case OperatorCode.i64_atomic_load16_u:
+    case OperatorCode.i32_atomic_store16:
+    case OperatorCode.i64_atomic_store16:
+    case OperatorCode.i32_atomic_rmw16_u_add:
+    case OperatorCode.i64_atomic_rmw16_u_add:
+    case OperatorCode.i32_atomic_rmw16_u_sub:
+    case OperatorCode.i64_atomic_rmw16_u_sub:
+    case OperatorCode.i32_atomic_rmw16_u_and:
+    case OperatorCode.i64_atomic_rmw16_u_and:
+    case OperatorCode.i32_atomic_rmw16_u_or:
+    case OperatorCode.i64_atomic_rmw16_u_or:
+    case OperatorCode.i32_atomic_rmw16_u_xor:
+    case OperatorCode.i64_atomic_rmw16_u_xor:
+    case OperatorCode.i32_atomic_rmw16_u_xchg:
+    case OperatorCode.i64_atomic_rmw16_u_xchg:
+    case OperatorCode.i32_atomic_rmw16_u_cmpxchg:
+    case OperatorCode.i64_atomic_rmw16_u_cmpxchg:
       defaultAlignFlags = 1;
       break;
     case OperatorCode.i32_load8_s:
@@ -101,6 +149,24 @@ function memoryAddressToString(address: IMemoryAddress, code: OperatorCode): str
     case OperatorCode.i64_load8_u:
     case OperatorCode.i32_store8:
     case OperatorCode.i64_store8:
+    case OperatorCode.i32_atomic_load8_u:
+    case OperatorCode.i64_atomic_load8_u:
+    case OperatorCode.i32_atomic_store8:
+    case OperatorCode.i64_atomic_store8:
+    case OperatorCode.i32_atomic_rmw8_u_add:
+    case OperatorCode.i64_atomic_rmw8_u_add:
+    case OperatorCode.i32_atomic_rmw8_u_sub:
+    case OperatorCode.i64_atomic_rmw8_u_sub:
+    case OperatorCode.i32_atomic_rmw8_u_and:
+    case OperatorCode.i64_atomic_rmw8_u_and:
+    case OperatorCode.i32_atomic_rmw8_u_or:
+    case OperatorCode.i64_atomic_rmw8_u_or:
+    case OperatorCode.i32_atomic_rmw8_u_xor:
+    case OperatorCode.i64_atomic_rmw8_u_xor:
+    case OperatorCode.i32_atomic_rmw8_u_xchg:
+    case OperatorCode.i64_atomic_rmw8_u_xchg:
+    case OperatorCode.i32_atomic_rmw8_u_cmpxchg:
+    case OperatorCode.i64_atomic_rmw8_u_cmpxchg:
       defaultAlignFlags = 0;
       break;
   }
@@ -504,6 +570,72 @@ export class WasmDisassembler {
       case OperatorCode.i64_store8:
       case OperatorCode.i64_store16:
       case OperatorCode.i64_store32:
+      case OperatorCode.atomic_wake:
+      case OperatorCode.i32_atomic_wait:
+      case OperatorCode.i64_atomic_wait:
+      case OperatorCode.i32_atomic_load:
+      case OperatorCode.i64_atomic_load:
+      case OperatorCode.i32_atomic_load8_u:
+      case OperatorCode.i32_atomic_load16_u:
+      case OperatorCode.i64_atomic_load8_u:
+      case OperatorCode.i64_atomic_load16_u:
+      case OperatorCode.i64_atomic_load32_u:
+      case OperatorCode.i32_atomic_store:
+      case OperatorCode.i64_atomic_store:
+      case OperatorCode.i32_atomic_store8:
+      case OperatorCode.i32_atomic_store16:
+      case OperatorCode.i64_atomic_store8:
+      case OperatorCode.i64_atomic_store16:
+      case OperatorCode.i64_atomic_store32:
+      case OperatorCode.i32_atomic_rmw_add:
+      case OperatorCode.i64_atomic_rmw_add:
+      case OperatorCode.i32_atomic_rmw8_u_add:
+      case OperatorCode.i32_atomic_rmw16_u_add:
+      case OperatorCode.i64_atomic_rmw8_u_add:
+      case OperatorCode.i64_atomic_rmw16_u_add:
+      case OperatorCode.i64_atomic_rmw32_u_add:
+      case OperatorCode.i32_atomic_rmw_sub:
+      case OperatorCode.i64_atomic_rmw_sub:
+      case OperatorCode.i32_atomic_rmw8_u_sub:
+      case OperatorCode.i32_atomic_rmw16_u_sub:
+      case OperatorCode.i64_atomic_rmw8_u_sub:
+      case OperatorCode.i64_atomic_rmw16_u_sub:
+      case OperatorCode.i64_atomic_rmw32_u_sub:
+      case OperatorCode.i32_atomic_rmw_and:
+      case OperatorCode.i64_atomic_rmw_and:
+      case OperatorCode.i32_atomic_rmw8_u_and:
+      case OperatorCode.i32_atomic_rmw16_u_and:
+      case OperatorCode.i64_atomic_rmw8_u_and:
+      case OperatorCode.i64_atomic_rmw16_u_and:
+      case OperatorCode.i64_atomic_rmw32_u_and:
+      case OperatorCode.i32_atomic_rmw_or:
+      case OperatorCode.i64_atomic_rmw_or:
+      case OperatorCode.i32_atomic_rmw8_u_or:
+      case OperatorCode.i32_atomic_rmw16_u_or:
+      case OperatorCode.i64_atomic_rmw8_u_or:
+      case OperatorCode.i64_atomic_rmw16_u_or:
+      case OperatorCode.i64_atomic_rmw32_u_or:
+      case OperatorCode.i32_atomic_rmw_xor:
+      case OperatorCode.i64_atomic_rmw_xor:
+      case OperatorCode.i32_atomic_rmw8_u_xor:
+      case OperatorCode.i32_atomic_rmw16_u_xor:
+      case OperatorCode.i64_atomic_rmw8_u_xor:
+      case OperatorCode.i64_atomic_rmw16_u_xor:
+      case OperatorCode.i64_atomic_rmw32_u_xor:
+      case OperatorCode.i32_atomic_rmw_xchg:
+      case OperatorCode.i64_atomic_rmw_xchg:
+      case OperatorCode.i32_atomic_rmw8_u_xchg:
+      case OperatorCode.i32_atomic_rmw16_u_xchg:
+      case OperatorCode.i64_atomic_rmw8_u_xchg:
+      case OperatorCode.i64_atomic_rmw16_u_xchg:
+      case OperatorCode.i64_atomic_rmw32_u_xchg:
+      case OperatorCode.i32_atomic_rmw_cmpxchg:
+      case OperatorCode.i64_atomic_rmw_cmpxchg:
+      case OperatorCode.i32_atomic_rmw8_u_cmpxchg:
+      case OperatorCode.i32_atomic_rmw16_u_cmpxchg:
+      case OperatorCode.i64_atomic_rmw8_u_cmpxchg:
+      case OperatorCode.i64_atomic_rmw16_u_cmpxchg:
+      case OperatorCode.i64_atomic_rmw32_u_cmpxchg:
         var memoryAddress = memoryAddressToString(operator.memoryAddress, operator.code);
         if (memoryAddress !== null) {
           this.appendBuffer(' ');
@@ -645,9 +777,11 @@ export class WasmDisassembler {
         case BinaryReaderState.MEMORY_SECTION_ENTRY:
           var memoryInfo = <IMemoryType>reader.result;
           var memoryName = this._nameResolver.getMemoryName(this._memoryCount++, false);
-          this.appendBuffer(`  (memory ${memoryName} ${memoryInfo.limits.initial}`);
-          if (memoryInfo.limits.maximum !== undefined) {
-            this.appendBuffer(` ${memoryInfo.limits.maximum}`);
+          this.appendBuffer(`  (memory ${memoryName} `);
+          if (memoryInfo.shared) {
+            this.appendBuffer(`(shared ${limitsToString(memoryInfo.limits)})`);
+          } else {
+            this.appendBuffer(limitsToString(memoryInfo.limits));
           }
           this.appendBuffer(')');
           this.newLine();
@@ -706,7 +840,13 @@ export class WasmDisassembler {
             case ExternalKind.Memory:
               var memoryImportInfo = <IMemoryType>importInfo.type;
               var memoryName = this._nameResolver.getMemoryName(this._memoryCount++, false);
-              this.appendBuffer(` (memory ${memoryName} ${limitsToString(memoryImportInfo.limits)})`);
+              this.appendBuffer(` (memory ${memoryName} `);
+              if (memoryImportInfo.shared) {
+                this.appendBuffer(`(shared ${limitsToString(memoryImportInfo.limits)})`);
+              } else {
+                this.appendBuffer(limitsToString(memoryImportInfo.limits));
+              }
+              this.appendBuffer(')');
               break;
             case ExternalKind.Global:
               var globalImportInfo = <IGlobalType>importInfo.type;

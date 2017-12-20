@@ -659,6 +659,72 @@ export class Emitter {
       case OperatorCode.i64_store8:
       case OperatorCode.i64_store16:
       case OperatorCode.i64_store32:
+      case OperatorCode.atomic_wake:
+      case OperatorCode.i32_atomic_wait:
+      case OperatorCode.i64_atomic_wait:
+      case OperatorCode.i32_atomic_load:
+      case OperatorCode.i64_atomic_load:
+      case OperatorCode.i32_atomic_load8_u:
+      case OperatorCode.i32_atomic_load16_u:
+      case OperatorCode.i64_atomic_load8_u:
+      case OperatorCode.i64_atomic_load16_u:
+      case OperatorCode.i64_atomic_load32_u:
+      case OperatorCode.i32_atomic_store:
+      case OperatorCode.i64_atomic_store:
+      case OperatorCode.i32_atomic_store8:
+      case OperatorCode.i32_atomic_store16:
+      case OperatorCode.i64_atomic_store8:
+      case OperatorCode.i64_atomic_store16:
+      case OperatorCode.i64_atomic_store32:
+      case OperatorCode.i32_atomic_rmw_add:
+      case OperatorCode.i64_atomic_rmw_add:
+      case OperatorCode.i32_atomic_rmw8_u_add:
+      case OperatorCode.i32_atomic_rmw16_u_add:
+      case OperatorCode.i64_atomic_rmw8_u_add:
+      case OperatorCode.i64_atomic_rmw16_u_add:
+      case OperatorCode.i64_atomic_rmw32_u_add:
+      case OperatorCode.i32_atomic_rmw_sub:
+      case OperatorCode.i64_atomic_rmw_sub:
+      case OperatorCode.i32_atomic_rmw8_u_sub:
+      case OperatorCode.i32_atomic_rmw16_u_sub:
+      case OperatorCode.i64_atomic_rmw8_u_sub:
+      case OperatorCode.i64_atomic_rmw16_u_sub:
+      case OperatorCode.i64_atomic_rmw32_u_sub:
+      case OperatorCode.i32_atomic_rmw_and:
+      case OperatorCode.i64_atomic_rmw_and:
+      case OperatorCode.i32_atomic_rmw8_u_and:
+      case OperatorCode.i32_atomic_rmw16_u_and:
+      case OperatorCode.i64_atomic_rmw8_u_and:
+      case OperatorCode.i64_atomic_rmw16_u_and:
+      case OperatorCode.i64_atomic_rmw32_u_and:
+      case OperatorCode.i32_atomic_rmw_or:
+      case OperatorCode.i64_atomic_rmw_or:
+      case OperatorCode.i32_atomic_rmw8_u_or:
+      case OperatorCode.i32_atomic_rmw16_u_or:
+      case OperatorCode.i64_atomic_rmw8_u_or:
+      case OperatorCode.i64_atomic_rmw16_u_or:
+      case OperatorCode.i64_atomic_rmw32_u_or:
+      case OperatorCode.i32_atomic_rmw_xor:
+      case OperatorCode.i64_atomic_rmw_xor:
+      case OperatorCode.i32_atomic_rmw8_u_xor:
+      case OperatorCode.i32_atomic_rmw16_u_xor:
+      case OperatorCode.i64_atomic_rmw8_u_xor:
+      case OperatorCode.i64_atomic_rmw16_u_xor:
+      case OperatorCode.i64_atomic_rmw32_u_xor:
+      case OperatorCode.i32_atomic_rmw_xchg:
+      case OperatorCode.i64_atomic_rmw_xchg:
+      case OperatorCode.i32_atomic_rmw8_u_xchg:
+      case OperatorCode.i32_atomic_rmw16_u_xchg:
+      case OperatorCode.i64_atomic_rmw8_u_xchg:
+      case OperatorCode.i64_atomic_rmw16_u_xchg:
+      case OperatorCode.i64_atomic_rmw32_u_xchg:
+      case OperatorCode.i32_atomic_rmw_cmpxchg:
+      case OperatorCode.i64_atomic_rmw_cmpxchg:
+      case OperatorCode.i32_atomic_rmw8_u_cmpxchg:
+      case OperatorCode.i32_atomic_rmw16_u_cmpxchg:
+      case OperatorCode.i64_atomic_rmw8_u_cmpxchg:
+      case OperatorCode.i64_atomic_rmw16_u_cmpxchg:
+      case OperatorCode.i64_atomic_rmw32_u_cmpxchg:
         this.writeMemoryImmediate(opInfo.memoryAddress);
         break;
       case OperatorCode.current_memory:

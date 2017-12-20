@@ -1,6 +1,6 @@
 {
   "name": "wasmparser",
-  "version": "0.4.11",
+  "version": "0.5.0",
   "description": "Binary WebAssembly file parser.",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",

@@ -1,0 +1,39 @@
+(module
+  (type $type0 (func (param i32) (result i32)))
+  (type $type1 (func (param i32)))
+  (import "env" "memory" (memory (;0;) (shared 1 1)))
+  (export "tryLockMutex" (func $func0))
+  (export "lockMutex" (func $func1))
+  (export "unlockMutex" (func $func2))
+  (func $func0 (param $var0 i32) (result i32)
+    get_local $var0
+    i32.const 0
+    i32.const 1
+    i32.atomic.rmw.cmpxchg
+    i32.eqz
+  )
+  (func $func1 (param $var0 i32)
+    block $label0
+      loop $label1
+        get_local $var0
+        call $func0
+        br_if $label0
+        get_local $var0
+        i32.const 1
+        i64.const -1
+        i32.atomic.wait
+        drop
+        br $label1
+      end $label1
+    end $label0
+  )
+  (func $func2 (param $var0 i32)
+    get_local $var0
+    i32.const 0
+    i32.atomic.store
+    get_local $var0
+    i32.const 1
+    atomic.wake
+    drop
+  )
+)

@@ -204,11 +204,90 @@ export const enum OperatorCode {
   i64_reinterpret_f64 = 0xbd,
   f32_reinterpret_i32 = 0xbe,
   f64_reinterpret_i64 = 0xbf,
+
+  i32_extend8_s = 0xc0,
+  i32_extend16_s = 0xc1,
+  i64_extend8_s = 0xc2,
+  i64_extend16_s = 0xc3,
+  i64_extend32_s = 0xc4,
+
+  prefix_0xfe = 0xfe,
+
+  atomic_wake = 0xfe00,
+  i32_atomic_wait = 0xfe01,
+  i64_atomic_wait = 0xfe02,
+  i32_atomic_load = 0xfe10,
+  i64_atomic_load = 0xfe11,
+  i32_atomic_load8_u = 0xfe12,
+  i32_atomic_load16_u = 0xfe13,
+  i64_atomic_load8_u = 0xfe14,
+  i64_atomic_load16_u = 0xfe15,
+  i64_atomic_load32_u = 0xfe16,
+  i32_atomic_store = 0xfe17,
+  i64_atomic_store = 0xfe18,
+  i32_atomic_store8 = 0xfe19,
+  i32_atomic_store16 = 0xfe1a,
+  i64_atomic_store8 = 0xfe1b,
+  i64_atomic_store16 = 0xfe1c,
+  i64_atomic_store32 = 0xfe1d,
+  i32_atomic_rmw_add = 0xfe1e,
+  i64_atomic_rmw_add = 0xfe1f,
+  i32_atomic_rmw8_u_add = 0xfe20,
+  i32_atomic_rmw16_u_add = 0xfe21,
+  i64_atomic_rmw8_u_add = 0xfe22,
+  i64_atomic_rmw16_u_add = 0xfe23,
+  i64_atomic_rmw32_u_add = 0xfe24,
+  i32_atomic_rmw_sub = 0xfe25,
+  i64_atomic_rmw_sub = 0xfe26,
+  i32_atomic_rmw8_u_sub = 0xfe27,
+  i32_atomic_rmw16_u_sub = 0xfe28,
+  i64_atomic_rmw8_u_sub = 0xfe29,
+  i64_atomic_rmw16_u_sub = 0xfe2a,
+  i64_atomic_rmw32_u_sub = 0xfe2b,
+  i32_atomic_rmw_and = 0xfe2c,
+  i64_atomic_rmw_and = 0xfe2d,
+  i32_atomic_rmw8_u_and = 0xfe2e,
+  i32_atomic_rmw16_u_and = 0xfe2f,
+  i64_atomic_rmw8_u_and = 0xfe30,
+  i64_atomic_rmw16_u_and = 0xfe31,
+  i64_atomic_rmw32_u_and = 0xfe32,
+  i32_atomic_rmw_or = 0xfe33,
+  i64_atomic_rmw_or = 0xfe34,
+  i32_atomic_rmw8_u_or = 0xfe35,
+  i32_atomic_rmw16_u_or = 0xfe36,
+  i64_atomic_rmw8_u_or = 0xfe37,
+  i64_atomic_rmw16_u_or = 0xfe38,
+  i64_atomic_rmw32_u_or = 0xfe39,
+  i32_atomic_rmw_xor = 0xfe3a,
+  i64_atomic_rmw_xor = 0xfe3b,
+  i32_atomic_rmw8_u_xor = 0xfe3c,
+  i32_atomic_rmw16_u_xor = 0xfe3d,
+  i64_atomic_rmw8_u_xor = 0xfe3e,
+  i64_atomic_rmw16_u_xor = 0xfe3f,
+  i64_atomic_rmw32_u_xor = 0xfe40,
+  i32_atomic_rmw_xchg = 0xfe41,
+  i64_atomic_rmw_xchg = 0xfe42,
+  i32_atomic_rmw8_u_xchg = 0xfe43,
+  i32_atomic_rmw16_u_xchg = 0xfe44,
+  i64_atomic_rmw8_u_xchg = 0xfe45,
+  i64_atomic_rmw16_u_xchg = 0xfe46,
+  i64_atomic_rmw32_u_xchg = 0xfe47,
+  i32_atomic_rmw_cmpxchg = 0xfe48,
+  i64_atomic_rmw_cmpxchg = 0xfe49,
+  i32_atomic_rmw8_u_cmpxchg = 0xfe4a,
+  i32_atomic_rmw16_u_cmpxchg = 0xfe4b,
+  i64_atomic_rmw8_u_cmpxchg = 0xfe4c,
+  i64_atomic_rmw16_u_cmpxchg = 0xfe4d,
+  i64_atomic_rmw32_u_cmpxchg = 0xfe4e,
 };
 
 export const OperatorCodeNames = [
-  "unreachable", "nop", "block", "loop", "if", "else", undefined, undefined, undefined, undefined, undefined, "end", "br", "br_if", "br_table", "return", "call", "call_indirect", undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, "drop", "select", undefined, undefined, undefined, undefined, "get_local", "set_local", "tee_local", "get_global", "set_global", undefined, undefined, undefined, "i32.load", "i64.load", "f32.load", "f64.load", "i32.load8_s", "i32.load8_u", "i32.load16_s", "i32.load16_u", "i64.load8_s", "i64.load8_u", "i64.load16_s", "i64.load16_u", "i64.load32_s", "i64.load32_u", "i32.store", "i64.store", "f32.store", "f64.store", "i32.store8", "i32.store16", "i64.store8", "i64.store16", "i64.store32", "current_memory", "grow_memory", "i32.const", "i64.const", "f32.const", "f64.const", "i32.eqz", "i32.eq", "i32.ne", "i32.lt_s", "i32.lt_u", "i32.gt_s", "i32.gt_u", "i32.le_s", "i32.le_u", "i32.ge_s", "i32.ge_u", "i64.eqz", "i64.eq", "i64.ne", "i64.lt_s", "i64.lt_u", "i64.gt_s", "i64.gt_u", "i64.le_s", "i64.le_u", "i64.ge_s", "i64.ge_u", "f32.eq", "f32.ne", "f32.lt", "f32.gt", "f32.le", "f32.ge", "f64.eq", "f64.ne", "f64.lt", "f64.gt", "f64.le", "f64.ge", "i32.clz", "i32.ctz", "i32.popcnt", "i32.add", "i32.sub", "i32.mul", "i32.div_s", "i32.div_u", "i32.rem_s", "i32.rem_u", "i32.and", "i32.or", "i32.xor", "i32.shl", "i32.shr_s", "i32.shr_u", "i32.rotl", "i32.rotr", "i64.clz", "i64.ctz", "i64.popcnt", "i64.add", "i64.sub", "i64.mul", "i64.div_s", "i64.div_u", "i64.rem_s", "i64.rem_u", "i64.and", "i64.or", "i64.xor", "i64.shl", "i64.shr_s", "i64.shr_u", "i64.rotl", "i64.rotr", "f32.abs", "f32.neg", "f32.ceil", "f32.floor", "f32.trunc", "f32.nearest", "f32.sqrt", "f32.add", "f32.sub", "f32.mul", "f32.div", "f32.min", "f32.max", "f32.copysign", "f64.abs", "f64.neg", "f64.ceil", "f64.floor", "f64.trunc", "f64.nearest", "f64.sqrt", "f64.add", "f64.sub", "f64.mul", "f64.div", "f64.min", "f64.max", "f64.copysign", "i32.wrap/i64", "i32.trunc_s/f32", "i32.trunc_u/f32", "i32.trunc_s/f64", "i32.trunc_u/f64", "i64.extend_s/i32", "i64.extend_u/i32", "i64.trunc_s/f32", "i64.trunc_u/f32", "i64.trunc_s/f64", "i64.trunc_u/f64", "f32.convert_s/i32", "f32.convert_u/i32", "f32.convert_s/i64", "f32.convert_u/i64", "f32.demote/f64", "f64.convert_s/i32", "f64.convert_u/i32", "f64.convert_s/i64", "f64.convert_u/i64", "f64.promote/f32", "i32.reinterpret/f32", "i64.reinterpret/f64", "f32.reinterpret/i32", "f64.reinterpret/i64", undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined
+  "unreachable", "nop", "block", "loop", "if", "else", undefined, undefined, undefined, undefined, undefined, "end", "br", "br_if", "br_table", "return", "call", "call_indirect", undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, "drop", "select", undefined, undefined, undefined, undefined, "get_local", "set_local", "tee_local", "get_global", "set_global", undefined, undefined, undefined, "i32.load", "i64.load", "f32.load", "f64.load", "i32.load8_s", "i32.load8_u", "i32.load16_s", "i32.load16_u", "i64.load8_s", "i64.load8_u", "i64.load16_s", "i64.load16_u", "i64.load32_s", "i64.load32_u", "i32.store", "i64.store", "f32.store", "f64.store", "i32.store8", "i32.store16", "i64.store8", "i64.store16", "i64.store32", "current_memory", "grow_memory", "i32.const", "i64.const", "f32.const", "f64.const", "i32.eqz", "i32.eq", "i32.ne", "i32.lt_s", "i32.lt_u", "i32.gt_s", "i32.gt_u", "i32.le_s", "i32.le_u", "i32.ge_s", "i32.ge_u", "i64.eqz", "i64.eq", "i64.ne", "i64.lt_s", "i64.lt_u", "i64.gt_s", "i64.gt_u", "i64.le_s", "i64.le_u", "i64.ge_s", "i64.ge_u", "f32.eq", "f32.ne", "f32.lt", "f32.gt", "f32.le", "f32.ge", "f64.eq", "f64.ne", "f64.lt", "f64.gt", "f64.le", "f64.ge", "i32.clz", "i32.ctz", "i32.popcnt", "i32.add", "i32.sub", "i32.mul", "i32.div_s", "i32.div_u", "i32.rem_s", "i32.rem_u", "i32.and", "i32.or", "i32.xor", "i32.shl", "i32.shr_s", "i32.shr_u", "i32.rotl", "i32.rotr", "i64.clz", "i64.ctz", "i64.popcnt", "i64.add", "i64.sub", "i64.mul", "i64.div_s", "i64.div_u", "i64.rem_s", "i64.rem_u", "i64.and", "i64.or", "i64.xor", "i64.shl", "i64.shr_s", "i64.shr_u", "i64.rotl", "i64.rotr", "f32.abs", "f32.neg", "f32.ceil", "f32.floor", "f32.trunc", "f32.nearest", "f32.sqrt", "f32.add", "f32.sub", "f32.mul", "f32.div", "f32.min", "f32.max", "f32.copysign", "f64.abs", "f64.neg", "f64.ceil", "f64.floor", "f64.trunc", "f64.nearest", "f64.sqrt", "f64.add", "f64.sub", "f64.mul", "f64.div", "f64.min", "f64.max", "f64.copysign", "i32.wrap/i64", "i32.trunc_s/f32", "i32.trunc_u/f32", "i32.trunc_s/f64", "i32.trunc_u/f64", "i64.extend_s/i32", "i64.extend_u/i32", "i64.trunc_s/f32", "i64.trunc_u/f32", "i64.trunc_s/f64", "i64.trunc_u/f64", "f32.convert_s/i32", "f32.convert_u/i32", "f32.convert_s/i64", "f32.convert_u/i64", "f32.demote/f64", "f64.convert_s/i32", "f64.convert_u/i32", "f64.convert_s/i64", "f64.convert_u/i64", "f64.promote/f32", "i32.reinterpret/f32", "i64.reinterpret/f64", "f32.reinterpret/i32", "f64.reinterpret/i64", "i32.extend8_s", "i32.extend16_s", "i64.extend8_s", "i64.extend16_s", "i64.extend32_s", undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined
 ];
+
+["atomic.wake", "i32.atomic.wait", "i64.atomic.wait", undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, "i32.atomic.load", "i64.atomic.load", "i32.atomic.load8_u", "i32.atomic.load16_u", "i64.atomic.load8_u", "i64.atomic.load16_u", "i64.atomic.load32_u", "i32.atomic.store", "i64.atomic.store", "i32.atomic.store8", "i32.atomic.store16", "i64.atomic.store8", "i64.atomic.store16", "i64.atomic.store32", "i32.atomic.rmw.add", "i64.atomic.rmw.add", "i32.atomic.rmw8_u.add", "i32.atomic.rmw16_u.add", "i64.atomic.rmw8_u.add", "i64.atomic.rmw16_u.add", "i64.atomic.rmw32_u.add", "i32.atomic.rmw.sub", "i64.atomic.rmw.sub", "i32.atomic.rmw8_u.sub", "i32.atomic.rmw16_u.sub", "i64.atomic.rmw8_u.sub", "i64.atomic.rmw16_u.sub", "i64.atomic.rmw32_u.sub", "i32.atomic.rmw.and", "i64.atomic.rmw.and", "i32.atomic.rmw8_u.and", "i32.atomic.rmw16_u.and", "i64.atomic.rmw8_u.and", "i64.atomic.rmw16_u.and", "i64.atomic.rmw32_u.and", "i32.atomic.rmw.or", "i64.atomic.rmw.or", "i32.atomic.rmw8_u.or", "i32.atomic.rmw16_u.or", "i64.atomic.rmw8_u.or", "i64.atomic.rmw16_u.or", "i64.atomic.rmw32_u.or", "i32.atomic.rmw.xor", "i64.atomic.rmw.xor", "i32.atomic.rmw8_u.xor", "i32.atomic.rmw16_u.xor", "i64.atomic.rmw8_u.xor", "i64.atomic.rmw16_u.xor", "i64.atomic.rmw32_u.xor", "i32.atomic.rmw.xchg", "i64.atomic.rmw.xchg", "i32.atomic.rmw8_u.xchg", "i32.atomic.rmw16_u.xchg", "i64.atomic.rmw8_u.xchg", "i64.atomic.rmw16_u.xchg", "i64.atomic.rmw32_u.xchg", "i32.atomic.rmw.cmpxchg", "i64.atomic.rmw.cmpxchg", "i32.atomic.rmw8_u.cmpxchg", "i32.atomic.rmw16_u.cmpxchg", "i64.atomic.rmw8_u.cmpxchg", "i64.atomic.rmw16_u.cmpxchg", "i64.atomic.rmw32_u.cmpxchg"].forEach((s, i) => {
+  OperatorCodeNames[0xfe00 | i] = s;
+});
 
 export const enum ExternalKind {
   Function = 0,
@@ -310,7 +389,6 @@ export interface IModuleHeader {
   version: number;
 }
 export interface IResizableLimits {
-  flags: number;
   initial: number;
   maximum?: number;
 }
@@ -320,6 +398,7 @@ export interface ITableType {
 }
 export interface IMemoryType {
   limits: IResizableLimits;
+  shared: boolean;
 }
 export interface IGlobalType {
   contentType: number;
@@ -652,22 +731,24 @@ export class BinaryReader {
       returns: returnTypes
     };
   }
-  private readResizableLimits(): IResizableLimits {
-    var flags = this.readVarUint32() >>> 0;
+  private readResizableLimits(maxPresent: boolean): IResizableLimits {
     var initial = this.readVarUint32() >>> 0;
     var maximum;
-    if (flags & 0x1) {
+    if (maxPresent) {
       maximum = this.readVarUint32() >>> 0;
     }
-    return { flags: flags, initial: initial, maximum: maximum };
+    return { initial: initial, maximum: maximum };
   }
   private readTableType() : ITableType{
     var elementType = this.readVarInt7();
-    var limits = this.readResizableLimits();
+    var flags = this.readVarUint32() >>> 0;
+    var limits = this.readResizableLimits(!!(flags & 0x01));
     return { elementType: elementType, limits: limits };
   }
   private readMemoryType(): IMemoryType {
-    return { limits: this.readResizableLimits() };
+    var flags = this.readVarUint32() >>> 0;
+    var shared = !!(flags & 0x02);
+    return { limits: this.readResizableLimits(!!(flags & 0x01)), shared: shared };
   }
   private readGlobalType(): IGlobalType {
     if (!this.hasVarIntBytes()) {
@@ -1035,6 +1116,96 @@ export class BinaryReader {
     this._sectionEntriesLeft--;
     return true;
   }
+
+  private readCodeOperator_0xfe(): boolean {
+    const MAX_CODE_OPERATOR_0XFE_SIZE = 11;
+    var pos = this._pos;
+    if (!this._eof && pos + MAX_CODE_OPERATOR_0XFE_SIZE > this._length) {
+      return false;
+    }
+    var code = this._data[this._pos++] | 0xfe00;
+    var memoryAddress;
+    switch (code) {
+      case OperatorCode.atomic_wake:
+      case OperatorCode.i32_atomic_wait:
+      case OperatorCode.i64_atomic_wait:
+      case OperatorCode.i32_atomic_load:
+      case OperatorCode.i64_atomic_load:
+      case OperatorCode.i32_atomic_load8_u:
+      case OperatorCode.i32_atomic_load16_u:
+      case OperatorCode.i64_atomic_load8_u:
+      case OperatorCode.i64_atomic_load16_u:
+      case OperatorCode.i64_atomic_load32_u:
+      case OperatorCode.i32_atomic_store:
+      case OperatorCode.i64_atomic_store:
+      case OperatorCode.i32_atomic_store8:
+      case OperatorCode.i32_atomic_store16:
+      case OperatorCode.i64_atomic_store8:
+      case OperatorCode.i64_atomic_store16:
+      case OperatorCode.i64_atomic_store32:
+      case OperatorCode.i32_atomic_rmw_add:
+      case OperatorCode.i64_atomic_rmw_add:
+      case OperatorCode.i32_atomic_rmw8_u_add:
+      case OperatorCode.i32_atomic_rmw16_u_add:
+      case OperatorCode.i64_atomic_rmw8_u_add:
+      case OperatorCode.i64_atomic_rmw16_u_add:
+      case OperatorCode.i64_atomic_rmw32_u_add:
+      case OperatorCode.i32_atomic_rmw_sub:
+      case OperatorCode.i64_atomic_rmw_sub:
+      case OperatorCode.i32_atomic_rmw8_u_sub:
+      case OperatorCode.i32_atomic_rmw16_u_sub:
+      case OperatorCode.i64_atomic_rmw8_u_sub:
+      case OperatorCode.i64_atomic_rmw16_u_sub:
+      case OperatorCode.i64_atomic_rmw32_u_sub:
+      case OperatorCode.i32_atomic_rmw_and:
+      case OperatorCode.i64_atomic_rmw_and:
+      case OperatorCode.i32_atomic_rmw8_u_and:
+      case OperatorCode.i32_atomic_rmw16_u_and:
+      case OperatorCode.i64_atomic_rmw8_u_and:
+      case OperatorCode.i64_atomic_rmw16_u_and:
+      case OperatorCode.i64_atomic_rmw32_u_and:
+      case OperatorCode.i32_atomic_rmw_or:
+      case OperatorCode.i64_atomic_rmw_or:
+      case OperatorCode.i32_atomic_rmw8_u_or:
+      case OperatorCode.i32_atomic_rmw16_u_or:
+      case OperatorCode.i64_atomic_rmw8_u_or:
+      case OperatorCode.i64_atomic_rmw16_u_or:
+      case OperatorCode.i64_atomic_rmw32_u_or:
+      case OperatorCode.i32_atomic_rmw_xor:
+      case OperatorCode.i64_atomic_rmw_xor:
+      case OperatorCode.i32_atomic_rmw8_u_xor:
+      case OperatorCode.i32_atomic_rmw16_u_xor:
+      case OperatorCode.i64_atomic_rmw8_u_xor:
+      case OperatorCode.i64_atomic_rmw16_u_xor:
+      case OperatorCode.i64_atomic_rmw32_u_xor:
+      case OperatorCode.i32_atomic_rmw_xchg:
+      case OperatorCode.i64_atomic_rmw_xchg:
+      case OperatorCode.i32_atomic_rmw8_u_xchg:
+      case OperatorCode.i32_atomic_rmw16_u_xchg:
+      case OperatorCode.i64_atomic_rmw8_u_xchg:
+      case OperatorCode.i64_atomic_rmw16_u_xchg:
+      case OperatorCode.i64_atomic_rmw32_u_xchg:
+      case OperatorCode.i32_atomic_rmw_cmpxchg:
+      case OperatorCode.i64_atomic_rmw_cmpxchg:
+      case OperatorCode.i32_atomic_rmw8_u_cmpxchg:
+      case OperatorCode.i32_atomic_rmw16_u_cmpxchg:
+      case OperatorCode.i64_atomic_rmw8_u_cmpxchg:
+      case OperatorCode.i64_atomic_rmw16_u_cmpxchg:
+      case OperatorCode.i64_atomic_rmw32_u_cmpxchg:
+        memoryAddress = this.readMemoryImmediate();
+        break;
+      default:
+        this.error = new Error(`Unknown operator: ${code}`);
+        this.state = BinaryReaderState.ERROR;
+        return true;
+    }
+    this.result = { code: code,
+      blockType: undefined, brDepth: undefined, brTable: undefined,
+      funcIndex: undefined, typeIndex: undefined, localIndex: undefined,
+      globalIndex: undefined, memoryAddress: memoryAddress, literal: undefined};
+    return true;
+  }
+
   private readCodeOperator(): boolean {
     if (this.state === BinaryReaderState.CODE_OPERATOR &&
         this._pos >= this._functionRange.end) {
@@ -1140,6 +1311,16 @@ export class BinaryReader {
         literal = new DataView(this._data.buffer, this._data.byteOffset).getFloat64(this._pos, true);
         this._pos += 8;
         break;
+      case OperatorCode.prefix_0xfe:
+        if (this.readCodeOperator_0xfe()) {
+          return true;
+        }
+        this._pos = pos;
+        return false;
+      // default:
+      //   this.error = new Error(`Unknown operator: ${code}`);
+      //   this.state = BinaryReaderState.ERROR;
+      //   return true;
     }
     this.result = { code: code,
       blockType: blockType, brDepth: brDepth, brTable: brTable,
