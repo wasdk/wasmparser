@@ -601,7 +601,12 @@ export class Emitter {
 
   public writeOperator(opInfo: IOperatorInformation): void {
     this.ensureEitherState([EmitterState.FunctionBody, EmitterState.InitExpression]);
-    this.writeByte(opInfo.code);
+    if (opInfo.code < 0x100) {
+      this.writeByte(opInfo.code);
+    } else {
+      this.writeByte(opInfo.code >> 8);
+      this.writeByte(opInfo.code & 255);
+    }
     this._endWritten = opInfo.code == OperatorCode.end;
     switch (opInfo.code) {
       case OperatorCode.block:
