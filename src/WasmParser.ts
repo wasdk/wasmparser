@@ -1865,7 +1865,7 @@ declare class TextDecoder {
   public decode(bytes: Uint8Array): string;
 }
 
-export var bytesToString: (Uint8Array) => string;
+export var bytesToString: (bytes: Uint8Array) => string;
 if (typeof TextDecoder !== 'undefined') {
   try {
     bytesToString = function () {
