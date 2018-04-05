@@ -18,7 +18,7 @@ import {
   IImportEntry, IOperatorInformation, Type, OperatorCode, OperatorCodeNames, Int64,
   ITableType, IMemoryType, IGlobalType, IResizableLimits, IDataSegmentBody,
   IGlobalVariable, IElementSegment, IElementSegmentBody, ISectionInformation,
-  IStartEntry
+  IStartEntry, bytesToString, INameEntry, NameType, IFunctionNameEntry, INaming
 } from './WasmParser';
 function typeToString(type: number): string {
   switch (type) {
@@ -999,5 +999,132 @@ export class WasmDisassembler {
           throw new Error(`Expectected state: ${reader.state}`);
       }
     }
+  }
+}
+
+const UNKNOWN_FUNCTION_PREFIX = "unknown";
+
+class NameSectionNameResolver extends DefaultNameResolver {
+  private _names: string[];
+
+  constructor(names: string[]) {
+    super();
+    this._names = names;
+  }
+
+  getFunctionName(index: number, isImport: boolean, isRef: boolean): string {
+    const name = this._names[index];
+    if (!name)
+      return `$${UNKNOWN_FUNCTION_PREFIX}${index}`;
+    return isRef ? `$${name}` : `$${name} (;${index};)`;
+  }
+}
+
+export class NameSectionReader {
+  private _done: boolean;
+  private _functionsCount: number;
+  private _functionImportsCount: number;
+  private _functionNames: string[];
+  private _hasNames: boolean;
+
+  constructor() {
+    this._done = false;
+    this._functionsCount = 0;
+    this._functionImportsCount = 0;
+    this._functionNames = null;
+    this._hasNames = false;
+  }
+
+  public read(reader: BinaryReader): boolean {
+    if (this._done)
+      throw new Error('Invalid state: disassembly process was already finished.')
+    while (true) {
+      if (!reader.read())
+        return false;
+      switch (reader.state) {
+        case BinaryReaderState.END_WASM:
+          if (!reader.hasMoreBytes()) {
+            this._done = true;
+            return true;
+          }
+          break;
+        case BinaryReaderState.ERROR:
+          throw reader.error;
+        case BinaryReaderState.BEGIN_WASM:
+          this._functionsCount = 0;
+          this._functionImportsCount = 0;
+          this._functionNames = [];
+          this._hasNames = false;
+          break;
+        case BinaryReaderState.END_SECTION:
+          break;
+        case BinaryReaderState.BEGIN_SECTION:
+          var sectionInfo = <ISectionInformation>reader.result;
+          if (sectionInfo.id === SectionCode.Custom &&
+              bytesToString(sectionInfo.name) === "name") {
+            break;
+          }
+          if (sectionInfo.id === SectionCode.Function ||
+              sectionInfo.id === SectionCode.Import) {
+            break;
+          }
+          reader.skipSection();
+          break;
+        case BinaryReaderState.IMPORT_SECTION_ENTRY:
+          var importInfo = <IImportEntry>reader.result;
+          if (importInfo.kind === ExternalKind.Function)
+            this._functionImportsCount++;
+          break;
+        case BinaryReaderState.FUNCTION_SECTION_ENTRY:
+          this._functionsCount++;
+          break;
+        case BinaryReaderState.NAME_SECTION_ENTRY:
+          var nameInfo = <INameEntry>reader.result;
+          if (nameInfo.type !== NameType.Function)
+            break;
+          var functionNameInfo = <IFunctionNameEntry>nameInfo;
+          functionNameInfo.names.forEach((naming: INaming) => {
+            this._functionNames[naming.index] = bytesToString(naming.name);
+          });
+          this._hasNames = true;
+          break;
+        default:
+          throw new Error(`Expectected state: ${reader.state}`);
+      }
+    }
+  }
+
+  public hasValidNames(): boolean {
+    return this._hasNames;
+  }
+
+  public getNameResolver(): INameResolver {
+    if (!this.hasValidNames())
+      throw new Error("Has no valid name section");
+
+    // Fix bad names.
+    const functionNamesLength = this._functionImportsCount + this._functionsCount;
+    const functionNames = this._functionNames.slice(0, functionNamesLength);
+    const usedNameAt = Object.create(null);
+    for (let i = 0; i < functionNames.length; i++) {
+      const name = functionNames[i];
+      if (!name)
+        continue;
+      const goodName = !(name in usedNameAt) &&
+                       !/[^0-9A-Za-z!#$%&'*+.:<=>?@^_`|~\/\-]/.test(name) &&
+                       name.indexOf(UNKNOWN_FUNCTION_PREFIX) !== 0;
+      if (!goodName) {
+        if (usedNameAt[name] >= 0) {
+          // Remove all non-unique names.
+          functionNames[usedNameAt[name]] = null;
+          usedNameAt[name] = -1;
+        }
+        functionNames[i] = null;
+        continue;
+      }
+      usedNameAt[name] = i;
+    }
+
+    return new NameSectionNameResolver(functionNames);
   }
 }

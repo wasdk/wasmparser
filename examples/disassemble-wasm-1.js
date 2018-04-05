@@ -31,8 +31,6 @@ dis.addOffsets = true;
 
 // Buffer to hold pending data.
 var buffer = new Uint8Array(1);
-var ensureBufferSize = function (size) {
-};
 var pendingSize = 0;
 var offsetInModule = 0;
 for (var i = 0; i < data.length;i++) {
