@@ -968,7 +968,9 @@ export class WasmDisassembler {
         case BinaryReaderState.CODE_OPERATOR:
           var operator = <IOperatorInformation>reader.result;
           if (operator.code == OperatorCode.end && this._indentLevel == 0) {
-            // reached of the function, skipping the operator
+            // reached of the function, closing function body
+            this.appendBuffer(`  )`);
+            this.newLine();
             break;
           }
           switch (operator.code) {
@@ -992,8 +994,7 @@ export class WasmDisassembler {
         case BinaryReaderState.END_FUNCTION_BODY:
           this._funcIndex++;
           this._backrefLabels = null;
-          this.appendBuffer(`  )`);
-          this.newLine();
+          // See case BinaryReaderState.CODE_OPERATOR for closing of body
           break;
         default:
           throw new Error(`Expectected state: ${reader.state}`);
