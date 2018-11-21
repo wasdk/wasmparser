@@ -70,7 +70,7 @@
     return
   )
   (func $func11 (result i64)
-    i64.const 913028331277281900
+    i64.const 913028331277281902
     return
   )
   (func $func12 (result i64)
@@ -78,23 +78,23 @@
     return
   )
   (func $func13 (result i64)
-    i64.const 9223372036854776000
+    i64.const 9223372036854775807
     return
   )
   (func $func14 (result i64)
-    i64.const -9223372036854776000
+    i64.const -9223372036854775807
     return
   )
   (func $func15 (result i64)
-    i64.const -9223372036854776000
+    i64.const -9223372036854775808
     return
   )
   (func $func16 (result i64)
-    i64.const -9223372036854776000
+    i64.const -9223372036854775808
     return
   )
   (func $func17 (result i64)
-    i64.const -9223372036854776000
+    i64.const -9223372036854775808
     i64.const 1
     i64.add
     return

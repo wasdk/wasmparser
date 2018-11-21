@@ -55,7 +55,7 @@
     f64.reinterpret/i64
     f64.div
     i64.reinterpret/f64
-    i64.const 9221120237041091000
+    i64.const 9221120237041090560
     i64.and
   )
   (func $func4 (param $var0 i64) (param $var1 i64) (result i64)
@@ -65,7 +65,7 @@
     f64.reinterpret/i64
     f64.div
     i64.reinterpret/f64
-    i64.const 9223372036854776000
+    i64.const 9223372036854775807
     i64.and
   )
   (func $func5 (param $var0 i64) (result i64)
@@ -134,7 +134,7 @@
     f64.const 0.0
     f64.sub
     i64.reinterpret/f64
-    i64.const 9221120237041091000
+    i64.const 9221120237041090560
     i64.and
   )
   (func $func13 (param $var0 i64) (result i64)
@@ -143,7 +143,7 @@
     f64.reinterpret/i64
     f64.sub
     i64.reinterpret/f64
-    i64.const 9221120237041091000
+    i64.const 9221120237041090560
     i64.and
   )
   (func $func14 (param $var0 i64) (result i64)
@@ -152,7 +152,7 @@
     f64.const 1
     f64.mul
     i64.reinterpret/f64
-    i64.const 9221120237041091000
+    i64.const 9221120237041090560
     i64.and
   )
   (func $func15 (param $var0 i64) (result i64)
@@ -161,7 +161,7 @@
     f64.reinterpret/i64
     f64.mul
     i64.reinterpret/f64
-    i64.const 9221120237041091000
+    i64.const 9221120237041090560
     i64.and
   )
   (func $func16 (param $var0 i64) (result i64)
@@ -170,7 +170,7 @@
     f64.const 1
     f64.div
     i64.reinterpret/f64
-    i64.const 9221120237041091000
+    i64.const 9221120237041090560
     i64.and
   )
   (func $func17 (param $var0 i64) (result i64)
@@ -179,7 +179,7 @@
     f64.const -1
     f64.div
     i64.reinterpret/f64
-    i64.const 9221120237041091000
+    i64.const 9221120237041090560
     i64.and
   )
   (func $func18 (param $var0 i32) (result i32)

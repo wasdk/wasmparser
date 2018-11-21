@@ -23,7 +23,7 @@
   )
   (func $func3
     i32.const 0
-    i64.const 9222246136947933000
+    i64.const 9222246136947933185
     i64.store
   )
   (func $func4

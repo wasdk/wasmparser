@@ -649,7 +649,7 @@ export class WasmDisassembler {
         this.appendBuffer(` ${(<number>operator.literal).toString()}`);
         break;
       case OperatorCode.i64_const:
-        this.appendBuffer(` ${(<Int64>operator.literal).toDouble()}`);
+        this.appendBuffer(` ${(<Int64>operator.literal).toString()}`);
         break;
       case OperatorCode.f32_const:
         this.appendBuffer(` ${formatFloat32(<number>operator.literal)}`);
