@@ -26,6 +26,7 @@ function typeToString(type: number): string {
     case Type.i64: return 'i64';
     case Type.f32: return 'f32';
     case Type.f64: return 'f64';
+    case Type.v128: return 'v128';
     case Type.anyfunc: return 'anyfunc';
     default: throw new Error('Unexpected type');
   }
@@ -69,9 +70,21 @@ function formatFloat64(n: number): string {
   return (data2 < 0 ? '-' : '+') + 'nan:0x' + payload.toString(16);
 }
 
+function formatI32Array(bytes, count) {
+  var dv = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+  var result = [];
+  for (var i = 0; i < count; i++)
+    result.push(`0x${formatHex(dv.getInt32(i << 2, true), 8)}`);
+  return result.join(' ');
+}
+
 function memoryAddressToString(address: IMemoryAddress, code: OperatorCode): string {
   var defaultAlignFlags;
   switch (code) {
+    case OperatorCode.v128_load:
+    case OperatorCode.v128_store:
+      defaultAlignFlags = 4;
+      break;
     case OperatorCode.i64_load:
     case OperatorCode.i64_store:
     case OperatorCode.f64_load:
@@ -186,7 +199,7 @@ function limitsToString(limits: IResizableLimits): string {
 }
 var paddingCache = ['0', '00', '000'];
 function formatHex(n: number, width?: number): string {
-  var s = n.toString(16).toUpperCase();
+  var s = (n >>> 0).toString(16).toUpperCase();
   if (width === undefined || s.length >= width)
     return s;
   var paddingIndex = width - s.length - 1;
@@ -636,6 +649,8 @@ export class WasmDisassembler {
       case OperatorCode.i64_atomic_rmw8_u_cmpxchg:
       case OperatorCode.i64_atomic_rmw16_u_cmpxchg:
       case OperatorCode.i64_atomic_rmw32_u_cmpxchg:
+      case OperatorCode.v128_load:
+      case OperatorCode.v128_store:
         var memoryAddress = memoryAddressToString(operator.memoryAddress, operator.code);
         if (memoryAddress !== null) {
           this.appendBuffer(' ');
@@ -657,7 +672,29 @@ export class WasmDisassembler {
       case OperatorCode.f64_const:
         this.appendBuffer(` ${formatFloat64(<number>operator.literal)}`);
         break;
-    }
+      case OperatorCode.v128_const:
+        this.appendBuffer(` i32 ${formatI32Array(operator.literal, 4)}`);
+        break;
+      case OperatorCode.v8x16_shuffle:
+        this.appendBuffer(` ${formatI32Array(operator.lines, 4)}`);
+        break;
+      case OperatorCode.i8x16_extract_lane_s:
+      case OperatorCode.i8x16_extract_lane_u:
+      case OperatorCode.i8x16_replace_lane:
+      case OperatorCode.i16x8_extract_lane_s:
+      case OperatorCode.i16x8_extract_lane_u:
+      case OperatorCode.i16x8_replace_lane:
+      case OperatorCode.i32x4_extract_lane:
+      case OperatorCode.i32x4_replace_lane:
+      case OperatorCode.f32x4_extract_lane:
+      case OperatorCode.f32x4_replace_lane:
+      case OperatorCode.i64x2_extract_lane:
+      case OperatorCode.i64x2_replace_lane:
+      case OperatorCode.f64x2_extract_lane:
+      case OperatorCode.f64x2_replace_lane:
+        this.appendBuffer(` ${operator.lineIndex}`);
+        break;
+      }
   }
   private printImportSource(info: IImportEntry): void {
     this.printString(info.module);
