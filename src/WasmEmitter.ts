@@ -730,6 +730,8 @@ export class Emitter {
       case OperatorCode.i64_atomic_rmw8_u_cmpxchg:
       case OperatorCode.i64_atomic_rmw16_u_cmpxchg:
       case OperatorCode.i64_atomic_rmw32_u_cmpxchg:
+      case OperatorCode.v128_load:
+      case OperatorCode.v128_store:
         this.writeMemoryImmediate(opInfo.memoryAddress);
         break;
       case OperatorCode.current_memory:
@@ -747,6 +749,28 @@ export class Emitter {
         break;
       case OperatorCode.f64_const:
         this.writeFloat64(<number>opInfo.literal);
+        break;
+      case OperatorCode.v128_const:
+        this.writeBytes(<Uint8Array>opInfo.literal, 0, 16);
+        break;
+      case OperatorCode.v8x16_shuffle:
+        this.writeBytes(opInfo.lines, 0, 16);
+        break;
+      case OperatorCode.i8x16_extract_lane_s:
+      case OperatorCode.i8x16_extract_lane_u:
+      case OperatorCode.i8x16_replace_lane:
+      case OperatorCode.i16x8_extract_lane_s:
+      case OperatorCode.i16x8_extract_lane_u:
+      case OperatorCode.i16x8_replace_lane:
+      case OperatorCode.i32x4_extract_lane:
+      case OperatorCode.i32x4_replace_lane:
+      case OperatorCode.f32x4_extract_lane:
+      case OperatorCode.f32x4_replace_lane:
+      case OperatorCode.i64x2_extract_lane:
+      case OperatorCode.i64x2_replace_lane:
+      case OperatorCode.f64x2_extract_lane:
+      case OperatorCode.f64x2_replace_lane:
+        this.writeByte(opInfo.lineIndex);
         break;
     }
   }
