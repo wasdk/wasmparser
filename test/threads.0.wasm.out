@@ -33,7 +33,7 @@
     i32.atomic.store
     get_local $var0
     i32.const 1
-    atomic.wake
+    atomic.notify
     drop
   )
 )

@@ -664,7 +664,7 @@ export class Emitter {
       case OperatorCode.i64_store8:
       case OperatorCode.i64_store16:
       case OperatorCode.i64_store32:
-      case OperatorCode.atomic_wake:
+      case OperatorCode.atomic_notify:
       case OperatorCode.i32_atomic_wait:
       case OperatorCode.i64_atomic_wait:
       case OperatorCode.i32_atomic_load:
