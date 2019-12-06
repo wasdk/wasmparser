@@ -1,0 +1,36 @@
+(module
+  (type $type0 (func))
+  (table $table0 0 anyfunc)
+  (memory $memory0 0)
+  (elem  anyfunc (ref.func $func0) (ref.null))
+  (elem  $func1)
+  (func $func0
+    i32.const 0
+    i32.const 0
+    i32.const 0
+    memory.init 0
+    data.drop 0
+    i32.const 0
+    i32.const 0
+    i32.const 0
+    memory.copy
+    i32.const 0
+    i32.const 0
+    i32.const 0
+    memory.fill
+    i32.const 0
+    i32.const 0
+    i32.const 0
+    table.init 0 $table0
+    elem.drop 0
+    i32.const 0
+    i32.const 0
+    i32.const 0
+    table.copy $table0 $table0
+  )
+  (func $func1
+  )
+  (data 
+    "hi"
+  )
+)

@@ -41,6 +41,7 @@ files.forEach(file => {
     } else {
       let outFileData = fs.readFileSync(outFile, 'utf8');
       if (out != outFileData) {
+        console.error(`Mismatched ${outFile}\n================\n${out}\n================`)
         failCount++;
       } else {
         passCount++;

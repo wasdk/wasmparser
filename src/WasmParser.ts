@@ -224,6 +224,25 @@ export const enum OperatorCode {
   i64_trunc_s_sat_f64 = 0xfc06,
   i64_trunc_u_sat_f64 = 0xfc07,
 
+  memory_init = 0xfc08,
+  data_drop = 0xfc09,
+  memory_copy = 0xfc0a,
+  memory_fill = 0xfc0b,
+  table_init = 0xfc0c,
+  elem_drop = 0xfc0d,
+  table_copy = 0xfc0e,
+
+  table_grow = 0xfc0f,
+  table_size = 0xfc10,
+  table_fill = 0xfc11,
+
+  table_get = 0x25,
+  table_set = 0x26,
+
+  ref_null = 0xd0,
+  ref_is_null = 0xd1,
+  ref_func = 0xd2,
+
   atomic_notify = 0xfe00,
   i32_atomic_wait = 0xfe01,
   i64_atomic_wait = 0xfe02,
@@ -434,10 +453,10 @@ export const enum OperatorCode {
 };
 
 export const OperatorCodeNames = [
-  "unreachable", "nop", "block", "loop", "if", "else", undefined, undefined, undefined, undefined, undefined, "end", "br", "br_if", "br_table", "return", "call", "call_indirect", undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, "drop", "select", undefined, undefined, undefined, undefined, "get_local", "set_local", "tee_local", "get_global", "set_global", undefined, undefined, undefined, "i32.load", "i64.load", "f32.load", "f64.load", "i32.load8_s", "i32.load8_u", "i32.load16_s", "i32.load16_u", "i64.load8_s", "i64.load8_u", "i64.load16_s", "i64.load16_u", "i64.load32_s", "i64.load32_u", "i32.store", "i64.store", "f32.store", "f64.store", "i32.store8", "i32.store16", "i64.store8", "i64.store16", "i64.store32", "current_memory", "grow_memory", "i32.const", "i64.const", "f32.const", "f64.const", "i32.eqz", "i32.eq", "i32.ne", "i32.lt_s", "i32.lt_u", "i32.gt_s", "i32.gt_u", "i32.le_s", "i32.le_u", "i32.ge_s", "i32.ge_u", "i64.eqz", "i64.eq", "i64.ne", "i64.lt_s", "i64.lt_u", "i64.gt_s", "i64.gt_u", "i64.le_s", "i64.le_u", "i64.ge_s", "i64.ge_u", "f32.eq", "f32.ne", "f32.lt", "f32.gt", "f32.le", "f32.ge", "f64.eq", "f64.ne", "f64.lt", "f64.gt", "f64.le", "f64.ge", "i32.clz", "i32.ctz", "i32.popcnt", "i32.add", "i32.sub", "i32.mul", "i32.div_s", "i32.div_u", "i32.rem_s", "i32.rem_u", "i32.and", "i32.or", "i32.xor", "i32.shl", "i32.shr_s", "i32.shr_u", "i32.rotl", "i32.rotr", "i64.clz", "i64.ctz", "i64.popcnt", "i64.add", "i64.sub", "i64.mul", "i64.div_s", "i64.div_u", "i64.rem_s", "i64.rem_u", "i64.and", "i64.or", "i64.xor", "i64.shl", "i64.shr_s", "i64.shr_u", "i64.rotl", "i64.rotr", "f32.abs", "f32.neg", "f32.ceil", "f32.floor", "f32.trunc", "f32.nearest", "f32.sqrt", "f32.add", "f32.sub", "f32.mul", "f32.div", "f32.min", "f32.max", "f32.copysign", "f64.abs", "f64.neg", "f64.ceil", "f64.floor", "f64.trunc", "f64.nearest", "f64.sqrt", "f64.add", "f64.sub", "f64.mul", "f64.div", "f64.min", "f64.max", "f64.copysign", "i32.wrap/i64", "i32.trunc_s/f32", "i32.trunc_u/f32", "i32.trunc_s/f64", "i32.trunc_u/f64", "i64.extend_s/i32", "i64.extend_u/i32", "i64.trunc_s/f32", "i64.trunc_u/f32", "i64.trunc_s/f64", "i64.trunc_u/f64", "f32.convert_s/i32", "f32.convert_u/i32", "f32.convert_s/i64", "f32.convert_u/i64", "f32.demote/f64", "f64.convert_s/i32", "f64.convert_u/i32", "f64.convert_s/i64", "f64.convert_u/i64", "f64.promote/f32", "i32.reinterpret/f32", "i64.reinterpret/f64", "f32.reinterpret/i32", "f64.reinterpret/i64", "i32.extend8_s", "i32.extend16_s", "i64.extend8_s", "i64.extend16_s", "i64.extend32_s", undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined
+  "unreachable", "nop", "block", "loop", "if", "else", undefined, undefined, undefined, undefined, undefined, "end", "br", "br_if", "br_table", "return", "call", "call_indirect", undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, "drop", "select", undefined, undefined, undefined, undefined, "get_local", "set_local", "tee_local", "get_global", "set_global", "get_table", "set_table", undefined, "i32.load", "i64.load", "f32.load", "f64.load", "i32.load8_s", "i32.load8_u", "i32.load16_s", "i32.load16_u", "i64.load8_s", "i64.load8_u", "i64.load16_s", "i64.load16_u", "i64.load32_s", "i64.load32_u", "i32.store", "i64.store", "f32.store", "f64.store", "i32.store8", "i32.store16", "i64.store8", "i64.store16", "i64.store32", "current_memory", "grow_memory", "i32.const", "i64.const", "f32.const", "f64.const", "i32.eqz", "i32.eq", "i32.ne", "i32.lt_s", "i32.lt_u", "i32.gt_s", "i32.gt_u", "i32.le_s", "i32.le_u", "i32.ge_s", "i32.ge_u", "i64.eqz", "i64.eq", "i64.ne", "i64.lt_s", "i64.lt_u", "i64.gt_s", "i64.gt_u", "i64.le_s", "i64.le_u", "i64.ge_s", "i64.ge_u", "f32.eq", "f32.ne", "f32.lt", "f32.gt", "f32.le", "f32.ge", "f64.eq", "f64.ne", "f64.lt", "f64.gt", "f64.le", "f64.ge", "i32.clz", "i32.ctz", "i32.popcnt", "i32.add", "i32.sub", "i32.mul", "i32.div_s", "i32.div_u", "i32.rem_s", "i32.rem_u", "i32.and", "i32.or", "i32.xor", "i32.shl", "i32.shr_s", "i32.shr_u", "i32.rotl", "i32.rotr", "i64.clz", "i64.ctz", "i64.popcnt", "i64.add", "i64.sub", "i64.mul", "i64.div_s", "i64.div_u", "i64.rem_s", "i64.rem_u", "i64.and", "i64.or", "i64.xor", "i64.shl", "i64.shr_s", "i64.shr_u", "i64.rotl", "i64.rotr", "f32.abs", "f32.neg", "f32.ceil", "f32.floor", "f32.trunc", "f32.nearest", "f32.sqrt", "f32.add", "f32.sub", "f32.mul", "f32.div", "f32.min", "f32.max", "f32.copysign", "f64.abs", "f64.neg", "f64.ceil", "f64.floor", "f64.trunc", "f64.nearest", "f64.sqrt", "f64.add", "f64.sub", "f64.mul", "f64.div", "f64.min", "f64.max", "f64.copysign", "i32.wrap/i64", "i32.trunc_s/f32", "i32.trunc_u/f32", "i32.trunc_s/f64", "i32.trunc_u/f64", "i64.extend_s/i32", "i64.extend_u/i32", "i64.trunc_s/f32", "i64.trunc_u/f32", "i64.trunc_s/f64", "i64.trunc_u/f64", "f32.convert_s/i32", "f32.convert_u/i32", "f32.convert_s/i64", "f32.convert_u/i64", "f32.demote/f64", "f64.convert_s/i32", "f64.convert_u/i32", "f64.convert_s/i64", "f64.convert_u/i64", "f64.promote/f32", "i32.reinterpret/f32", "i64.reinterpret/f64", "f32.reinterpret/i32", "f64.reinterpret/i64", "i32.extend8_s", "i32.extend16_s", "i64.extend8_s", "i64.extend16_s", "i64.extend32_s", undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, "ref.null", "ref.is_null", "ref.func", undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined
 ];
 
-["i32.trunc_s:sat/f32", "i32.trunc_u:sat/f32", "i32.trunc_s:sat/f64", "i32.trunc_u:sat/f64", "i64.trunc_s:sat/f32", "i64.trunc_u:sat/f32", "i64.trunc_s:sat/f64", "i64.trunc_u:sat/f64"].forEach((s, i) => { 
+["i32.trunc_s:sat/f32", "i32.trunc_u:sat/f32", "i32.trunc_s:sat/f64", "i32.trunc_u:sat/f64", "i64.trunc_s:sat/f32", "i64.trunc_u:sat/f32", "i64.trunc_s:sat/f64", "i64.trunc_u:sat/f64", "memory.init", "data.drop", "memory.copy", "memory.fill", "table.init", "elem.drop", "table.copy", "table.grow", "table.size", "table.fill"].forEach((s, i) => { 
   OperatorCodeNames[0xfc00 | i] = s;
 });
 
@@ -456,12 +475,14 @@ export const enum ExternalKind {
   Global = 3,
 }
 export const enum Type {
+  unspecified = 0,
   i32 = -0x01,
   i64 = -0x02,
   f32 = -0x03,
   f64 = -0x04,
   v128 = -0x05,
   anyfunc = -0x10,
+  anyref = -0x11,
   func = -0x20,
   empty_block_type = -0x40,
 }
@@ -533,6 +554,13 @@ export const enum BinaryReaderState {
 
   SOURCE_MAPPING_URL = 43,
 }
+export const enum SegmentFlags {
+  IsPassive = 1,
+  HasTableIndex = 2,
+  FunctionsAsElements = 4,
+}
+export const NULL_FUNCTION_INDEX = 0xFFFFFFFF;
+
 class DataRange {
   start: number;
   end: number;
@@ -573,6 +601,8 @@ export interface IElementSegment {
 }
 export interface IElementSegmentBody {
   elements: Uint32Array;
+  elementType: number;
+  asElements: boolean;
 }
 export interface IDataSegment {
   index: number;
@@ -663,8 +693,11 @@ export interface IOperatorInformation {
   brTable?: Array<number>;
   funcIndex?: number;
   typeIndex?: number;
+  tableIndex?: number;
   localIndex?: number;
   globalIndex?: number;
+  segmentIndex?: number;
+  destinationIndex?: number;
   memoryAddress?: IMemoryAddress;
   literal?: number | Int64 | Uint8Array;
   lines: Uint8Array;
@@ -751,6 +784,7 @@ export class BinaryReader {
   private _sectionId: SectionCode;
   private _sectionRange: DataRange;
   private _functionRange: DataRange;
+  private _segmentFlags: number;
   public get data(): Uint8Array {
     return this._data;
   }
@@ -1071,32 +1105,64 @@ export class BinaryReader {
       this.state = BinaryReaderState.ELEMENT_SECTION_ENTRY;
       return false;
     }
-    var tableIndex = this.readVarUint32();
+    let flags = this.readVarUint7();
+    let tableIndex = 0;
+    if (flags & SegmentFlags.HasTableIndex) {
+      tableIndex = this.readVarUint32();
+    }
+
     this.state = BinaryReaderState.BEGIN_ELEMENT_SECTION_ENTRY;
     this.result = { index: tableIndex };
     this._sectionEntriesLeft--;
+    this._segmentFlags = flags;
     return true;
   }
   private readElementEntryBody(): boolean {
+    let funcType = Type.unspecified;
+    if (this._segmentFlags & (SegmentFlags.IsPassive | SegmentFlags.HasTableIndex)) {
+      funcType = this.readVarInt7();
+    }
     if (!this.hasVarIntBytes())
       return false;
-    var pos = this._pos;
-    var numElemements = this.readVarUint32();
+    let pos = this._pos;
+    let numElemements = this.readVarUint32();
     if (!this.hasBytes(numElemements)) {
       // Shall have at least the numElemements amount of bytes.
       this._pos = pos;
       return false;
     }
-    var elements = new Uint32Array(numElemements);
-    for (var i = 0; i < numElemements; i++) {
-      if (!this.hasVarIntBytes()) {
-        this._pos = pos;
-        return false;
+    let elements = new Uint32Array(numElemements);
+    for (let i = 0; i < numElemements; i++) {
+      if (this._segmentFlags & SegmentFlags.FunctionsAsElements) {
+        // Read initializer expression, which must either be null ref or func ref
+        let operator = this.readUint8();
+        if (operator == OperatorCode.ref_null) {
+          elements[i] = NULL_FUNCTION_INDEX;
+        } else if (operator == OperatorCode.ref_func) {
+          elements[i] = this.readVarInt32();
+        } else {
+          this.error = new Error('Invalid initializer expression for element');
+          return true;
+        }
+        operator = this.readUint8();
+        if (operator != OperatorCode.end) {
+          this.error = new Error('Expected end of initializer expression for element');
+          return true;
+        }
+      } else {
+        if (!this.hasVarIntBytes()) {
+          this._pos = pos;
+          return false;
+        }
+        elements[i] = this.readVarUint32();
       }
-      elements[i] = this.readVarUint32();
     }
     this.state = BinaryReaderState.ELEMENT_SECTION_ENTRY_BODY;
-    this.result = { elements: elements };
+    this.result = { 
+      elements: elements, 
+      elementType: funcType, 
+      asElements: !!(this._segmentFlags & SegmentFlags.FunctionsAsElements)
+    };
     return true;
   }
   private readDataEntry(): boolean {
@@ -1107,9 +1173,15 @@ export class BinaryReader {
     if (!this.hasVarIntBytes()) {
        return false;
     }
+
+    this._segmentFlags = this.readVarUint32();
+    let index = 0;
+    if (this._segmentFlags == SegmentFlags.HasTableIndex) {
+      index = this.readVarUint32();
+    }
     this.state = BinaryReaderState.BEGIN_DATA_SECTION_ENTRY;
     this.result = {
-      index: this.readVarUint32()
+      index: index
     };
     this._sectionEntriesLeft--;
     return true;
@@ -1316,6 +1388,7 @@ export class BinaryReader {
 
   private readCodeOperator_0xfc(): boolean {
     var code = this._data[this._pos++] | 0xfc00;
+    var reserved, segmentIndex, destinationIndex, tableIndex;
     switch (code) {
       case OperatorCode.i32_trunc_s_sat_f32:
       case OperatorCode.i32_trunc_u_sat_f32:
@@ -1326,6 +1399,35 @@ export class BinaryReader {
       case OperatorCode.i64_trunc_s_sat_f64:
       case OperatorCode.i64_trunc_u_sat_f64:
         break;
+      case OperatorCode.memory_copy:
+        // Currently memory index must be zero.
+        reserved = this.readVarUint1();
+        reserved = this.readVarUint1();
+        break;
+      case OperatorCode.memory_fill:
+        reserved = this.readVarUint1();
+        break;
+      case OperatorCode.table_init:
+        segmentIndex = this.readVarUint32() >>> 0;
+        tableIndex = this.readVarUint32() >>> 0;
+        break;
+      case OperatorCode.table_copy:
+        tableIndex = this.readVarUint32() >>> 0;
+        destinationIndex = this.readVarUint32() >>> 0;
+        break;
+      case OperatorCode.table_grow:
+      case OperatorCode.table_size:
+      case OperatorCode.table_fill:
+        tableIndex = this.readVarUint32() >>> 0;
+        break;
+      case OperatorCode.memory_init:
+        segmentIndex = this.readVarUint32() >>> 0;
+        reserved = this.readVarUint1();
+        break;
+      case OperatorCode.data_drop:        
+      case OperatorCode.elem_drop:
+        segmentIndex = this.readVarUint32() >>> 0;
+        break;
       default:
         this.error = new Error(`Unknown operator: ${code}`);
         this.state = BinaryReaderState.ERROR;
@@ -1333,8 +1435,9 @@ export class BinaryReader {
     }
     this.result = { code: code,
       blockType: undefined, brDepth: undefined, brTable: undefined,
-      funcIndex: undefined, typeIndex: undefined, localIndex: undefined,
+      funcIndex: undefined, typeIndex: undefined, tableIndex: tableIndex, localIndex: undefined,
       globalIndex: undefined, memoryAddress: undefined, literal: undefined,
+      segmentIndex: segmentIndex, destinationIndex: destinationIndex,
       lines: undefined, lineIndex: undefined, };
     return true;
   }
@@ -1517,6 +1620,7 @@ export class BinaryReader {
       blockType: undefined, brDepth: undefined, brTable: undefined,
       funcIndex: undefined, typeIndex: undefined, localIndex: undefined,
       globalIndex: undefined, memoryAddress: memoryAddress, literal: literal,
+      segmentIndex: undefined, destinationIndex: undefined,
       lines: lines, lineIndex: lineIndex, };
     return true;
   }
@@ -1607,6 +1711,7 @@ export class BinaryReader {
       blockType: undefined, brDepth: undefined, brTable: undefined,
       funcIndex: undefined, typeIndex: undefined, localIndex: undefined,
       globalIndex: undefined, memoryAddress: memoryAddress, literal: undefined,
+      segmentIndex: undefined, destinationIndex: undefined,
       lines: undefined, lineIndex: undefined, };
     return true;
   }
@@ -1629,7 +1734,7 @@ export class BinaryReader {
       return false;
     }
     var code = this._data[this._pos++];
-    var blockType, brDepth, brTable, funcIndex, typeIndex,
+    var blockType, brDepth, brTable, funcIndex, typeIndex, tableIndex,
         localIndex, globalIndex, memoryAddress, literal, reserved;
     switch (code) {
       case OperatorCode.block:
@@ -1658,6 +1763,7 @@ export class BinaryReader {
         }
         break;
       case OperatorCode.call:
+      case OperatorCode.ref_func:
         funcIndex = this.readVarUint32() >>> 0;
         break;
       case OperatorCode.call_indirect:
@@ -1672,6 +1778,10 @@ export class BinaryReader {
       case OperatorCode.get_global:
       case OperatorCode.set_global:
         globalIndex = this.readVarUint32() >>> 0;
+        break;
+      case OperatorCode.table_get:
+      case OperatorCode.table_set:
+        tableIndex = this.readVarUint32() >>> 0;
         break;
       case OperatorCode.i32_load:
       case OperatorCode.i64_load:
@@ -1869,6 +1979,8 @@ export class BinaryReader {
       case OperatorCode.i64_extend8_s:
       case OperatorCode.i64_extend16_s:
       case OperatorCode.i64_extend32_s:
+      case OperatorCode.ref_null:
+      case OperatorCode.ref_is_null:
         break;
       default:
         this.error = new Error(`Unknown operator: ${code}`);
@@ -1876,9 +1988,10 @@ export class BinaryReader {
         return true;
     }
     this.result = { code: code,
-      blockType: blockType, brDepth: brDepth, brTable: brTable,
+      blockType: blockType, brDepth: brDepth, brTable: brTable, tableIndex: tableIndex,
       funcIndex: funcIndex, typeIndex: typeIndex, localIndex: localIndex,
       globalIndex: globalIndex, memoryAddress: memoryAddress, literal: literal,
+      segmentIndex: undefined, destinationIndex: undefined,
       lines: undefined, lineIndex: undefined, };
     return true;
   }
@@ -2137,7 +2250,11 @@ export class BinaryReader {
       case BinaryReaderState.END_ELEMENT_SECTION_ENTRY:
         return this.readElementEntry();
       case BinaryReaderState.BEGIN_ELEMENT_SECTION_ENTRY:
-        return this.readInitExpressionBody();
+        if (this._segmentFlags & SegmentFlags.IsPassive) {
+          return this.readElementEntryBody();
+        } else { 
+          return this.readInitExpressionBody();
+        }
       case BinaryReaderState.ELEMENT_SECTION_ENTRY_BODY:
         this.state = BinaryReaderState.END_ELEMENT_SECTION_ENTRY;
         this.result = null;
@@ -2146,7 +2263,11 @@ export class BinaryReader {
       case BinaryReaderState.END_DATA_SECTION_ENTRY:
         return this.readDataEntry();
       case BinaryReaderState.BEGIN_DATA_SECTION_ENTRY:
-        return this.readInitExpressionBody();
+          if (this._segmentFlags & SegmentFlags.IsPassive) {
+            return this.readDataEntryBody();
+          } else { 
+            return this.readInitExpressionBody();
+          }
       case BinaryReaderState.DATA_SECTION_ENTRY_BODY:
         this.state = BinaryReaderState.END_DATA_SECTION_ENTRY;
         this.result = null;

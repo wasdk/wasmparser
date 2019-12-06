@@ -18,8 +18,9 @@ import {
   IImportEntry, IOperatorInformation, Type, OperatorCode, OperatorCodeNames, Int64,
   ITableType, IMemoryType, IGlobalType, IResizableLimits, IDataSegmentBody,
   IGlobalVariable, IElementSegment, IElementSegmentBody, ISectionInformation,
-  IStartEntry, bytesToString, INameEntry, NameType, IFunctionNameEntry, INaming
-} from './WasmParser';
+  IStartEntry, bytesToString, INameEntry, NameType, IFunctionNameEntry, INaming,
+  NULL_FUNCTION_INDEX
+} from './WasmParser.js';
 function typeToString(type: number): string {
   switch (type) {
     case Type.i32: return 'i32';
@@ -28,7 +29,8 @@ function typeToString(type: number): string {
     case Type.f64: return 'f64';
     case Type.v128: return 'v128';
     case Type.anyfunc: return 'anyfunc';
-    default: throw new Error('Unexpected type');
+    case Type.anyref: return 'anyref';
+    default: throw new Error(`Unexpected type ${type}`);
   }
 }
 function formatFloat32(n: number): string {
@@ -693,7 +695,33 @@ export class WasmDisassembler {
       case OperatorCode.f64x2_replace_lane:
         this.appendBuffer(` ${operator.lineIndex}`);
         break;
-      }
+      case OperatorCode.memory_init:
+      case OperatorCode.data_drop:
+      case OperatorCode.elem_drop:
+        this.appendBuffer(` ${operator.segmentIndex}`);
+        break;
+      case OperatorCode.table_set:
+      case OperatorCode.table_get:
+      case OperatorCode.table_fill:
+        {
+          let tableName = this._nameResolver.getTableName(operator.tableIndex, true);
+          this.appendBuffer(` ${tableName}`);
+          break;
+        }
+      case OperatorCode.table_copy:
+        {
+          let tableName = this._nameResolver.getTableName(operator.tableIndex, true);
+          let destinationName = this._nameResolver.getTableName(operator.destinationIndex, true);
+          this.appendBuffer(` ${tableName} ${destinationName}`);
+          break;
+        }
+      case OperatorCode.table_init:
+        {
+          let tableName = this._nameResolver.getTableName(operator.tableIndex, true);
+          this.appendBuffer(` ${operator.segmentIndex} ${tableName}`);
+          break;
+        }
+    }
   }
   private printImportSource(info: IImportEntry): void {
     this.printString(info.module);
@@ -904,10 +932,23 @@ export class WasmDisassembler {
           this.newLine();
           break;
         case BinaryReaderState.ELEMENT_SECTION_ENTRY_BODY:
-          var elementSegmentBody = <IElementSegmentBody>reader.result;
+          let elementSegmentBody = <IElementSegmentBody>reader.result;
+          if (elementSegmentBody.elementType != Type.unspecified) {
+            let typeName = typeToString(elementSegmentBody.elementType);
+            this.appendBuffer(` ${typeName}`);
+          }
           elementSegmentBody.elements.forEach(funcIndex => {
-            var funcName = this._nameResolver.getFunctionName(funcIndex, funcIndex < this._importCount, true);
-            this.appendBuffer(` ${funcName}`);
+            if (elementSegmentBody.asElements) {
+              if (funcIndex == NULL_FUNCTION_INDEX) {
+                this.appendBuffer(' (ref.null)');
+              } else {
+                let funcName = this._nameResolver.getFunctionName(funcIndex, funcIndex < this._importCount, true);
+                this.appendBuffer(` (ref.func ${funcName})`);
+              }
+            } else {
+              let funcName = this._nameResolver.getFunctionName(funcIndex, funcIndex < this._importCount, true);
+              this.appendBuffer(` ${funcName}`);
+            }
           });
           break;
         case BinaryReaderState.BEGIN_GLOBAL_SECTION_ENTRY:
