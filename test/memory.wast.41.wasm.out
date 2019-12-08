@@ -1,5 +1,5 @@
 (module
-  (memory (;0;) 1 2)
+  (memory $memory0 1 2)
   (data (i32.const 0)
     "a"
   )

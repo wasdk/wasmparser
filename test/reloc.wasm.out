@@ -4,7 +4,7 @@
   (type $type2 (func (result i32)))
   (import "env" "STACKTOP" (global $global0 i32))
   (table $table0 0 anyfunc)
-  (memory (;0;) 4)
+  (memory $memory0 4)
   (global $global1 (mut i32) (get_global $global0))
   (global $global2 i32 (i32.const 0))
   (export "l" (func $func0))

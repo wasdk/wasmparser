@@ -239,8 +239,7 @@ export class DefaultNameResolver implements INameResolver {
     return '$table' + index;
   }
   public getMemoryName(index: number, isRef: boolean): string {
-    // TODO '$memory' + index;
-    return isRef ? '' + index : `(;${index};)`;
+    return '$memory' + index;
   }
   public getGlobalName(index: number, isRef: boolean): string {
     return '$global' + index;

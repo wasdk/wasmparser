@@ -1,6 +1,6 @@
 (module
   (type $type0 (func (result v128)))
-  (memory (;0;) 1)
+  (memory $memory0 1)
   (export "v128_load_0" (func $func0))
   (export "v128_store_0" (func $func1))
   (export "func_f64x2_replace_lane_0" (func $func2))

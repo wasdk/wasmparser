@@ -1,6 +1,6 @@
 (module
   (type $type0 (func (param i32)))
-  (memory (;0;) 1)
+  (memory $memory0 1)
   (export "no_dce.i32.load" (func $func0))
   (export "no_dce.i32.load16_s" (func $func1))
   (export "no_dce.i32.load16_u" (func $func2))

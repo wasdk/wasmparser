@@ -6,7 +6,7 @@
   (type $type4 (func (param i64) (result i64)))
   (type $type5 (func (param f32) (result f32)))
   (type $type6 (func (param f64) (result f64)))
-  (memory (;0;) 1)
+  (memory $memory0 1)
   (export "i32_load16_s" (func $func6))
   (export "i32_load16_u" (func $func7))
   (export "i32_load" (func $func8))

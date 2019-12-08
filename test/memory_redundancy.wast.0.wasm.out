@@ -3,7 +3,7 @@
   (type $type1 (func (result i32)))
   (type $type2 (func (result f32)))
   (type $type3 (func (param i32) (result i32)))
-  (memory (;0;) 1 1)
+  (memory $memory0 1 1)
   (export "zero_everything" (func $func0))
   (export "test_store_to_load" (func $func1))
   (export "test_redundant_load" (func $func2))

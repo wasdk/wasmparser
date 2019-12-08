@@ -9,7 +9,7 @@
   (type $type7 (func (param i32 i32 i32) (result i32)))
   (type $type8 (func (param i32 i32 i32) (result i32)))
   (table $table0 1 1 anyfunc)
-  (memory (;0;) 1)
+  (memory $memory0 1)
   (export "type-i32" (func $func1))
   (export "type-i64" (func $func2))
   (export "type-f32" (func $func3))

@@ -2,7 +2,7 @@
   (type $type0 (func (result i32)))
   (type $type1 (func (param i32 i32)))
   (type $type2 (func (param i32) (result i32)))
-  (memory (;0;) 1)
+  (memory $memory0 1)
   (export "store" (func $func1))
   (export "load" (func $func2))
   (export "grow_memory" (func $func3))

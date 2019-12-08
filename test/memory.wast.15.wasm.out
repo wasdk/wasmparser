@@ -1,6 +1,6 @@
 (module
   (type $type0 (func (result i32)))
-  (memory (;0;) 1 1)
+  (memory $memory0 1 1)
   (export "memsize" (func $func0))
   (func $func0 (result i32)
     current_memory

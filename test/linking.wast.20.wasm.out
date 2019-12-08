@@ -1,6 +1,6 @@
 (module
   (type $type0 (func (param i32) (result i32)))
-  (import "Mm" "mem" (memory (;0;) 1 8))
+  (import "Mm" "mem" (memory $memory0 1 8))
   (export "grow" (func $func0))
   (func $func0 (param $var0 i32) (result i32)
     get_local $var0
