@@ -1,6 +1,6 @@
 {
   "name": "wasmparser",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "description": "Binary WebAssembly file parser.",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -14,13 +14,13 @@
   "author": "",
   "license": "Apache-2.0",
   "devDependencies": {
-    "typescript": "^2.7.1"
+    "typescript": "^2.9.2"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/wasdk/wasmparser.git"
   },
   "dependencies": {
-    "@types/node": "^7.0.52"
+    "@types/node": "^7.10.9"
   }
 }
