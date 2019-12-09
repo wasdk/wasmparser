@@ -13,7 +13,7 @@
   (type $type11 (func (param f32 f32)))
   (type $type12 (func (param f64 f64)))
   (table $table0 8 8 anyfunc)
-  (memory (;0;) 1)
+  (memory $memory0 1)
   (export "i32_add" (func $func35))
   (export "i32_sub" (func $func36))
   (export "i32_mul" (func $func37))

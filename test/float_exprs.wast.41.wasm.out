@@ -1,7 +1,7 @@
 (module
   (type $type0 (func (param i32 f64)))
   (type $type1 (func (param i32) (result f64)))
-  (memory (;0;) 1 1)
+  (memory $memory0 1 1)
   (export "init" (func $func0))
   (export "run" (func $func1))
   (export "check" (func $func2))

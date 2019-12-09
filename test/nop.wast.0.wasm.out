@@ -4,7 +4,7 @@
   (type $type2 (func (result i32)))
   (type $type3 (func (param i32)))
   (type $type4 (func (param i32) (result i32)))
-  (memory (;0;) 1)
+  (memory $memory0 1)
   (export "as-func-first" (func $func2))
   (export "as-func-mid" (func $func3))
   (export "as-func-last" (func $func4))

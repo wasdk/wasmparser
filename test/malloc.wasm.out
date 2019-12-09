@@ -21,7 +21,7 @@
   (import "env" "_abort" (func $import3))
   (import "env" "_emscripten_memcpy_big" (func $import4 (param i32 i32 i32) (result i32)))
   (import "env" "___setErrNo" (func $import5 (param i32)))
-  (import "env" "memory" (memory (;0;) 256))
+  (import "env" "memory" (memory $memory0 256))
   (import "env" "table" (table $table0 0 0 anyfunc))
   (import "env" "memoryBase" (global $global9 i32))
   (import "env" "tableBase" (global $global10 i32))

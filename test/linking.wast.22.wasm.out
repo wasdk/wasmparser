@@ -1,5 +1,5 @@
 (module
-  (import "Mm" "mem" (memory (;0;) 1))
+  (import "Mm" "mem" (memory $memory0 1))
   (data (i32.const 0)
     "abc"
   )

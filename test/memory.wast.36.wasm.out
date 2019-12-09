@@ -1,6 +1,6 @@
 (module
   (import "spectest" "global" (global $global0 i32))
-  (memory (;0;) 0)
+  (memory $memory0 0)
   (data (get_global $global0)
     "a"
   )

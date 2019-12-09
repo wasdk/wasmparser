@@ -1,5 +1,5 @@
 (module
-  (memory (;0;) 0)
-  (export "a" (memory 0))
-  (export "b" (memory 0))
+  (memory $memory0 0)
+  (export "a" (memory $memory0))
+  (export "b" (memory $memory0))
 )

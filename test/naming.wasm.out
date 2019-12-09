@@ -13,7 +13,7 @@
   (import "env" "fb" (global $global6 i32))
   (import "global" "NaN" (global $global7 f64))
   (import "global" "Infinity" (global $global8 f64))
-  (import "env" "memory" (memory (;0;) 256 256))
+  (import "env" "memory" (memory $memory0 256 256))
   (import "env" "table" (table $table0 0 0 anyfunc))
   (import "env" "memoryBase" (global $global9 i32))
   (import "env" "tableBase" (global $global10 i32))

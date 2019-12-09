@@ -1,7 +1,7 @@
 (module
   (type $type0 (func (param i32)))
   (type $type1 (func))
-  (memory (;0;) 1)
+  (memory $memory0 1)
   (export "test-guard-page-skip" (func $func0))
   (func $func0 (param $var0 i32)
     get_local $var0
