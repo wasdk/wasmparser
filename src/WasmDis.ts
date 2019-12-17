@@ -20,7 +20,7 @@ import {
   IGlobalVariable, IElementSegment, IElementSegmentBody, ISectionInformation,
   IStartEntry, bytesToString, INameEntry, NameType, IFunctionNameEntry, INaming,
   NULL_FUNCTION_INDEX
-} from './WasmParser.js';
+} from './WasmParser';
 function typeToString(type: number): string {
   switch (type) {
     case Type.i32: return 'i32';
