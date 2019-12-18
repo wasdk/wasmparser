@@ -32,7 +32,7 @@ export class BinaryReaderTransform extends Transform {
     this._parser = new BinaryReader();
   }
 
-  public _transform(chunk: any, encoding: string, callback: Function): void {
+  public _transform(chunk: any, encoding: BufferEncoding, callback: Function): void {
     var buf: Buffer = Buffer.isBuffer(chunk) ? <Buffer>chunk : Buffer.from(chunk, encoding);
     var bufferNeeded = this._bufferSize + buf.length;
     if (bufferNeeded > this._buffer.byteLength) {
@@ -62,7 +62,7 @@ export class BinaryReaderTransform extends Transform {
     callback();
   }
 
-  protected _flush(callback: Function): void {
+  public _flush(callback: Function): void {
     var parser = this._parser;
     parser.setData(this._buffer, 0, this._bufferSize, true);
     while (parser.read()) {
