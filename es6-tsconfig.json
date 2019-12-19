@@ -3,6 +3,7 @@
   "compilerOptions": {
     "outDir": "./esm/",
     "target": "esnext",
-    "module": "esnext"
+    "module": "esnext",
+    "moduleResolution": "node"
   }
 }
