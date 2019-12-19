@@ -9,7 +9,7 @@
     "disassemble-wasm": "./disassemble-wasm.js"
   },
   "scripts": {
-    "test": "node ./test.js",
+    "test": "jest",
     "build": "tsc && tsc -p es6-tsconfig.json"
   },
   "author": "",
@@ -19,6 +19,9 @@
     "url": "https://github.com/wasdk/wasmparser.git"
   },
   "devDependencies": {
+    "@types/jest": "^24.0.24",
+    "jest": "^24.9.0",
+    "ts-jest": "^24.2.0",
     "typescript": "^3.7.3"
   },
   "dependencies": {
