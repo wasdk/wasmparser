@@ -21,7 +21,7 @@ import {
   IGlobalVariable, bytesToString, IRelocHeader, IRelocEntry, RelocType,
   INameEntry, NameType, IModuleNameEntry, IFunctionNameEntry, ILocalNameEntry,
   INaming, ILinkingEntry, LinkingType, ISourceMappingURL,
-} from './WasmParser';
+} from './WasmParser.js';
 
 enum EmitterState {
   Initial,
