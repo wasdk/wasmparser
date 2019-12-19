@@ -14,9 +14,9 @@
  */
 
 import { Transform } from 'stream';
-import { BinaryReader, BinaryReaderState } from './WasmParser';
+import { BinaryReader, BinaryReaderState } from './WasmParser.js';
 
-export { BinaryReaderState, SectionCode } from './WasmParser';
+export { BinaryReaderState, SectionCode } from './WasmParser.js';
 
 export class BinaryReaderTransform extends Transform {
   private _buffer: ArrayBuffer;
