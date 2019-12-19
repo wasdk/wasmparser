@@ -3,13 +3,14 @@
   "version": "0.9.1",
   "description": "Binary WebAssembly file parser.",
   "main": "./dist/index.js",
+  "module": "./esm/index.js",
   "types": "./dist/index.d.ts",
   "bin": {
     "disassemble-wasm": "./disassemble-wasm.js"
   },
   "scripts": {
     "test": "jest",
-    "build": "tsc"
+    "build": "tsc && tsc -p es6-tsconfig.json"
   },
   "author": "",
   "license": "Apache-2.0",

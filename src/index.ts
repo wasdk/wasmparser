@@ -44,13 +44,13 @@ export {
   IMemoryAddress,
   IOperatorInformation,
   IBinaryReaderData,
-} from './WasmParser';
+} from './WasmParser.js';
 export {
   Emitter,
-} from './WasmEmitter';
+} from './WasmEmitter.js';
 export {
   BinaryReaderTransform,
-} from './WasmParserTransform';
+} from './WasmParserTransform.js';
 export {
   DefaultNameResolver,
   NumericNameResolver,
@@ -58,4 +58,4 @@ export {
   LabelMode,
   IDisassemblerResult,
   INameResolver,
-} from './WasmDis';
+} from './WasmDis.js';
