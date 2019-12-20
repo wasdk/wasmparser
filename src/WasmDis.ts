@@ -19,7 +19,8 @@ import {
   ITableType, IMemoryType, IGlobalType, IResizableLimits, IDataSegmentBody,
   IGlobalVariable, IElementSegment, IElementSegmentBody, ISectionInformation,
   IStartEntry, bytesToString, INameEntry, NameType, IFunctionNameEntry, INaming,
-  NULL_FUNCTION_INDEX
+  NULL_FUNCTION_INDEX,
+  ILocalNameEntry
 } from './WasmParser.js';
 function typeToString(type: number): string {
   switch (type) {
@@ -1084,14 +1085,23 @@ const UNKNOWN_FUNCTION_PREFIX = "unknown";
 
 class NameSectionNameResolver extends DefaultNameResolver {
   private _names: string[];
+  private _localNames: string[][];
 
-  constructor(names: string[]) {
+  constructor(names: string[], localNames: string[][]) {
     super();
     this._names = names;
+    this._localNames = localNames;
   }
 
   getFunctionName(index: number, isImport: boolean, isRef: boolean): string {
     const name = this._names[index];
+    if (!name)
+      return `$${UNKNOWN_FUNCTION_PREFIX}${index}`;
+    return isRef ? `$${name}` : `$${name} (;${index};)`;
+  }
+
+  getVariableName(funcIndex: number, index: number, isRef: boolean): string {
+    const name = this._localNames[funcIndex] && this._localNames[funcIndex][index];
     if (!name)
       return `$${UNKNOWN_FUNCTION_PREFIX}${index}`;
     return isRef ? `$${name}` : `$${name} (;${index};)`;
@@ -1103,6 +1113,7 @@ export class NameSectionReader {
   private _functionsCount: number;
   private _functionImportsCount: number;
   private _functionNames: string[];
+  private _functionLocalNames: string[][];
   private _hasNames: boolean;
 
   constructor() {
@@ -1110,6 +1121,7 @@ export class NameSectionReader {
     this._functionsCount = 0;
     this._functionImportsCount = 0;
     this._functionNames = null;
+    this._functionLocalNames = null;
     this._hasNames = false;
   }
 
@@ -1132,6 +1144,7 @@ export class NameSectionReader {
           this._functionsCount = 0;
           this._functionImportsCount = 0;
           this._functionNames = [];
+          this._functionLocalNames = [];
           this._hasNames = false;
           break;
         case BinaryReaderState.END_SECTION:
@@ -1158,13 +1171,22 @@ export class NameSectionReader {
           break;
         case BinaryReaderState.NAME_SECTION_ENTRY:
           var nameInfo = <INameEntry>reader.result;
-          if (nameInfo.type !== NameType.Function)
-            break;
-          var functionNameInfo = <IFunctionNameEntry>nameInfo;
-          functionNameInfo.names.forEach((naming: INaming) => {
-            this._functionNames[naming.index] = bytesToString(naming.name);
-          });
-          this._hasNames = true;
+          if (nameInfo.type === NameType.Function) {
+            var functionNameInfo = <IFunctionNameEntry>nameInfo;
+            functionNameInfo.names.forEach((naming: INaming) => {
+              this._functionNames[naming.index] = bytesToString(naming.name);
+            });
+            this._hasNames = true;
+          } else if (nameInfo.type === NameType.Local) {
+            var localNameInfo = <ILocalNameEntry>nameInfo;
+            localNameInfo.funcs.forEach(localName => {
+              this._functionLocalNames[localName.index] = [];
+              localName.locals.forEach((naming: INaming) => {
+                this._functionLocalNames[localName.index][naming.index] = bytesToString(naming.name);
+              });
+            });
+            this._hasNames = true;
+          }
           break;
         default:
           throw new Error(`Expectected state: ${reader.state}`);
@@ -1203,6 +1225,6 @@ export class NameSectionReader {
       usedNameAt[name] = i;
     }
 
-    return new NameSectionNameResolver(functionNames);
+    return new NameSectionNameResolver(functionNames, this._functionLocalNames);
   }
 }
