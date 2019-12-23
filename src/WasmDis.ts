@@ -1102,8 +1102,7 @@ class NameSectionNameResolver extends DefaultNameResolver {
 
   getVariableName(funcIndex: number, index: number, isRef: boolean): string {
     const name = this._localNames[funcIndex] && this._localNames[funcIndex][index];
-    if (!name)
-      return `$${UNKNOWN_FUNCTION_PREFIX}${index}`;
+    if (!name) return super.getVariableName(funcIndex, index, isRef);
     return isRef ? `$${name}` : `$${name} (;${index};)`;
   }
 }
