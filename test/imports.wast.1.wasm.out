@@ -39,7 +39,7 @@
     call $import2
     get_local $var0
     i32.const 0
-    call_indirect $type0
+    call_indirect (type $type0)
   )
   (func $func10 (param $var0 i64)
     (local $var1 f64)
@@ -58,6 +58,6 @@
     call $import7
     get_local $var1
     i32.const 1
-    call_indirect $type3
+    call_indirect (type $type3)
   )
 )

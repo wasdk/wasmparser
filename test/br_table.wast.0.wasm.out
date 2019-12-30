@@ -504,7 +504,7 @@
       i32.const 1
       i32.const 2
       i32.const 3
-      call_indirect $type8
+      call_indirect (type $type8)
     end $label0
   )
   (func $func42 (result i32)
@@ -515,7 +515,7 @@
       br_table $label0
       i32.const 2
       i32.const 3
-      call_indirect $type8
+      call_indirect (type $type8)
     end $label0
   )
   (func $func43 (result i32)
@@ -526,7 +526,7 @@
       i32.const 1
       br_table $label0
       i32.const 3
-      call_indirect $type8
+      call_indirect (type $type8)
     end $label0
   )
   (func $func44 (result i32)
@@ -537,7 +537,7 @@
       i32.const 23
       i32.const 1
       br_table $label0
-      call_indirect $type8
+      call_indirect (type $type8)
     end $label0
   )
   (func $func45 (result i32)

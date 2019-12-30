@@ -300,28 +300,28 @@
     i32.const 1
     i32.const 2
     i32.const 3
-    call_indirect $type6
+    call_indirect (type $type6)
   )
   (func $func39
     i32.const 0
     unreachable
     i32.const 2
     i32.const 3
-    call_indirect $type6
+    call_indirect (type $type6)
   )
   (func $func40
     i32.const 0
     i32.const 1
     unreachable
     i32.const 3
-    call_indirect $type6
+    call_indirect (type $type6)
   )
   (func $func41
     i32.const 0
     i32.const 1
     i32.const 2
     unreachable
-    call_indirect $type6
+    call_indirect (type $type6)
   )
   (func $func42
     (local $var0 f32)
