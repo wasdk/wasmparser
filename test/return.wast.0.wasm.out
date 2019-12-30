@@ -307,15 +307,14 @@
     i32.const 1
     i32.const 2
     i32.const 3
-    call_indirect $type6
+    call_indirect (type $type6)
   )
   (func $func37 (result i32)
     i32.const 0
     i32.const 21
     return
     i32.const 2
-    i32.const 3
-    call_indirect $type6
+    call_indirect (type $type2)
   )
   (func $func38 (result i32)
     i32.const 0
@@ -323,7 +322,7 @@
     i32.const 22
     return
     i32.const 3
-    call_indirect $type6
+    call_indirect (type $type2)
   )
   (func $func39 (result i32)
     i32.const 0
@@ -331,7 +330,7 @@
     i32.const 2
     i32.const 23
     return
-    call_indirect $type6
+    call_indirect (type $type2)
   )
   (func $func40 (result i32)
     (local $var0 f32)

@@ -18,6 +18,6 @@
   )
   (func $func4 (param $var0 i32) (result i32)
     get_local $var0
-    call_indirect $type1
+    call_indirect (type $type1)
   )
 )

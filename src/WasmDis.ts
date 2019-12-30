@@ -549,7 +549,7 @@ export class WasmDisassembler {
         break;
       case OperatorCode.call_indirect:
         var typeName = this._nameResolver.getTypeName(operator.typeIndex, true);
-        this.appendBuffer(` ${typeName}`);
+        this.appendBuffer(` (type ${typeName})`);
         break;
       case OperatorCode.get_local:
       case OperatorCode.set_local:
