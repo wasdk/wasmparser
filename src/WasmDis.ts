@@ -281,73 +281,6 @@ export class NumericNameResolver implements INameResolver {
   }
 }
 
-class LineBuffer {
-  private _firstPart: string;
-  private _secondPart: string;
-  private _thirdPart: string;
-  private _count: number;
-
-  constructor() {
-    this._firstPart = '';
-    this._secondPart = '';
-    this._thirdPart = '';
-    this._count = 0;
-  }
-
-  public get length(): number {
-    switch (this._count) {
-      case 0:
-        return 0;
-      case 1:
-        return this._firstPart.length;
-      case 2:
-        return this._firstPart.length + this._secondPart.length;
-      default:
-        return this._firstPart.length +
-          this._secondPart.length +
-          this._thirdPart.length;
-    }
-  }
-
-  public append(part: string): void {
-    switch (this._count) {
-      case 0:
-        this._firstPart = part;
-        this._count = 1;
-        break;
-      case 1:
-        this._secondPart = part;
-        this._count = 2;
-        break;
-      case 2:
-        this._thirdPart = part;
-        this._count = 3;
-        break;
-      default:
-        this._count = 1;
-        this._firstPart = this._firstPart + this._secondPart +
-          this._thirdPart + part;
-        break;
-    }
-  }
-
-  public finalize(): string {
-    switch (this._count) {
-      case 0:
-        return '';
-      case 1:
-        this._count = 0;
-        return this._firstPart;
-      case 2:
-        this._count = 0;
-        return this._firstPart + this._secondPart;
-      default:
-        this._count = 0;
-        return this._firstPart + this._secondPart + this._thirdPart;
-    }
-  }
-}
-
 export enum LabelMode {
   Depth,
   WhenUsed,
@@ -362,7 +295,7 @@ export interface IDisassemblerResult {
 export class WasmDisassembler {
   private _lines: Array<string>;
   private _offsets: Array<number>;
-  private _buffer: LineBuffer;
+  private _buffer: string;
   private _types: Array<IFunctionType>;
   private _funcIndex: number;
   private _funcTypes: Array<number>;
@@ -384,7 +317,7 @@ export class WasmDisassembler {
   constructor() {
     this._lines = [];
     this._offsets = [];
-    this._buffer = new LineBuffer();
+    this._buffer = '';
     this._indent = null;
     this._indentLevel = 0;
     this._addOffsets = false;
@@ -432,12 +365,13 @@ export class WasmDisassembler {
     this._nameResolver = resolver;
   }
   private appendBuffer(s: string) {
-    this._buffer.append(s);
+    this._buffer += s;
   }
   private newLine() {
     if (this.addOffsets)
       this._offsets.push(this._currentPosition);
-    this._lines.push(this._buffer.finalize());
+    this._lines.push(this._buffer);
+    this._buffer = '';
   }
   private printFuncType(typeIndex: number): void {
     var type = this._types[typeIndex];
