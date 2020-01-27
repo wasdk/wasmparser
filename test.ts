@@ -36,3 +36,28 @@ readdirSync(TEST_FOLDER)
       expect(out).toBe(outFileData);
     });
   });
+
+for (const maxLines of [1, 3, 6, 7, 8, 20, 30, 32, 34, 35, 36, 37, 38, 39, 80]) {
+  test(`truncate_after_${maxLines}`, () => {
+    const testFilePath = join(TEST_FOLDER, "memory_bulk.0.wasm");
+    let dis = new WasmDisassembler();
+    dis.maxLines = maxLines;
+    let data = new Uint8Array(readFileSync(testFilePath));
+    let parser = new BinaryReader();
+    parser.setData(data.buffer, 0, data.length);
+    let out = dis.disassemble(parser);
+    let outFile = testFilePath + ".out";
+    let outFileData = readFileSync(outFile, "utf8");
+    let outLines = out.trimRight().split("\n");
+    let allLines = outFileData.trimRight().split("\n");
+    if (outLines.length > maxLines) {
+      // truncated case
+      expect(outLines.length).toBe(maxLines + 1);
+      expect(outLines[maxLines]).toMatch("truncated");
+      expect(outLines.slice(0, maxLines).join("\n")).toBe(allLines.slice(0, maxLines).join("\n"));
+    } else {
+      // full file should be output
+      expect(out).toBe(outFileData);
+    }
+  });
+}
