@@ -1268,8 +1268,7 @@ export class DevToolsNameGenerator {
   }
 
   private _generateExportName(field: Uint8Array) : string {
-    const exportName = bytesToString(field).replace(/\s/g, '_');
-    return exportName.replace(/\s/g, '_');
+    return bytesToString(field).replace(/\s/g, '_');
   }
 
   private _generateImportName(moduleName: Uint8Array, field: Uint8Array) : string {
