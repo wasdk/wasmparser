@@ -257,6 +257,72 @@ export class DefaultNameResolver implements INameResolver {
     return '$label' + index;
   }
 }
+
+const enum NameSource {
+  NameSection = 0,
+  Import = 1,
+  Export = 2,
+}
+
+export class DevToolsNameResolver extends DefaultNameResolver {
+  private static readonly _nameSourcePriorityList = [NameSource.NameSection, NameSource.Import, NameSource.Export];
+  private readonly _functionNames: string[][];
+  private readonly _localNames: string[][];
+  private readonly _memoryNames: string[][];
+  private readonly _tableNames: string[][];
+  private readonly _globalNames: string[][];
+
+  constructor(functionNames: string[][], localNames: string[][], memoryNames: string[][], tableNames: string[][], globalNames: string[][]) {
+    super();
+    this._functionNames = functionNames;
+    this._localNames = localNames;
+    this._memoryNames = memoryNames;
+    this._tableNames = tableNames;
+    this._globalNames = globalNames;
+  }
+
+  public getTableName(index: number, isRef: boolean): string {
+    const name = this._getPreferredName(this._tableNames[index]);
+    if (!name)
+      return super.getTableName(index, isRef);
+    return isRef ? `$${name}` : `$${name} (;${index};)`;
+  }
+  public getMemoryName(index: number, isRef: boolean): string {
+    const name = this._getPreferredName(this._memoryNames[index]);
+    if (!name)
+      return super.getMemoryName(index, isRef);
+    return isRef ? `$${name}` : `$${name} (;${index};)`;
+  }
+  public getGlobalName(index: number, isRef: boolean): string {
+    const name = this._getPreferredName(this._globalNames[index]);
+    if (!name)
+      return super.getGlobalName(index, isRef);
+    return isRef ? `$${name}` : `$${name} (;${index};)`;
+  }
+  public getFunctionName(index: number, isImport: boolean, isRef: boolean): string {
+    const name = this._getPreferredName(this._functionNames[index]);
+    if (!name)
+      return super.getFunctionName(index, isImport, isRef);
+    return isRef ? `$${name}` : `$${name} (;${index};)`;
+  }
+  public getVariableName(funcIndex: number, index: number, isRef: boolean): string {
+    const name = this._localNames[funcIndex] && this._localNames[funcIndex][index];
+    if (!name)
+      return super.getVariableName(funcIndex, index, isRef);
+    return isRef ? `$${name}` : `$${name} (;${index};)`;
+  }
+
+  private _getPreferredName(names: string[]) : string {
+    if (!names)
+      return null;
+    for (let source in DevToolsNameResolver._nameSourcePriorityList) {
+      if (names[source])
+        return names[source];
+    }
+    return null;
+  }
+}
+
 export class NumericNameResolver implements INameResolver {
   public getTypeName(index: number, isRef: boolean): string {
     return isRef ? '' + index : `(;${index};)`;
@@ -1169,5 +1235,187 @@ export class NameSectionReader {
     }
 
     return new NameSectionNameResolver(functionNames, this._functionLocalNames);
+  }
+}
+
+export class DevToolsNameGenerator {
+  private _done: boolean;
+  private _hasNames: boolean;
+  private _functionImportsCount: number;
+  private _memoryImportsCount: number;
+  private _tableImportsCount: number;
+  private _globalImportsCount: number;
+
+  private _functionNames: string[][];
+  private _functionLocalNames: string[][];
+  private _memoryNames: string[][];
+  private _tableNames: string[][];
+  private _globalNames: string[][];
+
+  constructor() {
+    this._done = false;
+    this._hasNames = false;
+    this._functionImportsCount = 0;
+    this._memoryImportsCount = 0;
+    this._tableImportsCount = 0;
+    this._globalImportsCount = 0;
+
+    this._functionNames = null;
+    this._functionLocalNames = null;
+    this._memoryNames = null;
+    this._tableNames = null;
+    this._globalNames = null;
+  }
+
+  private _generateExportName(field: Uint8Array) : string {
+    const exportName = bytesToString(field).replace(/\s/g, '_');
+    return exportName.replace(/\s/g, '_');
+  }
+
+  private _generateImportName(moduleName: Uint8Array, field: Uint8Array) : string {
+    if (moduleName.length == 0 && field.length == 0)
+      return null;
+    const name = bytesToString(moduleName) + '.' + bytesToString(field);
+    return name.replace(/\s/g, '_');
+  }
+
+  private _setName(names : string[][], index : number, nameSource: NameSource, name : string) {
+    if (!names[index])
+      names[index] = [];
+
+    // If the same entity is used in several exports, use the first name encountered.
+    if (NameSource.Export == nameSource) {
+      if (names[index][NameSource.Export]) return;
+    }
+
+    names[index][nameSource] = name;
+  }
+
+  public read(reader: BinaryReader): boolean {
+    if (this._done)
+    throw new Error('Invalid state: disassembly process was already finished.')
+    while (true) {
+      if (!reader.read())
+        return false;
+      switch (reader.state) {
+        case BinaryReaderState.END_WASM:
+          if (!reader.hasMoreBytes()) {
+            this._done = true;
+            return true;
+          }
+          break;
+        case BinaryReaderState.ERROR:
+          throw reader.error;
+        case BinaryReaderState.BEGIN_WASM:
+          this._functionImportsCount = 0;
+          this._memoryImportsCount = 0;
+          this._tableImportsCount = 0;
+          this._globalImportsCount = 0;
+
+          this._functionNames = [];
+          this._functionLocalNames = [];
+          this._memoryNames = [];
+          this._tableNames = [];
+          this._globalNames = [];
+          break;
+        case BinaryReaderState.END_SECTION:
+          break;
+        case BinaryReaderState.BEGIN_SECTION:
+          var sectionInfo = <ISectionInformation>reader.result;
+
+          if (sectionInfo.id === SectionCode.Custom &&
+              bytesToString(sectionInfo.name) === "name") {
+            break;
+          }
+          switch (sectionInfo.id) {
+            case SectionCode.Import:
+            case SectionCode.Export:
+              break; // reading known section;
+            default:
+              reader.skipSection();
+              break;
+          }
+          break;
+        case BinaryReaderState.IMPORT_SECTION_ENTRY:
+          var importInfo = <IImportEntry>reader.result;
+          const importName = this._generateImportName(importInfo.module, importInfo.field);
+          if (!importName)
+            continue;
+          this._hasNames = true;
+          switch (importInfo.kind) {
+            case ExternalKind.Function:
+              this._setName(this._functionNames, this._functionImportsCount++, NameSource.Import, importName);
+              break;
+            case ExternalKind.Table:
+              this._setName(this._tableNames, this._tableImportsCount++, NameSource.Import, importName);
+              break;
+            case ExternalKind.Memory:
+              this._setName(this._memoryNames, this._memoryImportsCount++, NameSource.Import, importName);
+              break;
+            case ExternalKind.Global:
+              this._setName(this._globalNames, this._globalImportsCount++, NameSource.Import, importName);
+              break;
+            default:
+              throw new Error(`Unsupported export ${importInfo.kind}`);
+          }
+          break;
+        case BinaryReaderState.NAME_SECTION_ENTRY:
+          var nameInfo = <INameEntry>reader.result;
+          if (nameInfo.type === NameType.Function) {
+            var functionNameInfo = <IFunctionNameEntry>nameInfo;
+            functionNameInfo.names.forEach((naming: INaming) => {
+              this._setName(this._functionNames, naming.index, NameSource.NameSection, bytesToString(naming.name));
+            });
+            this._hasNames = true;
+          } else if (nameInfo.type === NameType.Local) {
+            var localNameInfo = <ILocalNameEntry>nameInfo;
+            localNameInfo.funcs.forEach(localName => {
+              this._functionLocalNames[localName.index] = [];
+              localName.locals.forEach((naming: INaming) => {
+                this._functionLocalNames[localName.index][naming.index] = bytesToString(naming.name);
+              });
+            });
+            this._hasNames = true;
+          }
+          break;
+        case BinaryReaderState.EXPORT_SECTION_ENTRY:
+          var exportInfo = <IExportEntry>reader.result;
+          const exportName = this._generateExportName(exportInfo.field);
+          if (!exportName)
+            continue;
+          this._hasNames = true;
+          switch (exportInfo.kind) {
+            case ExternalKind.Function:
+              this._setName(this._functionNames, exportInfo.index, NameSource.Export, exportName);
+              break;
+            case ExternalKind.Table:
+              this._setName(this._tableNames, exportInfo.index, NameSource.Export, exportName);
+              break;
+            case ExternalKind.Memory:
+              this._setName(this._memoryNames, exportInfo.index, NameSource.Export, exportName);
+              break;
+            case ExternalKind.Global:
+              this._setName(this._globalNames, exportInfo.index, NameSource.Export, exportName);
+              break;
+            default:
+              throw new Error(`Unsupported export ${exportInfo.kind}`);
+          }
+          break;
+        default:
+          throw new Error(`Expectected state: ${reader.state}`);
+      }
+    }
+  }
+
+  public hasValidNames(): boolean {
+    return this._hasNames;
+  }
+
+  public getNameResolver(): INameResolver {
+    if (!this.hasValidNames())
+      throw new Error("Has no valid name section");
+
+    return new DevToolsNameResolver(this._functionNames, this._functionLocalNames,
+                                    this._memoryNames, this._tableNames, this._globalNames);
   }
 }
