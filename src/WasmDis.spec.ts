@@ -85,6 +85,8 @@ describe("DevToolsNameGenerator", () => {
     ng.read(reader);
     expect(ng.hasValidNames()).toBe(true);
     const nr = ng.getNameResolver();
+    expect(nr.getTypeName(0, true)).toBe("$type0");
+    expect(nr.getTypeName(0, false)).toBe("$type0");
     expect(nr.getFunctionName(0, true, true)).toBe("$import.function");
     expect(nr.getFunctionName(0, true, false)).toBe("$import.function (;0;)");
     expect(nr.getMemoryName(0, true)).toBe("$import.memory");
@@ -146,8 +148,8 @@ describe("DevToolsNameGenerator", () => {
       ng.read(reader);
       expect(ng.hasValidNames()).toBe(true);
       const nr = ng.getNameResolver();
-      expect(nr.getFunctionName(0, true, true)).toBe("$import0");
-      expect(nr.getFunctionName(0, true, false)).toBe("$import0");
+      expect(nr.getFunctionName(0, true, true)).toBe("$.");
+      expect(nr.getFunctionName(0, true, false)).toBe("$. (;0;)");
       expect(nr.getFunctionName(1, false, true)).toBe("$func1");
       expect(nr.getFunctionName(1, false, false)).toBe("$func1");
       expect(nr.getMemoryName(0, true)).toBe("$memory0");

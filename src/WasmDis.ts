@@ -258,21 +258,14 @@ export class DefaultNameResolver implements INameResolver {
   }
 }
 
-const enum NameSource {
-  NameSection = 0,
-  Import = 1,
-  Export = 2,
-}
-
 export class DevToolsNameResolver extends DefaultNameResolver {
-  private static readonly _nameSourcePriorityList = [NameSource.NameSection, NameSource.Import, NameSource.Export];
-  private readonly _functionNames: string[][];
+  private readonly _functionNames: string[];
   private readonly _localNames: string[][];
-  private readonly _memoryNames: string[][];
-  private readonly _tableNames: string[][];
-  private readonly _globalNames: string[][];
+  private readonly _memoryNames: string[];
+  private readonly _tableNames: string[];
+  private readonly _globalNames: string[];
 
-  constructor(functionNames: string[][], localNames: string[][], memoryNames: string[][], tableNames: string[][], globalNames: string[][]) {
+  constructor(functionNames: string[], localNames: string[][], memoryNames: string[], tableNames: string[], globalNames: string[]) {
     super();
     this._functionNames = functionNames;
     this._localNames = localNames;
@@ -282,25 +275,25 @@ export class DevToolsNameResolver extends DefaultNameResolver {
   }
 
   public getTableName(index: number, isRef: boolean): string {
-    const name = this._getPreferredName(this._tableNames[index]);
+    const name = this._tableNames[index];
     if (!name)
       return super.getTableName(index, isRef);
     return isRef ? `$${name}` : `$${name} (;${index};)`;
   }
   public getMemoryName(index: number, isRef: boolean): string {
-    const name = this._getPreferredName(this._memoryNames[index]);
+    const name = this._memoryNames[index];
     if (!name)
       return super.getMemoryName(index, isRef);
     return isRef ? `$${name}` : `$${name} (;${index};)`;
   }
   public getGlobalName(index: number, isRef: boolean): string {
-    const name = this._getPreferredName(this._globalNames[index]);
+    const name = this._globalNames[index];
     if (!name)
       return super.getGlobalName(index, isRef);
     return isRef ? `$${name}` : `$${name} (;${index};)`;
   }
   public getFunctionName(index: number, isImport: boolean, isRef: boolean): string {
-    const name = this._getPreferredName(this._functionNames[index]);
+    const name = this._functionNames[index];
     if (!name)
       return super.getFunctionName(index, isImport, isRef);
     return isRef ? `$${name}` : `$${name} (;${index};)`;
@@ -310,16 +303,6 @@ export class DevToolsNameResolver extends DefaultNameResolver {
     if (!name)
       return super.getVariableName(funcIndex, index, isRef);
     return isRef ? `$${name}` : `$${name} (;${index};)`;
-  }
-
-  private _getPreferredName(names: string[]) : string {
-    if (!names)
-      return null;
-    for (let source in DevToolsNameResolver._nameSourcePriorityList) {
-      if (names[source])
-        return names[source];
-    }
-    return null;
   }
 }
 
@@ -1246,11 +1229,11 @@ export class DevToolsNameGenerator {
   private _tableImportsCount: number;
   private _globalImportsCount: number;
 
-  private _functionNames: string[][];
+  private _functionNames: string[];
   private _functionLocalNames: string[][];
-  private _memoryNames: string[][];
-  private _tableNames: string[][];
-  private _globalNames: string[][];
+  private _memoryNames: string[];
+  private _tableNames: string[];
+  private _globalNames: string[];
 
   constructor() {
     this._done = false;
@@ -1272,22 +1255,13 @@ export class DevToolsNameGenerator {
   }
 
   private _generateImportName(moduleName: Uint8Array, field: Uint8Array) : string {
-    if (moduleName.length == 0 && field.length == 0)
-      return null;
     const name = bytesToString(moduleName) + '.' + bytesToString(field);
     return name.replace(/\s/g, '_');
   }
 
-  private _setName(names : string[][], index : number, nameSource: NameSource, name : string) {
-    if (!names[index])
-      names[index] = [];
-
-    // If the same entity is used in several exports, use the first name encountered.
-    if (NameSource.Export == nameSource) {
-      if (names[index][NameSource.Export]) return;
-    }
-
-    names[index][nameSource] = name;
+  private _setName(names: string[], index: number, name: string, isNameSectionName: boolean) {
+    if (isNameSectionName || !names[index])
+      names[index] = name;
   }
 
   public read(reader: BinaryReader): boolean {
@@ -1343,16 +1317,16 @@ export class DevToolsNameGenerator {
           this._hasNames = true;
           switch (importInfo.kind) {
             case ExternalKind.Function:
-              this._setName(this._functionNames, this._functionImportsCount++, NameSource.Import, importName);
+              this._setName(this._functionNames, this._functionImportsCount++, importName, false);
               break;
             case ExternalKind.Table:
-              this._setName(this._tableNames, this._tableImportsCount++, NameSource.Import, importName);
+              this._setName(this._tableNames, this._tableImportsCount++, importName, false);
               break;
             case ExternalKind.Memory:
-              this._setName(this._memoryNames, this._memoryImportsCount++, NameSource.Import, importName);
+              this._setName(this._memoryNames, this._memoryImportsCount++, importName, false);
               break;
             case ExternalKind.Global:
-              this._setName(this._globalNames, this._globalImportsCount++, NameSource.Import, importName);
+              this._setName(this._globalNames, this._globalImportsCount++, importName, false);
               break;
             default:
               throw new Error(`Unsupported export ${importInfo.kind}`);
@@ -1363,7 +1337,7 @@ export class DevToolsNameGenerator {
           if (nameInfo.type === NameType.Function) {
             var functionNameInfo = <IFunctionNameEntry>nameInfo;
             functionNameInfo.names.forEach((naming: INaming) => {
-              this._setName(this._functionNames, naming.index, NameSource.NameSection, bytesToString(naming.name));
+              this._setName(this._functionNames, naming.index, bytesToString(naming.name), true);
             });
             this._hasNames = true;
           } else if (nameInfo.type === NameType.Local) {
@@ -1385,16 +1359,16 @@ export class DevToolsNameGenerator {
           this._hasNames = true;
           switch (exportInfo.kind) {
             case ExternalKind.Function:
-              this._setName(this._functionNames, exportInfo.index, NameSource.Export, exportName);
+              this._setName(this._functionNames, exportInfo.index, exportName, false);
               break;
             case ExternalKind.Table:
-              this._setName(this._tableNames, exportInfo.index, NameSource.Export, exportName);
+              this._setName(this._tableNames, exportInfo.index, exportName, false);
               break;
             case ExternalKind.Memory:
-              this._setName(this._memoryNames, exportInfo.index, NameSource.Export, exportName);
+              this._setName(this._memoryNames, exportInfo.index, exportName, false);
               break;
             case ExternalKind.Global:
-              this._setName(this._globalNames, exportInfo.index, NameSource.Export, exportName);
+              this._setName(this._globalNames, exportInfo.index, exportName, false);
               break;
             default:
               throw new Error(`Unsupported export ${exportInfo.kind}`);
