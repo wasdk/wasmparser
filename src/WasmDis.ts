@@ -22,6 +22,9 @@ import {
   NULL_FUNCTION_INDEX,
   ILocalNameEntry
 } from './WasmParser.js';
+
+const NAME_SECTION_NAME = "name";
+
 function typeToString(type: number): string {
   switch (type) {
     case Type.i32: return 'i32';
@@ -1148,7 +1151,7 @@ export class NameSectionReader {
         case BinaryReaderState.BEGIN_SECTION:
           var sectionInfo = <ISectionInformation>reader.result;
           if (sectionInfo.id === SectionCode.Custom &&
-              bytesToString(sectionInfo.name) === "name") {
+              bytesToString(sectionInfo.name) === NAME_SECTION_NAME) {
             break;
           }
           if (sectionInfo.id === SectionCode.Function ||
@@ -1303,7 +1306,7 @@ export class DevToolsNameGenerator {
           var sectionInfo = <ISectionInformation>reader.result;
 
           if (sectionInfo.id === SectionCode.Custom &&
-              bytesToString(sectionInfo.name) === "name") {
+              bytesToString(sectionInfo.name) === NAME_SECTION_NAME) {
             break;
           }
           switch (sectionInfo.id) {
