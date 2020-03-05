@@ -1,4 +1,3 @@
-16
 (module
   (type $type0 (func (result v128)))
   (memory $memory0 1)
