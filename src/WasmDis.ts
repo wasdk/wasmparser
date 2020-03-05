@@ -225,6 +225,10 @@ function getOperatorName(code: OperatorCode): string {
   return operatorCodeNamesCache[code];
 }
 
+function isValidName(name : string) {
+  return !/[^0-9A-Za-z!#$%&'*+.:<=>?@^_`|~\/\-]/.test(name);
+}
+
 export interface INameResolver {
   getTypeName(index: number, isRef: boolean): string;
   getTableName(index: number, isRef: boolean): string;
@@ -1203,7 +1207,7 @@ export class NameSectionReader {
       if (!name)
         continue;
       const goodName = !(name in usedNameAt) &&
-                       !/[^0-9A-Za-z!#$%&'*+.:<=>?@^_`|~\/\-]/.test(name) &&
+                       isValidName(name) &&
                        name.indexOf(UNKNOWN_FUNCTION_PREFIX) !== 0;
       if (!goodName) {
         if (usedNameAt[name] >= 0) {
@@ -1260,6 +1264,8 @@ export class DevToolsNameGenerator {
   }
 
   private _setName(names: string[], index: number, name: string, isNameSectionName: boolean) {
+    if (!isValidName(name)) return;
+
     if (isNameSectionName || !names[index])
       names[index] = name;
   }
