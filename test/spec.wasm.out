@@ -6899,15 +6899,15 @@
     i32.reinterpret/f32
   )
   (func $func9 (result i32)
-    f32.const infinity
+    f32.const inf
     i32.reinterpret/f32
   )
   (func $func10 (result i32)
-    f32.const infinity
+    f32.const inf
     i32.reinterpret/f32
   )
   (func $func11 (result i32)
-    f32.const -infinity
+    f32.const -inf
     i32.reinterpret/f32
   )
   (func $func12 (result i32)
@@ -7019,15 +7019,15 @@
     i64.reinterpret/f64
   )
   (func $func39 (result i64)
-    f64.const infinity
+    f64.const inf
     i64.reinterpret/f64
   )
   (func $func40 (result i64)
-    f64.const infinity
+    f64.const inf
     i64.reinterpret/f64
   )
   (func $func41 (result i64)
-    f64.const -infinity
+    f64.const -inf
     i64.reinterpret/f64
   )
   (func $func42 (result i64)
@@ -7203,15 +7203,15 @@
     i32.reinterpret/f32
   )
   (func $func9 (result i32)
-    f32.const infinity
+    f32.const inf
     i32.reinterpret/f32
   )
   (func $func10 (result i32)
-    f32.const infinity
+    f32.const inf
     i32.reinterpret/f32
   )
   (func $func11 (result i32)
-    f32.const -infinity
+    f32.const -inf
     i32.reinterpret/f32
   )
   (func $func12 (result i32)
@@ -7323,15 +7323,15 @@
     i64.reinterpret/f64
   )
   (func $func39 (result i64)
-    f64.const infinity
+    f64.const inf
     i64.reinterpret/f64
   )
   (func $func40 (result i64)
-    f64.const infinity
+    f64.const inf
     i64.reinterpret/f64
   )
   (func $func41 (result i64)
-    f64.const -infinity
+    f64.const -inf
     i64.reinterpret/f64
   )
   (func $func42 (result i64)

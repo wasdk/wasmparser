@@ -1,3 +1,4 @@
+16
 (module
   (type $type0 (func (result v128)))
   (memory $memory0 1)
@@ -11,20 +12,20 @@
   )
   (func $func1 (result v128)
     i32.const 4
-    v128.const i32 0x11223344 0x55667788 0x99AABBCC 0xDDEEFF00
+    v128.const i32x4 0x11223344 0x55667788 0x99AABBCC 0xDDEEFF00
     v128.store
     i32.const 4
     v128.load
   )
   (func $func2 (result v128)
-    v128.const i32 0x0000789A 0xFF880330 0x0000FFFF 0x0000017F
+    v128.const i32x4 0x0000789A 0xFF880330 0x0000FFFF 0x0000017F
     f64.const 4.5
     f64x2.replace_lane 0
   )
   (func $func3 (result v128)
-    v128.const i32 0xFF00FF01 0xFF00FF0F 0xFF00FFFF 0xFF00FF7F
-    v128.const i32 0x00550055 0x00550055 0x00550055 0x00550155
-    v8x16.shuffle 0x03120110 0x07160514 0x0B1A0918 0x0F1E0D1C
+    v128.const i32x4 0xFF00FF01 0xFF00FF0F 0xFF00FFFF 0xFF00FF7F
+    v128.const i32x4 0x00550055 0x00550055 0x00550055 0x00550155
+    v8x16.shuffle 16 1 18 3 20 5 22 7 24 9 26 11 28 13 30 15
   )
   (data (i32.const 0)
     "\ff\ff\ff\ff"

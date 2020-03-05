@@ -40,7 +40,7 @@ function formatFloat32(n: number): string {
   if (isFinite(n))
     return n.toString();
   if (!isNaN(n))
-    return n < 0 ? '-infinity' : 'infinity';
+    return n < 0 ? '-inf' : 'inf';
   var view = new DataView(new ArrayBuffer(8));
   view.setFloat32(0, n, true);
   var data = view.getInt32(0, true);
@@ -59,7 +59,7 @@ function formatFloat64(n: number): string {
   if (isFinite(n))
     return n.toString();
   if (!isNaN(n))
-    return n < 0 ? '-infinity' : 'infinity';
+    return n < 0 ? '-inf' : 'inf';
   var view = new DataView(new ArrayBuffer(8));
   view.setFloat64(0, n, true);
   var data1 = view.getUint32(0, true);
@@ -78,6 +78,14 @@ function formatI32Array(bytes, count) {
   var result = [];
   for (var i = 0; i < count; i++)
     result.push(`0x${formatHex(dv.getInt32(i << 2, true), 8)}`);
+  return result.join(' ');
+}
+
+function formatI8Array(bytes, count) {
+  var dv = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
+  var result = [];
+  for (var i = 0; i < count; i++)
+    result.push(`${dv.getInt8(i)}`);
   return result.join(' ');
 }
 
@@ -614,10 +622,10 @@ export class WasmDisassembler {
         this.appendBuffer(` ${formatFloat64(<number>operator.literal)}`);
         break;
       case OperatorCode.v128_const:
-        this.appendBuffer(` i32 ${formatI32Array(operator.literal, 4)}`);
+        this.appendBuffer(` i32x4 ${formatI32Array(operator.literal, 4)}`);
         break;
       case OperatorCode.v8x16_shuffle:
-        this.appendBuffer(` ${formatI32Array(operator.lines, 4)}`);
+        this.appendBuffer(` ${formatI8Array(operator.lines, 16)}`);
         break;
       case OperatorCode.i8x16_extract_lane_s:
       case OperatorCode.i8x16_extract_lane_u:
@@ -652,7 +660,7 @@ export class WasmDisassembler {
         {
           let tableName = this._nameResolver.getTableName(operator.tableIndex, true);
           let destinationName = this._nameResolver.getTableName(operator.destinationIndex, true);
-          this.appendBuffer(` ${tableName} ${destinationName}`);
+          this.appendBuffer(` ${destinationName} ${tableName}`);
           break;
         }
       case OperatorCode.table_init:
