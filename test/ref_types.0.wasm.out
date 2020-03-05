@@ -4,7 +4,7 @@
   (func $func0
     i32.const 0
     i32.const 0
-    get_table $table0
-    set_table $table0
+    table.get $table0
+    table.set $table0
   )
 )
