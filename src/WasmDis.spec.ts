@@ -195,6 +195,23 @@ describe("DevToolsNameGenerator", () => {
       expect(nr.getVariableName(0, 1, true)).toBe("$x");
       expect(nr.getVariableName(0, 1, false)).toBe("$x (;1;)");
   });
+
+  test("Wasm module with invalid export name", () => {
+    const { buffer } = parseWat(
+        `test.wat`,
+        `(module
+         (export "{}" (func 0))
+         (func))`
+    ).toBinary({ write_debug_names: true });
+    const reader = new BinaryReader();
+    reader.setData(buffer.buffer, 0, buffer.byteLength);
+    const ng = new DevToolsNameGenerator();
+    ng.read(reader);
+    expect(ng.hasValidNames()).toBe(true);
+    const nr = ng.getNameResolver();
+    expect(nr.getFunctionName(0, false, true)).toBe("$__");
+    expect(nr.getFunctionName(0, false, false)).toBe("$__ (;0;)");
+  });
 });
 
 describe("NameSectionReader", () => {
@@ -258,6 +275,24 @@ describe("NameSectionReader", () => {
     expect(nr.getVariableName(0, 0, false)).toBe("$x (;0;)");
     expect(nr.getVariableName(0, 1, true)).toBe("$var1");
     expect(nr.getVariableName(0, 1, false)).toBe("$var1");
+  });
+
+  test("Wasm module with bad names", () => {
+    const { buffer } = parseWat(
+        `test.wat`,
+	`(module
+         (import "import" "function" (func $foo))
+         (import "import" "function2" (func $foo))
+         )`
+    ).toBinary({ write_debug_names: true });
+    const reader = new BinaryReader();
+    reader.setData(buffer.buffer, 0, buffer.byteLength);
+    const ng = new NameSectionReader();
+    ng.read(reader);
+    expect(ng.hasValidNames()).toBe(true);
+    const nr = ng.getNameResolver();
+    expect(nr.getFunctionName(0, true, true)).toBe("$unknown0");
+    expect(nr.getFunctionName(1, true, true)).toBe("$unknown1");
   });
 
   test("Wasm module with local names", () => {
