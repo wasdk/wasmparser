@@ -24,7 +24,8 @@ import {
 } from './WasmParser.js';
 
 const NAME_SECTION_NAME = "name";
-const INVALID_NAME_SYMBOLS_REGEX = /[^0-9A-Za-z!#$%&'*+.:<=>?@^_`|~\/\-]/g;
+const INVALID_NAME_SYMBOLS_REGEX = /[^0-9A-Za-z!#$%&'*+.:<=>?@^_`|~\/\-]/;
+const INVALID_NAME_SYMBOLS_REGEX_GLOBAL = new RegExp(INVALID_NAME_SYMBOLS_REGEX.source, "g");
 
 function typeToString(type: number): string {
   switch (type) {
@@ -1259,12 +1260,12 @@ export class DevToolsNameGenerator {
   }
 
   private _generateExportName(field: Uint8Array) : string {
-    return bytesToString(field).replace(INVALID_NAME_SYMBOLS_REGEX, '_');
+    return bytesToString(field).replace(INVALID_NAME_SYMBOLS_REGEX_GLOBAL, '_');
   }
 
   private _generateImportName(moduleName: Uint8Array, field: Uint8Array) : string {
     const name = bytesToString(moduleName) + '.' + bytesToString(field);
-    return name.replace(INVALID_NAME_SYMBOLS_REGEX,'_');
+    return name.replace(INVALID_NAME_SYMBOLS_REGEX_GLOBAL,'_');
   }
 
   private _setName(names: string[], index: number, name: string, isNameSectionName: boolean) {
