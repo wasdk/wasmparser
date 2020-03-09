@@ -21,26 +21,6 @@ import { BinaryReader } from "./WasmParser";
 const { parseWat } = require("wabt")();
 
 describe("DevToolsNameGenerator", () => {
-  test("Empty Wasm module", () => {
-    const data = new Uint8Array([
-      // Wasm header
-      0x00,
-      0x61,
-      0x73,
-      0x6d,
-      0x01,
-      0x00,
-      0x00,
-      0x00
-    ]);
-    const reader = new BinaryReader();
-    reader.setData(data.buffer, 0, data.byteLength);
-    const ng = new DevToolsNameGenerator();
-    ng.read(reader);
-    expect(ng.hasValidNames()).toBe(false);
-    expect(ng.getNameResolver.bind(ng)).toThrowError();
-  });
-
   test("Wasm module with export names only for function, memory, global and table", () => {
     const { buffer } = parseWat(
         `test.wat`,
@@ -58,7 +38,6 @@ describe("DevToolsNameGenerator", () => {
     reader.setData(buffer.buffer, 0, buffer.byteLength);
     const ng = new DevToolsNameGenerator();
     ng.read(reader);
-    expect(ng.hasValidNames()).toBe(true);
     const nr = ng.getNameResolver();
     expect(nr.getFunctionName(0, false, true)).toBe("$export.function");
     expect(nr.getFunctionName(0, false, false)).toBe("$export.function (;0;)");
@@ -83,7 +62,6 @@ describe("DevToolsNameGenerator", () => {
     reader.setData(buffer.buffer, 0, buffer.byteLength);
     const ng = new DevToolsNameGenerator();
     ng.read(reader);
-    expect(ng.hasValidNames()).toBe(true);
     const nr = ng.getNameResolver();
     expect(nr.getTypeName(0, true)).toBe("$type0");
     expect(nr.getTypeName(0, false)).toBe("$type0");
@@ -108,7 +86,6 @@ describe("DevToolsNameGenerator", () => {
     reader.setData(buffer.buffer, 0, buffer.byteLength);
     const ng = new DevToolsNameGenerator();
     ng.read(reader);
-    expect(ng.hasValidNames()).toBe(true);
     const nr = ng.getNameResolver();
     expect(nr.getFunctionName(0, false, true)).toBe("$f");
     expect(nr.getFunctionName(0, false, false)).toBe("$f (;0;)");
@@ -125,7 +102,6 @@ describe("DevToolsNameGenerator", () => {
     reader.setData(buffer.buffer, 0, buffer.byteLength);
     const ng = new DevToolsNameGenerator();
     ng.read(reader);
-    expect(ng.hasValidNames()).toBe(true);
     const nr = ng.getNameResolver();
     expect(nr.getFunctionName(0, true, true)).toBe("$import.function");
     expect(nr.getFunctionName(0, true, false)).toBe("$import.function (;0;)");
@@ -146,7 +122,6 @@ describe("DevToolsNameGenerator", () => {
       reader.setData(buffer.buffer, 0, buffer.byteLength);
       const ng = new DevToolsNameGenerator();
       ng.read(reader);
-      expect(ng.hasValidNames()).toBe(true);
       const nr = ng.getNameResolver();
       expect(nr.getFunctionName(0, true, true)).toBe("$.");
       expect(nr.getFunctionName(0, true, false)).toBe("$. (;0;)");
@@ -170,7 +145,6 @@ describe("DevToolsNameGenerator", () => {
       reader.setData(buffer.buffer, 0, buffer.byteLength);
       const ng = new DevToolsNameGenerator();
       ng.read(reader);
-      expect(ng.hasValidNames()).toBe(true);
       const nr = ng.getNameResolver();
       expect(nr.getVariableName(0, 0, true)).toBe("$var0");
       expect(nr.getVariableName(0, 0, false)).toBe("$var0");
@@ -188,7 +162,6 @@ describe("DevToolsNameGenerator", () => {
       reader.setData(buffer.buffer, 0, buffer.byteLength);
       const ng = new DevToolsNameGenerator();
       ng.read(reader);
-      expect(ng.hasValidNames()).toBe(true);
       const nr = ng.getNameResolver();
       expect(nr.getVariableName(0, 0, true)).toBe("$var0");
       expect(nr.getVariableName(0, 0, false)).toBe("$var0");
@@ -207,7 +180,6 @@ describe("DevToolsNameGenerator", () => {
     reader.setData(buffer.buffer, 0, buffer.byteLength);
     const ng = new DevToolsNameGenerator();
     ng.read(reader);
-    expect(ng.hasValidNames()).toBe(true);
     const nr = ng.getNameResolver();
     expect(nr.getFunctionName(0, false, true)).toBe("$__");
     expect(nr.getFunctionName(0, false, false)).toBe("$__ (;0;)");

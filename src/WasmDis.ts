@@ -1232,7 +1232,6 @@ export class NameSectionReader {
 
 export class DevToolsNameGenerator {
   private _done: boolean;
-  private _hasNames: boolean;
   private _functionImportsCount: number;
   private _memoryImportsCount: number;
   private _tableImportsCount: number;
@@ -1246,7 +1245,6 @@ export class DevToolsNameGenerator {
 
   constructor() {
     this._done = false;
-    this._hasNames = false;
     this._functionImportsCount = 0;
     this._memoryImportsCount = 0;
     this._tableImportsCount = 0;
@@ -1325,7 +1323,6 @@ export class DevToolsNameGenerator {
           const importName = this._generateImportName(importInfo.module, importInfo.field);
           if (!importName)
             continue;
-          this._hasNames = true;
           switch (importInfo.kind) {
             case ExternalKind.Function:
               this._setName(this._functionNames, this._functionImportsCount++, importName, false);
@@ -1350,7 +1347,6 @@ export class DevToolsNameGenerator {
             functionNameInfo.names.forEach((naming: INaming) => {
               this._setName(this._functionNames, naming.index, bytesToString(naming.name), true);
             });
-            this._hasNames = true;
           } else if (nameInfo.type === NameType.Local) {
             var localNameInfo = <ILocalNameEntry>nameInfo;
             localNameInfo.funcs.forEach(localName => {
@@ -1359,7 +1355,6 @@ export class DevToolsNameGenerator {
                 this._functionLocalNames[localName.index][naming.index] = bytesToString(naming.name);
               });
             });
-            this._hasNames = true;
           }
           break;
         case BinaryReaderState.EXPORT_SECTION_ENTRY:
@@ -1367,7 +1362,6 @@ export class DevToolsNameGenerator {
           const exportName = this._generateExportName(exportInfo.field);
           if (!exportName)
             continue;
-          this._hasNames = true;
           switch (exportInfo.kind) {
             case ExternalKind.Function:
               this._setName(this._functionNames, exportInfo.index, exportName, false);
@@ -1391,14 +1385,7 @@ export class DevToolsNameGenerator {
     }
   }
 
-  public hasValidNames(): boolean {
-    return this._hasNames;
-  }
-
   public getNameResolver(): INameResolver {
-    if (!this.hasValidNames())
-      throw new Error("Has no valid name section");
-
     return new DevToolsNameResolver(this._functionNames, this._functionLocalNames,
                                     this._memoryNames, this._tableNames, this._globalNames);
   }
