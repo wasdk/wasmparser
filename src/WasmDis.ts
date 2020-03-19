@@ -289,24 +289,28 @@ export class DevToolsNameResolver extends DefaultNameResolver {
       return super.getTableName(index, isRef);
     return isRef ? `$${name}` : `$${name} (;${index};)`;
   }
+
   public getMemoryName(index: number, isRef: boolean): string {
     const name = this._memoryNames[index];
     if (!name)
       return super.getMemoryName(index, isRef);
     return isRef ? `$${name}` : `$${name} (;${index};)`;
   }
+
   public getGlobalName(index: number, isRef: boolean): string {
     const name = this._globalNames[index];
     if (!name)
       return super.getGlobalName(index, isRef);
     return isRef ? `$${name}` : `$${name} (;${index};)`;
   }
+
   public getFunctionName(index: number, isImport: boolean, isRef: boolean): string {
     const name = this._functionNames[index];
     if (!name)
       return super.getFunctionName(index, isImport, isRef);
     return isRef ? `$${name}` : `$${name} (;${index};)`;
   }
+
   public getVariableName(funcIndex: number, index: number, isRef: boolean): string {
     const name = this._localNames[funcIndex] && this._localNames[funcIndex][index];
     if (!name)
