@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { NameSectionReader } from "./WasmDis";
+import { NameSectionReader, WasmDisassembler } from "./WasmDis";
 import { DevToolsNameGenerator } from "./WasmDis";
 import { BinaryReader } from "./WasmParser";
 
@@ -288,5 +288,105 @@ describe("NameSectionReader", () => {
     expect(nr.getVariableName(0, 0, false)).toBe("$x (;0;)");
     expect(nr.getVariableName(0, 1, true)).toBe("$y");
     expect(nr.getVariableName(0, 1, false)).toBe("$y (;1;)");
+  });
+});
+
+describe("WasmDisassembler.getResult() with function code", () => {
+  const watString =
+  `(module
+  (export "export.function" (func $f))
+  (func $f (result i32) i32.const 0))`;
+  const fileName = `test.wat`;
+  const expectedLines = [
+    "(module",
+    "  (type $type0 (func (result i32)))",
+    "  (export \"export.function\" (func $func0))",
+    "  (func $func0 (result i32)",
+    "    i32.const 0",
+    "  )",
+    ")",
+  ];
+
+  test("addOffsets is true", () => {
+    const { buffer } = parseWat(fileName, watString).toBinary({
+      write_debug_names: true
+    });
+    const parser = new BinaryReader();
+    parser.setData(buffer.buffer, 0, buffer.byteLength);
+    const dis = new WasmDisassembler();
+    dis.addOffsets = true;
+    const offsetInModule = 0;
+    dis.disassembleChunk(parser, offsetInModule);
+    const result = dis.getResult();
+    expect(result.done).toBe(true);
+    expect(result.lines).toEqual(expectedLines);
+    expect(result.offsets).toEqual([0, 10, 21, 42, 45, 47, 66,]);
+    expect(result.codeSectionOffsets).toEqual([40, 48]);
+  });
+
+  test("addOffsets is false", () => {
+    const { buffer } = parseWat(fileName, watString).toBinary({
+      write_debug_names: true
+    });
+    const parser = new BinaryReader();
+    parser.setData(buffer.buffer, 0, buffer.byteLength);
+    const dis = new WasmDisassembler();
+    dis.addOffsets = false;
+    const offsetInModule = 0;
+    dis.disassembleChunk(parser, offsetInModule);
+    const result = dis.getResult();
+    expect(result.done).toBe(true);
+    expect(result.lines).toEqual(expectedLines);
+    expect(result.offsets).toBeUndefined();
+    expect(result.codeSectionOffsets).toBeUndefined();
+  });
+});
+
+describe("WasmDisassembler.getResult() without function code", () => {
+  const watString =
+  `(module
+   (import "import" "function" (func))
+   (export "export.function" (func 0)))`;
+  const fileName = `test.wat`;
+  const expectedLines = [
+    "(module",
+    "  (type $type0 (func))",
+    "  (import \"import\" \"function\" (func $import0))",
+    "  (export \"export.function\" (func $import0))",
+    ")",
+  ];
+
+  test("addOffsets is true", () => {
+    const { buffer } = parseWat(fileName, watString).toBinary({
+      write_debug_names: true
+    });
+    const parser = new BinaryReader();
+    parser.setData(buffer.buffer, 0, buffer.byteLength);
+    const dis = new WasmDisassembler();
+    dis.addOffsets = true;
+    const offsetInModule = 0;
+    dis.disassembleChunk(parser, offsetInModule);
+    const result = dis.getResult();
+    expect(result.done).toBe(true);
+    expect(result.lines).toEqual(expectedLines);
+    expect(result.offsets).toEqual([0, 10, 16, 37, 68, ]);
+    expect(result.codeSectionOffsets).toEqual([]);
+  });
+
+  test("addOffsets is false", () => {
+    const { buffer } = parseWat(fileName, watString).toBinary({
+      write_debug_names: true
+    });
+    const parser = new BinaryReader();
+    parser.setData(buffer.buffer, 0, buffer.byteLength);
+    const dis = new WasmDisassembler();
+    dis.addOffsets = false;
+    const offsetInModule = 0;
+    dis.disassembleChunk(parser, offsetInModule);
+    const result = dis.getResult();
+    expect(result.done).toBe(true);
+    expect(result.lines).toEqual(expectedLines);
+    expect(result.offsets).toBeUndefined();
+    expect(result.codeSectionOffsets).toBeUndefined();
   });
 });

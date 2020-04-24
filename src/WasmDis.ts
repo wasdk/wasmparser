@@ -359,8 +359,9 @@ export enum LabelMode {
 
 export interface IDisassemblerResult {
   lines: Array<string>;
-  offsets?: Array<number>
+  offsets?: Array<number>;
   done: boolean;
+  codeSectionOffsets?: Array<number>;
 }
 export class WasmDisassembler {
   private _lines: Array<string>;
@@ -385,6 +386,7 @@ export class WasmDisassembler {
   private _nameResolver: INameResolver;
   private _labelMode: LabelMode;
   private _maxLines: number;
+  private _codeSectionOffsets: Array<number>;
   constructor() {
     this._lines = [];
     this._offsets = [];
@@ -396,6 +398,7 @@ export class WasmDisassembler {
     this._currentPosition = 0;
     this._nameResolver = new DefaultNameResolver();
     this._labelMode = LabelMode.WhenUsed;
+    this._codeSectionOffsets = [];
 
     this._reset();
   }
@@ -447,6 +450,10 @@ export class WasmDisassembler {
       this._offsets.push(this._currentPosition);
     this._lines.push(this._buffer);
     this._buffer = '';
+  }
+  private logCodeSectionOffsets() {
+    if (this.addOffsets)
+      this._codeSectionOffsets.push(this._currentPosition);
   }
   private printFuncType(typeIndex: number): void {
     var type = this._types[typeIndex];
@@ -778,6 +785,7 @@ export class WasmDisassembler {
         lines: [],
         offsets: this._addOffsets ? [] : undefined,
         done: this._done,
+        codeSectionOffsets: this._addOffsets ? [] : undefined,
       }
     }
     if (linesReady === this._lines.length) {
@@ -785,16 +793,20 @@ export class WasmDisassembler {
         lines: this._lines,
         offsets: this._addOffsets ? this._offsets : undefined,
         done: this._done,
+        codeSectionOffsets: this._addOffsets ? this._codeSectionOffsets : undefined,
       };
       this._lines = [];
-      if (this._addOffsets)
+      if (this._addOffsets) {
         this._offsets = [];
+        this._codeSectionOffsets = [];
+      }
       return result;
     }
     let result = {
       lines: this._lines.splice(0, linesReady),
       offsets: this._addOffsets ? this._offsets.splice(0, linesReady) : undefined,
       done: false,
+      codeSectionOffsets: this._addOffsets ? this._codeSectionOffsets : undefined,
     };
     if (this._backrefLabels) {
       this._backrefLabels.forEach((backrefLabel) => {
@@ -806,6 +818,7 @@ export class WasmDisassembler {
   public disassembleChunk(reader: BinaryReader, offsetInModule: number = 0): boolean {
     if (this._done)
       throw new Error('Invalid state: disassembly process was already finished.')
+    let foundCodeSection: boolean = false;
     while (true) {
       if (this._maxLines && this._lines.length >= this._maxLines) {
         this.appendBuffer(';; -- text is truncated due to size --');
@@ -832,6 +845,10 @@ export class WasmDisassembler {
           this.newLine();
           break;
         case BinaryReaderState.END_SECTION:
+          if (foundCodeSection) {
+            this.logCodeSectionOffsets();
+            foundCodeSection = false;
+          }
           break;
         case BinaryReaderState.BEGIN_SECTION:
           var sectionInfo = <ISectionInformation>reader.result;
@@ -842,12 +859,15 @@ export class WasmDisassembler {
             case SectionCode.Global:
             case SectionCode.Function:
             case SectionCode.Start:
-            case SectionCode.Code:
             case SectionCode.Memory:
             case SectionCode.Data:
             case SectionCode.Table:
             case SectionCode.Element:
               break; // reading known section;
+            case SectionCode.Code:
+              foundCodeSection = true;
+              this.logCodeSectionOffsets();
+              break;
             default:
               reader.skipSection();
               break;
@@ -990,7 +1010,7 @@ export class WasmDisassembler {
           var funcName = this._nameResolver.getFunctionName(startEntry.index, startEntry.index < this._importCount, true);
           this.appendBuffer(`  (start ${funcName})`);
           this.newLine();
-          break;          
+          break;
         case BinaryReaderState.BEGIN_DATA_SECTION_ENTRY:
           this.appendBuffer('  (data ');
           break;
