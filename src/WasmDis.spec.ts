@@ -295,7 +295,8 @@ describe("WasmDisassembler.getResult() with function code", () => {
   const watString =
   `(module
   (export "export.function" (func $f))
-  (func $f (result i32) i32.const 0))`;
+  (func $f (result i32) i32.const 0)
+  (func $f1 (result i32) i32.const 1))`;
   const fileName = `test.wat`;
   const expectedLines = [
     "(module",
@@ -303,6 +304,9 @@ describe("WasmDisassembler.getResult() with function code", () => {
     "  (export \"export.function\" (func $func0))",
     "  (func $func0 (result i32)",
     "    i32.const 0",
+    "  )",
+    "  (func $func1 (result i32)",
+    "    i32.const 1",
     "  )",
     ")",
   ];
@@ -320,8 +324,8 @@ describe("WasmDisassembler.getResult() with function code", () => {
     const result = dis.getResult();
     expect(result.done).toBe(true);
     expect(result.lines).toEqual(expectedLines);
-    expect(result.offsets).toEqual([0, 10, 21, 42, 45, 47, 66,]);
-    expect(result.codeSectionOffsets).toEqual([40, 48]);
+    expect(result.offsets).toEqual([0, 10, 22, 43, 46, 48, 49, 51, 53, 78,]);
+    expect(result.bodyFunctionOffsets).toEqual([[43, 49,], [49, 54,], ]);
   });
 
   test("addOffsets is false", () => {
@@ -338,7 +342,7 @@ describe("WasmDisassembler.getResult() with function code", () => {
     expect(result.done).toBe(true);
     expect(result.lines).toEqual(expectedLines);
     expect(result.offsets).toBeUndefined();
-    expect(result.codeSectionOffsets).toBeUndefined();
+    expect(result.bodyFunctionOffsets).toBeUndefined();
   });
 });
 
@@ -370,7 +374,7 @@ describe("WasmDisassembler.getResult() without function code", () => {
     expect(result.done).toBe(true);
     expect(result.lines).toEqual(expectedLines);
     expect(result.offsets).toEqual([0, 10, 16, 37, 68, ]);
-    expect(result.codeSectionOffsets).toEqual([]);
+    expect(result.bodyFunctionOffsets).toEqual([]);
   });
 
   test("addOffsets is false", () => {
@@ -387,6 +391,6 @@ describe("WasmDisassembler.getResult() without function code", () => {
     expect(result.done).toBe(true);
     expect(result.lines).toEqual(expectedLines);
     expect(result.offsets).toBeUndefined();
-    expect(result.codeSectionOffsets).toBeUndefined();
+    expect(result.bodyFunctionOffsets).toBeUndefined();
   });
 });
