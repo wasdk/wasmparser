@@ -470,7 +470,7 @@ export class WasmDisassembler {
     }
   }
   private logEndOfFunctionBodyOffset() {
-    if (this.addOffsets && this._currentFunctionBodyOffset?.start) {
+    if (this.addOffsets && this._currentFunctionBodyOffset) {
       this._currentFunctionBodyOffset.end = this._currentPosition;
       this._functionBodyOffsets.push(this._currentFunctionBodyOffset);
       this._currentFunctionBodyOffset = null;
