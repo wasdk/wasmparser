@@ -789,6 +789,7 @@ export class WasmDisassembler {
     let result = lines.join('\n');
     this._lines.length = 0;
     this._offsets.length = 0;
+    this._functionBodyOffsets.length = 0;
     return result;
   }
   public getResult(): IDisassemblerResult {
