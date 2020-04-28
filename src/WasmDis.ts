@@ -361,7 +361,7 @@ export interface IDisassemblerResult {
   lines: Array<string>;
   offsets?: Array<number>;
   done: boolean;
-  bodyFunctionOffsets?: Array<Array<number>>;
+  functionBodyOffsets?: Array<Array<number>>;
 }
 
 export class WasmDisassembler {
@@ -387,8 +387,8 @@ export class WasmDisassembler {
   private _nameResolver: INameResolver;
   private _labelMode: LabelMode;
   private _maxLines: number;
-  private _bodyFunctionOffsets: Array<Array<number>>;
-  private _currentBodyFunctionOffset: Array<number>;
+  private _functionBodyOffsets: Array<Array<number>>;
+  private _currentFunctionBodyOffset: Array<number>;
   constructor() {
     this._lines = [];
     this._offsets = [];
@@ -400,8 +400,8 @@ export class WasmDisassembler {
     this._currentPosition = 0;
     this._nameResolver = new DefaultNameResolver();
     this._labelMode = LabelMode.WhenUsed;
-    this._bodyFunctionOffsets = [];
-    this._currentBodyFunctionOffset = [];
+    this._functionBodyOffsets = [];
+    this._currentFunctionBodyOffset = [];
 
     this._reset();
   }
@@ -456,13 +456,14 @@ export class WasmDisassembler {
   }
   private logStartOfBodyFunctionOffset() {
     if (this.addOffsets) {
-      this._currentBodyFunctionOffset = [this._currentPosition];
+      this._currentFunctionBodyOffset = [this._currentPosition];
     }
   }
   private logEndOfBodyFunctionOffset() {
-    if (this.addOffsets && this._currentBodyFunctionOffset.length == 1) {
-      this._currentBodyFunctionOffset.push(this._currentPosition);
-      this._bodyFunctionOffsets.push(this._currentBodyFunctionOffset);
+    if (this.addOffsets && this._currentFunctionBodyOffset.length == 1) {
+      this._currentFunctionBodyOffset.push(this._currentPosition);
+      this._functionBodyOffsets.push(this._currentFunctionBodyOffset);
+      this._currentFunctionBodyOffset = [];
     }
   }
   private printFuncType(typeIndex: number): void {
@@ -795,7 +796,7 @@ export class WasmDisassembler {
         lines: [],
         offsets: this._addOffsets ? [] : undefined,
         done: this._done,
-        bodyFunctionOffsets: this._addOffsets ? [] : undefined,
+        functionBodyOffsets: this._addOffsets ? [] : undefined,
       }
     }
     if (linesReady === this._lines.length) {
@@ -803,12 +804,12 @@ export class WasmDisassembler {
         lines: this._lines,
         offsets: this._addOffsets ? this._offsets : undefined,
         done: this._done,
-        bodyFunctionOffsets: this._addOffsets ? this._bodyFunctionOffsets : undefined,
+        functionBodyOffsets: this._addOffsets ? this._functionBodyOffsets : undefined,
       };
       this._lines = [];
       if (this._addOffsets) {
         this._offsets = [];
-        this._bodyFunctionOffsets = [];
+        this._functionBodyOffsets = [];
       }
       return result;
     }
@@ -816,7 +817,7 @@ export class WasmDisassembler {
       lines: this._lines.splice(0, linesReady),
       offsets: this._addOffsets ? this._offsets.splice(0, linesReady) : undefined,
       done: false,
-      bodyFunctionOffsets: this._addOffsets ? this._bodyFunctionOffsets : undefined,
+      functionBodyOffsets: this._addOffsets ? this._functionBodyOffsets : undefined,
     };
     if (this._backrefLabels) {
       this._backrefLabels.forEach((backrefLabel) => {

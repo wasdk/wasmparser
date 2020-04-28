@@ -325,7 +325,7 @@ describe("WasmDisassembler.getResult() with function code", () => {
     expect(result.done).toBe(true);
     expect(result.lines).toEqual(expectedLines);
     expect(result.offsets).toEqual([0, 10, 22, 43, 46, 48, 49, 51, 53, 78,]);
-    expect(result.bodyFunctionOffsets).toEqual([[43, 49,], [49, 54,], ]);
+    expect(result.functionBodyOffsets).toEqual([[43, 49,], [49, 54,], ]);
   });
 
   test("addOffsets is false", () => {
@@ -342,7 +342,7 @@ describe("WasmDisassembler.getResult() with function code", () => {
     expect(result.done).toBe(true);
     expect(result.lines).toEqual(expectedLines);
     expect(result.offsets).toBeUndefined();
-    expect(result.bodyFunctionOffsets).toBeUndefined();
+    expect(result.functionBodyOffsets).toBeUndefined();
   });
 });
 
@@ -374,7 +374,7 @@ describe("WasmDisassembler.getResult() without function code", () => {
     expect(result.done).toBe(true);
     expect(result.lines).toEqual(expectedLines);
     expect(result.offsets).toEqual([0, 10, 16, 37, 68, ]);
-    expect(result.bodyFunctionOffsets).toEqual([]);
+    expect(result.functionBodyOffsets).toEqual([]);
   });
 
   test("addOffsets is false", () => {
@@ -391,6 +391,6 @@ describe("WasmDisassembler.getResult() without function code", () => {
     expect(result.done).toBe(true);
     expect(result.lines).toEqual(expectedLines);
     expect(result.offsets).toBeUndefined();
-    expect(result.bodyFunctionOffsets).toBeUndefined();
+    expect(result.functionBodyOffsets).toBeUndefined();
   });
 });
