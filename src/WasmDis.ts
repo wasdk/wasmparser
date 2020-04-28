@@ -357,11 +357,17 @@ export enum LabelMode {
   Always,
 }
 
+// The breakable range is [start, end).
+export interface IFunctionBodyOffset {
+  start?: number;
+  end?: number;
+}
+
 export interface IDisassemblerResult {
   lines: Array<string>;
   offsets?: Array<number>;
   done: boolean;
-  functionBodyOffsets?: Array<Array<number>>;
+  functionBodyOffsets?: Array<IFunctionBodyOffset>;
 }
 
 export class WasmDisassembler {
@@ -387,8 +393,9 @@ export class WasmDisassembler {
   private _nameResolver: INameResolver;
   private _labelMode: LabelMode;
   private _maxLines: number;
-  private _functionBodyOffsets: Array<Array<number>>;
-  private _currentFunctionBodyOffset: Array<number>;
+  private _functionBodyOffsets: Array<IFunctionBodyOffset>;
+  private _currentFunctionBodyOffset: IFunctionBodyOffset;
+  private _logFirstInstruction: boolean;
   constructor() {
     this._lines = [];
     this._offsets = [];
@@ -401,7 +408,8 @@ export class WasmDisassembler {
     this._nameResolver = new DefaultNameResolver();
     this._labelMode = LabelMode.WhenUsed;
     this._functionBodyOffsets = [];
-    this._currentFunctionBodyOffset = [];
+    this._currentFunctionBodyOffset = null;
+    this._logFirstInstruction = false;
 
     this._reset();
   }
@@ -454,16 +462,18 @@ export class WasmDisassembler {
     this._lines.push(this._buffer);
     this._buffer = '';
   }
-  private logStartOfBodyFunctionOffset() {
+  private logStartOfFunctionBodyOffset() {
     if (this.addOffsets) {
-      this._currentFunctionBodyOffset = [this._currentPosition];
+      this._currentFunctionBodyOffset = {
+        start: this._currentPosition,
+      };
     }
   }
-  private logEndOfBodyFunctionOffset() {
-    if (this.addOffsets && this._currentFunctionBodyOffset.length == 1) {
-      this._currentFunctionBodyOffset.push(this._currentPosition);
+  private logEndOfFunctionBodyOffset() {
+    if (this.addOffsets && this._currentFunctionBodyOffset?.start) {
+      this._currentFunctionBodyOffset.end = this._currentPosition;
       this._functionBodyOffsets.push(this._currentFunctionBodyOffset);
-      this._currentFunctionBodyOffset = [];
+      this._currentFunctionBodyOffset = null;
     }
   }
   private printFuncType(typeIndex: number): void {
@@ -1079,9 +1089,13 @@ export class WasmDisassembler {
           this._indentLevel = 0;
           this._labelIndex = 0;
           this._backrefLabels = this._labelMode === LabelMode.Depth ? null : [];
-          this.logStartOfBodyFunctionOffset();
+          this._logFirstInstruction = true;
           break;
         case BinaryReaderState.CODE_OPERATOR:
+          if (this._logFirstInstruction) {
+            this.logStartOfFunctionBodyOffset();
+            this._logFirstInstruction = false;
+          }
           var operator = <IOperatorInformation>reader.result;
           if (operator.code == OperatorCode.end && this._indentLevel == 0) {
             // reached of the function, closing function body
@@ -1110,7 +1124,7 @@ export class WasmDisassembler {
         case BinaryReaderState.END_FUNCTION_BODY:
           this._funcIndex++;
           this._backrefLabels = null;
-          this.logEndOfBodyFunctionOffset();
+          this.logEndOfFunctionBodyOffset();
           // See case BinaryReaderState.CODE_OPERATOR for closing of body
           break;
         default:

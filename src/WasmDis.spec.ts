@@ -295,7 +295,9 @@ describe("WasmDisassembler.getResult() with function code", () => {
   const watString =
   `(module
   (export "export.function" (func $f))
-  (func $f (result i32) i32.const 0)
+  (func $f (result i32)
+  (local $x i32)
+  i32.const 0)
   (func $f1 (result i32) i32.const 1))`;
   const fileName = `test.wat`;
   const expectedLines = [
@@ -303,6 +305,7 @@ describe("WasmDisassembler.getResult() with function code", () => {
     "  (type $type0 (func (result i32)))",
     "  (export \"export.function\" (func $func0))",
     "  (func $func0 (result i32)",
+    "    (local $var0 i32)",
     "    i32.const 0",
     "  )",
     "  (func $func1 (result i32)",
@@ -324,8 +327,18 @@ describe("WasmDisassembler.getResult() with function code", () => {
     const result = dis.getResult();
     expect(result.done).toBe(true);
     expect(result.lines).toEqual(expectedLines);
-    expect(result.offsets).toEqual([0, 10, 22, 43, 46, 48, 49, 51, 53, 78,]);
-    expect(result.functionBodyOffsets).toEqual([[43, 49,], [49, 54,], ]);
+    expect(result.offsets).toEqual([0, 10, 22, 43, 43, 48, 50, 51, 53, 55, 83]);
+    expect(result.functionBodyOffsets).toEqual(
+      [
+        {
+          start: 48,
+          end: 51,
+        },
+        {
+          start: 53,
+          end: 56,
+        },
+      ]);
   });
 
   test("addOffsets is false", () => {
