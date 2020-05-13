@@ -53,40 +53,40 @@
     f64.const 3940
   )
   (func $func4 (param $var0 i32) (result i32)
-    get_local $var0
+    local.get $var0
   )
   (func $func5 (param $var0 i64) (result i64)
-    get_local $var0
+    local.get $var0
   )
   (func $func6 (param $var0 f32) (result f32)
-    get_local $var0
+    local.get $var0
   )
   (func $func7 (param $var0 f64) (result f64)
-    get_local $var0
+    local.get $var0
   )
   (func $func8 (param $var0 i32) (param $var1 i64) (result i64)
-    get_local $var1
+    local.get $var1
   )
   (func $func9 (param $var0 i64) (param $var1 f64) (result f64)
-    get_local $var1
+    local.get $var1
   )
   (func $func10 (param $var0 f32) (param $var1 i32) (result i32)
-    get_local $var1
+    local.get $var1
   )
   (func $func11 (param $var0 f64) (param $var1 f32) (result f32)
-    get_local $var1
+    local.get $var1
   )
   (func $func12 (param $var0 i32) (result i32)
-    get_local $var0
+    local.get $var0
   )
   (func $func13 (param $var0 i64) (result i64)
-    get_local $var0
+    local.get $var0
   )
   (func $func14 (param $var0 f32) (result f32)
-    get_local $var0
+    local.get $var0
   )
   (func $func15 (param $var0 f64) (result f64)
-    get_local $var0
+    local.get $var0
   )
   (func $func16 (result i32)
     i32.const 0
@@ -154,23 +154,23 @@
     call_indirect (type $type12)
   )
   (func $func29 (param $var0 i32) (param $var1 i64) (result i64)
-    get_local $var1
-    get_local $var0
+    local.get $var1
+    local.get $var0
     call_indirect (type $type6)
   )
   (func $func30 (param $var0 i32) (result i64)
     i64.const 9
-    get_local $var0
+    local.get $var0
     call_indirect (type $type14)
   )
   (func $func31 (param $var0 i64) (result i64)
-    get_local $var0
+    local.get $var0
     i64.eqz
     if (result i64)
       i64.const 1
     else
-      get_local $var0
-      get_local $var0
+      local.get $var0
+      local.get $var0
       i64.const 1
       i64.sub
       i32.const 12
@@ -179,18 +179,18 @@
     end
   )
   (func $func32 (param $var0 i64) (result i64)
-    get_local $var0
+    local.get $var0
     i64.const 1
     i64.le_u
     if (result i64)
       i64.const 1
     else
-      get_local $var0
+      local.get $var0
       i64.const 2
       i64.sub
       i32.const 13
       call_indirect (type $type6)
-      get_local $var0
+      local.get $var0
       i64.const 1
       i64.sub
       i32.const 13
@@ -199,12 +199,12 @@
     end
   )
   (func $func33 (param $var0 i32) (result i32)
-    get_local $var0
+    local.get $var0
     i32.eqz
     if (result i32)
       i32.const 44
     else
-      get_local $var0
+      local.get $var0
       i32.const 1
       i32.sub
       i32.const 15
@@ -212,12 +212,12 @@
     end
   )
   (func $func34 (param $var0 i32) (result i32)
-    get_local $var0
+    local.get $var0
     i32.eqz
     if (result i32)
       i32.const 99
     else
-      get_local $var0
+      local.get $var0
       i32.const 1
       i32.sub
       i32.const 14

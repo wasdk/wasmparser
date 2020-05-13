@@ -3,7 +3,7 @@
   (import "Mm" "mem" (memory $memory0 1))
   (export "load" (func $func0))
   (func $func0 (param $var0 i32) (result i32)
-    get_local $var0
+    local.get $var0
     i32.load8_u
   )
   (data (i32.const 5)

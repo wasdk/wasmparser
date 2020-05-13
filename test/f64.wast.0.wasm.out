@@ -13,53 +13,53 @@
   (export "trunc" (func $func9))
   (export "nearest" (func $func10))
   (func $func0 (param $var0 f64) (param $var1 f64) (result f64)
-    get_local $var0
-    get_local $var1
+    local.get $var0
+    local.get $var1
     f64.add
   )
   (func $func1 (param $var0 f64) (param $var1 f64) (result f64)
-    get_local $var0
-    get_local $var1
+    local.get $var0
+    local.get $var1
     f64.sub
   )
   (func $func2 (param $var0 f64) (param $var1 f64) (result f64)
-    get_local $var0
-    get_local $var1
+    local.get $var0
+    local.get $var1
     f64.mul
   )
   (func $func3 (param $var0 f64) (param $var1 f64) (result f64)
-    get_local $var0
-    get_local $var1
+    local.get $var0
+    local.get $var1
     f64.div
   )
   (func $func4 (param $var0 f64) (result f64)
-    get_local $var0
+    local.get $var0
     f64.sqrt
   )
   (func $func5 (param $var0 f64) (param $var1 f64) (result f64)
-    get_local $var0
-    get_local $var1
+    local.get $var0
+    local.get $var1
     f64.min
   )
   (func $func6 (param $var0 f64) (param $var1 f64) (result f64)
-    get_local $var0
-    get_local $var1
+    local.get $var0
+    local.get $var1
     f64.max
   )
   (func $func7 (param $var0 f64) (result f64)
-    get_local $var0
+    local.get $var0
     f64.ceil
   )
   (func $func8 (param $var0 f64) (result f64)
-    get_local $var0
+    local.get $var0
     f64.floor
   )
   (func $func9 (param $var0 f64) (result f64)
-    get_local $var0
+    local.get $var0
     f64.trunc
   )
   (func $func10 (param $var0 f64) (result f64)
-    get_local $var0
+    local.get $var0
     f64.nearest
   )
 )

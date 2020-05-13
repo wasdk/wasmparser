@@ -31,144 +31,144 @@
   (export "ge_s" (func $func27))
   (export "ge_u" (func $func28))
   (func $func0 (param $var0 i32) (param $var1 i32) (result i32)
-    get_local $var0
-    get_local $var1
+    local.get $var0
+    local.get $var1
     i32.add
   )
   (func $func1 (param $var0 i32) (param $var1 i32) (result i32)
-    get_local $var0
-    get_local $var1
+    local.get $var0
+    local.get $var1
     i32.sub
   )
   (func $func2 (param $var0 i32) (param $var1 i32) (result i32)
-    get_local $var0
-    get_local $var1
+    local.get $var0
+    local.get $var1
     i32.mul
   )
   (func $func3 (param $var0 i32) (param $var1 i32) (result i32)
-    get_local $var0
-    get_local $var1
+    local.get $var0
+    local.get $var1
     i32.div_s
   )
   (func $func4 (param $var0 i32) (param $var1 i32) (result i32)
-    get_local $var0
-    get_local $var1
+    local.get $var0
+    local.get $var1
     i32.div_u
   )
   (func $func5 (param $var0 i32) (param $var1 i32) (result i32)
-    get_local $var0
-    get_local $var1
+    local.get $var0
+    local.get $var1
     i32.rem_s
   )
   (func $func6 (param $var0 i32) (param $var1 i32) (result i32)
-    get_local $var0
-    get_local $var1
+    local.get $var0
+    local.get $var1
     i32.rem_u
   )
   (func $func7 (param $var0 i32) (param $var1 i32) (result i32)
-    get_local $var0
-    get_local $var1
+    local.get $var0
+    local.get $var1
     i32.and
   )
   (func $func8 (param $var0 i32) (param $var1 i32) (result i32)
-    get_local $var0
-    get_local $var1
+    local.get $var0
+    local.get $var1
     i32.or
   )
   (func $func9 (param $var0 i32) (param $var1 i32) (result i32)
-    get_local $var0
-    get_local $var1
+    local.get $var0
+    local.get $var1
     i32.xor
   )
   (func $func10 (param $var0 i32) (param $var1 i32) (result i32)
-    get_local $var0
-    get_local $var1
+    local.get $var0
+    local.get $var1
     i32.shl
   )
   (func $func11 (param $var0 i32) (param $var1 i32) (result i32)
-    get_local $var0
-    get_local $var1
+    local.get $var0
+    local.get $var1
     i32.shr_s
   )
   (func $func12 (param $var0 i32) (param $var1 i32) (result i32)
-    get_local $var0
-    get_local $var1
+    local.get $var0
+    local.get $var1
     i32.shr_u
   )
   (func $func13 (param $var0 i32) (param $var1 i32) (result i32)
-    get_local $var0
-    get_local $var1
+    local.get $var0
+    local.get $var1
     i32.rotl
   )
   (func $func14 (param $var0 i32) (param $var1 i32) (result i32)
-    get_local $var0
-    get_local $var1
+    local.get $var0
+    local.get $var1
     i32.rotr
   )
   (func $func15 (param $var0 i32) (result i32)
-    get_local $var0
+    local.get $var0
     i32.clz
   )
   (func $func16 (param $var0 i32) (result i32)
-    get_local $var0
+    local.get $var0
     i32.ctz
   )
   (func $func17 (param $var0 i32) (result i32)
-    get_local $var0
+    local.get $var0
     i32.popcnt
   )
   (func $func18 (param $var0 i32) (result i32)
-    get_local $var0
+    local.get $var0
     i32.eqz
   )
   (func $func19 (param $var0 i32) (param $var1 i32) (result i32)
-    get_local $var0
-    get_local $var1
+    local.get $var0
+    local.get $var1
     i32.eq
   )
   (func $func20 (param $var0 i32) (param $var1 i32) (result i32)
-    get_local $var0
-    get_local $var1
+    local.get $var0
+    local.get $var1
     i32.ne
   )
   (func $func21 (param $var0 i32) (param $var1 i32) (result i32)
-    get_local $var0
-    get_local $var1
+    local.get $var0
+    local.get $var1
     i32.lt_s
   )
   (func $func22 (param $var0 i32) (param $var1 i32) (result i32)
-    get_local $var0
-    get_local $var1
+    local.get $var0
+    local.get $var1
     i32.lt_u
   )
   (func $func23 (param $var0 i32) (param $var1 i32) (result i32)
-    get_local $var0
-    get_local $var1
+    local.get $var0
+    local.get $var1
     i32.le_s
   )
   (func $func24 (param $var0 i32) (param $var1 i32) (result i32)
-    get_local $var0
-    get_local $var1
+    local.get $var0
+    local.get $var1
     i32.le_u
   )
   (func $func25 (param $var0 i32) (param $var1 i32) (result i32)
-    get_local $var0
-    get_local $var1
+    local.get $var0
+    local.get $var1
     i32.gt_s
   )
   (func $func26 (param $var0 i32) (param $var1 i32) (result i32)
-    get_local $var0
-    get_local $var1
+    local.get $var0
+    local.get $var1
     i32.gt_u
   )
   (func $func27 (param $var0 i32) (param $var1 i32) (result i32)
-    get_local $var0
-    get_local $var1
+    local.get $var0
+    local.get $var1
     i32.ge_s
   )
   (func $func28 (param $var0 i32) (param $var1 i32) (result i32)
-    get_local $var0
-    get_local $var1
+    local.get $var0
+    local.get $var1
     i32.ge_u
   )
 )

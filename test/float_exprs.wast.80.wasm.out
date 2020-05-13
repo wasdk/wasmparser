@@ -5,13 +5,13 @@
   (export "f64.compute_radix" (func $func1))
   (func $func0 (param $var0 f32) (param $var1 f32) (result f32)
     loop $label0
-      get_local $var0
-      get_local $var0
+      local.get $var0
+      local.get $var0
       f32.add
-      tee_local $var0
+      local.tee $var0
       f32.const 1
       f32.add
-      get_local $var0
+      local.get $var0
       f32.sub
       f32.const -1
       f32.add
@@ -20,31 +20,31 @@
       br_if $label0
     end $label0
     loop $label1
-      get_local $var0
-      get_local $var1
+      local.get $var0
+      local.get $var1
       f32.const 1
       f32.add
-      tee_local $var1
+      local.tee $var1
       f32.add
-      get_local $var0
+      local.get $var0
       f32.sub
-      get_local $var1
+      local.get $var1
       f32.sub
       f32.const 0.0
       f32.ne
       br_if $label1
     end $label1
-    get_local $var1
+    local.get $var1
   )
   (func $func1 (param $var0 f64) (param $var1 f64) (result f64)
     loop $label0
-      get_local $var0
-      get_local $var0
+      local.get $var0
+      local.get $var0
       f64.add
-      tee_local $var0
+      local.tee $var0
       f64.const 1
       f64.add
-      get_local $var0
+      local.get $var0
       f64.sub
       f64.const -1
       f64.add
@@ -53,20 +53,20 @@
       br_if $label0
     end $label0
     loop $label1
-      get_local $var0
-      get_local $var1
+      local.get $var0
+      local.get $var1
       f64.const 1
       f64.add
-      tee_local $var1
+      local.tee $var1
       f64.add
-      get_local $var0
+      local.get $var0
       f64.sub
-      get_local $var1
+      local.get $var1
       f64.sub
       f64.const 0.0
       f64.ne
       br_if $label1
     end $label1
-    get_local $var1
+    local.get $var1
   )
 )

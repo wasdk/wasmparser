@@ -28,43 +28,43 @@
   (export "set-5" (func $func10))
   (export "set-6" (func $func11))
   (func $func0 (result i32)
-    get_global $global0
+    global.get $global0
   )
   (func $func1 (result i64)
-    get_global $global3
+    global.get $global3
   )
   (func $func2 (result i32)
-    get_global $global4
+    global.get $global4
   )
   (func $func3 (result i64)
-    get_global $global7
+    global.get $global7
   )
   (func $func4 (param $var0 i32)
-    get_local $var0
-    set_global $global4
+    local.get $var0
+    global.set $global4
   )
   (func $func5 (param $var0 i64)
-    get_local $var0
-    set_global $global7
+    local.get $var0
+    global.set $global7
   )
   (func $func6 (result f32)
-    get_global $global1
+    global.get $global1
   )
   (func $func7 (result f64)
-    get_global $global2
+    global.get $global2
   )
   (func $func8 (result f32)
-    get_global $global5
+    global.get $global5
   )
   (func $func9 (result f64)
-    get_global $global6
+    global.get $global6
   )
   (func $func10 (param $var0 f32)
-    get_local $var0
-    set_global $global5
+    local.get $var0
+    global.set $global5
   )
   (func $func11 (param $var0 f64)
-    get_local $var0
-    set_global $global6
+    local.get $var0
+    global.set $global6
   )
 )

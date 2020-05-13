@@ -9,7 +9,7 @@
   (func $func0 (param $var0 i32) (result i32)
     (local $var1 i32)
     i32.const 100
-    set_local $var1
+    local.set $var1
     block $label9
       block $label7
         block $label8
@@ -20,41 +20,41 @@
                   block $label2
                     block $label1
                       block $label0
-                        get_local $var0
+                        local.get $var0
                         br_table $label0 $label1 $label2 $label3 $label4 $label5 $label6 $label7 $label8
                       end $label0
-                      get_local $var0
+                      local.get $var0
                       return
                     end $label1
                     nop
                   end $label2
                 end $label3
                 i32.const 0
-                get_local $var0
+                local.get $var0
                 i32.sub
-                set_local $var1
+                local.set $var1
                 br $label9
               end $label4
               br $label9
             end $label5
             i32.const 101
-            set_local $var1
+            local.set $var1
             br $label9
           end $label6
           i32.const 101
-          set_local $var1
+          local.set $var1
         end $label8
         i32.const 102
-        set_local $var1
+        local.set $var1
       end $label7
     end $label9
-    get_local $var1
+    local.get $var1
     return
   )
   (func $func1 (param $var0 i64) (result i64)
     (local $var1 i64)
     i64.const 100
-    set_local $var1
+    local.set $var1
     block $label9 (result i64)
       block $label7
         block $label8
@@ -65,27 +65,27 @@
                   block $label2
                     block $label1
                       block $label0
-                        get_local $var0
+                        local.get $var0
                         i32.wrap/i64
                         br_table $label0 $label1 $label2 $label3 $label4 $label5 $label6 $label7 $label8
                       end $label0
-                      get_local $var0
+                      local.get $var0
                       return
                     end $label1
                     nop
                   end $label2
                 end $label3
                 i64.const 0
-                get_local $var0
+                local.get $var0
                 i64.sub
                 br $label9
               end $label6
               i64.const 101
-              set_local $var1
+              local.set $var1
             end $label5
           end $label4
         end $label8
-        get_local $var1
+        local.get $var1
         br $label9
       end $label7
       i64.const -5
@@ -101,10 +101,10 @@
           i32.const 1000
           block $label3 (result i32)
             i32.const 2
-            get_local $var0
+            local.get $var0
             i32.mul
             i32.const 3
-            get_local $var0
+            local.get $var0
             i32.and
             br_table $label0 $label1 $label2 $label3
           end $label3

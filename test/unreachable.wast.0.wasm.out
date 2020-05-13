@@ -244,31 +244,31 @@
     end
   )
   (func $func30 (param $var0 i32) (param $var1 i32) (result i32)
-    get_local $var0
+    local.get $var0
     if (result i32)
       unreachable
     else
-      get_local $var1
+      local.get $var1
     end
   )
   (func $func31 (param $var0 i32) (param $var1 i32) (result i32)
-    get_local $var0
+    local.get $var0
     if (result i32)
-      get_local $var1
+      local.get $var1
     else
       unreachable
     end
   )
   (func $func32 (param $var0 i32) (param $var1 i32) (result i32)
     unreachable
-    get_local $var0
-    get_local $var1
+    local.get $var0
+    local.get $var1
     select
   )
   (func $func33 (param $var0 i32) (param $var1 i32) (result i32)
-    get_local $var0
+    local.get $var0
     unreachable
-    get_local $var1
+    local.get $var1
     select
   )
   (func $func34 (result i32)
@@ -326,7 +326,7 @@
   (func $func42
     (local $var0 f32)
     unreachable
-    set_local $var0
+    local.set $var0
   )
   (func $func43 (result f32)
     unreachable

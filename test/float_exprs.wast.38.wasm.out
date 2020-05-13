@@ -2,8 +2,8 @@
   (type $type0 (func (param f64 f32) (result f32)))
   (export "no_demote_mixed_sub" (func $func0))
   (func $func0 (param $var0 f64) (param $var1 f32) (result f32)
-    get_local $var0
-    get_local $var1
+    local.get $var0
+    local.get $var1
     f64.promote/f32
     f64.sub
     f32.demote/f64

@@ -4,6 +4,6 @@
   (export "glob" (global $global0))
   (export "get" (func $func0))
   (func $func0 (result i32)
-    get_global $global0
+    global.get $global0
   )
 )

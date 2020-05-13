@@ -12,35 +12,35 @@
   (export "i64.trunc_s:sat_f64" (func $func6))
   (export "i64.trunc_u:sat_f64" (func $func7))
   (func $func0 (param $var0 f32) (result i32)
-    get_local $var0
+    local.get $var0
     i32.trunc_s:sat/f32
   )
   (func $func1 (param $var0 f32) (result i32)
-    get_local $var0
+    local.get $var0
     i32.trunc_u:sat/f32
   )
   (func $func2 (param $var0 f64) (result i32)
-    get_local $var0
+    local.get $var0
     i32.trunc_s:sat/f64
   )
   (func $func3 (param $var0 f64) (result i32)
-    get_local $var0
+    local.get $var0
     i32.trunc_u:sat/f64
   )
   (func $func4 (param $var0 f32) (result i64)
-    get_local $var0
+    local.get $var0
     i64.trunc_s:sat/f32
   )
   (func $func5 (param $var0 f32) (result i64)
-    get_local $var0
+    local.get $var0
     i64.trunc_u:sat/f32
   )
   (func $func6 (param $var0 f64) (result i64)
-    get_local $var0
+    local.get $var0
     i64.trunc_s:sat/f64
   )
   (func $func7 (param $var0 f64) (result i64)
-    get_local $var0
+    local.get $var0
     i64.trunc_u:sat/f64
   )
 )

@@ -1,7 +1,7 @@
 (module
   (import "spectest" "global" (global $global0 i32))
   (memory $memory0 0)
-  (data (get_global $global0)
+  (data (global.get $global0)
     "a"
   )
 )

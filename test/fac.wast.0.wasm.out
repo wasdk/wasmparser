@@ -6,14 +6,14 @@
   (export "fac-iter-named" (func $func3))
   (export "fac-opt" (func $func4))
   (func $func0 (param $var0 i64) (result i64)
-    get_local $var0
+    local.get $var0
     i64.const 0
     i64.eq
     if (result i64)
       i64.const 1
     else
-      get_local $var0
-      get_local $var0
+      local.get $var0
+      local.get $var0
       i64.const 1
       i64.sub
       call $func0
@@ -21,14 +21,14 @@
     end
   )
   (func $func1 (param $var0 i64) (result i64)
-    get_local $var0
+    local.get $var0
     i64.const 0
     i64.eq
     if (result i64)
       i64.const 1
     else
-      get_local $var0
-      get_local $var0
+      local.get $var0
+      local.get $var0
       i64.const 1
       i64.sub
       call $func1
@@ -37,88 +37,88 @@
   )
   (func $func2 (param $var0 i64) (result i64)
     (local $var1 i64) (local $var2 i64)
-    get_local $var0
-    set_local $var1
+    local.get $var0
+    local.set $var1
     i64.const 1
-    set_local $var2
+    local.set $var2
     block $label0
       loop $label1
-        get_local $var1
+        local.get $var1
         i64.const 0
         i64.eq
         if
           br $label0
         else
           block
-            get_local $var1
-            get_local $var2
+            local.get $var1
+            local.get $var2
             i64.mul
-            set_local $var2
-            get_local $var1
+            local.set $var2
+            local.get $var1
             i64.const 1
             i64.sub
-            set_local $var1
+            local.set $var1
           end
         end
         br $label1
       end $label1
     end $label0
-    get_local $var2
+    local.get $var2
   )
   (func $func3 (param $var0 i64) (result i64)
     (local $var1 i64) (local $var2 i64)
-    get_local $var0
-    set_local $var1
+    local.get $var0
+    local.set $var1
     i64.const 1
-    set_local $var2
+    local.set $var2
     block $label0
       loop $label1
-        get_local $var1
+        local.get $var1
         i64.const 0
         i64.eq
         if
           br $label0
         else
           block
-            get_local $var1
-            get_local $var2
+            local.get $var1
+            local.get $var2
             i64.mul
-            set_local $var2
-            get_local $var1
+            local.set $var2
+            local.get $var1
             i64.const 1
             i64.sub
-            set_local $var1
+            local.set $var1
           end
         end
         br $label1
       end $label1
     end $label0
-    get_local $var2
+    local.get $var2
   )
   (func $func4 (param $var0 i64) (result i64)
     (local $var1 i64)
     i64.const 1
-    set_local $var1
+    local.set $var1
     block $label0
-      get_local $var0
+      local.get $var0
       i64.const 2
       i64.lt_s
       br_if $label0
       loop $label1
-        get_local $var1
-        get_local $var0
+        local.get $var1
+        local.get $var0
         i64.mul
-        set_local $var1
-        get_local $var0
+        local.set $var1
+        local.get $var0
         i64.const -1
         i64.add
-        set_local $var0
-        get_local $var0
+        local.set $var0
+        local.get $var0
         i64.const 1
         i64.gt_s
         br_if $label1
       end $label1
     end $label0
-    get_local $var1
+    local.get $var1
   )
 )

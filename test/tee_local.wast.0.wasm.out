@@ -24,114 +24,114 @@
   (func $func0 (result i32)
     (local $var0 i32)
     i32.const 0
-    tee_local $var0
+    local.tee $var0
   )
   (func $func1 (result i64)
     (local $var0 i64)
     i64.const 0
-    tee_local $var0
+    local.tee $var0
   )
   (func $func2 (result f32)
     (local $var0 f32)
     f32.const 0.0
-    tee_local $var0
+    local.tee $var0
   )
   (func $func3 (result f64)
     (local $var0 f64)
     f64.const 0.0
-    tee_local $var0
+    local.tee $var0
   )
   (func $func4 (param $var0 i32) (result i32)
     i32.const 10
-    tee_local $var0
+    local.tee $var0
   )
   (func $func5 (param $var0 i64) (result i64)
     i64.const 11
-    tee_local $var0
+    local.tee $var0
   )
   (func $func6 (param $var0 f32) (result f32)
     f32.const 11.100000381469727
-    tee_local $var0
+    local.tee $var0
   )
   (func $func7 (param $var0 f64) (result f64)
     f64.const 12.2
-    tee_local $var0
+    local.tee $var0
   )
   (func $func8 (param $var0 i64) (param $var1 f32) (param $var2 f64) (param $var3 i32) (param $var4 i32)
     (local $var5 f32) (local $var6 i64) (local $var7 i64) (local $var8 f64)
     i64.const 0
-    tee_local $var0
+    local.tee $var0
     i64.eqz
     drop
     f32.const 0.0
-    tee_local $var1
+    local.tee $var1
     f32.neg
     drop
     f64.const 0.0
-    tee_local $var2
+    local.tee $var2
     f64.neg
     drop
     i32.const 0
-    tee_local $var3
+    local.tee $var3
     i32.eqz
     drop
     i32.const 0
-    tee_local $var4
+    local.tee $var4
     i32.eqz
     drop
     f32.const 0.0
-    tee_local $var5
+    local.tee $var5
     f32.neg
     drop
     i64.const 0
-    tee_local $var6
+    local.tee $var6
     i64.eqz
     drop
     i64.const 0
-    tee_local $var7
+    local.tee $var7
     i64.eqz
     drop
     f64.const 0.0
-    tee_local $var8
+    local.tee $var8
     f64.neg
     drop
   )
   (func $func9 (param $var0 i64) (param $var1 f32) (param $var2 f64) (param $var3 i32) (param $var4 i32) (result i64)
     (local $var5 f32) (local $var6 i64) (local $var7 i64) (local $var8 f64)
     f32.const -0.30000001192092896
-    tee_local $var1
+    local.tee $var1
     drop
     i32.const 40
-    tee_local $var3
+    local.tee $var3
     drop
     i32.const -7
-    tee_local $var4
+    local.tee $var4
     drop
     f32.const 5.5
-    tee_local $var5
+    local.tee $var5
     drop
     i64.const 6
-    tee_local $var6
+    local.tee $var6
     drop
     f64.const 8
-    tee_local $var8
+    local.tee $var8
     drop
-    get_local $var0
+    local.get $var0
     f64.convert_u/i64
-    get_local $var1
+    local.get $var1
     f64.promote/f32
-    get_local $var2
-    get_local $var3
+    local.get $var2
+    local.get $var3
     f64.convert_u/i32
-    get_local $var4
+    local.get $var4
     f64.convert_s/i32
-    get_local $var5
+    local.get $var5
     f64.promote/f32
-    get_local $var6
+    local.get $var6
     f64.convert_u/i64
-    get_local $var7
+    local.get $var7
     f64.convert_u/i64
-    get_local $var8
+    local.get $var8
     f64.add
     f64.add
     f64.add
@@ -145,30 +145,30 @@
   (func $func10 (param $var0 i64) (param $var1 f32) (param $var2 f64) (param $var3 i32) (param $var4 i32) (result f64)
     (local $var5 f32) (local $var6 i64) (local $var7 i64) (local $var8 f64)
     i64.const 1
-    tee_local $var0
+    local.tee $var0
     f64.convert_u/i64
     f32.const 2
-    tee_local $var1
+    local.tee $var1
     f64.promote/f32
     f64.const 3.3
-    tee_local $var2
+    local.tee $var2
     i32.const 4
-    tee_local $var3
+    local.tee $var3
     f64.convert_u/i32
     i32.const 5
-    tee_local $var4
+    local.tee $var4
     f64.convert_s/i32
     f32.const 5.5
-    tee_local $var5
+    local.tee $var5
     f64.promote/f32
     i64.const 6
-    tee_local $var6
+    local.tee $var6
     f64.convert_u/i64
     i64.const 0
-    tee_local $var7
+    local.tee $var7
     f64.convert_u/i64
     f64.const 8
-    tee_local $var8
+    local.tee $var8
     f64.add
     f64.add
     f64.add

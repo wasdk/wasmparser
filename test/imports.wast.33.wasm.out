@@ -11,15 +11,15 @@
   (export "get-x" (func $func2))
   (export "get-y" (func $func3))
   (func $func0 (result i32)
-    get_global $global0
+    global.get $global0
   )
   (func $func1 (result i32)
-    get_global $global1
+    global.get $global1
   )
   (func $func2 (result i32)
-    get_global $global2
+    global.get $global2
   )
   (func $func3 (result i32)
-    get_global $global3
+    global.get $global3
   )
 )

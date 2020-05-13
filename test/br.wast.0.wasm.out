@@ -259,20 +259,20 @@
   )
   (func $func25 (param $var0 i32) (param $var1 i32) (result i32)
     block $label0 (result i32)
-      get_local $var0
+      local.get $var0
       if (result i32)
         i32.const 3
         br $label0
       else
-        get_local $var1
+        local.get $var1
       end
     end $label0
   )
   (func $func26 (param $var0 i32) (param $var1 i32) (result i32)
     block $label0 (result i32)
-      get_local $var0
+      local.get $var0
       if (result i32)
-        get_local $var1
+        local.get $var1
       else
         i32.const 4
         br $label0
@@ -283,17 +283,17 @@
     block $label0 (result i32)
       i32.const 5
       br $label0
-      get_local $var0
-      get_local $var1
+      local.get $var0
+      local.get $var1
       select
     end $label0
   )
   (func $func28 (param $var0 i32) (param $var1 i32) (result i32)
     block $label0 (result i32)
-      get_local $var0
+      local.get $var0
       i32.const 6
       br $label0
-      get_local $var1
+      local.get $var1
       select
     end $label0
   )
@@ -381,7 +381,7 @@
     block $label0 (result i32)
       i32.const 17
       br $label0
-      set_local $var0
+      local.set $var0
       i32.const -1
     end $label0
   )
