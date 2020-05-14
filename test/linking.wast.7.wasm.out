@@ -14,7 +14,7 @@
     i32.const -4
   )
   (func $func2 (param $var0 i32) (result i32)
-    get_local $var0
+    local.get $var0
     call_indirect (type $type0)
   )
 )

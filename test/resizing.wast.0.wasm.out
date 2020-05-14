@@ -28,7 +28,7 @@
     i32.store
   )
   (func $func4 (param $var0 i32) (result i32)
-    get_local $var0
+    local.get $var0
     grow_memory
   )
   (func $func5 (result i32)

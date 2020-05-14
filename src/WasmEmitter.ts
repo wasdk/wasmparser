@@ -632,13 +632,13 @@ export class Emitter {
         this.writeVarUint(opInfo.typeIndex);
         this.writeVarUint(0);
         break;
-      case OperatorCode.get_local:
-      case OperatorCode.set_local:
-      case OperatorCode.tee_local:
+      case OperatorCode.local_get:
+      case OperatorCode.local_set:
+      case OperatorCode.local_tee:
         this.writeVarUint(opInfo.localIndex);
         break;
-      case OperatorCode.get_global:
-      case OperatorCode.set_global:
+      case OperatorCode.global_get:
+      case OperatorCode.global_set:
         this.writeVarUint(opInfo.globalIndex);
         break;
       case OperatorCode.i32_load:

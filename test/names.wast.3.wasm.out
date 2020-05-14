@@ -5,9 +5,9 @@
   (import "spectest" "print" (func $import1 (param i32)))
   (export "print32" (func $func2))
   (func $func2 (param $var0 i32) (param $var1 i32)
-    get_local $var0
+    local.get $var0
     call $import0
-    get_local $var1
+    local.get $var1
     call $import1
   )
 )

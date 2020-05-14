@@ -134,102 +134,102 @@
   )
   (func $func23 (result i32)
     (local $var0 i32) (local $var1 i32)
-    get_local $var0
+    local.get $var0
   )
   (func $func24 (result i64)
     (local $var0 i64) (local $var1 i64)
-    get_local $var0
+    local.get $var0
   )
   (func $func25 (result f32)
     (local $var0 f32) (local $var1 f32)
-    get_local $var0
+    local.get $var0
   )
   (func $func26 (result f64)
     (local $var0 f64) (local $var1 f64)
-    get_local $var0
+    local.get $var0
   )
   (func $func27 (result i32)
     (local $var0 i32) (local $var1 i32)
-    get_local $var1
+    local.get $var1
   )
   (func $func28 (result i64)
     (local $var0 i64) (local $var1 i64)
-    get_local $var1
+    local.get $var1
   )
   (func $func29 (result f32)
     (local $var0 f32) (local $var1 f32)
-    get_local $var1
+    local.get $var1
   )
   (func $func30 (result f64)
     (local $var0 f64) (local $var1 f64)
-    get_local $var1
+    local.get $var1
   )
   (func $func31 (result f64)
     (local $var0 f32) (local $var1 i32) (local $var2 i64) (local $var3 i32) (local $var4 f64) (local $var5 i32)
-    get_local $var0
+    local.get $var0
     f32.neg
     drop
-    get_local $var1
+    local.get $var1
     i32.eqz
     drop
-    get_local $var2
+    local.get $var2
     i64.eqz
     drop
-    get_local $var3
+    local.get $var3
     i32.eqz
     drop
-    get_local $var4
+    local.get $var4
     f64.neg
     drop
-    get_local $var5
+    local.get $var5
     i32.eqz
     drop
-    get_local $var4
+    local.get $var4
   )
   (func $func32 (param $var0 i32) (param $var1 i32) (result i32)
-    get_local $var0
+    local.get $var0
   )
   (func $func33 (param $var0 i64) (param $var1 i64) (result i64)
-    get_local $var0
+    local.get $var0
   )
   (func $func34 (param $var0 f32) (param $var1 f32) (result f32)
-    get_local $var0
+    local.get $var0
   )
   (func $func35 (param $var0 f64) (param $var1 f64) (result f64)
-    get_local $var0
+    local.get $var0
   )
   (func $func36 (param $var0 i32) (param $var1 i32) (result i32)
-    get_local $var1
+    local.get $var1
   )
   (func $func37 (param $var0 i64) (param $var1 i64) (result i64)
-    get_local $var1
+    local.get $var1
   )
   (func $func38 (param $var0 f32) (param $var1 f32) (result f32)
-    get_local $var1
+    local.get $var1
   )
   (func $func39 (param $var0 f64) (param $var1 f64) (result f64)
-    get_local $var1
+    local.get $var1
   )
   (func $func40 (param $var0 f32) (param $var1 i32) (param $var2 i64) (param $var3 i32) (param $var4 f64) (param $var5 i32) (result f64)
-    get_local $var0
+    local.get $var0
     f32.neg
     drop
-    get_local $var1
+    local.get $var1
     i32.eqz
     drop
-    get_local $var2
+    local.get $var2
     i64.eqz
     drop
-    get_local $var3
+    local.get $var3
     i32.eqz
     drop
-    get_local $var4
+    local.get $var4
     f64.neg
     drop
-    get_local $var5
+    local.get $var5
     i32.eqz
     drop
-    get_local $var4
+    local.get $var4
   )
   (func $func41
   )
@@ -313,36 +313,36 @@
     br 0
   )
   (func $func61 (param $var0 i32)
-    get_local $var0
+    local.get $var0
     br_if 0
   )
   (func $func62 (param $var0 i32) (result i32)
     i32.const 50
-    get_local $var0
+    local.get $var0
     br_if 0
     drop
     i32.const 51
   )
   (func $func63 (param $var0 i32)
-    get_local $var0
+    local.get $var0
     br_table 0 0 0
   )
   (func $func64 (param $var0 i32) (result i32)
     i32.const 50
-    get_local $var0
+    local.get $var0
     br_table 0 0
     i32.const 51
   )
   (func $func65 (param $var0 i32)
     block $label0
-      get_local $var0
+      local.get $var0
       br_table $label0 1 $label0
     end $label0
   )
   (func $func66 (param $var0 i32) (result i32)
     block $label0 (result i32)
       i32.const 50
-      get_local $var0
+      local.get $var0
       br_table $label0 1 $label0
       i32.const 51
     end $label0
@@ -351,19 +351,19 @@
   )
   (func $func67 (result i32)
     (local $var0 i32)
-    get_local $var0
+    local.get $var0
   )
   (func $func68 (result i64)
     (local $var0 i64)
-    get_local $var0
+    local.get $var0
   )
   (func $func69 (result f32)
     (local $var0 f32)
-    get_local $var0
+    local.get $var0
   )
   (func $func70 (result f64)
     (local $var0 f64)
-    get_local $var0
+    local.get $var0
   )
   (func $func71
   )

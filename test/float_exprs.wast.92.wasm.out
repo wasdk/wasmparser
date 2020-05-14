@@ -5,9 +5,9 @@
   (export "f64.silver_means" (func $func1))
   (func $func0 (param $var0 f32) (result f32)
     f32.const 0.5
-    get_local $var0
-    get_local $var0
-    get_local $var0
+    local.get $var0
+    local.get $var0
+    local.get $var0
     f32.mul
     f32.const 4
     f32.add
@@ -17,9 +17,9 @@
   )
   (func $func1 (param $var0 f64) (result f64)
     f64.const 0.5
-    get_local $var0
-    get_local $var0
-    get_local $var0
+    local.get $var0
+    local.get $var0
+    local.get $var0
     f64.mul
     f64.const 4
     f64.add

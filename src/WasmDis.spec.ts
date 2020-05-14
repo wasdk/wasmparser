@@ -231,7 +231,7 @@ describe("NameSectionReader", () => {
   test("Wasm module with parameter name", () => {
     const { buffer } = parseWat(
       `test.wat`,
-      `(module (func $foo (param $x i32) (result i32) get_local $x))`
+      `(module (func $foo (param $x i32) (result i32) local.get $x))`
     ).toBinary({ write_debug_names: true });
     const reader = new BinaryReader();
     reader.setData(buffer.buffer, 0, buffer.byteLength);
@@ -271,8 +271,8 @@ describe("NameSectionReader", () => {
     const { buffer } = parseWat(
       `test.wat`,
       `(module (func $foo (local $x i32) (local $y f32)
-        get_local $x
-        get_local $y))`
+        local.get $x
+        local.get $y))`
     ).toBinary({ write_debug_names: true });
     const reader = new BinaryReader();
     reader.setData(buffer.buffer, 0, buffer.byteLength);

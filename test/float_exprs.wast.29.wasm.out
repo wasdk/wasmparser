@@ -6,22 +6,22 @@
   (export "i64.no_fold_f64_s" (func $func2))
   (export "i64.no_fold_f64_u" (func $func3))
   (func $func0 (param $var0 i32) (result i32)
-    get_local $var0
+    local.get $var0
     f32.convert_s/i32
     i32.trunc_s/f32
   )
   (func $func1 (param $var0 i32) (result i32)
-    get_local $var0
+    local.get $var0
     f32.convert_u/i32
     i32.trunc_u/f32
   )
   (func $func2 (param $var0 i64) (result i64)
-    get_local $var0
+    local.get $var0
     f64.convert_s/i64
     i64.trunc_s/f64
   )
   (func $func3 (param $var0 i64) (result i64)
-    get_local $var0
+    local.get $var0
     f64.convert_u/i64
     i64.trunc_u/f64
   )

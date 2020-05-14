@@ -55,9 +55,9 @@
   (func $func0
   )
   (func $func1 (param $var0 i32) (param $var1 i32) (param $var2 i32) (result i32)
-    get_local $var0
-    get_local $var1
-    get_local $var2
+    local.get $var0
+    local.get $var1
+    local.get $var2
     i32.sub
     i32.add
   )
@@ -85,48 +85,48 @@
     nop
   )
   (func $func6 (param $var0 i32)
-    get_local $var0
+    local.get $var0
     nop
     drop
   )
   (func $func7 (param $var0 i32)
     nop
     nop
-    get_local $var0
+    local.get $var0
     nop
     nop
     drop
   )
   (func $func8 (param $var0 i32) (result i32)
-    get_local $var0
+    local.get $var0
     nop
-    get_local $var0
-    get_local $var0
+    local.get $var0
+    local.get $var0
     select
   )
   (func $func9 (param $var0 i32) (result i32)
-    get_local $var0
-    get_local $var0
+    local.get $var0
+    local.get $var0
     nop
-    get_local $var0
+    local.get $var0
     select
   )
   (func $func10 (param $var0 i32) (result i32)
-    get_local $var0
-    get_local $var0
-    get_local $var0
+    local.get $var0
+    local.get $var0
+    local.get $var0
     nop
     select
   )
   (func $func11 (param $var0 i32) (result i32)
     nop
-    get_local $var0
+    local.get $var0
     nop
     nop
-    get_local $var0
+    local.get $var0
     nop
     nop
-    get_local $var0
+    local.get $var0
     nop
     nop
     select
@@ -195,14 +195,14 @@
     end
   )
   (func $func20 (param $var0 i32)
-    get_local $var0
+    local.get $var0
     nop
     if
       call $func0
     end
   )
   (func $func21 (param $var0 i32)
-    get_local $var0
+    local.get $var0
     if
       nop
     else
@@ -210,7 +210,7 @@
     end
   )
   (func $func22 (param $var0 i32)
-    get_local $var0
+    local.get $var0
     if
       call $func0
     else
@@ -219,7 +219,7 @@
   )
   (func $func23 (param $var0 i32) (result i32)
     block $label0 (result i32)
-      get_local $var0
+      local.get $var0
       nop
       br $label0
     end $label0
@@ -228,7 +228,7 @@
     block $label0 (result i32)
       nop
       nop
-      get_local $var0
+      local.get $var0
       nop
       nop
       br $label0
@@ -236,16 +236,16 @@
   )
   (func $func25 (param $var0 i32) (result i32)
     block $label0 (result i32)
-      get_local $var0
+      local.get $var0
       nop
-      get_local $var0
+      local.get $var0
       br_if $label0
     end $label0
   )
   (func $func26 (param $var0 i32) (result i32)
     block $label0 (result i32)
-      get_local $var0
-      get_local $var0
+      local.get $var0
+      local.get $var0
       nop
       br_if $label0
     end $label0
@@ -254,10 +254,10 @@
     block $label0 (result i32)
       nop
       nop
-      get_local $var0
+      local.get $var0
       nop
       nop
-      get_local $var0
+      local.get $var0
       nop
       nop
       br_if $label0
@@ -265,16 +265,16 @@
   )
   (func $func28 (param $var0 i32) (result i32)
     block $label0 (result i32)
-      get_local $var0
+      local.get $var0
       nop
-      get_local $var0
+      local.get $var0
       br_table $label0 $label0
     end $label0
   )
   (func $func29 (param $var0 i32) (result i32)
     block $label0 (result i32)
-      get_local $var0
-      get_local $var0
+      local.get $var0
+      local.get $var0
       nop
       br_table $label0 $label0
     end $label0
@@ -283,142 +283,142 @@
     block $label0 (result i32)
       nop
       nop
-      get_local $var0
+      local.get $var0
       nop
       nop
-      get_local $var0
+      local.get $var0
       nop
       nop
       br_table $label0 $label0
     end $label0
   )
   (func $func31 (param $var0 i32) (result i32)
-    get_local $var0
+    local.get $var0
     nop
     return
   )
   (func $func32 (param $var0 i32) (result i32)
     nop
     nop
-    get_local $var0
+    local.get $var0
     nop
     nop
     return
   )
   (func $func33 (param $var0 i32) (param $var1 i32) (param $var2 i32) (result i32)
-    get_local $var0
+    local.get $var0
     nop
-    get_local $var1
-    get_local $var2
+    local.get $var1
+    local.get $var2
     call $func1
   )
   (func $func34 (param $var0 i32) (param $var1 i32) (param $var2 i32) (result i32)
-    get_local $var0
-    get_local $var1
+    local.get $var0
+    local.get $var1
     nop
-    get_local $var2
+    local.get $var2
     call $func1
   )
   (func $func35 (param $var0 i32) (param $var1 i32) (param $var2 i32) (result i32)
-    get_local $var0
-    get_local $var1
-    get_local $var2
+    local.get $var0
+    local.get $var1
+    local.get $var2
     nop
     call $func1
   )
   (func $func36 (param $var0 i32) (param $var1 i32) (param $var2 i32) (result i32)
     nop
     nop
-    get_local $var0
+    local.get $var0
     nop
     nop
-    get_local $var1
+    local.get $var1
     nop
     nop
-    get_local $var2
+    local.get $var2
     nop
     nop
     call $func1
   )
   (func $func37 (param $var0 i32) (result i32)
-    get_local $var0
+    local.get $var0
     nop
     i32.ctz
   )
   (func $func38 (param $var0 i32) (result i32)
     nop
     nop
-    get_local $var0
+    local.get $var0
     nop
     nop
     i32.ctz
   )
   (func $func39 (param $var0 i32) (result i32)
-    get_local $var0
+    local.get $var0
     nop
-    get_local $var0
+    local.get $var0
     i32.add
   )
   (func $func40 (param $var0 i32) (result i32)
-    get_local $var0
-    get_local $var0
+    local.get $var0
+    local.get $var0
     nop
     i32.add
   )
   (func $func41 (param $var0 i32) (result i32)
     nop
-    get_local $var0
+    local.get $var0
     nop
     nop
-    get_local $var0
+    local.get $var0
     nop
     nop
     i32.add
   )
   (func $func42 (param $var0 i32) (result i32)
-    get_local $var0
+    local.get $var0
     nop
     i32.eqz
   )
   (func $func43 (param $var0 i32) (result i32)
     nop
     nop
-    get_local $var0
+    local.get $var0
     nop
     nop
     i32.eqz
   )
   (func $func44 (param $var0 i32) (result i32)
-    get_local $var0
+    local.get $var0
     nop
-    get_local $var0
+    local.get $var0
     i32.ne
   )
   (func $func45 (param $var0 i32) (result i32)
-    get_local $var0
-    get_local $var0
+    local.get $var0
+    local.get $var0
     nop
     i32.lt_u
   )
   (func $func46 (param $var0 i32) (result i32)
     nop
-    get_local $var0
+    local.get $var0
     nop
     nop
-    get_local $var0
+    local.get $var0
     nop
     nop
     i32.le_s
   )
   (func $func47 (param $var0 i32) (result i32)
-    get_local $var0
+    local.get $var0
     nop
     grow_memory
   )
   (func $func48 (param $var0 i32) (result i32)
     nop
     nop
-    get_local $var0
+    local.get $var0
     nop
     nop
     grow_memory

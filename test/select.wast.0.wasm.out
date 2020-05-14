@@ -13,39 +13,39 @@
   (export "select_trap_r" (func $func5))
   (export "select_unreached" (func $func6))
   (func $func0 (param $var0 i32) (param $var1 i32) (param $var2 i32) (result i32)
-    get_local $var0
-    get_local $var1
-    get_local $var2
+    local.get $var0
+    local.get $var1
+    local.get $var2
     select
   )
   (func $func1 (param $var0 i64) (param $var1 i64) (param $var2 i32) (result i64)
-    get_local $var0
-    get_local $var1
-    get_local $var2
+    local.get $var0
+    local.get $var1
+    local.get $var2
     select
   )
   (func $func2 (param $var0 f32) (param $var1 f32) (param $var2 i32) (result f32)
-    get_local $var0
-    get_local $var1
-    get_local $var2
+    local.get $var0
+    local.get $var1
+    local.get $var2
     select
   )
   (func $func3 (param $var0 f64) (param $var1 f64) (param $var2 i32) (result f64)
-    get_local $var0
-    get_local $var1
-    get_local $var2
+    local.get $var0
+    local.get $var1
+    local.get $var2
     select
   )
   (func $func4 (param $var0 i32) (result i32)
     unreachable
     i32.const 0
-    get_local $var0
+    local.get $var0
     select
   )
   (func $func5 (param $var0 i32) (result i32)
     i32.const 0
     unreachable
-    get_local $var0
+    local.get $var0
     select
   )
   (func $func6

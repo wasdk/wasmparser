@@ -18,82 +18,82 @@
   (export "f64.i64.no_fold_trunc_s_convert_u" (func $func14))
   (export "f64.i64.no_fold_trunc_u_convert_u" (func $func15))
   (func $func0 (param $var0 f32) (result f32)
-    get_local $var0
+    local.get $var0
     i32.trunc_s/f32
     f32.convert_s/i32
   )
   (func $func1 (param $var0 f32) (result f32)
-    get_local $var0
+    local.get $var0
     i32.trunc_u/f32
     f32.convert_s/i32
   )
   (func $func2 (param $var0 f32) (result f32)
-    get_local $var0
+    local.get $var0
     i32.trunc_s/f32
     f32.convert_u/i32
   )
   (func $func3 (param $var0 f32) (result f32)
-    get_local $var0
+    local.get $var0
     i32.trunc_u/f32
     f32.convert_u/i32
   )
   (func $func4 (param $var0 f64) (result f64)
-    get_local $var0
+    local.get $var0
     i32.trunc_s/f64
     f64.convert_s/i32
   )
   (func $func5 (param $var0 f64) (result f64)
-    get_local $var0
+    local.get $var0
     i32.trunc_u/f64
     f64.convert_s/i32
   )
   (func $func6 (param $var0 f64) (result f64)
-    get_local $var0
+    local.get $var0
     i32.trunc_s/f64
     f64.convert_u/i32
   )
   (func $func7 (param $var0 f64) (result f64)
-    get_local $var0
+    local.get $var0
     i32.trunc_u/f64
     f64.convert_u/i32
   )
   (func $func8 (param $var0 f32) (result f32)
-    get_local $var0
+    local.get $var0
     i64.trunc_s/f32
     f32.convert_s/i64
   )
   (func $func9 (param $var0 f32) (result f32)
-    get_local $var0
+    local.get $var0
     i64.trunc_u/f32
     f32.convert_s/i64
   )
   (func $func10 (param $var0 f32) (result f32)
-    get_local $var0
+    local.get $var0
     i64.trunc_s/f32
     f32.convert_u/i64
   )
   (func $func11 (param $var0 f32) (result f32)
-    get_local $var0
+    local.get $var0
     i64.trunc_u/f32
     f32.convert_u/i64
   )
   (func $func12 (param $var0 f64) (result f64)
-    get_local $var0
+    local.get $var0
     i64.trunc_s/f64
     f64.convert_s/i64
   )
   (func $func13 (param $var0 f64) (result f64)
-    get_local $var0
+    local.get $var0
     i64.trunc_u/f64
     f64.convert_s/i64
   )
   (func $func14 (param $var0 f64) (result f64)
-    get_local $var0
+    local.get $var0
     i64.trunc_s/f64
     f64.convert_u/i64
   )
   (func $func15 (param $var0 f64) (result f64)
-    get_local $var0
+    local.get $var0
     i64.trunc_u/f64
     f64.convert_u/i64
   )

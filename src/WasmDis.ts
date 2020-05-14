@@ -590,14 +590,14 @@ export class WasmDisassembler {
         var typeName = this._nameResolver.getTypeName(operator.typeIndex, true);
         this.appendBuffer(` (type ${typeName})`);
         break;
-      case OperatorCode.get_local:
-      case OperatorCode.set_local:
-      case OperatorCode.tee_local:
+      case OperatorCode.local_get:
+      case OperatorCode.local_set:
+      case OperatorCode.local_tee:
         var paramName = this._nameResolver.getVariableName(this._funcIndex, operator.localIndex, true);
         this.appendBuffer(` ${paramName}`);
         break;
-      case OperatorCode.get_global:
-      case OperatorCode.set_global:
+      case OperatorCode.global_get:
+      case OperatorCode.global_set:
         var globalName = this._nameResolver.getGlobalName(operator.globalIndex, true);
         this.appendBuffer(` ${globalName}`);
         break;

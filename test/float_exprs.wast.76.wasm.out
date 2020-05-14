@@ -10,51 +10,51 @@
   (export "f64.recoding_lt" (func $func5))
   (export "recoding_demote" (func $func6))
   (func $func0 (param $var0 f32) (param $var1 f32) (result i32)
-    get_local $var0
-    get_local $var1
+    local.get $var0
+    local.get $var1
     f32.mul
-    get_local $var0
+    local.get $var0
     f32.eq
   )
   (func $func1 (param $var0 f32) (param $var1 f32) (result i32)
-    get_local $var0
-    get_local $var1
+    local.get $var0
+    local.get $var1
     f32.mul
-    get_local $var0
+    local.get $var0
     f32.le
   )
   (func $func2 (param $var0 f32) (param $var1 f32) (result i32)
-    get_local $var0
-    get_local $var1
+    local.get $var0
+    local.get $var1
     f32.mul
-    get_local $var0
+    local.get $var0
     f32.lt
   )
   (func $func3 (param $var0 f64) (param $var1 f64) (result i32)
-    get_local $var0
-    get_local $var1
+    local.get $var0
+    local.get $var1
     f64.mul
-    get_local $var0
+    local.get $var0
     f64.eq
   )
   (func $func4 (param $var0 f64) (param $var1 f64) (result i32)
-    get_local $var0
-    get_local $var1
+    local.get $var0
+    local.get $var1
     f64.mul
-    get_local $var0
+    local.get $var0
     f64.le
   )
   (func $func5 (param $var0 f64) (param $var1 f64) (result i32)
-    get_local $var0
-    get_local $var1
+    local.get $var0
+    local.get $var1
     f64.mul
-    get_local $var0
+    local.get $var0
     f64.lt
   )
   (func $func6 (param $var0 f64) (param $var1 f32) (result f32)
-    get_local $var0
+    local.get $var0
     f32.demote/f64
-    get_local $var1
+    local.get $var1
     f32.mul
   )
 )

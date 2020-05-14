@@ -7,9 +7,9 @@
   (elem (i32.const 3) $import0)
   (elem (i32.const 4) $import0 $func1)
   (func $func1 (param $var0 i32) (param $var1 i32) (param $var2 i32) (result i32)
-    get_local $var1
-    get_local $var2
-    get_local $var0
+    local.get $var1
+    local.get $var2
+    local.get $var0
     i32.const 3
     return_call_indirect (type $type0)
   )

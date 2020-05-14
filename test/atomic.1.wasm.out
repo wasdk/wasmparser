@@ -10,24 +10,24 @@
   (export "i32.atomic.wait" (func $func3))
   (func $func0 (param $var0 i64)
     i32.const 0
-    get_local $var0
+    local.get $var0
     i64.store
   )
   (func $func1 (param $var0 i32) (param $var1 i32) (result i32)
-    get_local $var0
-    get_local $var1
+    local.get $var0
+    local.get $var1
     atomic.notify
   )
   (func $func2 (param $var0 i32) (param $var1 i64) (param $var2 i64) (result i32)
-    get_local $var0
-    get_local $var1
-    get_local $var2
+    local.get $var0
+    local.get $var1
+    local.get $var2
     i64.atomic.wait
   )
   (func $func3 (param $var0 i32) (param $var1 i32) (param $var2 i64) (result i32)
-    get_local $var0
-    get_local $var1
-    get_local $var2
+    local.get $var0
+    local.get $var1
+    local.get $var2
     i32.atomic.wait
   )
 )

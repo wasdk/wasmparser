@@ -4,40 +4,40 @@
   (func $func0 (result f32)
     (local $var0 f32) (local $var1 f32) (local $var2 f32) (local $var3 f32) (local $var4 f32)
     f32.const 156.25
-    set_local $var0
+    local.set $var0
     f32.const 208.3333282470703
-    set_local $var1
+    local.set $var1
     f32.const 1.7795130014419556
-    set_local $var2
-    get_local $var1
+    local.set $var2
+    local.get $var1
     f32.neg
-    get_local $var0
+    local.get $var0
     f32.mul
-    get_local $var0
-    get_local $var2
+    local.get $var0
+    local.get $var2
     f32.mul
-    get_local $var1
+    local.get $var1
     f32.sub
     f32.div
-    set_local $var3
-    get_local $var1
+    local.set $var3
+    local.get $var1
     f32.neg
-    get_local $var0
+    local.get $var0
     f32.mul
-    get_local $var0
-    get_local $var2
+    local.get $var0
+    local.get $var2
     f32.mul
-    get_local $var1
+    local.get $var1
     f32.sub
     f32.div
-    set_local $var4
+    local.set $var4
     block $label0
-      get_local $var3
-      get_local $var4
+      local.get $var3
+      local.get $var4
       f32.eq
       br_if $label0
       unreachable
     end $label0
-    get_local $var4
+    local.get $var4
   )
 )

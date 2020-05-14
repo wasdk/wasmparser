@@ -264,8 +264,8 @@
   (func $func13 (result i32)
     (local $var0 i32)
     i32.const 0
-    set_local $var0
-    get_local $var0
+    local.set $var0
+    local.get $var0
     block $label0 (result i32)
       loop (result i32)
         block (result i32)
@@ -275,8 +275,8 @@
       end
     end $label0
     i32.add
-    set_local $var0
-    get_local $var0
+    local.set $var0
+    local.get $var0
     block $label1 (result i32)
       loop (result i32)
         loop (result i32)
@@ -286,8 +286,8 @@
       end
     end $label1
     i32.add
-    set_local $var0
-    get_local $var0
+    local.set $var0
+    local.get $var0
     block (result i32)
       loop (result i32)
         block $label2 (result i32)
@@ -299,8 +299,8 @@
       end
     end
     i32.add
-    set_local $var0
-    get_local $var0
+    local.set $var0
+    local.get $var0
     block $label3 (result i32)
       loop (result i32)
         i32.const 8
@@ -309,8 +309,8 @@
       end
     end $label3
     i32.add
-    set_local $var0
-    get_local $var0
+    local.set $var0
+    local.get $var0
     block $label4 (result i32)
       loop (result i32)
         loop (result i32)
@@ -321,29 +321,29 @@
       end
     end $label4
     i32.add
-    set_local $var0
-    get_local $var0
+    local.set $var0
+    local.get $var0
   )
   (func $func14 (result i32)
     (local $var0 i32)
     i32.const 0
-    set_local $var0
-    get_local $var0
+    local.set $var0
+    local.get $var0
     loop $label0 (result i32)
       loop (result i32)
         br $label0
       end
     end $label0
     i32.add
-    set_local $var0
-    get_local $var0
+    local.set $var0
+    local.get $var0
     loop $label1 (result i32)
       br $label1
       i32.ctz
     end $label1
     i32.add
-    set_local $var0
-    get_local $var0
+    local.set $var0
+    local.get $var0
     loop $label2 (result i32)
       loop (result i32)
         br $label2
@@ -351,127 +351,127 @@
       i32.ctz
     end $label2
     i32.add
-    set_local $var0
-    get_local $var0
+    local.set $var0
+    local.get $var0
   )
   (func $func15 (result i32)
     (local $var0 i32)
     block $label0
       loop
         i32.const 1
-        set_local $var0
-        get_local $var0
+        local.set $var0
+        local.get $var0
         i32.const 3
         i32.mul
-        set_local $var0
-        get_local $var0
+        local.set $var0
+        local.get $var0
         i32.const 5
         i32.sub
-        set_local $var0
-        get_local $var0
+        local.set $var0
+        local.get $var0
         i32.const 7
         i32.mul
-        set_local $var0
+        local.set $var0
         br $label0
-        get_local $var0
+        local.get $var0
         i32.const 100
         i32.mul
-        set_local $var0
+        local.set $var0
       end
     end $label0
-    get_local $var0
+    local.get $var0
     i32.const -14
     i32.eq
   )
   (func $func16 (param $var0 i64) (result i64)
     (local $var1 i64)
     i64.const 1
-    set_local $var1
+    local.set $var1
     block $label0
       loop $label1
-        get_local $var0
+        local.get $var0
         i64.eqz
         br_if $label0
-        get_local $var0
-        get_local $var1
+        local.get $var0
+        local.get $var1
         i64.mul
-        set_local $var1
-        get_local $var0
+        local.set $var1
+        local.get $var0
         i64.const 1
         i64.sub
-        set_local $var0
+        local.set $var0
         br $label1
       end $label1
     end $label0
-    get_local $var1
+    local.get $var1
   )
   (func $func17 (param $var0 i64) (result i64)
     (local $var1 i64) (local $var2 i64)
     i64.const 1
-    set_local $var1
+    local.set $var1
     i64.const 2
-    set_local $var2
+    local.set $var2
     block $label0
       loop $label1
-        get_local $var2
-        get_local $var0
+        local.get $var2
+        local.get $var0
         i64.gt_u
         br_if $label0
-        get_local $var1
-        get_local $var2
+        local.get $var1
+        local.get $var2
         i64.mul
-        set_local $var1
-        get_local $var2
+        local.set $var1
+        local.get $var2
         i64.const 1
         i64.add
-        set_local $var2
+        local.set $var2
         br $label1
       end $label1
     end $label0
-    get_local $var1
+    local.get $var1
   )
   (func $func18 (param $var0 f32) (param $var1 f32) (result f32)
     (local $var2 f32) (local $var3 f32)
     block $label0
       loop $label3
-        get_local $var0
+        local.get $var0
         f32.const 0.0
         f32.eq
         br_if $label0
-        get_local $var1
-        set_local $var2
+        local.get $var1
+        local.set $var2
         block $label1
           loop $label2
-            get_local $var2
+            local.get $var2
             f32.const 0.0
             f32.eq
             br_if $label1
-            get_local $var2
+            local.get $var2
             f32.const 0.0
             f32.lt
             br_if $label0
-            get_local $var3
-            get_local $var2
+            local.get $var3
+            local.get $var2
             f32.add
-            set_local $var3
-            get_local $var2
+            local.set $var3
+            local.get $var2
             f32.const 2
             f32.sub
-            set_local $var2
+            local.set $var2
             br $label2
           end $label2
         end $label1
-        get_local $var3
-        get_local $var0
+        local.get $var3
+        local.get $var0
         f32.div
-        set_local $var3
-        get_local $var0
+        local.set $var3
+        local.get $var0
         f32.const 1
         f32.sub
-        set_local $var0
+        local.set $var0
         br $label3
       end $label3
     end $label0
-    get_local $var3
+    local.get $var3
   )
 )

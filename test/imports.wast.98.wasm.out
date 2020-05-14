@@ -3,7 +3,7 @@
   (import "spectest" "memory" (memory $memory0 0 3))
   (export "grow" (func $func0))
   (func $func0 (param $var0 i32) (result i32)
-    get_local $var0
+    local.get $var0
     grow_memory
   )
 )

@@ -10,42 +10,42 @@
   (export "no_dce.i64.trunc_s_f64" (func $func6))
   (export "no_dce.i64.trunc_u_f64" (func $func7))
   (func $func0 (param $var0 f32)
-    get_local $var0
+    local.get $var0
     i32.trunc_s/f32
     drop
   )
   (func $func1 (param $var0 f32)
-    get_local $var0
+    local.get $var0
     i32.trunc_u/f32
     drop
   )
   (func $func2 (param $var0 f64)
-    get_local $var0
+    local.get $var0
     i32.trunc_s/f64
     drop
   )
   (func $func3 (param $var0 f64)
-    get_local $var0
+    local.get $var0
     i32.trunc_u/f64
     drop
   )
   (func $func4 (param $var0 f32)
-    get_local $var0
+    local.get $var0
     i64.trunc_s/f32
     drop
   )
   (func $func5 (param $var0 f32)
-    get_local $var0
+    local.get $var0
     i64.trunc_u/f32
     drop
   )
   (func $func6 (param $var0 f64)
-    get_local $var0
+    local.get $var0
     i64.trunc_s/f64
     drop
   )
   (func $func7 (param $var0 f64)
-    get_local $var0
+    local.get $var0
     i64.trunc_u/f64
     drop
   )

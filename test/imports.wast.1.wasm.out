@@ -21,42 +21,42 @@
   (elem (i32.const 0) $import1 $import3)
   (func $func9 (param $var0 i32)
     (local $var1 f32)
-    get_local $var0
+    local.get $var0
     f32.convert_s/i32
-    set_local $var1
-    get_local $var0
+    local.set $var1
+    local.get $var0
     call $import0
-    get_local $var0
+    local.get $var0
     i32.const 1
     i32.add
     f32.const 42
     call $import4
-    get_local $var0
+    local.get $var0
     call $import1
-    get_local $var0
+    local.get $var0
     call $import6
-    get_local $var1
+    local.get $var1
     call $import2
-    get_local $var0
+    local.get $var0
     i32.const 0
     call_indirect (type $type0)
   )
   (func $func10 (param $var0 i64)
     (local $var1 f64)
-    get_local $var0
+    local.get $var0
     call $import8
     f64.convert_s/i64
-    set_local $var1
-    get_local $var1
+    local.set $var1
+    local.get $var1
     f64.const 1
     f64.add
     f64.const 53
     call $import5
-    get_local $var1
+    local.get $var1
     call $import3
-    get_local $var1
+    local.get $var1
     call $import7
-    get_local $var1
+    local.get $var1
     i32.const 1
     call_indirect (type $type3)
   )

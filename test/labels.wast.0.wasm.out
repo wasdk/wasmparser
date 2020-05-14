@@ -28,18 +28,18 @@
   (func $func1 (result i32)
     (local $var0 i32)
     i32.const 0
-    set_local $var0
+    local.set $var0
     block $label0 (result i32)
       loop $label1 (result i32)
-        get_local $var0
+        local.get $var0
         i32.const 1
         i32.add
-        set_local $var0
-        get_local $var0
+        local.set $var0
+        local.get $var0
         i32.const 5
         i32.eq
         if
-          get_local $var0
+          local.get $var0
           br $label0
         end
         br $label1
@@ -49,30 +49,30 @@
   (func $func2 (result i32)
     (local $var0 i32)
     i32.const 0
-    set_local $var0
+    local.set $var0
     block $label1 (result i32)
       loop $label0 (result i32)
-        get_local $var0
+        local.get $var0
         i32.const 1
         i32.add
-        set_local $var0
-        get_local $var0
+        local.set $var0
+        local.get $var0
         i32.const 5
         i32.eq
         if
           br $label0
         end
-        get_local $var0
+        local.get $var0
         i32.const 8
         i32.eq
         if
-          get_local $var0
+          local.get $var0
           br $label1
         end
-        get_local $var0
+        local.get $var0
         i32.const 1
         i32.add
-        set_local $var0
+        local.set $var0
         br $label0
       end $label0
     end $label1
@@ -80,39 +80,39 @@
   (func $func3 (result i32)
     (local $var0 i32)
     i32.const 0
-    set_local $var0
+    local.set $var0
     block $label0 (result i32)
       loop (result i32)
-        get_local $var0
+        local.get $var0
         i32.const 1
         i32.add
-        set_local $var0
-        get_local $var0
+        local.set $var0
+        local.get $var0
         i32.const 5
         i32.eq
         if
-          get_local $var0
+          local.get $var0
           br $label0
         end
-        get_local $var0
+        local.get $var0
       end
     end $label0
   )
   (func $func4 (param $var0 i32) (result i32)
     (local $var1 i32)
     i32.const 1
-    set_local $var1
+    local.set $var1
     block $label0 (result i32)
       loop $label1 (result i32)
-        get_local $var1
-        get_local $var1
+        local.get $var1
+        local.get $var1
         i32.add
-        set_local $var1
-        get_local $var1
-        get_local $var0
+        local.set $var1
+        local.get $var1
+        local.get $var0
         i32.gt_u
         if
-          get_local $var1
+          local.get $var1
           br $label0
         end
         br $label1
@@ -129,142 +129,142 @@
   (func $func6 (result i32)
     (local $var0 i32)
     i32.const 0
-    set_local $var0
+    local.set $var0
     block
       i32.const 1
       if $label0
         br $label0
         i32.const 666
-        set_local $var0
+        local.set $var0
       end $label0
-      get_local $var0
+      local.get $var0
       i32.const 1
       i32.add
-      set_local $var0
+      local.set $var0
       i32.const 1
       if $label1
         br $label1
         i32.const 666
-        set_local $var0
+        local.set $var0
       else
         i32.const 888
-        set_local $var0
+        local.set $var0
       end $label1
-      get_local $var0
+      local.get $var0
       i32.const 1
       i32.add
-      set_local $var0
+      local.set $var0
       i32.const 1
       if $label2
         br $label2
         i32.const 666
-        set_local $var0
+        local.set $var0
       else
         i32.const 888
-        set_local $var0
+        local.set $var0
       end $label2
-      get_local $var0
+      local.get $var0
       i32.const 1
       i32.add
-      set_local $var0
+      local.set $var0
       i32.const 0
       if $label3
         i32.const 888
-        set_local $var0
+        local.set $var0
       else
         br $label3
         i32.const 666
-        set_local $var0
+        local.set $var0
       end $label3
-      get_local $var0
+      local.get $var0
       i32.const 1
       i32.add
-      set_local $var0
+      local.set $var0
       i32.const 0
       if $label4
         i32.const 888
-        set_local $var0
+        local.set $var0
       else
         br $label4
         i32.const 666
-        set_local $var0
+        local.set $var0
       end $label4
-      get_local $var0
+      local.get $var0
       i32.const 1
       i32.add
-      set_local $var0
+      local.set $var0
     end
-    get_local $var0
+    local.get $var0
   )
   (func $func7 (result i32)
     (local $var0 i32)
     i32.const 0
-    set_local $var0
+    local.set $var0
     block
       i32.const 1
       if $label0
         br $label0
         i32.const 666
-        set_local $var0
+        local.set $var0
       end $label0
-      get_local $var0
+      local.get $var0
       i32.const 1
       i32.add
-      set_local $var0
+      local.set $var0
       i32.const 1
       if $label1
         br $label1
         i32.const 666
-        set_local $var0
+        local.set $var0
       else
         i32.const 888
-        set_local $var0
+        local.set $var0
       end $label1
-      get_local $var0
+      local.get $var0
       i32.const 1
       i32.add
-      set_local $var0
+      local.set $var0
       i32.const 1
       if $label2
         br $label2
         i32.const 666
-        set_local $var0
+        local.set $var0
       else
         i32.const 888
-        set_local $var0
+        local.set $var0
       end $label2
-      get_local $var0
+      local.get $var0
       i32.const 1
       i32.add
-      set_local $var0
+      local.set $var0
       i32.const 0
       if $label3
         i32.const 888
-        set_local $var0
+        local.set $var0
       else
         br $label3
         i32.const 666
-        set_local $var0
+        local.set $var0
       end $label3
-      get_local $var0
+      local.get $var0
       i32.const 1
       i32.add
-      set_local $var0
+      local.set $var0
       i32.const 0
       if $label4
         i32.const 888
-        set_local $var0
+        local.set $var0
       else
         br $label4
         i32.const 666
-        set_local $var0
+        local.set $var0
       end $label4
-      get_local $var0
+      local.get $var0
       i32.const 1
       i32.add
-      set_local $var0
+      local.set $var0
     end
-    get_local $var0
+    local.get $var0
   )
   (func $func8 (param $var0 i32) (result i32)
     block $label6 (result i32)
@@ -275,7 +275,7 @@
             block $label3
               block $label2
                 block $label1
-                  get_local $var0
+                  local.get $var0
                   br_table $label0 $label1 $label2 $label3 $label4
                 end $label1
               end $label2
@@ -295,7 +295,7 @@
     block $label2
       block $label1
         block $label0
-          get_local $var0
+          local.get $var0
           br_table $label0 $label1
           br $label2
         end $label0
@@ -308,51 +308,51 @@
   (func $func10 (result i32)
     (local $var0 i32)
     i32.const 0
-    set_local $var0
+    local.set $var0
     block $label1 (result i32)
       block $label0
         i32.const 0
         br_if $label0
-        get_local $var0
+        local.get $var0
         i32.const 1
         i32.or
-        set_local $var0
+        local.set $var0
         i32.const 1
         br_if $label0
-        get_local $var0
+        local.get $var0
         i32.const 2
         i32.or
-        set_local $var0
+        local.set $var0
       end $label0
       block (result i32)
-        get_local $var0
+        local.get $var0
         i32.const 4
         i32.or
-        set_local $var0
-        get_local $var0
+        local.set $var0
+        local.get $var0
       end
       i32.const 0
       br_if $label1
       drop
-      get_local $var0
+      local.get $var0
       i32.const 8
       i32.or
-      set_local $var0
+      local.set $var0
       block (result i32)
-        get_local $var0
+        local.get $var0
         i32.const 16
         i32.or
-        set_local $var0
-        get_local $var0
+        local.set $var0
+        local.get $var0
       end
       i32.const 1
       br_if $label1
       drop
-      get_local $var0
+      local.get $var0
       i32.const 32
       i32.or
-      set_local $var0
-      get_local $var0
+      local.set $var0
+      local.get $var0
     end $label1
   )
   (func $func11 (result i32)
@@ -385,13 +385,13 @@
     block $label0 (result i32)
       block (result i32)
         i32.const 1
-        set_local $var0
-        get_local $var0
+        local.set $var0
+        local.get $var0
       end
       block (result i32)
         i32.const 2
-        set_local $var0
-        get_local $var0
+        local.set $var0
+        local.get $var0
       end
       br_if $label0
       drop
@@ -400,7 +400,7 @@
     i32.const 0
     i32.add
     drop
-    get_local $var0
+    local.get $var0
   )
   (func $func14 (result i32)
     block $label1 (result i32)
