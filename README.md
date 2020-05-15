@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/yurydelendik/wasmparser.svg?branch=master)](https://travis-ci.org/yurydelendik/wasmparser)
+[![Build Status](https://travis-ci.org/wasdk/wasmparser.svg?branch=master)](https://travis-ci.org/wasdk/wasmparser)
 
 Simple streamable WebAssembly binary parser.
 
