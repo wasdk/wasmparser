@@ -19,7 +19,7 @@ import {
   ITableType, IMemoryType, IGlobalType, IResizableLimits, IDataSegmentBody,
   IGlobalVariable, IElementSegment, IElementSegmentBody, ISectionInformation,
   IStartEntry, bytesToString, INameEntry, NameType, IFunctionNameEntry, INaming,
-  NULL_FUNCTION_INDEX,
+  NULL_FUNCTION_INDEX, isTypeIndex,
   ILocalNameEntry
 } from './WasmParser.js';
 
@@ -497,6 +497,17 @@ export class WasmDisassembler {
       this.appendBuffer(')');
     }
   }
+  private printBlockType(type: number): void {
+    if (type === Type.empty_block_type) {
+      return;
+    }
+    if (isTypeIndex(type)) {
+      return this.printFuncType(type);
+    }
+    this.appendBuffer(' (result ');
+    this.appendBuffer(typeToString(type));
+    this.appendBuffer(')');
+  }
   private printString(b: Uint8Array): void {
     this.appendBuffer('\"');
     for (var i = 0; i < b.length; i++) {
@@ -553,11 +564,7 @@ export class WasmDisassembler {
           }
           this._backrefLabels.push(backrefLabel);
         }
-        if (operator.blockType !== Type.empty_block_type) {
-          this.appendBuffer(' (result ');
-          this.appendBuffer(typeToString(operator.blockType));
-          this.appendBuffer(')');
-        }
+        this.printBlockType(operator.blockType);
         break;
       case OperatorCode.end:
         if (this._labelMode === LabelMode.Depth) {

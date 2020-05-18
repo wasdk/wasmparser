@@ -2386,6 +2386,10 @@ export class BinaryReader {
   }
 }
 
+export function isTypeIndex(type: Type): boolean {
+  return type >= 0;  
+}
+
 declare var escape: (string) => string;
 declare class TextDecoder {
   public constructor(encoding: string);
