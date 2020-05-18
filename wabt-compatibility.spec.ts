@@ -43,10 +43,7 @@ readdirSync(TEST_FOLDER)
     test(`wabt ${fileName}`, () => {
       const filePath = join(TEST_FOLDER, fileName);
       let data = new Uint8Array(readFileSync(filePath));
-      const { buffer } = parseWat(fileName, data).toBinary({
-        write_debug_names: true
-      });
-      expect(buffer).toBeDefined();
+      expect(parseWat(fileName, data)).toBeDefined();
     });
   });
 
