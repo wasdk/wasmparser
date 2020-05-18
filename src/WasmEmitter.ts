@@ -605,7 +605,7 @@ export class Emitter {
       this.writeByte(opInfo.code);
     } else {
       this.writeByte(opInfo.code >> 8);
-      this.writeByte(opInfo.code & 255);
+      this.writeVarUint(opInfo.code & 255);
     }
     this._endWritten = opInfo.code == OperatorCode.end;
     switch (opInfo.code) {
