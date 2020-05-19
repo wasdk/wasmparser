@@ -1,11 +1,8 @@
 {
     "compilerOptions": {
-        "outDir": "./dist/",
-        "sourceMap": true,
         "declaration": true,
         "preserveConstEnums": true,
-        "target": "es5",
-        "module": "commonjs"
+        "sourceMap": true
     },
     "exclude": [
         "node_modules"

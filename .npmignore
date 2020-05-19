@@ -1,4 +1,12 @@
 *~
-node_modules/
-test/
+/examples
+/node_modules
+/src
+/test
+.editorconfig
+.travis.yml
+jest.config.js
 npm-debug.log
+test.ts
+tsconfig.json
+wabt-compatibility.spec.ts
