@@ -8,7 +8,7 @@
   (type $type6 (func (param i32 i64) (result i64)))
   (type $type7 (func (param i32 i32 i32) (result i32)))
   (type $type8 (func (param i32 i64 i64) (result i64)))
-  (memory $memory0 (shared 1 1))
+  (memory $memory0 1 1 shared)
   (export "init" (func $func0))
   (export "i32.atomic.load" (func $func1))
   (export "i64.atomic.load" (func $func2))
