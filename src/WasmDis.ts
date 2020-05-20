@@ -901,7 +901,7 @@ export class WasmDisassembler {
           var memoryName = this._nameResolver.getMemoryName(this._memoryCount++, false);
           this.appendBuffer(`  (memory ${memoryName} `);
           if (memoryInfo.shared) {
-            this.appendBuffer(`(shared ${limitsToString(memoryInfo.limits)})`);
+            this.appendBuffer(`${limitsToString(memoryInfo.limits)} shared`);
           } else {
             this.appendBuffer(limitsToString(memoryInfo.limits));
           }
@@ -964,7 +964,7 @@ export class WasmDisassembler {
               var memoryName = this._nameResolver.getMemoryName(this._memoryCount++, false);
               this.appendBuffer(` (memory ${memoryName} `);
               if (memoryImportInfo.shared) {
-                this.appendBuffer(`(shared ${limitsToString(memoryImportInfo.limits)})`);
+                this.appendBuffer(`${limitsToString(memoryImportInfo.limits)} shared`);
               } else {
                 this.appendBuffer(limitsToString(memoryImportInfo.limits));
               }
