@@ -21,7 +21,6 @@ const { parseWat } = require("wabt")();
 const TEST_FOLDER = "./test";
 
 const INCOMPATIBLE_FILE_NAMES = [
-  "atomic.0.wasm.out",
   "conversion_sat.wasm.out",
   "memory_bulk.0.wasm.out",
   "ref_types.0.wasm.out",
