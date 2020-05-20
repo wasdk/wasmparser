@@ -35,15 +35,12 @@ const INCOMPATIBLE_FILE_NAMES = [
   "threads.0.wasm.out",
 ];
 
-// These two below arrays are used to select corresponding feature flags for corresponding files.
-const FEATURE_FILE_NAMES = [
-  "atomic.1.wasm.out",
-];
-const FEATURE_FLAGS_FOR_FILE = [
-  {
+// This dict is used to select corresponding feature flags for corresponding files.
+const FEATURE_FLAGS_FOR_FILES = {
+  'atomic.1.wasm.out': {
     'threads': true,
   },
-];
+};
 
 // Run wabt over .out files.
 readdirSync(TEST_FOLDER)
@@ -52,8 +49,7 @@ readdirSync(TEST_FOLDER)
     test(`wabt ${fileName}`, () => {
       const filePath = join(TEST_FOLDER, fileName);
       let data = new Uint8Array(readFileSync(filePath));
-      const index = FEATURE_FILE_NAMES.indexOf(fileName);
-      const feature = index === -1 ? {} : FEATURE_FLAGS_FOR_FILE[index];
+      const feature = FEATURE_FLAGS_FOR_FILES[fileName] || {};
       expect(parseWat(fileName, data, feature)).toBeDefined();
     });
   });
