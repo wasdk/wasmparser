@@ -4,9 +4,9 @@
 // Utility that prints WebAssembly module function imports/exports.
 
 var fs = require('fs');
-var WasmParserTransform = require('../dist/WasmParserTransform.js');
+var WasmParserTransform = require('../dist/cjs/WasmParserTransform.js');
 var ParserTransform = WasmParserTransform.BinaryReaderTransform;
-var WasmParser = require('../dist/WasmParser.js');
+var WasmParser = require('../dist/cjs/WasmParser.js');
 var BinaryReaderState = WasmParser.BinaryReaderState;
 var bytesToString = WasmParser.bytesToString;
 var ExternalKind = WasmParser.ExternalKind;
