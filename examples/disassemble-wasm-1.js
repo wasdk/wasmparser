@@ -18,8 +18,8 @@
 // all available entries from the imcomplete data.
 // See also ../disassemble-wasm.js file.
 
-var wasmparser = require('../dist/WasmParser.js');
-var wasmdis = require('../dist/WasmDis.js');
+var wasmparser = require('../dist/cjs/WasmParser.js');
+var wasmdis = require('../dist/cjs/WasmDis.js');
 var fs = require('fs');
 
 var wasmPath = process.argv[2];
