@@ -131,19 +131,19 @@ function memoryAddressToString(address: IMemoryAddress, code: OperatorCode): str
     case OperatorCode.i32_atomic_store:
     case OperatorCode.i64_atomic_store32:
     case OperatorCode.i32_atomic_rmw_add:
-    case OperatorCode.i64_atomic_rmw32_u_add:
+    case OperatorCode.i64_atomic_rmw32_add_u:
     case OperatorCode.i32_atomic_rmw_sub:
-    case OperatorCode.i64_atomic_rmw32_u_sub:
+    case OperatorCode.i64_atomic_rmw32_sub_u:
     case OperatorCode.i32_atomic_rmw_and:
-    case OperatorCode.i64_atomic_rmw32_u_and:
+    case OperatorCode.i64_atomic_rmw32_and_u:
     case OperatorCode.i32_atomic_rmw_or:
-    case OperatorCode.i64_atomic_rmw32_u_or:
+    case OperatorCode.i64_atomic_rmw32_or_u:
     case OperatorCode.i32_atomic_rmw_xor:
-    case OperatorCode.i64_atomic_rmw32_u_xor:
+    case OperatorCode.i64_atomic_rmw32_xor_u:
     case OperatorCode.i32_atomic_rmw_xchg:
-    case OperatorCode.i64_atomic_rmw32_u_xchg:
+    case OperatorCode.i64_atomic_rmw32_xchg_u:
     case OperatorCode.i32_atomic_rmw_cmpxchg:
-    case OperatorCode.i64_atomic_rmw32_u_cmpxchg:
+    case OperatorCode.i64_atomic_rmw32_cmpxchg_u:
       defaultAlignFlags = 2;
       break;
     case OperatorCode.i32_load16_s:
@@ -156,20 +156,20 @@ function memoryAddressToString(address: IMemoryAddress, code: OperatorCode): str
     case OperatorCode.i64_atomic_load16_u:
     case OperatorCode.i32_atomic_store16:
     case OperatorCode.i64_atomic_store16:
-    case OperatorCode.i32_atomic_rmw16_u_add:
-    case OperatorCode.i64_atomic_rmw16_u_add:
-    case OperatorCode.i32_atomic_rmw16_u_sub:
-    case OperatorCode.i64_atomic_rmw16_u_sub:
-    case OperatorCode.i32_atomic_rmw16_u_and:
-    case OperatorCode.i64_atomic_rmw16_u_and:
-    case OperatorCode.i32_atomic_rmw16_u_or:
-    case OperatorCode.i64_atomic_rmw16_u_or:
-    case OperatorCode.i32_atomic_rmw16_u_xor:
-    case OperatorCode.i64_atomic_rmw16_u_xor:
-    case OperatorCode.i32_atomic_rmw16_u_xchg:
-    case OperatorCode.i64_atomic_rmw16_u_xchg:
-    case OperatorCode.i32_atomic_rmw16_u_cmpxchg:
-    case OperatorCode.i64_atomic_rmw16_u_cmpxchg:
+    case OperatorCode.i32_atomic_rmw16_add_u:
+    case OperatorCode.i64_atomic_rmw16_add_u:
+    case OperatorCode.i32_atomic_rmw16_sub_u:
+    case OperatorCode.i64_atomic_rmw16_sub_u:
+    case OperatorCode.i32_atomic_rmw16_and_u:
+    case OperatorCode.i64_atomic_rmw16_and_u:
+    case OperatorCode.i32_atomic_rmw16_or_u:
+    case OperatorCode.i64_atomic_rmw16_or_u:
+    case OperatorCode.i32_atomic_rmw16_xor_u:
+    case OperatorCode.i64_atomic_rmw16_xor_u:
+    case OperatorCode.i32_atomic_rmw16_xchg_u:
+    case OperatorCode.i64_atomic_rmw16_xchg_u:
+    case OperatorCode.i32_atomic_rmw16_cmpxchg_u:
+    case OperatorCode.i64_atomic_rmw16_cmpxchg_u:
       defaultAlignFlags = 1;
       break;
     case OperatorCode.i32_load8_s:
@@ -182,20 +182,20 @@ function memoryAddressToString(address: IMemoryAddress, code: OperatorCode): str
     case OperatorCode.i64_atomic_load8_u:
     case OperatorCode.i32_atomic_store8:
     case OperatorCode.i64_atomic_store8:
-    case OperatorCode.i32_atomic_rmw8_u_add:
-    case OperatorCode.i64_atomic_rmw8_u_add:
-    case OperatorCode.i32_atomic_rmw8_u_sub:
-    case OperatorCode.i64_atomic_rmw8_u_sub:
-    case OperatorCode.i32_atomic_rmw8_u_and:
-    case OperatorCode.i64_atomic_rmw8_u_and:
-    case OperatorCode.i32_atomic_rmw8_u_or:
-    case OperatorCode.i64_atomic_rmw8_u_or:
-    case OperatorCode.i32_atomic_rmw8_u_xor:
-    case OperatorCode.i64_atomic_rmw8_u_xor:
-    case OperatorCode.i32_atomic_rmw8_u_xchg:
-    case OperatorCode.i64_atomic_rmw8_u_xchg:
-    case OperatorCode.i32_atomic_rmw8_u_cmpxchg:
-    case OperatorCode.i64_atomic_rmw8_u_cmpxchg:
+    case OperatorCode.i32_atomic_rmw8_add_u:
+    case OperatorCode.i64_atomic_rmw8_add_u:
+    case OperatorCode.i32_atomic_rmw8_sub_u:
+    case OperatorCode.i64_atomic_rmw8_sub_u:
+    case OperatorCode.i32_atomic_rmw8_and_u:
+    case OperatorCode.i64_atomic_rmw8_and_u:
+    case OperatorCode.i32_atomic_rmw8_or_u:
+    case OperatorCode.i64_atomic_rmw8_or_u:
+    case OperatorCode.i32_atomic_rmw8_xor_u:
+    case OperatorCode.i64_atomic_rmw8_xor_u:
+    case OperatorCode.i32_atomic_rmw8_xchg_u:
+    case OperatorCode.i64_atomic_rmw8_xchg_u:
+    case OperatorCode.i32_atomic_rmw8_cmpxchg_u:
+    case OperatorCode.i64_atomic_rmw8_cmpxchg_u:
       defaultAlignFlags = 0;
       break;
   }
@@ -650,53 +650,53 @@ export class WasmDisassembler {
       case OperatorCode.i64_atomic_store32:
       case OperatorCode.i32_atomic_rmw_add:
       case OperatorCode.i64_atomic_rmw_add:
-      case OperatorCode.i32_atomic_rmw8_u_add:
-      case OperatorCode.i32_atomic_rmw16_u_add:
-      case OperatorCode.i64_atomic_rmw8_u_add:
-      case OperatorCode.i64_atomic_rmw16_u_add:
-      case OperatorCode.i64_atomic_rmw32_u_add:
+      case OperatorCode.i32_atomic_rmw8_add_u:
+      case OperatorCode.i32_atomic_rmw16_add_u:
+      case OperatorCode.i64_atomic_rmw8_add_u:
+      case OperatorCode.i64_atomic_rmw16_add_u:
+      case OperatorCode.i64_atomic_rmw32_add_u:
       case OperatorCode.i32_atomic_rmw_sub:
       case OperatorCode.i64_atomic_rmw_sub:
-      case OperatorCode.i32_atomic_rmw8_u_sub:
-      case OperatorCode.i32_atomic_rmw16_u_sub:
-      case OperatorCode.i64_atomic_rmw8_u_sub:
-      case OperatorCode.i64_atomic_rmw16_u_sub:
-      case OperatorCode.i64_atomic_rmw32_u_sub:
+      case OperatorCode.i32_atomic_rmw8_sub_u:
+      case OperatorCode.i32_atomic_rmw16_sub_u:
+      case OperatorCode.i64_atomic_rmw8_sub_u:
+      case OperatorCode.i64_atomic_rmw16_sub_u:
+      case OperatorCode.i64_atomic_rmw32_sub_u:
       case OperatorCode.i32_atomic_rmw_and:
       case OperatorCode.i64_atomic_rmw_and:
-      case OperatorCode.i32_atomic_rmw8_u_and:
-      case OperatorCode.i32_atomic_rmw16_u_and:
-      case OperatorCode.i64_atomic_rmw8_u_and:
-      case OperatorCode.i64_atomic_rmw16_u_and:
-      case OperatorCode.i64_atomic_rmw32_u_and:
+      case OperatorCode.i32_atomic_rmw8_and_u:
+      case OperatorCode.i32_atomic_rmw16_and_u:
+      case OperatorCode.i64_atomic_rmw8_and_u:
+      case OperatorCode.i64_atomic_rmw16_and_u:
+      case OperatorCode.i64_atomic_rmw32_and_u:
       case OperatorCode.i32_atomic_rmw_or:
       case OperatorCode.i64_atomic_rmw_or:
-      case OperatorCode.i32_atomic_rmw8_u_or:
-      case OperatorCode.i32_atomic_rmw16_u_or:
-      case OperatorCode.i64_atomic_rmw8_u_or:
-      case OperatorCode.i64_atomic_rmw16_u_or:
-      case OperatorCode.i64_atomic_rmw32_u_or:
+      case OperatorCode.i32_atomic_rmw8_or_u:
+      case OperatorCode.i32_atomic_rmw16_or_u:
+      case OperatorCode.i64_atomic_rmw8_or_u:
+      case OperatorCode.i64_atomic_rmw16_or_u:
+      case OperatorCode.i64_atomic_rmw32_or_u:
       case OperatorCode.i32_atomic_rmw_xor:
       case OperatorCode.i64_atomic_rmw_xor:
-      case OperatorCode.i32_atomic_rmw8_u_xor:
-      case OperatorCode.i32_atomic_rmw16_u_xor:
-      case OperatorCode.i64_atomic_rmw8_u_xor:
-      case OperatorCode.i64_atomic_rmw16_u_xor:
-      case OperatorCode.i64_atomic_rmw32_u_xor:
+      case OperatorCode.i32_atomic_rmw8_xor_u:
+      case OperatorCode.i32_atomic_rmw16_xor_u:
+      case OperatorCode.i64_atomic_rmw8_xor_u:
+      case OperatorCode.i64_atomic_rmw16_xor_u:
+      case OperatorCode.i64_atomic_rmw32_xor_u:
       case OperatorCode.i32_atomic_rmw_xchg:
       case OperatorCode.i64_atomic_rmw_xchg:
-      case OperatorCode.i32_atomic_rmw8_u_xchg:
-      case OperatorCode.i32_atomic_rmw16_u_xchg:
-      case OperatorCode.i64_atomic_rmw8_u_xchg:
-      case OperatorCode.i64_atomic_rmw16_u_xchg:
-      case OperatorCode.i64_atomic_rmw32_u_xchg:
+      case OperatorCode.i32_atomic_rmw8_xchg_u:
+      case OperatorCode.i32_atomic_rmw16_xchg_u:
+      case OperatorCode.i64_atomic_rmw8_xchg_u:
+      case OperatorCode.i64_atomic_rmw16_xchg_u:
+      case OperatorCode.i64_atomic_rmw32_xchg_u:
       case OperatorCode.i32_atomic_rmw_cmpxchg:
       case OperatorCode.i64_atomic_rmw_cmpxchg:
-      case OperatorCode.i32_atomic_rmw8_u_cmpxchg:
-      case OperatorCode.i32_atomic_rmw16_u_cmpxchg:
-      case OperatorCode.i64_atomic_rmw8_u_cmpxchg:
-      case OperatorCode.i64_atomic_rmw16_u_cmpxchg:
-      case OperatorCode.i64_atomic_rmw32_u_cmpxchg:
+      case OperatorCode.i32_atomic_rmw8_cmpxchg_u:
+      case OperatorCode.i32_atomic_rmw16_cmpxchg_u:
+      case OperatorCode.i64_atomic_rmw8_cmpxchg_u:
+      case OperatorCode.i64_atomic_rmw16_cmpxchg_u:
+      case OperatorCode.i64_atomic_rmw32_cmpxchg_u:
       case OperatorCode.v128_load:
       case OperatorCode.v128_store:
         var memoryAddress = memoryAddressToString(operator.memoryAddress, operator.code);

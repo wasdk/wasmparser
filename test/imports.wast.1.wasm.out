@@ -22,7 +22,7 @@
   (func $func9 (param $var0 i32)
     (local $var1 f32)
     local.get $var0
-    f32.convert_s/i32
+    f32.convert_i32_s
     local.set $var1
     local.get $var0
     call $import0
@@ -45,7 +45,7 @@
     (local $var1 f64)
     local.get $var0
     call $import8
-    f64.convert_s/i64
+    f64.convert_i64_s
     local.set $var1
     local.get $var1
     f64.const 1

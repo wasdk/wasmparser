@@ -663,7 +663,7 @@
       i32.const 41
       i32.const 0
       br_table $label0
-      i32.wrap/i64
+      i32.wrap_i64
     end $label0
   )
   (func $func59 (result i32)

@@ -1441,7 +1441,7 @@
     block $label0 (result i32)
       i32.const 41
       br $label0
-      i32.wrap/i64
+      i32.wrap_i64
     end $label0
   )
   (func $func52 (result i32)
@@ -2274,7 +2274,7 @@
     block $label0 (result i32)
       i32.const 41
       br $label0
-      i32.wrap/i64
+      i32.wrap_i64
     end $label0
   )
   (func $func52 (result i32)
@@ -3982,7 +3982,7 @@
       i32.const 41
       i32.const 0
       br_table $label0
-      i32.wrap/i64
+      i32.wrap_i64
     end $label0
   )
   (func $func59 (result i32)
@@ -4166,7 +4166,7 @@
   (func $func2 (param $var0 i32) (param $var1 i64)
     local.get $var0
     local.get $var1
-    i32.wrap/i64
+    i32.wrap_i64
     call $func1
     local.get $var0
     i32.const 4
@@ -4174,7 +4174,7 @@
     local.get $var1
     i64.const 32
     i64.shr_u
-    i32.wrap/i64
+    i32.wrap_i64
     call $func1
   )
   (func $func3 (param $var0 i32) (result i32)
@@ -4202,12 +4202,12 @@
   (func $func5 (param $var0 i32) (result i64)
     local.get $var0
     call $func4
-    i64.extend_u/i32
+    i64.extend_i32_u
     local.get $var0
     i32.const 4
     i32.add
     call $func4
-    i64.extend_u/i32
+    i64.extend_i32_u
     i64.const 32
     i64.shl
     i64.or
@@ -4236,7 +4236,7 @@
   (func $func9 (param $var0 i64) (result i64)
     i32.const 0
     local.get $var0
-    i32.wrap/i64
+    i32.wrap_i64
     call $func0
     i32.const 0
     i64.load16_s
@@ -4244,7 +4244,7 @@
   (func $func10 (param $var0 i64) (result i64)
     i32.const 0
     local.get $var0
-    i32.wrap/i64
+    i32.wrap_i64
     call $func0
     i32.const 0
     i64.load16_u
@@ -4252,7 +4252,7 @@
   (func $func11 (param $var0 i64) (result i64)
     i32.const 0
     local.get $var0
-    i32.wrap/i64
+    i32.wrap_i64
     call $func1
     i32.const 0
     i64.load32_s
@@ -4260,7 +4260,7 @@
   (func $func12 (param $var0 i64) (result i64)
     i32.const 0
     local.get $var0
-    i32.wrap/i64
+    i32.wrap_i64
     call $func1
     i32.const 0
     i64.load32_u
@@ -4275,7 +4275,7 @@
   (func $func14 (param $var0 f32) (result f32)
     i32.const 0
     local.get $var0
-    i32.reinterpret/f32
+    i32.reinterpret_f32
     call $func1
     i32.const 0
     f32.load
@@ -4283,7 +4283,7 @@
   (func $func15 (param $var0 f64) (result f64)
     i32.const 0
     local.get $var0
-    i64.reinterpret/f64
+    i64.reinterpret_f64
     call $func2
     i32.const 0
     f64.load
@@ -4308,7 +4308,7 @@
     i64.store16
     i32.const 0
     call $func3
-    i64.extend_u/i32
+    i64.extend_i32_u
   )
   (func $func19 (param $var0 i64) (result i64)
     i32.const 0
@@ -4316,7 +4316,7 @@
     i64.store32
     i32.const 0
     call $func4
-    i64.extend_u/i32
+    i64.extend_i32_u
   )
   (func $func20 (param $var0 i64) (result i64)
     i32.const 0
@@ -4331,7 +4331,7 @@
     f32.store
     i32.const 0
     call $func4
-    f32.reinterpret/i32
+    f32.reinterpret_i32
   )
   (func $func22 (param $var0 f64) (result f64)
     i32.const 0
@@ -4339,7 +4339,7 @@
     f64.store
     i32.const 0
     call $func5
-    f64.reinterpret/i64
+    f64.reinterpret_i64
   )
 )
 (module
@@ -4395,7 +4395,7 @@
   (func $func2 (param $var0 i32) (param $var1 i64)
     local.get $var0
     local.get $var1
-    i32.wrap/i64
+    i32.wrap_i64
     call $func1
     local.get $var0
     i32.const 4
@@ -4403,7 +4403,7 @@
     local.get $var1
     i64.const 32
     i64.shr_u
-    i32.wrap/i64
+    i32.wrap_i64
     call $func1
   )
   (func $func3 (param $var0 i32) (result i32)
@@ -4431,12 +4431,12 @@
   (func $func5 (param $var0 i32) (result i64)
     local.get $var0
     call $func4
-    i64.extend_u/i32
+    i64.extend_i32_u
     local.get $var0
     i32.const 4
     i32.add
     call $func4
-    i64.extend_u/i32
+    i64.extend_i32_u
     i64.const 32
     i64.shl
     i64.or
@@ -4465,7 +4465,7 @@
   (func $func9 (param $var0 i64) (result i64)
     i32.const 0
     local.get $var0
-    i32.wrap/i64
+    i32.wrap_i64
     call $func0
     i32.const 0
     i64.load16_s
@@ -4473,7 +4473,7 @@
   (func $func10 (param $var0 i64) (result i64)
     i32.const 0
     local.get $var0
-    i32.wrap/i64
+    i32.wrap_i64
     call $func0
     i32.const 0
     i64.load16_u
@@ -4481,7 +4481,7 @@
   (func $func11 (param $var0 i64) (result i64)
     i32.const 0
     local.get $var0
-    i32.wrap/i64
+    i32.wrap_i64
     call $func1
     i32.const 0
     i64.load32_s
@@ -4489,7 +4489,7 @@
   (func $func12 (param $var0 i64) (result i64)
     i32.const 0
     local.get $var0
-    i32.wrap/i64
+    i32.wrap_i64
     call $func1
     i32.const 0
     i64.load32_u
@@ -4504,7 +4504,7 @@
   (func $func14 (param $var0 f32) (result f32)
     i32.const 0
     local.get $var0
-    i32.reinterpret/f32
+    i32.reinterpret_f32
     call $func1
     i32.const 0
     f32.load
@@ -4512,7 +4512,7 @@
   (func $func15 (param $var0 f64) (result f64)
     i32.const 0
     local.get $var0
-    i64.reinterpret/f64
+    i64.reinterpret_f64
     call $func2
     i32.const 0
     f64.load
@@ -4537,7 +4537,7 @@
     i64.store16
     i32.const 0
     call $func3
-    i64.extend_u/i32
+    i64.extend_i32_u
   )
   (func $func19 (param $var0 i64) (result i64)
     i32.const 0
@@ -4545,7 +4545,7 @@
     i64.store32
     i32.const 0
     call $func4
-    i64.extend_u/i32
+    i64.extend_i32_u
   )
   (func $func20 (param $var0 i64) (result i64)
     i32.const 0
@@ -4560,7 +4560,7 @@
     f32.store
     i32.const 0
     call $func4
-    f32.reinterpret/i32
+    f32.reinterpret_i32
   )
   (func $func22 (param $var0 f64) (result f64)
     i32.const 0
@@ -4568,7 +4568,7 @@
     f64.store
     i32.const 0
     call $func5
-    f64.reinterpret/i64
+    f64.reinterpret_i64
   )
 )
 (module
@@ -4844,103 +4844,103 @@
   (export "i64.reinterpret_f64" (func $func24))
   (func $func0 (param $var0 i32) (result i64)
     local.get $var0
-    i64.extend_s/i32
+    i64.extend_i32_s
   )
   (func $func1 (param $var0 i32) (result i64)
     local.get $var0
-    i64.extend_u/i32
+    i64.extend_i32_u
   )
   (func $func2 (param $var0 i64) (result i32)
     local.get $var0
-    i32.wrap/i64
+    i32.wrap_i64
   )
   (func $func3 (param $var0 f32) (result i32)
     local.get $var0
-    i32.trunc_s/f32
+    i32.trunc_f32_s
   )
   (func $func4 (param $var0 f32) (result i32)
     local.get $var0
-    i32.trunc_u/f32
+    i32.trunc_f32_u
   )
   (func $func5 (param $var0 f64) (result i32)
     local.get $var0
-    i32.trunc_s/f64
+    i32.trunc_f64_s
   )
   (func $func6 (param $var0 f64) (result i32)
     local.get $var0
-    i32.trunc_u/f64
+    i32.trunc_f64_u
   )
   (func $func7 (param $var0 f32) (result i64)
     local.get $var0
-    i64.trunc_s/f32
+    i64.trunc_f32_s
   )
   (func $func8 (param $var0 f32) (result i64)
     local.get $var0
-    i64.trunc_u/f32
+    i64.trunc_f32_u
   )
   (func $func9 (param $var0 f64) (result i64)
     local.get $var0
-    i64.trunc_s/f64
+    i64.trunc_f64_s
   )
   (func $func10 (param $var0 f64) (result i64)
     local.get $var0
-    i64.trunc_u/f64
+    i64.trunc_f64_u
   )
   (func $func11 (param $var0 i32) (result f32)
     local.get $var0
-    f32.convert_s/i32
+    f32.convert_i32_s
   )
   (func $func12 (param $var0 i64) (result f32)
     local.get $var0
-    f32.convert_s/i64
+    f32.convert_i64_s
   )
   (func $func13 (param $var0 i32) (result f64)
     local.get $var0
-    f64.convert_s/i32
+    f64.convert_i32_s
   )
   (func $func14 (param $var0 i64) (result f64)
     local.get $var0
-    f64.convert_s/i64
+    f64.convert_i64_s
   )
   (func $func15 (param $var0 i32) (result f32)
     local.get $var0
-    f32.convert_u/i32
+    f32.convert_i32_u
   )
   (func $func16 (param $var0 i64) (result f32)
     local.get $var0
-    f32.convert_u/i64
+    f32.convert_i64_u
   )
   (func $func17 (param $var0 i32) (result f64)
     local.get $var0
-    f64.convert_u/i32
+    f64.convert_i32_u
   )
   (func $func18 (param $var0 i64) (result f64)
     local.get $var0
-    f64.convert_u/i64
+    f64.convert_i64_u
   )
   (func $func19 (param $var0 f32) (result f64)
     local.get $var0
-    f64.promote/f32
+    f64.promote_f32
   )
   (func $func20 (param $var0 f64) (result f32)
     local.get $var0
-    f32.demote/f64
+    f32.demote_f64
   )
   (func $func21 (param $var0 i32) (result f32)
     local.get $var0
-    f32.reinterpret/i32
+    f32.reinterpret_i32
   )
   (func $func22 (param $var0 i64) (result f64)
     local.get $var0
-    f64.reinterpret/i64
+    f64.reinterpret_i64
   )
   (func $func23 (param $var0 f32) (result i32)
     local.get $var0
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func24 (param $var0 f64) (result i64)
     local.get $var0
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
 )
 (module
@@ -4983,103 +4983,103 @@
   (export "i64.reinterpret_f64" (func $func24))
   (func $func0 (param $var0 i32) (result i64)
     local.get $var0
-    i64.extend_s/i32
+    i64.extend_i32_s
   )
   (func $func1 (param $var0 i32) (result i64)
     local.get $var0
-    i64.extend_u/i32
+    i64.extend_i32_u
   )
   (func $func2 (param $var0 i64) (result i32)
     local.get $var0
-    i32.wrap/i64
+    i32.wrap_i64
   )
   (func $func3 (param $var0 f32) (result i32)
     local.get $var0
-    i32.trunc_s/f32
+    i32.trunc_f32_s
   )
   (func $func4 (param $var0 f32) (result i32)
     local.get $var0
-    i32.trunc_u/f32
+    i32.trunc_f32_u
   )
   (func $func5 (param $var0 f64) (result i32)
     local.get $var0
-    i32.trunc_s/f64
+    i32.trunc_f64_s
   )
   (func $func6 (param $var0 f64) (result i32)
     local.get $var0
-    i32.trunc_u/f64
+    i32.trunc_f64_u
   )
   (func $func7 (param $var0 f32) (result i64)
     local.get $var0
-    i64.trunc_s/f32
+    i64.trunc_f32_s
   )
   (func $func8 (param $var0 f32) (result i64)
     local.get $var0
-    i64.trunc_u/f32
+    i64.trunc_f32_u
   )
   (func $func9 (param $var0 f64) (result i64)
     local.get $var0
-    i64.trunc_s/f64
+    i64.trunc_f64_s
   )
   (func $func10 (param $var0 f64) (result i64)
     local.get $var0
-    i64.trunc_u/f64
+    i64.trunc_f64_u
   )
   (func $func11 (param $var0 i32) (result f32)
     local.get $var0
-    f32.convert_s/i32
+    f32.convert_i32_s
   )
   (func $func12 (param $var0 i64) (result f32)
     local.get $var0
-    f32.convert_s/i64
+    f32.convert_i64_s
   )
   (func $func13 (param $var0 i32) (result f64)
     local.get $var0
-    f64.convert_s/i32
+    f64.convert_i32_s
   )
   (func $func14 (param $var0 i64) (result f64)
     local.get $var0
-    f64.convert_s/i64
+    f64.convert_i64_s
   )
   (func $func15 (param $var0 i32) (result f32)
     local.get $var0
-    f32.convert_u/i32
+    f32.convert_i32_u
   )
   (func $func16 (param $var0 i64) (result f32)
     local.get $var0
-    f32.convert_u/i64
+    f32.convert_i64_u
   )
   (func $func17 (param $var0 i32) (result f64)
     local.get $var0
-    f64.convert_u/i32
+    f64.convert_i32_u
   )
   (func $func18 (param $var0 i64) (result f64)
     local.get $var0
-    f64.convert_u/i64
+    f64.convert_i64_u
   )
   (func $func19 (param $var0 f32) (result f64)
     local.get $var0
-    f64.promote/f32
+    f64.promote_f32
   )
   (func $func20 (param $var0 f64) (result f32)
     local.get $var0
-    f32.demote/f64
+    f32.demote_f64
   )
   (func $func21 (param $var0 i32) (result f32)
     local.get $var0
-    f32.reinterpret/i32
+    f32.reinterpret_i32
   )
   (func $func22 (param $var0 i64) (result f64)
     local.get $var0
-    f64.reinterpret/i64
+    f64.reinterpret_i64
   )
   (func $func23 (param $var0 f32) (result i32)
     local.get $var0
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func24 (param $var0 f64) (result i64)
     local.get $var0
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
 )
 (module
@@ -5979,7 +5979,7 @@
       i32.const 41
       i32.const 0
       br_table $label0
-      i32.wrap/i64
+      i32.wrap_i64
     end $label0
   )
   (func $func59 (result i32)
@@ -6864,243 +6864,243 @@
   (export "f64_dec.trailing_dot" (func $func59))
   (func $func0 (result i32)
     f32.const nan
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func1 (result i32)
     f32.const nan
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func2 (result i32)
     f32.const -nan
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func3 (result i32)
     f32.const nan
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func4 (result i32)
     f32.const +nan:0x600000
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func5 (result i32)
     f32.const -nan:0x7fffff
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func6 (result i32)
     f32.const +nan:0x412345
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func7 (result i32)
     f32.const +nan:0x704050
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func8 (result i32)
     f32.const -nan:0x6abcde
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func9 (result i32)
     f32.const inf
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func10 (result i32)
     f32.const inf
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func11 (result i32)
     f32.const -inf
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func12 (result i32)
     f32.const 0.0
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func13 (result i32)
     f32.const 0.0
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func14 (result i32)
     f32.const -0.0
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func15 (result i32)
     f32.const 6.2831854820251465
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func16 (result i32)
     f32.const 1.401298464324817e-45
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func17 (result i32)
     f32.const 1.1754943508222875e-38
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func18 (result i32)
     f32.const 3.4028234663852886e+38
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func19 (result i32)
     f32.const 1.1754942106924411e-38
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func20 (result i32)
     f32.const 1024
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func21 (result i32)
     f32.const 0.0
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func22 (result i32)
     f32.const 0.0
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func23 (result i32)
     f32.const -0.0
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func24 (result i32)
     f32.const 6.2831854820251465
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func25 (result i32)
     f32.const 1.401298464324817e-45
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func26 (result i32)
     f32.const 1.1754943508222875e-38
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func27 (result i32)
     f32.const 1.1754942106924411e-38
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func28 (result i32)
     f32.const 3.4028234663852886e+38
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func29 (result i32)
     f32.const 10000000000
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func30 (result i64)
     f64.const nan
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func31 (result i64)
     f64.const nan
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func32 (result i64)
     f64.const -nan
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func33 (result i64)
     f64.const nan
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func34 (result i64)
     f64.const +nan:0x4000000000000
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func35 (result i64)
     f64.const -nan:0xfffffffffffff
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func36 (result i64)
     f64.const +nan:0x123456789abc
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func37 (result i64)
     f64.const +nan:0x3040506070809
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func38 (result i64)
     f64.const -nan:0x2abcdef012345
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func39 (result i64)
     f64.const inf
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func40 (result i64)
     f64.const inf
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func41 (result i64)
     f64.const -inf
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func42 (result i64)
     f64.const 0.0
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func43 (result i64)
     f64.const 0.0
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func44 (result i64)
     f64.const -0.0
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func45 (result i64)
     f64.const 6.283185307179586
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func46 (result i64)
     f64.const 5e-324
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func47 (result i64)
     f64.const 2.2250738585072014e-308
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func48 (result i64)
     f64.const 2.225073858507201e-308
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func49 (result i64)
     f64.const 1.7976931348623157e+308
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func50 (result i64)
     f64.const 1.2676506002282294e+30
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func51 (result i64)
     f64.const 0.0
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func52 (result i64)
     f64.const 0.0
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func53 (result i64)
     f64.const -0.0
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func54 (result i64)
     f64.const 6.283185307179586
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func55 (result i64)
     f64.const 5e-324
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func56 (result i64)
     f64.const 2.2250738585072014e-308
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func57 (result i64)
     f64.const 2.225073858507201e-308
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func58 (result i64)
     f64.const 1.7976931348623157e+308
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func59 (result i64)
     f64.const 1e+100
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
 )
 (module
@@ -7168,243 +7168,243 @@
   (export "f64_dec.trailing_dot" (func $func59))
   (func $func0 (result i32)
     f32.const nan
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func1 (result i32)
     f32.const nan
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func2 (result i32)
     f32.const -nan
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func3 (result i32)
     f32.const nan
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func4 (result i32)
     f32.const +nan:0x600000
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func5 (result i32)
     f32.const -nan:0x7fffff
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func6 (result i32)
     f32.const +nan:0x412345
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func7 (result i32)
     f32.const +nan:0x704050
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func8 (result i32)
     f32.const -nan:0x6abcde
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func9 (result i32)
     f32.const inf
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func10 (result i32)
     f32.const inf
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func11 (result i32)
     f32.const -inf
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func12 (result i32)
     f32.const 0.0
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func13 (result i32)
     f32.const 0.0
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func14 (result i32)
     f32.const -0.0
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func15 (result i32)
     f32.const 6.2831854820251465
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func16 (result i32)
     f32.const 1.401298464324817e-45
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func17 (result i32)
     f32.const 1.1754943508222875e-38
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func18 (result i32)
     f32.const 3.4028234663852886e+38
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func19 (result i32)
     f32.const 1.1754942106924411e-38
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func20 (result i32)
     f32.const 1024
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func21 (result i32)
     f32.const 0.0
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func22 (result i32)
     f32.const 0.0
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func23 (result i32)
     f32.const -0.0
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func24 (result i32)
     f32.const 6.2831854820251465
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func25 (result i32)
     f32.const 1.401298464324817e-45
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func26 (result i32)
     f32.const 1.1754943508222875e-38
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func27 (result i32)
     f32.const 1.1754942106924411e-38
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func28 (result i32)
     f32.const 3.4028234663852886e+38
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func29 (result i32)
     f32.const 10000000000
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func30 (result i64)
     f64.const nan
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func31 (result i64)
     f64.const nan
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func32 (result i64)
     f64.const -nan
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func33 (result i64)
     f64.const nan
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func34 (result i64)
     f64.const +nan:0x4000000000000
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func35 (result i64)
     f64.const -nan:0xfffffffffffff
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func36 (result i64)
     f64.const +nan:0x123456789abc
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func37 (result i64)
     f64.const +nan:0x3040506070809
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func38 (result i64)
     f64.const -nan:0x2abcdef012345
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func39 (result i64)
     f64.const inf
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func40 (result i64)
     f64.const inf
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func41 (result i64)
     f64.const -inf
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func42 (result i64)
     f64.const 0.0
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func43 (result i64)
     f64.const 0.0
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func44 (result i64)
     f64.const -0.0
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func45 (result i64)
     f64.const 6.283185307179586
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func46 (result i64)
     f64.const 5e-324
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func47 (result i64)
     f64.const 2.2250738585072014e-308
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func48 (result i64)
     f64.const 2.225073858507201e-308
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func49 (result i64)
     f64.const 1.7976931348623157e+308
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func50 (result i64)
     f64.const 1.2676506002282294e+30
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func51 (result i64)
     f64.const 0.0
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func52 (result i64)
     f64.const 0.0
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func53 (result i64)
     f64.const -0.0
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func54 (result i64)
     f64.const 6.283185307179586
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func55 (result i64)
     f64.const 5e-324
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func56 (result i64)
     f64.const 2.2250738585072014e-308
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func57 (result i64)
     f64.const 2.225073858507201e-308
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func58 (result i64)
     f64.const 1.7976931348623157e+308
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func59 (result i64)
     f64.const 1e+100
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
 )
 (module
@@ -9072,20 +9072,20 @@
     f64.const 8
     local.set $var8
     local.get $var0
-    f64.convert_u/i64
+    f64.convert_i64_u
     local.get $var1
-    f64.promote/f32
+    f64.promote_f32
     local.get $var2
     local.get $var3
-    f64.convert_u/i32
+    f64.convert_i32_u
     local.get $var4
-    f64.convert_s/i32
+    f64.convert_i32_s
     local.get $var5
-    f64.promote/f32
+    f64.promote_f32
     local.get $var6
-    f64.convert_u/i64
+    f64.convert_i64_u
     local.get $var7
-    f64.convert_u/i64
+    f64.convert_i64_u
     local.get $var8
     f64.add
     f64.add
@@ -9185,20 +9185,20 @@
     f64.const 8
     local.set $var8
     local.get $var0
-    f64.convert_u/i64
+    f64.convert_i64_u
     local.get $var1
-    f64.promote/f32
+    f64.promote_f32
     local.get $var2
     local.get $var3
-    f64.convert_u/i32
+    f64.convert_i32_u
     local.get $var4
-    f64.convert_s/i32
+    f64.convert_i32_s
     local.get $var5
-    f64.promote/f32
+    f64.promote_f32
     local.get $var6
-    f64.convert_u/i64
+    f64.convert_i64_u
     local.get $var7
-    f64.convert_u/i64
+    f64.convert_i64_u
     local.get $var8
     f64.add
     f64.add
@@ -10685,23 +10685,23 @@
   (export "i64.no_fold_f64_u" (func $func3))
   (func $func0 (param $var0 i32) (result i32)
     local.get $var0
-    f32.convert_s/i32
-    i32.trunc_s/f32
+    f32.convert_i32_s
+    i32.trunc_f32_s
   )
   (func $func1 (param $var0 i32) (result i32)
     local.get $var0
-    f32.convert_u/i32
-    i32.trunc_u/f32
+    f32.convert_i32_u
+    i32.trunc_f32_u
   )
   (func $func2 (param $var0 i64) (result i64)
     local.get $var0
-    f64.convert_s/i64
-    i64.trunc_s/f64
+    f64.convert_i64_s
+    i64.trunc_f64_s
   )
   (func $func3 (param $var0 i64) (result i64)
     local.get $var0
-    f64.convert_u/i64
-    i64.trunc_u/f64
+    f64.convert_i64_u
+    i64.trunc_f64_u
   )
 )
 (module
@@ -10789,8 +10789,8 @@
   (export "no_fold_demote_promote" (func $func0))
   (func $func0 (param $var0 f64) (result f64)
     local.get $var0
-    f32.demote/f64
-    f64.promote/f32
+    f32.demote_f64
+    f64.promote_f32
   )
 )
 (module
@@ -10798,8 +10798,8 @@
   (export "no_fold_promote_demote" (func $func0))
   (func $func0 (param $var0 f32) (result f32)
     local.get $var0
-    f64.promote/f32
-    f32.demote/f64
+    f64.promote_f32
+    f32.demote_f64
   )
 )
 (module
@@ -10810,16 +10810,16 @@
   (func $func0 (param $var0 f64) (param $var1 f32) (result f32)
     local.get $var0
     local.get $var1
-    f64.promote/f32
+    f64.promote_f32
     f64.add
-    f32.demote/f64
+    f32.demote_f64
   )
   (func $func1 (param $var0 f32) (param $var1 f64) (result f32)
     local.get $var0
-    f64.promote/f32
+    f64.promote_f32
     local.get $var1
     f64.add
-    f32.demote/f64
+    f32.demote_f64
   )
 )
 (module
@@ -10828,9 +10828,9 @@
   (func $func0 (param $var0 f64) (param $var1 f32) (result f32)
     local.get $var0
     local.get $var1
-    f64.promote/f32
+    f64.promote_f32
     f64.sub
-    f32.demote/f64
+    f32.demote_f64
   )
 )
 (module
@@ -10854,83 +10854,83 @@
   (export "f64.i64.no_fold_trunc_u_convert_u" (func $func15))
   (func $func0 (param $var0 f32) (result f32)
     local.get $var0
-    i32.trunc_s/f32
-    f32.convert_s/i32
+    i32.trunc_f32_s
+    f32.convert_i32_s
   )
   (func $func1 (param $var0 f32) (result f32)
     local.get $var0
-    i32.trunc_u/f32
-    f32.convert_s/i32
+    i32.trunc_f32_u
+    f32.convert_i32_s
   )
   (func $func2 (param $var0 f32) (result f32)
     local.get $var0
-    i32.trunc_s/f32
-    f32.convert_u/i32
+    i32.trunc_f32_s
+    f32.convert_i32_u
   )
   (func $func3 (param $var0 f32) (result f32)
     local.get $var0
-    i32.trunc_u/f32
-    f32.convert_u/i32
+    i32.trunc_f32_u
+    f32.convert_i32_u
   )
   (func $func4 (param $var0 f64) (result f64)
     local.get $var0
-    i32.trunc_s/f64
-    f64.convert_s/i32
+    i32.trunc_f64_s
+    f64.convert_i32_s
   )
   (func $func5 (param $var0 f64) (result f64)
     local.get $var0
-    i32.trunc_u/f64
-    f64.convert_s/i32
+    i32.trunc_f64_u
+    f64.convert_i32_s
   )
   (func $func6 (param $var0 f64) (result f64)
     local.get $var0
-    i32.trunc_s/f64
-    f64.convert_u/i32
+    i32.trunc_f64_s
+    f64.convert_i32_u
   )
   (func $func7 (param $var0 f64) (result f64)
     local.get $var0
-    i32.trunc_u/f64
-    f64.convert_u/i32
+    i32.trunc_f64_u
+    f64.convert_i32_u
   )
   (func $func8 (param $var0 f32) (result f32)
     local.get $var0
-    i64.trunc_s/f32
-    f32.convert_s/i64
+    i64.trunc_f32_s
+    f32.convert_i64_s
   )
   (func $func9 (param $var0 f32) (result f32)
     local.get $var0
-    i64.trunc_u/f32
-    f32.convert_s/i64
+    i64.trunc_f32_u
+    f32.convert_i64_s
   )
   (func $func10 (param $var0 f32) (result f32)
     local.get $var0
-    i64.trunc_s/f32
-    f32.convert_u/i64
+    i64.trunc_f32_s
+    f32.convert_i64_u
   )
   (func $func11 (param $var0 f32) (result f32)
     local.get $var0
-    i64.trunc_u/f32
-    f32.convert_u/i64
+    i64.trunc_f32_u
+    f32.convert_i64_u
   )
   (func $func12 (param $var0 f64) (result f64)
     local.get $var0
-    i64.trunc_s/f64
-    f64.convert_s/i64
+    i64.trunc_f64_s
+    f64.convert_i64_s
   )
   (func $func13 (param $var0 f64) (result f64)
     local.get $var0
-    i64.trunc_u/f64
-    f64.convert_s/i64
+    i64.trunc_f64_u
+    f64.convert_i64_s
   )
   (func $func14 (param $var0 f64) (result f64)
     local.get $var0
-    i64.trunc_s/f64
-    f64.convert_u/i64
+    i64.trunc_f64_s
+    f64.convert_i64_u
   )
   (func $func15 (param $var0 f64) (result f64)
     local.get $var0
-    i64.trunc_u/f64
-    f64.convert_u/i64
+    i64.trunc_f64_u
+    f64.convert_i64_u
   )
 )
 (module
@@ -11551,7 +11551,7 @@
     local.get $var0
     i32.const 268435455
     i32.and
-    f32.convert_s/i32
+    f32.convert_i32_s
     f32.const -8388608
     f32.add
   )
@@ -11563,11 +11563,11 @@
     local.get $var0
     i32.const -25034805
     i32.or
-    f32.convert_s/i32
+    f32.convert_i32_s
     local.get $var1
     i32.const 14942208
     i32.and
-    f32.convert_s/i32
+    f32.convert_i32_s
     f32.add
   )
 )
@@ -12116,7 +12116,7 @@
   )
   (func $func6 (param $var0 f64) (param $var1 f32) (result f32)
     local.get $var0
-    f32.demote/f64
+    f32.demote_f64
     local.get $var1
     f32.mul
   )
@@ -13250,23 +13250,23 @@
   (export "i64.no_fold_f64_u" (func $func3))
   (func $func0 (param $var0 i32) (result i32)
     local.get $var0
-    f32.convert_s/i32
-    i32.trunc_s/f32
+    f32.convert_i32_s
+    i32.trunc_f32_s
   )
   (func $func1 (param $var0 i32) (result i32)
     local.get $var0
-    f32.convert_u/i32
-    i32.trunc_u/f32
+    f32.convert_i32_u
+    i32.trunc_f32_u
   )
   (func $func2 (param $var0 i64) (result i64)
     local.get $var0
-    f64.convert_s/i64
-    i64.trunc_s/f64
+    f64.convert_i64_s
+    i64.trunc_f64_s
   )
   (func $func3 (param $var0 i64) (result i64)
     local.get $var0
-    f64.convert_u/i64
-    i64.trunc_u/f64
+    f64.convert_i64_u
+    i64.trunc_f64_u
   )
 )
 (module
@@ -13354,8 +13354,8 @@
   (export "no_fold_demote_promote" (func $func0))
   (func $func0 (param $var0 f64) (result f64)
     local.get $var0
-    f32.demote/f64
-    f64.promote/f32
+    f32.demote_f64
+    f64.promote_f32
   )
 )
 (module
@@ -13363,8 +13363,8 @@
   (export "no_fold_promote_demote" (func $func0))
   (func $func0 (param $var0 f32) (result f32)
     local.get $var0
-    f64.promote/f32
-    f32.demote/f64
+    f64.promote_f32
+    f32.demote_f64
   )
 )
 (module
@@ -13375,16 +13375,16 @@
   (func $func0 (param $var0 f64) (param $var1 f32) (result f32)
     local.get $var0
     local.get $var1
-    f64.promote/f32
+    f64.promote_f32
     f64.add
-    f32.demote/f64
+    f32.demote_f64
   )
   (func $func1 (param $var0 f32) (param $var1 f64) (result f32)
     local.get $var0
-    f64.promote/f32
+    f64.promote_f32
     local.get $var1
     f64.add
-    f32.demote/f64
+    f32.demote_f64
   )
 )
 (module
@@ -13393,9 +13393,9 @@
   (func $func0 (param $var0 f64) (param $var1 f32) (result f32)
     local.get $var0
     local.get $var1
-    f64.promote/f32
+    f64.promote_f32
     f64.sub
-    f32.demote/f64
+    f32.demote_f64
   )
 )
 (module
@@ -13419,83 +13419,83 @@
   (export "f64.i64.no_fold_trunc_u_convert_u" (func $func15))
   (func $func0 (param $var0 f32) (result f32)
     local.get $var0
-    i32.trunc_s/f32
-    f32.convert_s/i32
+    i32.trunc_f32_s
+    f32.convert_i32_s
   )
   (func $func1 (param $var0 f32) (result f32)
     local.get $var0
-    i32.trunc_u/f32
-    f32.convert_s/i32
+    i32.trunc_f32_u
+    f32.convert_i32_s
   )
   (func $func2 (param $var0 f32) (result f32)
     local.get $var0
-    i32.trunc_s/f32
-    f32.convert_u/i32
+    i32.trunc_f32_s
+    f32.convert_i32_u
   )
   (func $func3 (param $var0 f32) (result f32)
     local.get $var0
-    i32.trunc_u/f32
-    f32.convert_u/i32
+    i32.trunc_f32_u
+    f32.convert_i32_u
   )
   (func $func4 (param $var0 f64) (result f64)
     local.get $var0
-    i32.trunc_s/f64
-    f64.convert_s/i32
+    i32.trunc_f64_s
+    f64.convert_i32_s
   )
   (func $func5 (param $var0 f64) (result f64)
     local.get $var0
-    i32.trunc_u/f64
-    f64.convert_s/i32
+    i32.trunc_f64_u
+    f64.convert_i32_s
   )
   (func $func6 (param $var0 f64) (result f64)
     local.get $var0
-    i32.trunc_s/f64
-    f64.convert_u/i32
+    i32.trunc_f64_s
+    f64.convert_i32_u
   )
   (func $func7 (param $var0 f64) (result f64)
     local.get $var0
-    i32.trunc_u/f64
-    f64.convert_u/i32
+    i32.trunc_f64_u
+    f64.convert_i32_u
   )
   (func $func8 (param $var0 f32) (result f32)
     local.get $var0
-    i64.trunc_s/f32
-    f32.convert_s/i64
+    i64.trunc_f32_s
+    f32.convert_i64_s
   )
   (func $func9 (param $var0 f32) (result f32)
     local.get $var0
-    i64.trunc_u/f32
-    f32.convert_s/i64
+    i64.trunc_f32_u
+    f32.convert_i64_s
   )
   (func $func10 (param $var0 f32) (result f32)
     local.get $var0
-    i64.trunc_s/f32
-    f32.convert_u/i64
+    i64.trunc_f32_s
+    f32.convert_i64_u
   )
   (func $func11 (param $var0 f32) (result f32)
     local.get $var0
-    i64.trunc_u/f32
-    f32.convert_u/i64
+    i64.trunc_f32_u
+    f32.convert_i64_u
   )
   (func $func12 (param $var0 f64) (result f64)
     local.get $var0
-    i64.trunc_s/f64
-    f64.convert_s/i64
+    i64.trunc_f64_s
+    f64.convert_i64_s
   )
   (func $func13 (param $var0 f64) (result f64)
     local.get $var0
-    i64.trunc_u/f64
-    f64.convert_s/i64
+    i64.trunc_f64_u
+    f64.convert_i64_s
   )
   (func $func14 (param $var0 f64) (result f64)
     local.get $var0
-    i64.trunc_s/f64
-    f64.convert_u/i64
+    i64.trunc_f64_s
+    f64.convert_i64_u
   )
   (func $func15 (param $var0 f64) (result f64)
     local.get $var0
-    i64.trunc_u/f64
-    f64.convert_u/i64
+    i64.trunc_f64_u
+    f64.convert_i64_u
   )
 )
 (module
@@ -14116,7 +14116,7 @@
     local.get $var0
     i32.const 268435455
     i32.and
-    f32.convert_s/i32
+    f32.convert_i32_s
     f32.const -8388608
     f32.add
   )
@@ -14128,11 +14128,11 @@
     local.get $var0
     i32.const -25034805
     i32.or
-    f32.convert_s/i32
+    f32.convert_i32_s
     local.get $var1
     i32.const 14942208
     i32.and
-    f32.convert_s/i32
+    f32.convert_i32_s
     f32.add
   )
 )
@@ -14681,7 +14681,7 @@
   )
   (func $func6 (param $var0 f64) (param $var1 f32) (result f32)
     local.get $var0
-    f32.demote/f64
+    f32.demote_f64
     local.get $var1
     f32.mul
   )
@@ -15433,8 +15433,8 @@
   (export "i64.no_fold_wrap_extend_s" (func $func0))
   (func $func0 (param $var0 i64) (result i64)
     local.get $var0
-    i32.wrap/i64
-    i64.extend_s/i32
+    i32.wrap_i64
+    i64.extend_i32_s
   )
 )
 (module
@@ -15442,8 +15442,8 @@
   (export "i64.no_fold_wrap_extend_u" (func $func0))
   (func $func0 (param $var0 i64) (result i64)
     local.get $var0
-    i32.wrap/i64
-    i64.extend_u/i32
+    i32.wrap_i64
+    i64.extend_i32_u
   )
 )
 (module
@@ -16313,8 +16313,8 @@
   (export "i64.no_fold_wrap_extend_s" (func $func0))
   (func $func0 (param $var0 i64) (result i64)
     local.get $var0
-    i32.wrap/i64
-    i64.extend_s/i32
+    i32.wrap_i64
+    i64.extend_i32_s
   )
 )
 (module
@@ -16322,8 +16322,8 @@
   (export "i64.no_fold_wrap_extend_u" (func $func0))
   (func $func0 (param $var0 i64) (result i64)
     local.get $var0
-    i32.wrap/i64
-    i64.extend_u/i32
+    i32.wrap_i64
+    i64.extend_i32_u
   )
 )
 (module
@@ -21967,7 +21967,7 @@
   (func $func53 (result i32)
     i32.const 41
     return
-    i32.wrap/i64
+    i32.wrap_i64
   )
   (func $func54 (result i32)
     i32.const 40
@@ -22392,7 +22392,7 @@
   (func $func53 (result i32)
     i32.const 41
     return
-    i32.wrap/i64
+    i32.wrap_i64
   )
   (func $func54 (result i32)
     i32.const 40
@@ -22588,20 +22588,20 @@
     f64.const 8
     local.set $var8
     local.get $var0
-    f64.convert_u/i64
+    f64.convert_i64_u
     local.get $var1
-    f64.promote/f32
+    f64.promote_f32
     local.get $var2
     local.get $var3
-    f64.convert_u/i32
+    f64.convert_i32_u
     local.get $var4
-    f64.convert_s/i32
+    f64.convert_i32_s
     local.get $var5
-    f64.promote/f32
+    f64.promote_f32
     local.get $var6
-    f64.convert_u/i64
+    f64.convert_i64_u
     local.get $var7
-    f64.convert_u/i64
+    f64.convert_i64_u
     local.get $var8
     f64.add
     f64.add
@@ -22611,7 +22611,7 @@
     f64.add
     f64.add
     f64.add
-    i64.trunc_s/f64
+    i64.trunc_f64_s
   )
 )
 (module
@@ -22704,20 +22704,20 @@
     f64.const 8
     local.set $var8
     local.get $var0
-    f64.convert_u/i64
+    f64.convert_i64_u
     local.get $var1
-    f64.promote/f32
+    f64.promote_f32
     local.get $var2
     local.get $var3
-    f64.convert_u/i32
+    f64.convert_i32_u
     local.get $var4
-    f64.convert_s/i32
+    f64.convert_i32_s
     local.get $var5
-    f64.promote/f32
+    f64.promote_f32
     local.get $var6
-    f64.convert_u/i64
+    f64.convert_i64_u
     local.get $var7
-    f64.convert_u/i64
+    f64.convert_i64_u
     local.get $var8
     f64.add
     f64.add
@@ -22727,7 +22727,7 @@
     f64.add
     f64.add
     f64.add
-    i64.trunc_s/f64
+    i64.trunc_f64_s
   )
 )
 (module
@@ -35986,7 +35986,7 @@
                     block $label1
                       block $label0
                         local.get $var0
-                        i32.wrap/i64
+                        i32.wrap_i64
                         br_table $label0 $label1 $label2 $label3 $label4 $label5 $label6 $label7 $label8
                       end $label0
                       local.get $var0
@@ -36115,35 +36115,35 @@
   (export "no_dce.i64.trunc_u_f64" (func $func7))
   (func $func0 (param $var0 f32) (result i32)
     local.get $var0
-    i32.trunc_s/f32
+    i32.trunc_f32_s
   )
   (func $func1 (param $var0 f32) (result i32)
     local.get $var0
-    i32.trunc_u/f32
+    i32.trunc_f32_u
   )
   (func $func2 (param $var0 f64) (result i32)
     local.get $var0
-    i32.trunc_s/f64
+    i32.trunc_f64_s
   )
   (func $func3 (param $var0 f64) (result i32)
     local.get $var0
-    i32.trunc_u/f64
+    i32.trunc_f64_u
   )
   (func $func4 (param $var0 f32) (result i64)
     local.get $var0
-    i64.trunc_s/f32
+    i64.trunc_f32_s
   )
   (func $func5 (param $var0 f32) (result i64)
     local.get $var0
-    i64.trunc_u/f32
+    i64.trunc_f32_u
   )
   (func $func6 (param $var0 f64) (result i64)
     local.get $var0
-    i64.trunc_s/f64
+    i64.trunc_f64_s
   )
   (func $func7 (param $var0 f64) (result i64)
     local.get $var0
-    i64.trunc_u/f64
+    i64.trunc_f64_u
   )
 )
 (module
@@ -36241,7 +36241,7 @@
                     block $label1
                       block $label0
                         local.get $var0
-                        i32.wrap/i64
+                        i32.wrap_i64
                         br_table $label0 $label1 $label2 $label3 $label4 $label5 $label6 $label7 $label8
                       end $label0
                       local.get $var0
@@ -36370,35 +36370,35 @@
   (export "no_dce.i64.trunc_u_f64" (func $func7))
   (func $func0 (param $var0 f32) (result i32)
     local.get $var0
-    i32.trunc_s/f32
+    i32.trunc_f32_s
   )
   (func $func1 (param $var0 f32) (result i32)
     local.get $var0
-    i32.trunc_u/f32
+    i32.trunc_f32_u
   )
   (func $func2 (param $var0 f64) (result i32)
     local.get $var0
-    i32.trunc_s/f64
+    i32.trunc_f64_s
   )
   (func $func3 (param $var0 f64) (result i32)
     local.get $var0
-    i32.trunc_u/f64
+    i32.trunc_f64_u
   )
   (func $func4 (param $var0 f32) (result i64)
     local.get $var0
-    i64.trunc_s/f32
+    i64.trunc_f32_s
   )
   (func $func5 (param $var0 f32) (result i64)
     local.get $var0
-    i64.trunc_u/f32
+    i64.trunc_f32_u
   )
   (func $func6 (param $var0 f64) (result i64)
     local.get $var0
-    i64.trunc_s/f64
+    i64.trunc_f64_s
   )
   (func $func7 (param $var0 f64) (result i64)
     local.get $var0
-    i64.trunc_u/f64
+    i64.trunc_f64_u
   )
 )
 (module
@@ -36547,20 +36547,20 @@
     local.tee $var8
     drop
     local.get $var0
-    f64.convert_u/i64
+    f64.convert_i64_u
     local.get $var1
-    f64.promote/f32
+    f64.promote_f32
     local.get $var2
     local.get $var3
-    f64.convert_u/i32
+    f64.convert_i32_u
     local.get $var4
-    f64.convert_s/i32
+    f64.convert_i32_s
     local.get $var5
-    f64.promote/f32
+    f64.promote_f32
     local.get $var6
-    f64.convert_u/i64
+    f64.convert_i64_u
     local.get $var7
-    f64.convert_u/i64
+    f64.convert_i64_u
     local.get $var8
     f64.add
     f64.add
@@ -36570,33 +36570,33 @@
     f64.add
     f64.add
     f64.add
-    i64.trunc_s/f64
+    i64.trunc_f64_s
   )
   (func $func10 (param $var0 i64) (param $var1 f32) (param $var2 f64) (param $var3 i32) (param $var4 i32) (result f64)
     (local $var5 f32) (local $var6 i64) (local $var7 i64) (local $var8 f64)
     i64.const 1
     local.tee $var0
-    f64.convert_u/i64
+    f64.convert_i64_u
     f32.const 2
     local.tee $var1
-    f64.promote/f32
+    f64.promote_f32
     f64.const 3.3
     local.tee $var2
     i32.const 4
     local.tee $var3
-    f64.convert_u/i32
+    f64.convert_i32_u
     i32.const 5
     local.tee $var4
-    f64.convert_s/i32
+    f64.convert_i32_s
     f32.const 5.5
     local.tee $var5
-    f64.promote/f32
+    f64.promote_f32
     i64.const 6
     local.tee $var6
-    f64.convert_u/i64
+    f64.convert_i64_u
     i64.const 0
     local.tee $var7
-    f64.convert_u/i64
+    f64.convert_i64_u
     f64.const 8
     local.tee $var8
     f64.add
@@ -36728,20 +36728,20 @@
     local.tee $var8
     drop
     local.get $var0
-    f64.convert_u/i64
+    f64.convert_i64_u
     local.get $var1
-    f64.promote/f32
+    f64.promote_f32
     local.get $var2
     local.get $var3
-    f64.convert_u/i32
+    f64.convert_i32_u
     local.get $var4
-    f64.convert_s/i32
+    f64.convert_i32_s
     local.get $var5
-    f64.promote/f32
+    f64.promote_f32
     local.get $var6
-    f64.convert_u/i64
+    f64.convert_i64_u
     local.get $var7
-    f64.convert_u/i64
+    f64.convert_i64_u
     local.get $var8
     f64.add
     f64.add
@@ -36751,33 +36751,33 @@
     f64.add
     f64.add
     f64.add
-    i64.trunc_s/f64
+    i64.trunc_f64_s
   )
   (func $func10 (param $var0 i64) (param $var1 f32) (param $var2 f64) (param $var3 i32) (param $var4 i32) (result f64)
     (local $var5 f32) (local $var6 i64) (local $var7 i64) (local $var8 f64)
     i64.const 1
     local.tee $var0
-    f64.convert_u/i64
+    f64.convert_i64_u
     f32.const 2
     local.tee $var1
-    f64.promote/f32
+    f64.promote_f32
     f64.const 3.3
     local.tee $var2
     i32.const 4
     local.tee $var3
-    f64.convert_u/i32
+    f64.convert_i32_u
     i32.const 5
     local.tee $var4
-    f64.convert_s/i32
+    f64.convert_i32_s
     f32.const 5.5
     local.tee $var5
-    f64.promote/f32
+    f64.promote_f32
     i64.const 6
     local.tee $var6
-    f64.convert_u/i64
+    f64.convert_i64_u
     i64.const 0
     local.tee $var7
-    f64.convert_u/i64
+    f64.convert_i64_u
     f64.const 8
     local.tee $var8
     f64.add
@@ -37505,7 +37505,7 @@
   )
   (func $func53 (result i32)
     unreachable
-    i32.wrap/i64
+    i32.wrap_i64
   )
   (func $func54 (result i32)
     unreachable
@@ -38227,7 +38227,7 @@
   )
   (func $func53 (result i32)
     unreachable
-    i32.wrap/i64
+    i32.wrap_i64
   )
   (func $func54 (result i32)
     unreachable

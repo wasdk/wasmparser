@@ -485,7 +485,7 @@
     block $label0 (result i32)
       i32.const 41
       br $label0
-      i32.wrap/i64
+      i32.wrap_i64
     end $label0
   )
   (func $func52 (result i32)

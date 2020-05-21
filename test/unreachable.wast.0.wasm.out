@@ -386,7 +386,7 @@
   )
   (func $func55 (result i32)
     unreachable
-    i32.wrap/i64
+    i32.wrap_i64
   )
   (func $func56 (result i32)
     unreachable

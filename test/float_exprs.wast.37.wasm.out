@@ -6,15 +6,15 @@
   (func $func0 (param $var0 f64) (param $var1 f32) (result f32)
     local.get $var0
     local.get $var1
-    f64.promote/f32
+    f64.promote_f32
     f64.add
-    f32.demote/f64
+    f32.demote_f64
   )
   (func $func1 (param $var0 f32) (param $var1 f64) (result f32)
     local.get $var0
-    f64.promote/f32
+    f64.promote_f32
     local.get $var1
     f64.add
-    f32.demote/f64
+    f32.demote_f64
   )
 )

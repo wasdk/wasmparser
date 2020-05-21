@@ -414,7 +414,7 @@
   (func $func53 (result i32)
     i32.const 41
     return
-    i32.wrap/i64
+    i32.wrap_i64
   )
   (func $func54 (result i32)
     i32.const 40
