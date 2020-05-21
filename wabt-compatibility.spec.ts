@@ -21,15 +21,9 @@ const { parseWat } = require("wabt")();
 const TEST_FOLDER = "./test";
 
 const INCOMPATIBLE_FILE_NAMES = [
-  "atomic.0.wasm.out",
   "conversion_sat.wasm.out",
   "memory_bulk.0.wasm.out",
   "ref_types.0.wasm.out",
-  "return_call_indirect.wast.0.wasm.out",
-  "return_call_indirect.wast.1.wasm.out",
-  "return_call_indirect.wast.2.wasm.out",
-  "return_call.wast.0.wasm.out",
-  "return_call.wast.1.wasm.out",
   "simd.wasm.out",
   "spec.wasm.out",
   "threads.0.wasm.out",
@@ -37,9 +31,21 @@ const INCOMPATIBLE_FILE_NAMES = [
 
 // This dict is used to select corresponding feature flags for corresponding files.
 const FEATURE_FLAGS_FOR_FILES = {
-  'atomic.1.wasm.out': {
-    'threads': true,
+  "return_call_indirect.wast.0.wasm.out": {
+    'tail_call': true,
   },
+  "return_call_indirect.wast.1.wasm.out": {
+    'tail_call': true,
+  },
+  "return_call_indirect.wast.2.wasm.out": {
+    'tail_call': true,
+  },
+  "return_call.wast.0.wasm.out": {
+    'tail_call': true,
+  },
+  "return_call.wast.1.wasm.out": {
+    'tail_call': true,
+  }
 };
 
 // Run wabt over .out files.
@@ -49,7 +55,8 @@ readdirSync(TEST_FOLDER)
     test(`wabt ${fileName}`, () => {
       const filePath = join(TEST_FOLDER, fileName);
       let data = new Uint8Array(readFileSync(filePath));
-      const feature = FEATURE_FLAGS_FOR_FILES[fileName] || {};
+      // Always turn on 'threads' flag.
+      const feature = {'threads': true, ...FEATURE_FLAGS_FOR_FILES[fileName]} ;
       expect(parseWat(fileName, data, feature)).toBeDefined();
     });
   });

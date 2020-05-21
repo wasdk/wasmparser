@@ -26,53 +26,53 @@
   (export "i64.atomic.store32" (func $func14))
   (export "i32.atomic.rmw.add" (func $func15))
   (export "i64.atomic.rmw.add" (func $func16))
-  (export "i32.atomic.rmw8_u.add" (func $func17))
-  (export "i32.atomic.rmw16_u.add" (func $func18))
-  (export "i64.atomic.rmw8_u.add" (func $func19))
-  (export "i64.atomic.rmw16_u.add" (func $func20))
-  (export "i64.atomic.rmw32_u.add" (func $func21))
+  (export "i32.atomic.rmw8.add_u" (func $func17))
+  (export "i32.atomic.rmw16.add_u" (func $func18))
+  (export "i64.atomic.rmw8.add_u" (func $func19))
+  (export "i64.atomic.rmw16.add_u" (func $func20))
+  (export "i64.atomic.rmw32.add_u" (func $func21))
   (export "i32.atomic.rmw.sub" (func $func22))
   (export "i64.atomic.rmw.sub" (func $func23))
-  (export "i32.atomic.rmw8_u.sub" (func $func24))
-  (export "i32.atomic.rmw16_u.sub" (func $func25))
-  (export "i64.atomic.rmw8_u.sub" (func $func26))
-  (export "i64.atomic.rmw16_u.sub" (func $func27))
-  (export "i64.atomic.rmw32_u.sub" (func $func28))
+  (export "i32.atomic.rmw8.sub_u" (func $func24))
+  (export "i32.atomic.rmw16.sub_u" (func $func25))
+  (export "i64.atomic.rmw8.sub_u" (func $func26))
+  (export "i64.atomic.rmw16.sub_u" (func $func27))
+  (export "i64.atomic.rmw32.sub_u" (func $func28))
   (export "i32.atomic.rmw.and" (func $func29))
   (export "i64.atomic.rmw.and" (func $func30))
-  (export "i32.atomic.rmw8_u.and" (func $func31))
-  (export "i32.atomic.rmw16_u.and" (func $func32))
-  (export "i64.atomic.rmw8_u.and" (func $func33))
-  (export "i64.atomic.rmw16_u.and" (func $func34))
-  (export "i64.atomic.rmw32_u.and" (func $func35))
+  (export "i32.atomic.rmw8.and_u" (func $func31))
+  (export "i32.atomic.rmw16.and_u" (func $func32))
+  (export "i64.atomic.rmw8.and_u" (func $func33))
+  (export "i64.atomic.rmw16.and_u" (func $func34))
+  (export "i64.atomic.rmw32.and_u" (func $func35))
   (export "i32.atomic.rmw.or" (func $func36))
   (export "i64.atomic.rmw.or" (func $func37))
-  (export "i32.atomic.rmw8_u.or" (func $func38))
-  (export "i32.atomic.rmw16_u.or" (func $func39))
-  (export "i64.atomic.rmw8_u.or" (func $func40))
-  (export "i64.atomic.rmw16_u.or" (func $func41))
-  (export "i64.atomic.rmw32_u.or" (func $func42))
+  (export "i32.atomic.rmw8.or_u" (func $func38))
+  (export "i32.atomic.rmw16.or_u" (func $func39))
+  (export "i64.atomic.rmw8.or_u" (func $func40))
+  (export "i64.atomic.rmw16.or_u" (func $func41))
+  (export "i64.atomic.rmw32.or_u" (func $func42))
   (export "i32.atomic.rmw.xor" (func $func43))
   (export "i64.atomic.rmw.xor" (func $func44))
-  (export "i32.atomic.rmw8_u.xor" (func $func45))
-  (export "i32.atomic.rmw16_u.xor" (func $func46))
-  (export "i64.atomic.rmw8_u.xor" (func $func47))
-  (export "i64.atomic.rmw16_u.xor" (func $func48))
-  (export "i64.atomic.rmw32_u.xor" (func $func49))
+  (export "i32.atomic.rmw8.xor_u" (func $func45))
+  (export "i32.atomic.rmw16.xor_u" (func $func46))
+  (export "i64.atomic.rmw8.xor_u" (func $func47))
+  (export "i64.atomic.rmw16.xor_u" (func $func48))
+  (export "i64.atomic.rmw32.xor_u" (func $func49))
   (export "i32.atomic.rmw.xchg" (func $func50))
   (export "i64.atomic.rmw.xchg" (func $func51))
-  (export "i32.atomic.rmw8_u.xchg" (func $func52))
-  (export "i32.atomic.rmw16_u.xchg" (func $func53))
-  (export "i64.atomic.rmw8_u.xchg" (func $func54))
-  (export "i64.atomic.rmw16_u.xchg" (func $func55))
-  (export "i64.atomic.rmw32_u.xchg" (func $func56))
+  (export "i32.atomic.rmw8.xchg_u" (func $func52))
+  (export "i32.atomic.rmw16.xchg_u" (func $func53))
+  (export "i64.atomic.rmw8.xchg_u" (func $func54))
+  (export "i64.atomic.rmw16.xchg_u" (func $func55))
+  (export "i64.atomic.rmw32.xchg_u" (func $func56))
   (export "i32.atomic.rmw.cmpxchg" (func $func57))
   (export "i64.atomic.rmw.cmpxchg" (func $func58))
-  (export "i32.atomic.rmw8_u.cmpxchg" (func $func59))
-  (export "i32.atomic.rmw16_u.cmpxchg" (func $func60))
-  (export "i64.atomic.rmw8_u.cmpxchg" (func $func61))
-  (export "i64.atomic.rmw16_u.cmpxchg" (func $func62))
-  (export "i64.atomic.rmw32_u.cmpxchg" (func $func63))
+  (export "i32.atomic.rmw8.cmpxchg_u" (func $func59))
+  (export "i32.atomic.rmw16.cmpxchg_u" (func $func60))
+  (export "i64.atomic.rmw8.cmpxchg_u" (func $func61))
+  (export "i64.atomic.rmw16.cmpxchg_u" (func $func62))
+  (export "i64.atomic.rmw32.cmpxchg_u" (func $func63))
   (func $func0 (param $var0 i64)
     i32.const 0
     local.get $var0
@@ -154,27 +154,27 @@
   (func $func17 (param $var0 i32) (param $var1 i32) (result i32)
     local.get $var0
     local.get $var1
-    i32.atomic.rmw8_u.add
+    i32.atomic.rmw8.add_u
   )
   (func $func18 (param $var0 i32) (param $var1 i32) (result i32)
     local.get $var0
     local.get $var1
-    i32.atomic.rmw16_u.add
+    i32.atomic.rmw16.add_u
   )
   (func $func19 (param $var0 i32) (param $var1 i64) (result i64)
     local.get $var0
     local.get $var1
-    i64.atomic.rmw8_u.add
+    i64.atomic.rmw8.add_u
   )
   (func $func20 (param $var0 i32) (param $var1 i64) (result i64)
     local.get $var0
     local.get $var1
-    i64.atomic.rmw16_u.add
+    i64.atomic.rmw16.add_u
   )
   (func $func21 (param $var0 i32) (param $var1 i64) (result i64)
     local.get $var0
     local.get $var1
-    i64.atomic.rmw32_u.add
+    i64.atomic.rmw32.add_u
   )
   (func $func22 (param $var0 i32) (param $var1 i32) (result i32)
     local.get $var0
@@ -189,27 +189,27 @@
   (func $func24 (param $var0 i32) (param $var1 i32) (result i32)
     local.get $var0
     local.get $var1
-    i32.atomic.rmw8_u.sub
+    i32.atomic.rmw8.sub_u
   )
   (func $func25 (param $var0 i32) (param $var1 i32) (result i32)
     local.get $var0
     local.get $var1
-    i32.atomic.rmw16_u.sub
+    i32.atomic.rmw16.sub_u
   )
   (func $func26 (param $var0 i32) (param $var1 i64) (result i64)
     local.get $var0
     local.get $var1
-    i64.atomic.rmw8_u.sub
+    i64.atomic.rmw8.sub_u
   )
   (func $func27 (param $var0 i32) (param $var1 i64) (result i64)
     local.get $var0
     local.get $var1
-    i64.atomic.rmw16_u.sub
+    i64.atomic.rmw16.sub_u
   )
   (func $func28 (param $var0 i32) (param $var1 i64) (result i64)
     local.get $var0
     local.get $var1
-    i64.atomic.rmw32_u.sub
+    i64.atomic.rmw32.sub_u
   )
   (func $func29 (param $var0 i32) (param $var1 i32) (result i32)
     local.get $var0
@@ -224,27 +224,27 @@
   (func $func31 (param $var0 i32) (param $var1 i32) (result i32)
     local.get $var0
     local.get $var1
-    i32.atomic.rmw8_u.and
+    i32.atomic.rmw8.and_u
   )
   (func $func32 (param $var0 i32) (param $var1 i32) (result i32)
     local.get $var0
     local.get $var1
-    i32.atomic.rmw16_u.and
+    i32.atomic.rmw16.and_u
   )
   (func $func33 (param $var0 i32) (param $var1 i64) (result i64)
     local.get $var0
     local.get $var1
-    i64.atomic.rmw8_u.and
+    i64.atomic.rmw8.and_u
   )
   (func $func34 (param $var0 i32) (param $var1 i64) (result i64)
     local.get $var0
     local.get $var1
-    i64.atomic.rmw16_u.and
+    i64.atomic.rmw16.and_u
   )
   (func $func35 (param $var0 i32) (param $var1 i64) (result i64)
     local.get $var0
     local.get $var1
-    i64.atomic.rmw32_u.and
+    i64.atomic.rmw32.and_u
   )
   (func $func36 (param $var0 i32) (param $var1 i32) (result i32)
     local.get $var0
@@ -259,27 +259,27 @@
   (func $func38 (param $var0 i32) (param $var1 i32) (result i32)
     local.get $var0
     local.get $var1
-    i32.atomic.rmw8_u.or
+    i32.atomic.rmw8.or_u
   )
   (func $func39 (param $var0 i32) (param $var1 i32) (result i32)
     local.get $var0
     local.get $var1
-    i32.atomic.rmw16_u.or
+    i32.atomic.rmw16.or_u
   )
   (func $func40 (param $var0 i32) (param $var1 i64) (result i64)
     local.get $var0
     local.get $var1
-    i64.atomic.rmw8_u.or
+    i64.atomic.rmw8.or_u
   )
   (func $func41 (param $var0 i32) (param $var1 i64) (result i64)
     local.get $var0
     local.get $var1
-    i64.atomic.rmw16_u.or
+    i64.atomic.rmw16.or_u
   )
   (func $func42 (param $var0 i32) (param $var1 i64) (result i64)
     local.get $var0
     local.get $var1
-    i64.atomic.rmw32_u.or
+    i64.atomic.rmw32.or_u
   )
   (func $func43 (param $var0 i32) (param $var1 i32) (result i32)
     local.get $var0
@@ -294,27 +294,27 @@
   (func $func45 (param $var0 i32) (param $var1 i32) (result i32)
     local.get $var0
     local.get $var1
-    i32.atomic.rmw8_u.xor
+    i32.atomic.rmw8.xor_u
   )
   (func $func46 (param $var0 i32) (param $var1 i32) (result i32)
     local.get $var0
     local.get $var1
-    i32.atomic.rmw16_u.xor
+    i32.atomic.rmw16.xor_u
   )
   (func $func47 (param $var0 i32) (param $var1 i64) (result i64)
     local.get $var0
     local.get $var1
-    i64.atomic.rmw8_u.xor
+    i64.atomic.rmw8.xor_u
   )
   (func $func48 (param $var0 i32) (param $var1 i64) (result i64)
     local.get $var0
     local.get $var1
-    i64.atomic.rmw16_u.xor
+    i64.atomic.rmw16.xor_u
   )
   (func $func49 (param $var0 i32) (param $var1 i64) (result i64)
     local.get $var0
     local.get $var1
-    i64.atomic.rmw32_u.xor
+    i64.atomic.rmw32.xor_u
   )
   (func $func50 (param $var0 i32) (param $var1 i32) (result i32)
     local.get $var0
@@ -329,27 +329,27 @@
   (func $func52 (param $var0 i32) (param $var1 i32) (result i32)
     local.get $var0
     local.get $var1
-    i32.atomic.rmw8_u.xchg
+    i32.atomic.rmw8.xchg_u
   )
   (func $func53 (param $var0 i32) (param $var1 i32) (result i32)
     local.get $var0
     local.get $var1
-    i32.atomic.rmw16_u.xchg
+    i32.atomic.rmw16.xchg_u
   )
   (func $func54 (param $var0 i32) (param $var1 i64) (result i64)
     local.get $var0
     local.get $var1
-    i64.atomic.rmw8_u.xchg
+    i64.atomic.rmw8.xchg_u
   )
   (func $func55 (param $var0 i32) (param $var1 i64) (result i64)
     local.get $var0
     local.get $var1
-    i64.atomic.rmw16_u.xchg
+    i64.atomic.rmw16.xchg_u
   )
   (func $func56 (param $var0 i32) (param $var1 i64) (result i64)
     local.get $var0
     local.get $var1
-    i64.atomic.rmw32_u.xchg
+    i64.atomic.rmw32.xchg_u
   )
   (func $func57 (param $var0 i32) (param $var1 i32) (param $var2 i32) (result i32)
     local.get $var0
@@ -367,30 +367,30 @@
     local.get $var0
     local.get $var1
     local.get $var2
-    i32.atomic.rmw8_u.cmpxchg
+    i32.atomic.rmw8.cmpxchg_u
   )
   (func $func60 (param $var0 i32) (param $var1 i32) (param $var2 i32) (result i32)
     local.get $var0
     local.get $var1
     local.get $var2
-    i32.atomic.rmw16_u.cmpxchg
+    i32.atomic.rmw16.cmpxchg_u
   )
   (func $func61 (param $var0 i32) (param $var1 i64) (param $var2 i64) (result i64)
     local.get $var0
     local.get $var1
     local.get $var2
-    i64.atomic.rmw8_u.cmpxchg
+    i64.atomic.rmw8.cmpxchg_u
   )
   (func $func62 (param $var0 i32) (param $var1 i64) (param $var2 i64) (result i64)
     local.get $var0
     local.get $var1
     local.get $var2
-    i64.atomic.rmw16_u.cmpxchg
+    i64.atomic.rmw16.cmpxchg_u
   )
   (func $func63 (param $var0 i32) (param $var1 i64) (param $var2 i64) (result i64)
     local.get $var0
     local.get $var1
     local.get $var2
-    i64.atomic.rmw32_u.cmpxchg
+    i64.atomic.rmw32.cmpxchg_u
   )
 )
