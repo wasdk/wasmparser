@@ -21,12 +21,10 @@ const { parseWat } = require("wabt")();
 const TEST_FOLDER = "./test";
 
 const INCOMPATIBLE_FILE_NAMES = [
-  "conversion_sat.wasm.out",
   "memory_bulk.0.wasm.out",
   "ref_types.0.wasm.out",
   "simd.wasm.out",
   "spec.wasm.out",
-  "threads.0.wasm.out",
 ];
 
 // This dict is used to select corresponding feature flags for corresponding files.
@@ -45,7 +43,10 @@ const FEATURE_FLAGS_FOR_FILES = {
   },
   "return_call.wast.1.wasm.out": {
     'tail_call': true,
-  }
+  },
+  "conversion_sat.wasm.out": {
+    'sat_float_to_int': true,
+  },
 };
 
 // Run wabt over .out files.
