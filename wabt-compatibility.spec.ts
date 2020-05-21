@@ -22,8 +22,6 @@ const TEST_FOLDER = "./test";
 
 const INCOMPATIBLE_FILE_NAMES = [
   "memory_bulk.0.wasm.out",
-  "ref_types.0.wasm.out",
-  "simd.wasm.out",
   "spec.wasm.out",
 ];
 
@@ -46,6 +44,12 @@ const FEATURE_FLAGS_FOR_FILES = {
   },
   "conversion_sat.wasm.out": {
     'sat_float_to_int': true,
+  },
+  "ref_types.0.wasm.out": {
+    'reference_types': true,
+  },
+  "simd.wasm.out": {
+    'simd': true,
   },
 };
 
