@@ -743,11 +743,18 @@ export class WasmDisassembler {
         this.appendBuffer(` ${operator.lineIndex}`);
         break;
       case OperatorCode.memory_init:
-      case OperatorCode.table_init:
       case OperatorCode.data_drop:
       case OperatorCode.elem_drop:
         this.appendBuffer(` ${operator.segmentIndex}`);
         break;
+      case OperatorCode.table_set:
+      case OperatorCode.table_get:
+      case OperatorCode.table_fill:
+        {
+          let tableName = this._nameResolver.getTableName(operator.tableIndex, true);
+          this.appendBuffer(` ${tableName}`);
+          break;
+        }
       case OperatorCode.table_copy:
         {	
           // Table index might be omitted by default 0.
@@ -767,15 +774,7 @@ export class WasmDisassembler {
           let tableName = this._nameResolver.getTableName(operator.tableIndex, true);	
           this.appendBuffer(` ${operator.segmentIndex} ${tableName}`);	
           break;	
-        }         
-      case OperatorCode.table_set:
-      case OperatorCode.table_get:
-      case OperatorCode.table_fill:
-        {
-          let tableName = this._nameResolver.getTableName(operator.tableIndex, true);
-          this.appendBuffer(` ${tableName}`);
-          break;
-        }
+        }           
     }
   }
   private printImportSource(info: IImportEntry): void {
