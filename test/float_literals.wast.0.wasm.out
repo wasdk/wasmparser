@@ -63,242 +63,242 @@
   (export "f64_dec.trailing_dot" (func $func59))
   (func $func0 (result i32)
     f32.const nan
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func1 (result i32)
     f32.const nan
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func2 (result i32)
     f32.const -nan
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func3 (result i32)
     f32.const nan
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func4 (result i32)
     f32.const +nan:0x600000
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func5 (result i32)
     f32.const -nan:0x7fffff
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func6 (result i32)
     f32.const +nan:0x412345
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func7 (result i32)
     f32.const +nan:0x704050
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func8 (result i32)
     f32.const -nan:0x6abcde
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func9 (result i32)
     f32.const inf
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func10 (result i32)
     f32.const inf
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func11 (result i32)
     f32.const -inf
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func12 (result i32)
     f32.const 0.0
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func13 (result i32)
     f32.const 0.0
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func14 (result i32)
     f32.const -0.0
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func15 (result i32)
     f32.const 6.2831854820251465
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func16 (result i32)
     f32.const 1.401298464324817e-45
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func17 (result i32)
     f32.const 1.1754943508222875e-38
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func18 (result i32)
     f32.const 3.4028234663852886e+38
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func19 (result i32)
     f32.const 1.1754942106924411e-38
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func20 (result i32)
     f32.const 1024
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func21 (result i32)
     f32.const 0.0
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func22 (result i32)
     f32.const 0.0
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func23 (result i32)
     f32.const -0.0
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func24 (result i32)
     f32.const 6.2831854820251465
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func25 (result i32)
     f32.const 1.401298464324817e-45
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func26 (result i32)
     f32.const 1.1754943508222875e-38
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func27 (result i32)
     f32.const 1.1754942106924411e-38
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func28 (result i32)
     f32.const 3.4028234663852886e+38
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func29 (result i32)
     f32.const 10000000000
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func30 (result i64)
     f64.const nan
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func31 (result i64)
     f64.const nan
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func32 (result i64)
     f64.const -nan
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func33 (result i64)
     f64.const nan
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func34 (result i64)
     f64.const +nan:0x4000000000000
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func35 (result i64)
     f64.const -nan:0xfffffffffffff
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func36 (result i64)
     f64.const +nan:0x123456789abc
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func37 (result i64)
     f64.const +nan:0x3040506070809
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func38 (result i64)
     f64.const -nan:0x2abcdef012345
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func39 (result i64)
     f64.const inf
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func40 (result i64)
     f64.const inf
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func41 (result i64)
     f64.const -inf
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func42 (result i64)
     f64.const 0.0
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func43 (result i64)
     f64.const 0.0
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func44 (result i64)
     f64.const -0.0
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func45 (result i64)
     f64.const 6.283185307179586
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func46 (result i64)
     f64.const 5e-324
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func47 (result i64)
     f64.const 2.2250738585072014e-308
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func48 (result i64)
     f64.const 2.225073858507201e-308
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func49 (result i64)
     f64.const 1.7976931348623157e+308
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func50 (result i64)
     f64.const 1.2676506002282294e+30
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func51 (result i64)
     f64.const 0.0
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func52 (result i64)
     f64.const 0.0
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func53 (result i64)
     f64.const -0.0
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func54 (result i64)
     f64.const 6.283185307179586
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func55 (result i64)
     f64.const 5e-324
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func56 (result i64)
     f64.const 2.2250738585072014e-308
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func57 (result i64)
     f64.const 2.225073858507201e-308
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func58 (result i64)
     f64.const 1.7976931348623157e+308
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
   (func $func59 (result i64)
     f64.const 1e+100
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
 )

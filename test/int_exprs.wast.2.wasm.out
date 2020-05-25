@@ -3,7 +3,7 @@
   (export "i64.no_fold_wrap_extend_u" (func $func0))
   (func $func0 (param $var0 i64) (result i64)
     local.get $var0
-    i32.wrap/i64
-    i64.extend_u/i32
+    i32.wrap_i64
+    i64.extend_i32_u
   )
 )

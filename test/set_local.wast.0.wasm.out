@@ -88,20 +88,20 @@
     f64.const 8
     local.set $var8
     local.get $var0
-    f64.convert_u/i64
+    f64.convert_i64_u
     local.get $var1
-    f64.promote/f32
+    f64.promote_f32
     local.get $var2
     local.get $var3
-    f64.convert_u/i32
+    f64.convert_i32_u
     local.get $var4
-    f64.convert_s/i32
+    f64.convert_i32_s
     local.get $var5
-    f64.promote/f32
+    f64.promote_f32
     local.get $var6
-    f64.convert_u/i64
+    f64.convert_i64_u
     local.get $var7
-    f64.convert_u/i64
+    f64.convert_i64_u
     local.get $var8
     f64.add
     f64.add
@@ -111,6 +111,6 @@
     f64.add
     f64.add
     f64.add
-    i64.trunc_s/f64
+    i64.trunc_f64_s
   )
 )

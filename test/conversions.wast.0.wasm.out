@@ -38,102 +38,102 @@
   (export "i64.reinterpret_f64" (func $func24))
   (func $func0 (param $var0 i32) (result i64)
     local.get $var0
-    i64.extend_s/i32
+    i64.extend_i32_s
   )
   (func $func1 (param $var0 i32) (result i64)
     local.get $var0
-    i64.extend_u/i32
+    i64.extend_i32_u
   )
   (func $func2 (param $var0 i64) (result i32)
     local.get $var0
-    i32.wrap/i64
+    i32.wrap_i64
   )
   (func $func3 (param $var0 f32) (result i32)
     local.get $var0
-    i32.trunc_s/f32
+    i32.trunc_f32_s
   )
   (func $func4 (param $var0 f32) (result i32)
     local.get $var0
-    i32.trunc_u/f32
+    i32.trunc_f32_u
   )
   (func $func5 (param $var0 f64) (result i32)
     local.get $var0
-    i32.trunc_s/f64
+    i32.trunc_f64_s
   )
   (func $func6 (param $var0 f64) (result i32)
     local.get $var0
-    i32.trunc_u/f64
+    i32.trunc_f64_u
   )
   (func $func7 (param $var0 f32) (result i64)
     local.get $var0
-    i64.trunc_s/f32
+    i64.trunc_f32_s
   )
   (func $func8 (param $var0 f32) (result i64)
     local.get $var0
-    i64.trunc_u/f32
+    i64.trunc_f32_u
   )
   (func $func9 (param $var0 f64) (result i64)
     local.get $var0
-    i64.trunc_s/f64
+    i64.trunc_f64_s
   )
   (func $func10 (param $var0 f64) (result i64)
     local.get $var0
-    i64.trunc_u/f64
+    i64.trunc_f64_u
   )
   (func $func11 (param $var0 i32) (result f32)
     local.get $var0
-    f32.convert_s/i32
+    f32.convert_i32_s
   )
   (func $func12 (param $var0 i64) (result f32)
     local.get $var0
-    f32.convert_s/i64
+    f32.convert_i64_s
   )
   (func $func13 (param $var0 i32) (result f64)
     local.get $var0
-    f64.convert_s/i32
+    f64.convert_i32_s
   )
   (func $func14 (param $var0 i64) (result f64)
     local.get $var0
-    f64.convert_s/i64
+    f64.convert_i64_s
   )
   (func $func15 (param $var0 i32) (result f32)
     local.get $var0
-    f32.convert_u/i32
+    f32.convert_i32_u
   )
   (func $func16 (param $var0 i64) (result f32)
     local.get $var0
-    f32.convert_u/i64
+    f32.convert_i64_u
   )
   (func $func17 (param $var0 i32) (result f64)
     local.get $var0
-    f64.convert_u/i32
+    f64.convert_i32_u
   )
   (func $func18 (param $var0 i64) (result f64)
     local.get $var0
-    f64.convert_u/i64
+    f64.convert_i64_u
   )
   (func $func19 (param $var0 f32) (result f64)
     local.get $var0
-    f64.promote/f32
+    f64.promote_f32
   )
   (func $func20 (param $var0 f64) (result f32)
     local.get $var0
-    f32.demote/f64
+    f32.demote_f64
   )
   (func $func21 (param $var0 i32) (result f32)
     local.get $var0
-    f32.reinterpret/i32
+    f32.reinterpret_i32
   )
   (func $func22 (param $var0 i64) (result f64)
     local.get $var0
-    f64.reinterpret/i64
+    f64.reinterpret_i64
   )
   (func $func23 (param $var0 f32) (result i32)
     local.get $var0
-    i32.reinterpret/f32
+    i32.reinterpret_f32
   )
   (func $func24 (param $var0 f64) (result i64)
     local.get $var0
-    i64.reinterpret/f64
+    i64.reinterpret_f64
   )
 )

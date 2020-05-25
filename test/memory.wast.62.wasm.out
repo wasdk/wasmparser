@@ -110,7 +110,7 @@
           br $label0
         end
         local.get $var0
-        f64.convert_s/i32
+        f64.convert_i32_s
         local.set $var2
         local.get $var0
         local.get $var2
@@ -141,7 +141,7 @@
     i32.const 8
     f64.load
     i64.const -12345
-    f64.reinterpret/i64
+    f64.reinterpret_i64
     f64.eq
     if
       f64.const 0.0

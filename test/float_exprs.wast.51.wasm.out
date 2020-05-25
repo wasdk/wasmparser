@@ -5,7 +5,7 @@
     local.get $var0
     i32.const 268435455
     i32.and
-    f32.convert_s/i32
+    f32.convert_i32_s
     f32.const -8388608
     f32.add
   )

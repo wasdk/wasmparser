@@ -117,20 +117,20 @@
     local.tee $var8
     drop
     local.get $var0
-    f64.convert_u/i64
+    f64.convert_i64_u
     local.get $var1
-    f64.promote/f32
+    f64.promote_f32
     local.get $var2
     local.get $var3
-    f64.convert_u/i32
+    f64.convert_i32_u
     local.get $var4
-    f64.convert_s/i32
+    f64.convert_i32_s
     local.get $var5
-    f64.promote/f32
+    f64.promote_f32
     local.get $var6
-    f64.convert_u/i64
+    f64.convert_i64_u
     local.get $var7
-    f64.convert_u/i64
+    f64.convert_i64_u
     local.get $var8
     f64.add
     f64.add
@@ -140,33 +140,33 @@
     f64.add
     f64.add
     f64.add
-    i64.trunc_s/f64
+    i64.trunc_f64_s
   )
   (func $func10 (param $var0 i64) (param $var1 f32) (param $var2 f64) (param $var3 i32) (param $var4 i32) (result f64)
     (local $var5 f32) (local $var6 i64) (local $var7 i64) (local $var8 f64)
     i64.const 1
     local.tee $var0
-    f64.convert_u/i64
+    f64.convert_i64_u
     f32.const 2
     local.tee $var1
-    f64.promote/f32
+    f64.promote_f32
     f64.const 3.3
     local.tee $var2
     i32.const 4
     local.tee $var3
-    f64.convert_u/i32
+    f64.convert_i32_u
     i32.const 5
     local.tee $var4
-    f64.convert_s/i32
+    f64.convert_i32_s
     f32.const 5.5
     local.tee $var5
-    f64.promote/f32
+    f64.promote_f32
     i64.const 6
     local.tee $var6
-    f64.convert_u/i64
+    f64.convert_i64_u
     i64.const 0
     local.tee $var7
-    f64.convert_u/i64
+    f64.convert_i64_u
     f64.const 8
     local.tee $var8
     f64.add
