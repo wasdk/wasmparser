@@ -748,6 +748,26 @@ export class WasmDisassembler {
       case OperatorCode.elem_drop:
         this.appendBuffer(` ${operator.segmentIndex}`);
         break;
+      case OperatorCode.table_copy:
+        {	
+          // Table index might be omitted by default 0.
+          if (operator.tableIndex === 0 && operator.destinationIndex === 0) break;
+          let tableName = this._nameResolver.getTableName(operator.tableIndex, true);	
+          let destinationName = this._nameResolver.getTableName(operator.destinationIndex, true);	
+          this.appendBuffer(` ${destinationName} ${tableName}`);	
+          break;	
+        }	
+      case OperatorCode.table_init:
+        {
+          // Table index might be omitted by default 0.	
+          if (operator.tableIndex === 0) {
+            this.appendBuffer(` ${operator.segmentIndex}`);
+            break;
+          }
+          let tableName = this._nameResolver.getTableName(operator.tableIndex, true);	
+          this.appendBuffer(` ${operator.segmentIndex} ${tableName}`);	
+          break;	
+        }         
       case OperatorCode.table_set:
       case OperatorCode.table_get:
       case OperatorCode.table_fill:
