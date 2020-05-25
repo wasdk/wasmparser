@@ -224,19 +224,6 @@ function formatHex(n: number, width?: number): string {
   return paddingCache[paddingIndex] + s;
 }
 const IndentIncrement: string = '  ';
-var operatorCodeNamesCache = null;
-function getOperatorName(code: OperatorCode): string {
-  if (!operatorCodeNamesCache) {
-    operatorCodeNamesCache = Object.create(null);
-    Object.keys(OperatorCodeNames).forEach((key) => {
-      let value = OperatorCodeNames[key];
-      if (typeof value !== 'string')
-        return;
-      operatorCodeNamesCache[key] = value.replace(/^([if](32|64))_/, "$1.").replace(/_([if](32|64))$/, "\/$1");
-    })
-  }
-  return operatorCodeNamesCache[code];
-}
 
 function isValidName(name : string) {
   return !INVALID_NAME_SYMBOLS_REGEX.test(name);
@@ -542,7 +529,7 @@ export class WasmDisassembler {
   }
   private printOperator(operator: IOperatorInformation): void {
     var code = operator.code;
-    this.appendBuffer(getOperatorName(code));
+    this.appendBuffer(OperatorCodeNames[code]);
     switch (code) {
       case OperatorCode.block:
       case OperatorCode.loop:
