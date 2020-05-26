@@ -757,7 +757,7 @@ export class WasmDisassembler {
         }
       case OperatorCode.table_copy:
         {	
-          // Table index might be omitted by default 0.
+          // Table index might be omitted and defaults to 0.
           if (operator.tableIndex === 0 && operator.destinationIndex === 0) break;
           let tableName = this._nameResolver.getTableName(operator.tableIndex, true);	
           let destinationName = this._nameResolver.getTableName(operator.destinationIndex, true);	
@@ -766,7 +766,7 @@ export class WasmDisassembler {
         }	
       case OperatorCode.table_init:
         {
-          // Table index might be omitted by default 0.	
+          // Table index might be omitted and defaults to 0.
           if (operator.tableIndex === 0) {
             this.appendBuffer(` ${operator.segmentIndex}`);
             break;
