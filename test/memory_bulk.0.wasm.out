@@ -21,12 +21,12 @@
     i32.const 0
     i32.const 0
     i32.const 0
-    table.init 0 $table0
+    table.init 0
     elem.drop 0
     i32.const 0
     i32.const 0
     i32.const 0
-    table.copy $table0 $table0
+    table.copy
   )
   (func $func1
   )

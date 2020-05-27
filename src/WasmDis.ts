@@ -743,18 +743,25 @@ export class WasmDisassembler {
           break;
         }
       case OperatorCode.table_copy:
-        {
-          let tableName = this._nameResolver.getTableName(operator.tableIndex, true);
-          let destinationName = this._nameResolver.getTableName(operator.destinationIndex, true);
-          this.appendBuffer(` ${destinationName} ${tableName}`);
-          break;
-        }
+        {	
+          // Table index might be omitted and defaults to 0.
+          if (operator.tableIndex === 0 && operator.destinationIndex === 0) break;
+          let tableName = this._nameResolver.getTableName(operator.tableIndex, true);	
+          let destinationName = this._nameResolver.getTableName(operator.destinationIndex, true);	
+          this.appendBuffer(` ${destinationName} ${tableName}`);	
+          break;	
+        }	
       case OperatorCode.table_init:
         {
-          let tableName = this._nameResolver.getTableName(operator.tableIndex, true);
-          this.appendBuffer(` ${operator.segmentIndex} ${tableName}`);
-          break;
-        }
+          // Table index might be omitted and defaults to 0.
+          if (operator.tableIndex === 0) {
+            this.appendBuffer(` ${operator.segmentIndex}`);
+            break;
+          }
+          let tableName = this._nameResolver.getTableName(operator.tableIndex, true);	
+          this.appendBuffer(` ${operator.segmentIndex} ${tableName}`);	
+          break;	
+        }           
     }
   }
   private printImportSource(info: IImportEntry): void {

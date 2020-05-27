@@ -21,7 +21,6 @@ const { parseWat } = require("wabt")();
 const TEST_FOLDER = "./test";
 
 const INCOMPATIBLE_FILE_NAMES = [
-  "memory_bulk.0.wasm.out",
   "spec.wasm.out",
 ];
 
@@ -50,6 +49,9 @@ const FEATURE_FLAGS_FOR_FILES = {
   },
   "simd.wasm.out": {
     'simd': true,
+  },
+  "memory_bulk.0.wasm.out": {
+    'bulk_memory': true,
   },
 };
 
