@@ -15,7 +15,12 @@
     "prepare": "npm run build",
     "test": "jest"
   },
-  "author": "",
+  "author": "Yury Delendik <ydelendik@mozilla.com.",
+  "contributors": [
+    "Benedikt Meurer <bmeurer@google.com>",
+    "Kim Anh-Tran <kimanh@google.com>",
+    "Z Nguyen-Huu <duongn@microsoft.com>"
+  ],
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
