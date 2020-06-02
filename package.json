@@ -33,6 +33,7 @@
     "concurrently": "^5.2.0",
     "husky": "^4.2.5",
     "jest": "^25.1.0",
+    "semantic-release": "^17.0.8",
     "ts-jest": "^24.3.0",
     "typescript": "^3.8.3",
     "wabt": "^1.0.13"
