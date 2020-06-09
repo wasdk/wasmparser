@@ -5,7 +5,5 @@
     local.get $var0
     i32.load
   )
-  (data (i32.const 10)
-    "\10"
-  )
+  (data (i32.const 10) "\10")
 )

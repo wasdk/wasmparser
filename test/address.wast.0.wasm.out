@@ -49,7 +49,5 @@
     i32.load offset=4294967295
     drop
   )
-  (data (i32.const 0)
-    "abcdefghijklmnopqrstuvwxyz"
-  )
+  (data (i32.const 0) "abcdefghijklmnopqrstuvwxyz")
 )

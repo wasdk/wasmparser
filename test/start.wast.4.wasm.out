@@ -21,7 +21,5 @@
     call $func0
     call $func0
   )
-  (data (i32.const 0)
-    "A"
-  )
+  (data (i32.const 0) "A")
 )

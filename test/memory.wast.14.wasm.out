@@ -4,7 +4,5 @@
   (func $func0 (result i32)
     current_memory
   )
-  (data (i32.const 0)
-    ""
-  )
+  (data (i32.const 0) "")
 )
