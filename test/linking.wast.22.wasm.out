@@ -1,9 +1,5 @@
 (module
   (import "Mm" "mem" (memory $memory0 1))
-  (data (i32.const 0)
-    "abc"
-  )
-  (data (i32.const 327680)
-    "d"
-  )
+  (data (i32.const 0) "abc")
+  (data (i32.const 327680) "d")
 )

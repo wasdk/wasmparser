@@ -4,7 +4,5 @@
   (elem (i32.const 0) $func0)
   (func $func0
   )
-  (data (i32.const 0)
-    "abc"
-  )
+  (data (i32.const 0) "abc")
 )

@@ -28,7 +28,5 @@
     i32.const 0
     i32.store
   )
-  (data (i32.const 0)
-    "\01\00\d0\7f"
-  )
+  (data (i32.const 0) "\01\00\d0\7f")
 )

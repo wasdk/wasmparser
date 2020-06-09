@@ -5,7 +5,5 @@
   (func $func0 (result i32)
     i32.const 0
   )
-  (data (i32.const 65536)
-    "d"
-  )
+  (data (i32.const 65536) "d")
 )

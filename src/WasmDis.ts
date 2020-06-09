@@ -1042,13 +1042,11 @@ export class WasmDisassembler {
           break;
         case BinaryReaderState.DATA_SECTION_ENTRY_BODY:
           var body = <IDataSegmentBody>reader.result;
-          this.newLine();
-          this.appendBuffer('    ');
+          this.appendBuffer(' ');
           this.printString(body.data);
-          this.newLine();
           break;
         case BinaryReaderState.END_DATA_SECTION_ENTRY:
-          this.appendBuffer('  )');
+          this.appendBuffer(')');
           this.newLine();
           break;
         case BinaryReaderState.BEGIN_INIT_EXPRESSION_BODY:

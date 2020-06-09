@@ -29,7 +29,5 @@
   )
   (func $func1
   )
-  (data 
-    "hi"
-  )
+  (data  "hi")
 )

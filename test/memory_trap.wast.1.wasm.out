@@ -124,10 +124,6 @@
     local.get $var1
     i64.store32
   )
-  (data (i32.const 0)
-    "abcdefgh"
-  )
-  (data (i32.const 65528)
-    "abcdefgh"
-  )
+  (data (i32.const 0) "abcdefgh")
+  (data (i32.const 65528) "abcdefgh")
 )
