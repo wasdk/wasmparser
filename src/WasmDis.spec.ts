@@ -291,6 +291,73 @@ describe("NameSectionReader", () => {
   });
 });
 
+describe("WasmDisassembler with export metadata", () => {
+  function parseAndDisassemble(lines: string[]) {
+    const { buffer } = parseWat("functions.js", lines.join("\n")).toBinary({
+      write_debug_names: true
+    });
+    const parser = new BinaryReader;
+    parser.setData(buffer.buffer, 0, buffer.byteLength);
+    const ng = new DevToolsNameGenerator;
+    ng.read(parser);
+    parser.setData(buffer.buffer, 0, buffer.byteLength);
+    const dis = new WasmDisassembler;
+    dis.exportMetadata = ng.getExportMetadata();
+    dis.disassembleChunk(parser);
+    return dis.getResult().lines;
+  }
+
+  test("functions", () => {
+    const lines = [
+      `(module`,
+      `  (func $import0 (export "bar") (export "foo") (import "foo" "bar") (param i32 f32) (result i64))`,
+      `  (func $func1 (export "baz") (param $var0 i32) (result i32)`,
+      `    local.get $var0`,
+      `  )`,
+      `)`
+    ];
+    expect(parseAndDisassemble(lines)).toEqual(lines);
+  });
+
+  test("globals", () => {
+    const lines = [
+      `(module`,
+      `  (global $global0 (export "bar") (export "foo") (import "foo" "bar") i32)`,
+      `  (global $global1 (export "baz") f32 (f32.const 42))`,
+      `)`
+    ];
+    expect(parseAndDisassemble(lines)).toEqual(lines);
+  });
+
+  test("imported memory", () => {
+    const lines = [
+      `(module`,
+      `  (memory $memory0 (export "bar") (export "foo") (import "foo" "bar") 100)`,
+      `)`
+    ];
+    expect(parseAndDisassemble(lines)).toEqual(lines);
+  });
+
+  test("memory", () => {
+    const lines = [
+      `(module`,
+      `  (memory $memory0 (export "bar") (export "foo") 100)`,
+      `)`
+    ];
+    expect(parseAndDisassemble(lines)).toEqual(lines);
+  });
+
+  test("tables", () => {
+    const lines = [
+      `(module`,
+      `  (table $table0 (export "bar") (export "foo") (import "foo" "bar") 10 anyfunc)`,
+      `  (table $table1 (export "baz") 5 20 anyfunc)`,
+      `)`
+    ];
+    expect(parseAndDisassemble(lines)).toEqual(lines);
+  });
+});
+
 describe("WasmDisassembler.getResult() with function code", () => {
   const watString =
   `(module

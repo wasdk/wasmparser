@@ -228,6 +228,13 @@ function isValidName(name : string) {
   return !INVALID_NAME_SYMBOLS_REGEX.test(name);
 }
 
+export interface IExportMetadata {
+  getFunctionExportNames(index: number): string[];
+  getGlobalExportNames(index: number): string[];
+  getMemoryExportNames(index: number): string[];
+  getTableExportNames(index: number): string[];
+}
+
 export interface INameResolver {
   getTypeName(index: number, isRef: boolean): string;
   getTableName(index: number, isRef: boolean): string;
@@ -258,6 +265,38 @@ export class DefaultNameResolver implements INameResolver {
   }
   public getLabel(index: number): string {
     return '$label' + index;
+  }
+}
+
+const EMPTY_STRING_ARRAY : string[] = [];
+
+class DevToolsExportMetadata implements IExportMetadata {
+  private readonly _functionExportNames: string[][];
+  private readonly _globalExportNames: string[][];
+  private readonly _memoryExportNames: string[][];
+  private readonly _tableExportNames: string[][];
+
+  constructor(functionExportNames: string[][], globalExportNames: string[][], memoryExportNames: string[][], tableExportNames: string[][]) {
+    this._functionExportNames = functionExportNames;
+    this._globalExportNames = globalExportNames;
+    this._memoryExportNames = memoryExportNames;
+    this._tableExportNames = tableExportNames;
+  }
+
+  public getFunctionExportNames(index: number) {
+    return this._functionExportNames[index] ?? EMPTY_STRING_ARRAY;
+  }
+
+  public getGlobalExportNames(index: number) {
+    return this._globalExportNames[index] ?? EMPTY_STRING_ARRAY;
+  }
+
+  public getMemoryExportNames(index: number) {
+    return this._memoryExportNames[index] ?? EMPTY_STRING_ARRAY;
+  }
+
+  public getTableExportNames(index: number) {
+    return this._tableExportNames[index] ?? EMPTY_STRING_ARRAY;
   }
 }
 
@@ -377,6 +416,7 @@ export class WasmDisassembler {
   private _done: boolean;
   private _currentPosition: number;
   private _nameResolver: INameResolver;
+  private _exportMetadata: IExportMetadata = null;
   private _labelMode: LabelMode;
   private _maxLines: number;
   private _functionBodyOffsets: Array<IFunctionBodyOffset>;
@@ -435,6 +475,14 @@ export class WasmDisassembler {
     if (this._currentPosition)
       throw new Error('Cannot switch labelMode during processing.');
     this._labelMode = value;
+  }
+  public get exportMetadata() {
+    return this._exportMetadata;
+  }
+  public set exportMetadata(exportMetadata: IExportMetadata) {
+    if (this._currentPosition)
+      throw new Error('Cannot switch exportMetadata during processing.');
+    this._exportMetadata = exportMetadata;
   }
   public get nameResolver() {
     return this._nameResolver;
@@ -898,73 +946,110 @@ export class WasmDisassembler {
           break;
         case BinaryReaderState.MEMORY_SECTION_ENTRY:
           var memoryInfo = <IMemoryType>reader.result;
-          var memoryName = this._nameResolver.getMemoryName(this._memoryCount++, false);
-          this.appendBuffer(`  (memory ${memoryName} `);
+          var memoryIndex = this._memoryCount++;
+          var memoryName = this._nameResolver.getMemoryName(memoryIndex, false);
+          this.appendBuffer(`  (memory ${memoryName}`);
+          if (this._exportMetadata !== null) {
+            for (const exportName of this._exportMetadata.getMemoryExportNames(memoryIndex)) {
+              this.appendBuffer(` (export "${exportName}")`);
+            }
+          }
+          this.appendBuffer(` ${limitsToString(memoryInfo.limits)}`);
           if (memoryInfo.shared) {
-            this.appendBuffer(`${limitsToString(memoryInfo.limits)} shared`);
-          } else {
-            this.appendBuffer(limitsToString(memoryInfo.limits));
+            this.appendBuffer(` shared`);
           }
           this.appendBuffer(')');
           this.newLine();
           break;
         case BinaryReaderState.TABLE_SECTION_ENTRY:
           var tableInfo = <ITableType>reader.result;
-          var tableName = this._nameResolver.getTableName(this._tableCount++, false);
-          this.appendBuffer(`  (table ${tableName} ${limitsToString(tableInfo.limits)} ${typeToString(tableInfo.elementType)})`);
+          var tableIndex = this._tableCount++;
+          var tableName = this._nameResolver.getTableName(tableIndex, false);
+          this.appendBuffer(`  (table ${tableName}`);
+          if (this._exportMetadata !== null) {
+            for (const exportName of this._exportMetadata.getTableExportNames(tableIndex)) {
+              this.appendBuffer(` (export "${exportName}")`);
+            }
+          }
+          this.appendBuffer(` ${limitsToString(tableInfo.limits)} ${typeToString(tableInfo.elementType)})`);
           this.newLine();
           break;
         case BinaryReaderState.EXPORT_SECTION_ENTRY:
-          var exportInfo = <IExportEntry>reader.result;
-          this.appendBuffer('  (export ');
-          this.printString(exportInfo.field);
-          this.appendBuffer(' ');
-          switch (exportInfo.kind) {
-            case ExternalKind.Function:
-              var funcName = this._nameResolver.getFunctionName(exportInfo.index, exportInfo.index < this._importCount, true);
-              this.appendBuffer(`(func ${funcName})`);
-              break;
-            case ExternalKind.Table:
-              var tableName = this._nameResolver.getTableName(exportInfo.index, true);
-              this.appendBuffer(`(table ${tableName})`);
-              break;
-            case ExternalKind.Memory:
-              var memoryName = this._nameResolver.getMemoryName(exportInfo.index, true);
-              this.appendBuffer(`(memory ${memoryName})`);
-              break;
-            case ExternalKind.Global:
-              var globalName = this._nameResolver.getGlobalName(exportInfo.index, true);
-              this.appendBuffer(`(global ${globalName})`);
-              break;
-            default:
-              throw new Error(`Unsupported export ${exportInfo.kind}`);
+          // Skip printing exports here when we have export metadata
+          // which we can use to print export information inline.
+          if (this._exportMetadata === null) {
+            var exportInfo = <IExportEntry>reader.result;
+            this.appendBuffer('  (export ');
+            this.printString(exportInfo.field);
+            this.appendBuffer(' ');
+            switch (exportInfo.kind) {
+              case ExternalKind.Function:
+                var funcName = this._nameResolver.getFunctionName(exportInfo.index, exportInfo.index < this._importCount, true);
+                this.appendBuffer(`(func ${funcName})`);
+                break;
+              case ExternalKind.Table:
+                var tableName = this._nameResolver.getTableName(exportInfo.index, true);
+                this.appendBuffer(`(table ${tableName})`);
+                break;
+              case ExternalKind.Memory:
+                var memoryName = this._nameResolver.getMemoryName(exportInfo.index, true);
+                this.appendBuffer(`(memory ${memoryName})`);
+                break;
+              case ExternalKind.Global:
+                var globalName = this._nameResolver.getGlobalName(exportInfo.index, true);
+                this.appendBuffer(`(global ${globalName})`);
+                break;
+              default:
+                throw new Error(`Unsupported export ${exportInfo.kind}`);
+            }
+            this.appendBuffer(')');
+            this.newLine();
           }
-          this.appendBuffer(')');
-          this.newLine();
           break;
         case BinaryReaderState.IMPORT_SECTION_ENTRY:
           var importInfo = <IImportEntry>reader.result;
           switch (importInfo.kind) {
             case ExternalKind.Function:
               this._importCount++;
-              var funcName = this._nameResolver.getFunctionName(this._funcIndex++, true, false);
-              this.appendBuffer(`  (func ${funcName} (import `);
+              var funcIndex = this._funcIndex++;
+              var funcName = this._nameResolver.getFunctionName(funcIndex, true, false);
+              this.appendBuffer(`  (func ${funcName}`);
+              if (this._exportMetadata !== null) {
+                for (const exportName of this._exportMetadata.getFunctionExportNames(funcIndex)) {
+                  this.appendBuffer(` (export "${exportName}")`);
+                }
+              }
+              this.appendBuffer(` (import `);
               this.printImportSource(importInfo);
               this.appendBuffer(')');
               this.printFuncType(importInfo.funcTypeIndex);
               this.appendBuffer(')');
               break;
-            case ExternalKind.Table:
-              var tableImportInfo = <ITableType>importInfo.type;
-              var tableName = this._nameResolver.getTableName(this._tableCount++, false);
-              this.appendBuffer(`  (table ${tableName} (import `);
+            case ExternalKind.Global:
+              var globalImportInfo = <IGlobalType>importInfo.type;
+              var globalIndex = this._globalCount++;
+              var globalName = this._nameResolver.getGlobalName(globalIndex, false);
+              this.appendBuffer(`  (global ${globalName}`);
+              if (this._exportMetadata !== null) {
+                for (const exportName of this._exportMetadata.getGlobalExportNames(globalIndex)) {
+                  this.appendBuffer(` (export "${exportName}")`);
+                }
+              }
+              this.appendBuffer(` (import `);
               this.printImportSource(importInfo);
-              this.appendBuffer(`) ${limitsToString(tableImportInfo.limits)} ${typeToString(tableImportInfo.elementType)})`);
+              this.appendBuffer(`) ${globalTypeToString(globalImportInfo)})`);
               break;
             case ExternalKind.Memory:
               var memoryImportInfo = <IMemoryType>importInfo.type;
-              var memoryName = this._nameResolver.getMemoryName(this._memoryCount++, false);
-              this.appendBuffer(`  (memory ${memoryName} (import `);
+              var memoryIndex = this._memoryCount++;
+              var memoryName = this._nameResolver.getMemoryName(memoryIndex, false);
+              this.appendBuffer(`  (memory ${memoryName}`);
+              if (this._exportMetadata !== null) {
+                for (const exportName of this._exportMetadata.getMemoryExportNames(memoryIndex)) {
+                  this.appendBuffer(` (export "${exportName}")`);
+                }
+              }
+              this.appendBuffer(` (import `);
               this.printImportSource(importInfo);
               this.appendBuffer(`) ${limitsToString(memoryImportInfo.limits)}`);
               if (memoryImportInfo.shared) {
@@ -972,12 +1057,19 @@ export class WasmDisassembler {
               }
               this.appendBuffer(')');
               break;
-            case ExternalKind.Global:
-              var globalImportInfo = <IGlobalType>importInfo.type;
-              var globalName = this._nameResolver.getGlobalName(this._globalCount++, false);
-              this.appendBuffer(`  (global ${globalName} (import `);
+            case ExternalKind.Table:
+              var tableImportInfo = <ITableType>importInfo.type;
+              var tableIndex = this._tableCount++;
+              var tableName = this._nameResolver.getTableName(tableIndex, false);
+              this.appendBuffer(`  (table ${tableName}`);
+              if (this._exportMetadata !== null) {
+                for (const exportName of this._exportMetadata.getTableExportNames(tableIndex)) {
+                  this.appendBuffer(` (export "${exportName}")`);
+                }
+              }
+              this.appendBuffer(` (import `);
               this.printImportSource(importInfo);
-              this.appendBuffer(`) ${globalTypeToString(globalImportInfo)})`);
+              this.appendBuffer(`) ${limitsToString(tableImportInfo.limits)} ${typeToString(tableImportInfo.elementType)})`);
               break;
             default:
               throw new Error(`NYI other import types: ${importInfo.kind}`);
@@ -1014,8 +1106,15 @@ export class WasmDisassembler {
           break;
         case BinaryReaderState.BEGIN_GLOBAL_SECTION_ENTRY:
           var globalInfo = <IGlobalVariable>reader.result;
-          var globalName = this._nameResolver.getGlobalName(this._globalCount++, false);
-          this.appendBuffer(`  (global ${globalName} ${globalTypeToString(globalInfo.type)} `);
+          var globalIndex = this._globalCount++;
+          var globalName = this._nameResolver.getGlobalName(globalIndex, false);
+          this.appendBuffer(`  (global ${globalName}`);
+          if (this._exportMetadata !== null) {
+            for (const exportName of this._exportMetadata.getGlobalExportNames(globalIndex)) {
+              this.appendBuffer(` (export "${exportName}")`);
+            }
+          }
+          this.appendBuffer(` ${globalTypeToString(globalInfo.type)} `);
           break;
         case BinaryReaderState.END_GLOBAL_SECTION_ENTRY:
           this.appendBuffer(')');
@@ -1079,6 +1178,11 @@ export class WasmDisassembler {
           var type = this._types[this._funcTypes[this._funcIndex - this._importCount]];
           this.appendBuffer('  (func ');
           this.appendBuffer(this._nameResolver.getFunctionName(this._funcIndex, false, false));
+          if (this._exportMetadata !== null) {
+            for (const exportName of this._exportMetadata.getFunctionExportNames(this._funcIndex)) {
+              this.appendBuffer(` (export "${exportName}")`);
+            }
+          }
           for (var i = 0; i < type.params.length; i++) {
             var paramName = this._nameResolver.getVariableName(this._funcIndex, i, false);
             this.appendBuffer(` (param ${paramName} ${typeToString(type.params[i])})`);
@@ -1295,46 +1399,42 @@ export class NameSectionReader {
 }
 
 export class DevToolsNameGenerator {
-  private _done: boolean;
-  private _functionImportsCount: number;
-  private _memoryImportsCount: number;
-  private _tableImportsCount: number;
-  private _globalImportsCount: number;
+  private _done: boolean = false;
+  private _functionImportsCount: number = 0;
+  private _memoryImportsCount: number = 0;
+  private _tableImportsCount: number = 0;
+  private _globalImportsCount: number = 0;
 
-  private _functionNames: string[];
-  private _functionLocalNames: string[][];
-  private _memoryNames: string[];
-  private _tableNames: string[];
-  private _globalNames: string[];
+  private _functionNames: string[] = null;
+  private _functionLocalNames: string[][] = null;
+  private _memoryNames: string[] = null;
+  private _tableNames: string[] = null;
+  private _globalNames: string[] = null;
 
-  constructor() {
-    this._done = false;
-    this._functionImportsCount = 0;
-    this._memoryImportsCount = 0;
-    this._tableImportsCount = 0;
-    this._globalImportsCount = 0;
+  private _functionExportNames: string[][] = null;
+  private _globalExportNames: string[][] = null;
+  private _memoryExportNames: string[][] = null;
+  private _tableExportNames: string[][] = null;
 
-    this._functionNames = null;
-    this._functionLocalNames = null;
-    this._memoryNames = null;
-    this._tableNames = null;
-    this._globalNames = null;
-  }
+  constructor() { }
 
-  private _generateExportName(field: Uint8Array) : string {
-    return bytesToString(field).replace(INVALID_NAME_SYMBOLS_REGEX_GLOBAL, '_');
-  }
-
-  private _generateImportName(moduleName: Uint8Array, field: Uint8Array) : string {
-    const name = bytesToString(moduleName) + '.' + bytesToString(field);
-    return name.replace(INVALID_NAME_SYMBOLS_REGEX_GLOBAL,'_');
+  private _addExportName(exportNames: string[][], index: number, name: string) {
+    const names = exportNames[index];
+    if (names) {
+      names.push(name);
+    } else {
+      exportNames[index] = [name];
+    }
   }
 
   private _setName(names: string[], index: number, name: string, isNameSectionName: boolean) {
-    if (!isValidName(name)) return;
-
-    if (isNameSectionName || !names[index])
+    if (!name) return;
+    if (isNameSectionName) {
+      if (!isValidName(name)) return;
       names[index] = name;
+    } else if (!names[index]) {
+      names[index] = name.replace(INVALID_NAME_SYMBOLS_REGEX_GLOBAL, '_');
+    }
   }
 
   public read(reader: BinaryReader): boolean {
@@ -1363,6 +1463,10 @@ export class DevToolsNameGenerator {
           this._memoryNames = [];
           this._tableNames = [];
           this._globalNames = [];
+          this._functionExportNames = [];
+          this._globalExportNames = [];
+          this._memoryExportNames = [];
+          this._tableExportNames = [];
           break;
         case BinaryReaderState.END_SECTION:
           break;
@@ -1384,9 +1488,7 @@ export class DevToolsNameGenerator {
           break;
         case BinaryReaderState.IMPORT_SECTION_ENTRY:
           var importInfo = <IImportEntry>reader.result;
-          const importName = this._generateImportName(importInfo.module, importInfo.field);
-          if (!importName)
-            continue;
+          const importName = `${bytesToString(importInfo.module)}.${bytesToString(importInfo.field)}`;
           switch (importInfo.kind) {
             case ExternalKind.Function:
               this._setName(this._functionNames, this._functionImportsCount++, importName, false);
@@ -1423,21 +1525,23 @@ export class DevToolsNameGenerator {
           break;
         case BinaryReaderState.EXPORT_SECTION_ENTRY:
           var exportInfo = <IExportEntry>reader.result;
-          const exportName = this._generateExportName(exportInfo.field);
-          if (!exportName)
-            continue;
+          const exportName = bytesToString(exportInfo.field);
           switch (exportInfo.kind) {
             case ExternalKind.Function:
+              this._addExportName(this._functionExportNames, exportInfo.index, exportName);
               this._setName(this._functionNames, exportInfo.index, exportName, false);
               break;
-            case ExternalKind.Table:
-              this._setName(this._tableNames, exportInfo.index, exportName, false);
+            case ExternalKind.Global:
+              this._addExportName(this._globalExportNames, exportInfo.index, exportName);
+              this._setName(this._globalNames, exportInfo.index, exportName, false);
               break;
             case ExternalKind.Memory:
+              this._addExportName(this._memoryExportNames, exportInfo.index, exportName);
               this._setName(this._memoryNames, exportInfo.index, exportName, false);
               break;
-            case ExternalKind.Global:
-              this._setName(this._globalNames, exportInfo.index, exportName, false);
+            case ExternalKind.Table:
+              this._addExportName(this._tableExportNames, exportInfo.index, exportName);
+              this._setName(this._tableNames, exportInfo.index, exportName, false);
               break;
             default:
               throw new Error(`Unsupported export ${exportInfo.kind}`);
@@ -1447,6 +1551,11 @@ export class DevToolsNameGenerator {
           throw new Error(`Expectected state: ${reader.state}`);
       }
     }
+  }
+
+  public getExportMetadata(): IExportMetadata {
+    return new DevToolsExportMetadata(this._functionExportNames, this._globalExportNames,
+                                      this._memoryExportNames, this._tableExportNames);
   }
 
   public getNameResolver(): INameResolver {
