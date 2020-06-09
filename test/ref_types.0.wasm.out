@@ -1,5 +1,4 @@
 (module
-  (type $type0 (func))
   (table $table0 1 anyref)
   (func $func0
     i32.const 0

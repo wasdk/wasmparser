@@ -302,7 +302,6 @@ describe("WasmDisassembler.getResult() with function code", () => {
   const fileName = `test.wat`;
   const expectedLines = [
     "(module",
-    "  (type $type0 (func (result i32)))",
     "  (export \"export.function\" (func $func0))",
     "  (func $func0 (result i32)",
     "    (local $var0 i32)",
@@ -327,7 +326,7 @@ describe("WasmDisassembler.getResult() with function code", () => {
     const result = dis.getResult();
     expect(result.done).toBe(true);
     expect(result.lines).toEqual(expectedLines);
-    expect(result.offsets).toEqual([0, 10, 22, 43, 43, 48, 50, 51, 53, 55, 83]);
+    expect(result.offsets).toEqual([0, 22, 43, 43, 48, 50, 51, 53, 55, 83]);
     expect(result.functionBodyOffsets).toEqual(
       [
         {
@@ -367,6 +366,12 @@ describe("WasmDisassembler.getResult() without function code", () => {
   const fileName = `test.wat`;
   const expectedLines = [
     "(module",
+    "  (import \"import\" \"function\" (func $import0))",
+    "  (export \"export.function\" (func $import0))",
+    ")",
+  ];
+  const expectedLinesWithTypes = [
+    "(module",
     "  (type $type0 (func))",
     "  (import \"import\" \"function\" (func $import0))",
     "  (export \"export.function\" (func $import0))",
@@ -386,7 +391,7 @@ describe("WasmDisassembler.getResult() without function code", () => {
     const result = dis.getResult();
     expect(result.done).toBe(true);
     expect(result.lines).toEqual(expectedLines);
-    expect(result.offsets).toEqual([0, 10, 16, 37, 68, ]);
+    expect(result.offsets).toEqual([0, 16, 37, 68, ]);
     expect(result.functionBodyOffsets).toEqual([]);
   });
 
@@ -405,5 +410,19 @@ describe("WasmDisassembler.getResult() without function code", () => {
     expect(result.lines).toEqual(expectedLines);
     expect(result.offsets).toBeUndefined();
     expect(result.functionBodyOffsets).toBeUndefined();
+  });
+
+  test("skipTypes is false", () => {
+    const { buffer } = parseWat(fileName, watString).toBinary({
+      write_debug_names: true
+    });
+    const parser = new BinaryReader();
+    parser.setData(buffer.buffer, 0, buffer.byteLength);
+    const dis = new WasmDisassembler();
+    dis.skipTypes = false;
+    dis.disassembleChunk(parser);
+    const result = dis.getResult();
+    expect(result.done).toBe(true);
+    expect(result.lines).toEqual(expectedLinesWithTypes);
   });
 });

@@ -1,6 +1,4 @@
 (module
-  (type $type0 (func (param f64) (result f64)))
-  (type $type1 (func (param f64 f64) (result f64)))
   (export "abs" (func $func0))
   (export "neg" (func $func1))
   (export "copysign" (func $func2))

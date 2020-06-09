@@ -1,12 +1,4 @@
 (module
-  (type $type0 (func (param i32) (result i32)))
-  (type $type1 (func (param i32) (result i64)))
-  (type $type2 (func (param i32) (result f32)))
-  (type $type3 (func (param i32) (result f64)))
-  (type $type4 (func (param i32 i32)))
-  (type $type5 (func (param i32 i64)))
-  (type $type6 (func (param i32 f32)))
-  (type $type7 (func (param i32 f64)))
   (memory $memory0 1)
   (export "i32.load" (func $func0))
   (export "i64.load" (func $func1))

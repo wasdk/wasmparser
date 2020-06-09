@@ -1,5 +1,4 @@
 (module
-  (type $type0 (func))
   (import "Mm" "mem" (memory $memory0 1))
   (table $table0 0 anyfunc)
   (elem (i32.const 0) $func0)

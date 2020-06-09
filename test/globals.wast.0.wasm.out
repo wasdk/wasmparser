@@ -1,12 +1,4 @@
 (module
-  (type $type0 (func (result i32)))
-  (type $type1 (func (result i64)))
-  (type $type2 (func (param i32)))
-  (type $type3 (func (param i64)))
-  (type $type4 (func (result f32)))
-  (type $type5 (func (result f64)))
-  (type $type6 (func (param f32)))
-  (type $type7 (func (param f64)))
   (global $global0 i32 (i32.const -2))
   (global $global1 f32 (f32.const -3))
   (global $global2 f64 (f64.const -4))

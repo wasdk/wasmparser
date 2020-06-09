@@ -1,6 +1,4 @@
 (module
-  (type $type0 (func (param f32 f32 f32 f32) (result f32)))
-  (type $type1 (func (param f64 f64 f64 f64) (result f64)))
   (export "f32.no_reassociate_mul" (func $func0))
   (export "f64.no_reassociate_mul" (func $func1))
   (func $func0 (param $var0 f32) (param $var1 f32) (param $var2 f32) (param $var3 f32) (result f32)

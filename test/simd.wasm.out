@@ -1,5 +1,4 @@
 (module
-  (type $type0 (func (result v128)))
   (memory $memory0 1)
   (export "v128_load_0" (func $func0))
   (export "v128_store_0" (func $func1))

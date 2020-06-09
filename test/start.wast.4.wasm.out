@@ -1,6 +1,4 @@
 (module
-  (type $type0 (func))
-  (type $type1 (func (result i32)))
   (memory $memory0 1 1)
   (export "inc" (func $func0))
   (export "get" (func $func1))

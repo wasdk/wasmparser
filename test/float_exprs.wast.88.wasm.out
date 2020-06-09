@@ -1,5 +1,4 @@
 (module
-  (type $type0 (func (param f64 f64 f64 f64 f64 f64 f64 f64) (result f64)))
   (export "dot_product_example" (func $func0))
   (export "with_binary_sum_collapse" (func $func1))
   (func $func0 (param $var0 f64) (param $var1 f64) (param $var2 f64) (param $var3 f64) (param $var4 f64) (param $var5 f64) (param $var6 f64) (param $var7 f64) (result f64)

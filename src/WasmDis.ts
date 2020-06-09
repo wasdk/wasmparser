@@ -374,7 +374,7 @@ export class WasmDisassembler {
   private _indent: string;
   private _indentLevel: number;
   private _addOffsets: boolean;
-  private _nextLineToAddOffset: number;
+  private _skipTypes: boolean = true;
   private _done: boolean;
   private _currentPosition: number;
   private _nameResolver: INameResolver;
@@ -420,6 +420,14 @@ export class WasmDisassembler {
     if (this._currentPosition)
       throw new Error('Cannot switch addOffsets during processing.');
     this._addOffsets = value;
+  }
+  public get skipTypes() {
+    return this._skipTypes;
+  }
+  public set skipTypes(skipTypes: boolean) {
+    if (this._currentPosition)
+      throw new Error('Cannot switch skipTypes during processing.');
+    this._skipTypes = skipTypes;
   }
   public get labelMode() {
     return this._labelMode;
@@ -581,8 +589,7 @@ export class WasmDisassembler {
         break;
       case OperatorCode.call_indirect:
       case OperatorCode.return_call_indirect:
-        var typeName = this._nameResolver.getTypeName(operator.typeIndex, true);
-        this.appendBuffer(` (type ${typeName})`);
+        this.printFuncType(operator.typeIndex);
         break;
       case OperatorCode.local_get:
       case OperatorCode.local_set:
@@ -1016,11 +1023,13 @@ export class WasmDisassembler {
           var funcType = <IFunctionType>reader.result;
           var typeIndex = this._types.length;
           this._types.push(funcType);
-          var typeName = this._nameResolver.getTypeName(typeIndex, false);
-          this.appendBuffer(`  (type ${typeName} (func`);
-          this.printFuncType(typeIndex);
-          this.appendBuffer('))');
-          this.newLine();
+          if (!this._skipTypes) {
+            var typeName = this._nameResolver.getTypeName(typeIndex, false);
+            this.appendBuffer(`  (type ${typeName} (func`);
+            this.printFuncType(typeIndex);
+            this.appendBuffer('))');
+            this.newLine();
+          }
           break;
         case BinaryReaderState.START_SECTION_ENTRY:
           var startEntry = <IStartEntry>reader.result;

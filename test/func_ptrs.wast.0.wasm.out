@@ -1,11 +1,4 @@
 (module
-  (type $type0 (func))
-  (type $type1 (func))
-  (type $type2 (func))
-  (type $type3 (func (result i32)))
-  (type $type4 (func (result i32)))
-  (type $type5 (func (param i32) (result i32)))
-  (type $type6 (func (param i32)))
   (import "spectest" "print" (func $import0 (param i32)))
   (export "one" (func $func3))
   (export "two" (func $func4))

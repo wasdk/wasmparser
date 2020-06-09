@@ -1,5 +1,4 @@
 (module
-  (type $type0 (func (result i32)))
   (import "spectest" "global" (global $global0 i32))
   (import "spectest" "global" (global $global1 i32))
   (import "spectest" "global" (global $global2 i32))

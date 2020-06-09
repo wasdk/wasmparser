@@ -1,6 +1,4 @@
 (module
-  (type $type0 (func (param f32 f32) (result f32)))
-  (type $type1 (func (param f32) (result f32)))
   (export "add" (func $func0))
   (export "sub" (func $func1))
   (export "mul" (func $func2))

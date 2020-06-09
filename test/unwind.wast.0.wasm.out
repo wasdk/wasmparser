@@ -1,6 +1,4 @@
 (module
-  (type $type0 (func))
-  (type $type1 (func (result i32)))
   (export "func-unwind-by-unreachable" (func $func0))
   (export "func-unwind-by-br" (func $func1))
   (export "func-unwind-by-br-value" (func $func2))

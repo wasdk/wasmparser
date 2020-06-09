@@ -1,6 +1,4 @@
 (module
-  (type $type0 (func (result i32)))
-  (type $type1 (func (result i64)))
   (export "f32.nan" (func $func0))
   (export "f32.positive_nan" (func $func1))
   (export "f32.negative_nan" (func $func2))

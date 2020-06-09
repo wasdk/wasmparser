@@ -1,6 +1,4 @@
 (module
-  (type $type0 (func (param f32)))
-  (type $type1 (func (param f64)))
   (export "no_dce.i32.trunc_s_f32" (func $func0))
   (export "no_dce.i32.trunc_u_f32" (func $func1))
   (export "no_dce.i32.trunc_s_f64" (func $func2))

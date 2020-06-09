@@ -1,7 +1,4 @@
 (module
-  (type $type0 (func (param i32)))
-  (type $type1 (func (param i32) (result i32)))
-  (type $type2 (func (result i32)))
   (import "env" "STACKTOP" (global $global0 i32))
   (table $table0 0 anyfunc)
   (memory $memory0 4)

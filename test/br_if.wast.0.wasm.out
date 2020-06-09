@@ -1,8 +1,4 @@
 (module
-  (type $type0 (func))
-  (type $type1 (func (param i32) (result i32)))
-  (type $type2 (func (param i32)))
-  (type $type3 (func (param i32 i32)))
   (export "as-block-first" (func $func1))
   (export "as-block-mid" (func $func2))
   (export "as-block-last" (func $func3))

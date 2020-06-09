@@ -1,9 +1,4 @@
 (module
-  (type $type0 (func))
-  (type $type1 (func (param i32 i32 i32) (result i32)))
-  (type $type2 (func (result i32)))
-  (type $type3 (func (param i32)))
-  (type $type4 (func (param i32) (result i32)))
   (memory $memory0 1)
   (export "as-func-first" (func $func2))
   (export "as-func-mid" (func $func3))

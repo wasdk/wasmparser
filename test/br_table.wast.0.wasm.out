@@ -1,13 +1,4 @@
 (module
-  (type $type0 (func))
-  (type $type1 (func (result i32)))
-  (type $type2 (func (result i64)))
-  (type $type3 (func (result f32)))
-  (type $type4 (func (result f64)))
-  (type $type5 (func (param i32) (result i32)))
-  (type $type6 (func (param i32 i32) (result i32)))
-  (type $type7 (func (param i32 i32 i32) (result i32)))
-  (type $type8 (func (param i32 i32 i32) (result i32)))
   (table $table0 1 1 anyfunc)
   (memory $memory0 1)
   (export "type-i32" (func $func1))
@@ -504,7 +495,7 @@
       i32.const 1
       i32.const 2
       i32.const 3
-      call_indirect (type $type8)
+      call_indirect (param i32 i32 i32) (result i32)
     end $label0
   )
   (func $func42 (result i32)
@@ -515,7 +506,7 @@
       br_table $label0
       i32.const 2
       i32.const 3
-      call_indirect (type $type8)
+      call_indirect (param i32 i32 i32) (result i32)
     end $label0
   )
   (func $func43 (result i32)
@@ -526,7 +517,7 @@
       i32.const 1
       br_table $label0
       i32.const 3
-      call_indirect (type $type8)
+      call_indirect (param i32 i32 i32) (result i32)
     end $label0
   )
   (func $func44 (result i32)
@@ -537,7 +528,7 @@
       i32.const 23
       i32.const 1
       br_table $label0
-      call_indirect (type $type8)
+      call_indirect (param i32 i32 i32) (result i32)
     end $label0
   )
   (func $func45 (result i32)

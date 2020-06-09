@@ -1,5 +1,4 @@
 (module
-  (type $type0 (func (param f64 f32) (result f32)))
   (export "no_demote_mixed_sub" (func $func0))
   (func $func0 (param $var0 f64) (param $var1 f32) (result f32)
     local.get $var0

@@ -1,7 +1,4 @@
 (module
-  (type $type0 (func (result f32)))
-  (type $type1 (func (result i32)))
-  (type $type2 (func))
   (memory $memory0 1 1)
   (export "f32.load" (func $func0))
   (export "i32.load" (func $func1))
