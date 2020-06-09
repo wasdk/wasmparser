@@ -1,5 +1,5 @@
 (module
-  (import "Mm" "load" (func $import0 (param i32) (result i32)))
+  (func $import0 (import "Mm" "load") (param i32) (result i32))
   (memory $memory0 1)
   (export "Mm.load" (func $import0))
   (export "load" (func $func1))

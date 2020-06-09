@@ -1,3 +1,3 @@
 (module
-  (import "test" "table-10-inf" (table $table0 12 anyfunc))
+  (table $table0 (import "test" "table-10-inf") 12 anyfunc)
 )

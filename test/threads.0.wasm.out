@@ -1,5 +1,5 @@
 (module
-  (import "env" "memory" (memory $memory0 1 1 shared))
+  (memory $memory0 (import "env" "memory") 1 1 shared)
   (export "tryLockMutex" (func $func0))
   (export "lockMutex" (func $func1))
   (export "unlockMutex" (func $func2))

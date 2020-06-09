@@ -1,4 +1,4 @@
 (module
-  (import "spectest" "print" (func $import0))
+  (func $import0 (import "spectest" "print"))
   (start $import0)
 )

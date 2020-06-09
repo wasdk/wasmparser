@@ -1,5 +1,5 @@
 (module
-  (import "spectest" "print" (func $import0 (param i32)))
+  (func $import0 (import "spectest" "print") (param i32))
   (memory $memory0 1)
   (export "good" (func $func1))
   (export "bad" (func $func2))
@@ -52,7 +52,7 @@
   (data (i32.const 0) "abcdefghijklmnopqrstuvwxyz")
 )
 (module
-  (import "spectest" "print" (func $import0 (param i32)))
+  (func $import0 (import "spectest" "print") (param i32))
   (memory $memory0 1)
   (export "good" (func $func1))
   (export "bad" (func $func2))
@@ -8521,7 +8521,7 @@
   )
 )
 (module
-  (import "spectest" "print" (func $import0 (param i32)))
+  (func $import0 (import "spectest" "print") (param i32))
   (export "one" (func $func3))
   (export "two" (func $func4))
   (export "three" (func $func5))
@@ -8593,7 +8593,7 @@
   )
 )
 (module
-  (import "spectest" "print" (func $import0 (param i32)))
+  (func $import0 (import "spectest" "print") (param i32))
   (export "one" (func $func3))
   (export "two" (func $func4))
   (export "three" (func $func5))
@@ -19693,8 +19693,8 @@
   )
 )
 (module
-  (import "spectest" "print" (func $import0 (param i32)))
-  (import "spectest" "print" (func $import1 (param i32)))
+  (func $import0 (import "spectest" "print") (param i32))
+  (func $import1 (import "spectest" "print") (param i32))
   (export "print32" (func $func2))
   (func $func2 (param $var0 i32) (param $var1 i32)
     local.get $var0
@@ -19766,8 +19766,8 @@
   )
 )
 (module
-  (import "spectest" "print" (func $import0 (param i32)))
-  (import "spectest" "print" (func $import1 (param i32)))
+  (func $import0 (import "spectest" "print") (param i32))
+  (func $import1 (import "spectest" "print") (param i32))
   (export "print32" (func $func2))
   (func $func2 (param $var0 i32) (param $var1 i32)
     local.get $var0
@@ -28564,7 +28564,7 @@
   (data (i32.const 0) "A")
 )
 (module
-  (import "spectest" "print" (func $import0 (param i32)))
+  (func $import0 (import "spectest" "print") (param i32))
   (start $func1)
   (func $func1
     i32.const 1
@@ -28572,7 +28572,7 @@
   )
 )
 (module
-  (import "spectest" "print" (func $import0 (param i32)))
+  (func $import0 (import "spectest" "print") (param i32))
   (start $func1)
   (func $func1
     i32.const 2
@@ -28636,7 +28636,7 @@
   (data (i32.const 0) "A")
 )
 (module
-  (import "spectest" "print" (func $import0 (param i32)))
+  (func $import0 (import "spectest" "print") (param i32))
   (start $func1)
   (func $func1
     i32.const 1
@@ -28644,7 +28644,7 @@
   )
 )
 (module
-  (import "spectest" "print" (func $import0 (param i32)))
+  (func $import0 (import "spectest" "print") (param i32))
   (start $func1)
   (func $func1
     i32.const 2

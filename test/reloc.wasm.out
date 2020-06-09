@@ -1,5 +1,5 @@
 (module
-  (import "env" "STACKTOP" (global $global0 i32))
+  (global $global0 (import "env" "STACKTOP") i32)
   (table $table0 0 anyfunc)
   (memory $memory0 4)
   (global $global1 (mut i32) (global.get $global0))

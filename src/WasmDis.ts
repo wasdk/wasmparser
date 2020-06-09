@@ -206,9 +206,8 @@ function memoryAddressToString(address: IMemoryAddress, code: OperatorCode): str
   return `offset=${address.offset | 0} align=${1 << address.flags}`;
 }
 function globalTypeToString(type: IGlobalType): string {
-  if (!type.mutability)
-    return typeToString(type.contentType)
-  return `(mut ${typeToString(type.contentType)})`;
+  const typeStr = typeToString(type.contentType);
+  return type.mutability ? `(mut ${typeStr})` : typeStr;
 }
 function limitsToString(limits: IResizableLimits): string {
   return limits.initial + (limits.maximum !== undefined ? ' ' + limits.maximum : '');
@@ -945,41 +944,44 @@ export class WasmDisassembler {
           break;
         case BinaryReaderState.IMPORT_SECTION_ENTRY:
           var importInfo = <IImportEntry>reader.result;
-          this.appendBuffer('  (import ');
-          this.printImportSource(importInfo);
           switch (importInfo.kind) {
             case ExternalKind.Function:
               this._importCount++;
               var funcName = this._nameResolver.getFunctionName(this._funcIndex++, true, false);
-              this.appendBuffer(` (func ${funcName}`);
+              this.appendBuffer(`  (func ${funcName} (import `);
+              this.printImportSource(importInfo);
+              this.appendBuffer(')');
               this.printFuncType(importInfo.funcTypeIndex);
               this.appendBuffer(')');
               break;
             case ExternalKind.Table:
               var tableImportInfo = <ITableType>importInfo.type;
               var tableName = this._nameResolver.getTableName(this._tableCount++, false);
-              this.appendBuffer(` (table ${tableName} ${limitsToString(tableImportInfo.limits)} ${typeToString(tableImportInfo.elementType)})`);
+              this.appendBuffer(`  (table ${tableName} (import `);
+              this.printImportSource(importInfo);
+              this.appendBuffer(`) ${limitsToString(tableImportInfo.limits)} ${typeToString(tableImportInfo.elementType)})`);
               break;
             case ExternalKind.Memory:
               var memoryImportInfo = <IMemoryType>importInfo.type;
               var memoryName = this._nameResolver.getMemoryName(this._memoryCount++, false);
-              this.appendBuffer(` (memory ${memoryName} `);
+              this.appendBuffer(`  (memory ${memoryName} (import `);
+              this.printImportSource(importInfo);
+              this.appendBuffer(`) ${limitsToString(memoryImportInfo.limits)}`);
               if (memoryImportInfo.shared) {
-                this.appendBuffer(`${limitsToString(memoryImportInfo.limits)} shared`);
-              } else {
-                this.appendBuffer(limitsToString(memoryImportInfo.limits));
+                this.appendBuffer(` shared`);
               }
               this.appendBuffer(')');
               break;
             case ExternalKind.Global:
               var globalImportInfo = <IGlobalType>importInfo.type;
               var globalName = this._nameResolver.getGlobalName(this._globalCount++, false);
-              this.appendBuffer(` (global ${globalName} ${globalTypeToString(globalImportInfo)})`);
+              this.appendBuffer(`  (global ${globalName} (import `);
+              this.printImportSource(importInfo);
+              this.appendBuffer(`) ${globalTypeToString(globalImportInfo)})`);
               break;
             default:
               throw new Error(`NYI other import types: ${importInfo.kind}`);
           }
-          this.appendBuffer(')');
           this.newLine();
           break;
         case BinaryReaderState.BEGIN_ELEMENT_SECTION_ENTRY:
