@@ -359,24 +359,21 @@ describe("WasmDisassembler.getResult() with function code", () => {
 });
 
 describe("WasmDisassembler.getResult() without function code", () => {
-  const watString =
-  `(module
-   (import "import" "function" (func))
-   (export "export.function" (func 0)))`;
   const fileName = `test.wat`;
   const expectedLines = [
-    "(module",
-    "  (import \"import\" \"function\" (func $import0))",
-    "  (export \"export.function\" (func $import0))",
-    ")",
+    `(module`,
+    `  (func $import0 (import "import" "function"))`,
+    `  (export "export.function" (func $import0))`,
+    `)`
   ];
   const expectedLinesWithTypes = [
-    "(module",
-    "  (type $type0 (func))",
-    "  (import \"import\" \"function\" (func $import0))",
-    "  (export \"export.function\" (func $import0))",
-    ")",
+    `(module`,
+    `  (type $type0 (func))`,
+    `  (func $import0 (import "import" "function"))`,
+    `  (export \"export.function\" (func $import0))`,
+    `)`,
   ];
+  const watString = expectedLines.join('\n');
 
   test("addOffsets is true", () => {
     const { buffer } = parseWat(fileName, watString).toBinary({
@@ -391,7 +388,7 @@ describe("WasmDisassembler.getResult() without function code", () => {
     const result = dis.getResult();
     expect(result.done).toBe(true);
     expect(result.lines).toEqual(expectedLines);
-    expect(result.offsets).toEqual([0, 16, 37, 68, ]);
+    expect(result.offsets).toEqual([0, 16, 37, 80]);
     expect(result.functionBodyOffsets).toEqual([]);
   });
 

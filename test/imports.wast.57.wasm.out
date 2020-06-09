@@ -1,3 +1,3 @@
 (module
-  (import "spectest" "table" (table $table0 0 20 anyfunc))
+  (table $table0 (import "spectest" "table") 0 20 anyfunc)
 )

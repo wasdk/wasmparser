@@ -1,6 +1,6 @@
 (module
-  (import "Mt" "h" (func $import0 (result i32)))
-  (import "Mt" "tab" (table $table0 5 anyfunc))
+  (func $import0 (import "Mt" "h") (result i32))
+  (table $table0 (import "Mt" "tab") 5 anyfunc)
   (export "call" (func $func2))
   (elem (i32.const 1) $func1 $import0)
   (func $func1 (result i32)

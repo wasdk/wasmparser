@@ -1,5 +1,5 @@
 (module
-  (import "spectest" "print" (func $import0 (param i32)))
+  (func $import0 (import "spectest" "print") (param i32))
   (start $func1)
   (func $func1
     i32.const 1

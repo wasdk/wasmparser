@@ -1,5 +1,5 @@
 (module
-  (import "spectest" "table" (table $table0 10 20 anyfunc))
+  (table $table0 (import "spectest" "table") 10 20 anyfunc)
   (export "call" (func $func0))
   (elem (i32.const 1) $func1 $func2)
   (func $func0 (param $var0 i32) (result i32)

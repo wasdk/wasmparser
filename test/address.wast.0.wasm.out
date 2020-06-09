@@ -1,5 +1,5 @@
 (module
-  (import "spectest" "print" (func $import0 (param i32)))
+  (func $import0 (import "spectest" "print") (param i32))
   (memory $memory0 1)
   (export "good" (func $func1))
   (export "bad" (func $func2))

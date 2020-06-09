@@ -1,5 +1,5 @@
 (module
-  (import "spectest" "print" (func $import0 (param i32)))
+  (func $import0 (import "spectest" "print") (param i32))
   (export "one" (func $func3))
   (export "two" (func $func4))
   (export "three" (func $func5))
