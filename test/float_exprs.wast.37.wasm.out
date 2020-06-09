@@ -1,6 +1,4 @@
 (module
-  (type $type0 (func (param f64 f32) (result f32)))
-  (type $type1 (func (param f32 f64) (result f32)))
   (export "no_demote_mixed_add" (func $func0))
   (export "no_demote_mixed_add_commuted" (func $func1))
   (func $func0 (param $var0 f64) (param $var1 f32) (result f32)

@@ -1,6 +1,4 @@
 (module
-  (type $type0 (func (param i32) (result i32)))
-  (type $type1 (func (param i64) (result i64)))
   (export "i32.no_fold_shl_shr_s" (func $func0))
   (export "i32.no_fold_shl_shr_u" (func $func1))
   (export "i64.no_fold_shl_shr_s" (func $func2))

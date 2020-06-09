@@ -1,5 +1,4 @@
 (module
-  (type $type0 (func (result i32)))
   (export "" (func $func0))
   (export "0" (func $func1))
   (export "-0" (func $func2))

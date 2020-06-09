@@ -1,8 +1,4 @@
 (module
-  (type $type0 (func (result i32)))
-  (type $type1 (func (result f64)))
-  (type $type2 (func (param i32) (result i32)))
-  (type $type3 (func (param i64) (result i64)))
   (memory $memory0 1)
   (export "data" (func $func0))
   (export "aligned" (func $func1))

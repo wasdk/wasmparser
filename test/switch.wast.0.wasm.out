@@ -1,7 +1,4 @@
 (module
-  (type $type0 (func (param i32) (result i32)))
-  (type $type1 (func (param i64) (result i64)))
-  (type $type2 (func (result i32)))
   (export "stmt" (func $func0))
   (export "expr" (func $func1))
   (export "arg" (func $func2))

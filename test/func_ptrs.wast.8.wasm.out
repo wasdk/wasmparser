@@ -1,7 +1,4 @@
 (module
-  (type $type0 (func (result i32)))
-  (type $type1 (func (result i32)))
-  (type $type2 (func (param i32) (result i32)))
   (table $table0 7 7 anyfunc)
   (export "callt" (func $func5))
   (export "callu" (func $func6))
@@ -23,10 +20,10 @@
   )
   (func $func5 (param $var0 i32) (result i32)
     local.get $var0
-    call_indirect (type $type0)
+    call_indirect (result i32)
   )
   (func $func6 (param $var0 i32) (result i32)
     local.get $var0
-    call_indirect (type $type1)
+    call_indirect (result i32)
   )
 )

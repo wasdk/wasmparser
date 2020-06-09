@@ -1,6 +1,4 @@
 (module
-  (type $type0 (func (param i32 i32 i32)))
-  (type $type1 (func (param i32) (result f32)))
   (memory $memory0 1 1)
   (export "f32.simple_x4_sum" (func $func0))
   (export "f32.load" (func $func1))

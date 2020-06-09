@@ -1,5 +1,4 @@
 (module
-  (type $type0 (func (param i32 i32) (result f32)))
   (memory $memory0 1 1)
   (export "f32.kahan_sum" (func $func0))
   (export "f32.plain_sum" (func $func1))

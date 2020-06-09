@@ -1,7 +1,4 @@
 (module
-  (type $type0 (func))
-  (type $type1 (func (result i32)))
-  (type $type2 (func (param i32) (result i32)))
   (import "Mt" "call" (func $import0 (param i32) (result i32)))
   (import "Mt" "h" (func $import1 (result i32)))
   (table $table0 5 5 anyfunc)
@@ -18,6 +15,6 @@
   )
   (func $func4 (param $var0 i32) (result i32)
     local.get $var0
-    call_indirect (type $type1)
+    call_indirect (result i32)
   )
 )

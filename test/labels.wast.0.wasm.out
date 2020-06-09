@@ -1,6 +1,4 @@
 (module
-  (type $type0 (func (result i32)))
-  (type $type1 (func (param i32) (result i32)))
   (export "block" (func $func0))
   (export "loop1" (func $func1))
   (export "loop2" (func $func2))

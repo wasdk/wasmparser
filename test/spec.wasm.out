@@ -1,5 +1,4 @@
 (module
-  (type $type0 (func (param i32)))
   (import "spectest" "print" (func $import0 (param i32)))
   (memory $memory0 1)
   (export "good" (func $func1))
@@ -55,7 +54,6 @@
   )
 )
 (module
-  (type $type0 (func (param i32)))
   (import "spectest" "print" (func $import0 (param i32)))
   (memory $memory0 1)
   (export "good" (func $func1))
@@ -111,8 +109,6 @@
   )
 )
 (module
-  (type $type0 (func))
-  (type $type1 (func (result i32)))
   (export "empty" (func $func1))
   (export "singular" (func $func2))
   (export "multi" (func $func3))
@@ -412,8 +408,6 @@
   )
 )
 (module
-  (type $type0 (func))
-  (type $type1 (func (result i32)))
   (export "empty" (func $func1))
   (export "singular" (func $func2))
   (export "multi" (func $func3))
@@ -713,10 +707,6 @@
   )
 )
 (module
-  (type $type0 (func))
-  (type $type1 (func (param i32) (result i32)))
-  (type $type2 (func (param i32)))
-  (type $type3 (func (param i32 i32)))
   (export "as-block-first" (func $func1))
   (export "as-block-mid" (func $func2))
   (export "as-block-last" (func $func3))
@@ -955,14 +945,6 @@
   )
 )
 (module
-  (type $type0 (func))
-  (type $type1 (func (result i32)))
-  (type $type2 (func (result i64)))
-  (type $type3 (func (result f32)))
-  (type $type4 (func (result f64)))
-  (type $type5 (func (param i32 i32) (result i32)))
-  (type $type6 (func (param i32 i32 i32) (result i32)))
-  (type $type7 (func (param i32 i32 i32) (result i32)))
   (table $table0 1 1 anyfunc)
   (memory $memory0 1)
   (export "type-i32" (func $func1))
@@ -1299,7 +1281,7 @@
       i32.const 1
       i32.const 2
       i32.const 3
-      call_indirect (type $type7)
+      call_indirect (param i32 i32 i32) (result i32)
     end $label0
   )
   (func $func35 (result i32)
@@ -1309,7 +1291,7 @@
       br $label0
       i32.const 2
       i32.const 3
-      call_indirect (type $type7)
+      call_indirect (param i32 i32 i32) (result i32)
     end $label0
   )
   (func $func36 (result i32)
@@ -1319,7 +1301,7 @@
       i32.const 22
       br $label0
       i32.const 3
-      call_indirect (type $type7)
+      call_indirect (param i32 i32 i32) (result i32)
     end $label0
   )
   (func $func37 (result i32)
@@ -1329,7 +1311,7 @@
       i32.const 2
       i32.const 23
       br $label0
-      call_indirect (type $type7)
+      call_indirect (param i32 i32 i32) (result i32)
     end $label0
   )
   (func $func38 (result i32)
@@ -1546,10 +1528,6 @@
   )
 )
 (module
-  (type $type0 (func))
-  (type $type1 (func (param i32) (result i32)))
-  (type $type2 (func (param i32)))
-  (type $type3 (func (param i32 i32)))
   (export "as-block-first" (func $func1))
   (export "as-block-mid" (func $func2))
   (export "as-block-last" (func $func3))
@@ -1788,14 +1766,6 @@
   )
 )
 (module
-  (type $type0 (func))
-  (type $type1 (func (result i32)))
-  (type $type2 (func (result i64)))
-  (type $type3 (func (result f32)))
-  (type $type4 (func (result f64)))
-  (type $type5 (func (param i32 i32) (result i32)))
-  (type $type6 (func (param i32 i32 i32) (result i32)))
-  (type $type7 (func (param i32 i32 i32) (result i32)))
   (table $table0 1 1 anyfunc)
   (memory $memory0 1)
   (export "type-i32" (func $func1))
@@ -2132,7 +2102,7 @@
       i32.const 1
       i32.const 2
       i32.const 3
-      call_indirect (type $type7)
+      call_indirect (param i32 i32 i32) (result i32)
     end $label0
   )
   (func $func35 (result i32)
@@ -2142,7 +2112,7 @@
       br $label0
       i32.const 2
       i32.const 3
-      call_indirect (type $type7)
+      call_indirect (param i32 i32 i32) (result i32)
     end $label0
   )
   (func $func36 (result i32)
@@ -2152,7 +2122,7 @@
       i32.const 22
       br $label0
       i32.const 3
-      call_indirect (type $type7)
+      call_indirect (param i32 i32 i32) (result i32)
     end $label0
   )
   (func $func37 (result i32)
@@ -2162,7 +2132,7 @@
       i32.const 2
       i32.const 23
       br $label0
-      call_indirect (type $type7)
+      call_indirect (param i32 i32 i32) (result i32)
     end $label0
   )
   (func $func38 (result i32)
@@ -2379,7 +2349,6 @@
   )
 )
 (module
-  (type $type0 (func))
   (export "br" (func $func0))
   (export "br_if" (func $func1))
   (export "br_table" (func $func2))
@@ -2402,7 +2371,6 @@
   )
 )
 (module
-  (type $type0 (func))
   (export "br" (func $func0))
   (export "br_if" (func $func1))
   (export "br_table" (func $func2))
@@ -2425,21 +2393,6 @@
   )
 )
 (module
-  (type $type0 (func (result i32)))
-  (type $type1 (func (result i64)))
-  (type $type2 (func (result f32)))
-  (type $type3 (func (result f64)))
-  (type $type4 (func (param i32) (result i32)))
-  (type $type5 (func (param i64) (result i64)))
-  (type $type6 (func (param f32) (result f32)))
-  (type $type7 (func (param f64) (result f64)))
-  (type $type8 (func (param f32 i32) (result i32)))
-  (type $type9 (func (param i32 i64) (result i64)))
-  (type $type10 (func (param f64 f32) (result f32)))
-  (type $type11 (func (param i64 f64) (result f64)))
-  (type $type12 (func (param i64 i64) (result i64)))
-  (type $type13 (func (param i64) (result i32)))
-  (type $type14 (func))
   (export "type-i32" (func $func12))
   (export "type-i64" (func $func13))
   (export "type-f32" (func $func14))
@@ -2625,21 +2578,6 @@
   )
 )
 (module
-  (type $type0 (func (result i32)))
-  (type $type1 (func (result i64)))
-  (type $type2 (func (result f32)))
-  (type $type3 (func (result f64)))
-  (type $type4 (func (param i32) (result i32)))
-  (type $type5 (func (param i64) (result i64)))
-  (type $type6 (func (param f32) (result f32)))
-  (type $type7 (func (param f64) (result f64)))
-  (type $type8 (func (param f32 i32) (result i32)))
-  (type $type9 (func (param i32 i64) (result i64)))
-  (type $type10 (func (param f64 f32) (result f32)))
-  (type $type11 (func (param i64 f64) (result f64)))
-  (type $type12 (func (param i64 i64) (result i64)))
-  (type $type13 (func (param i64) (result i32)))
-  (type $type14 (func))
   (export "type-i32" (func $func12))
   (export "type-i64" (func $func13))
   (export "type-f32" (func $func14))
@@ -2841,24 +2779,6 @@
 (module
 )
 (module
-  (type $type0 (func))
-  (type $type1 (func (result i32)))
-  (type $type2 (func (result i64)))
-  (type $type3 (func (result f32)))
-  (type $type4 (func (result f64)))
-  (type $type5 (func (param i32) (result i32)))
-  (type $type6 (func (param i64) (result i64)))
-  (type $type7 (func (param f32) (result f32)))
-  (type $type8 (func (param f64) (result f64)))
-  (type $type9 (func (param f32 i32) (result i32)))
-  (type $type10 (func (param i32 i64) (result i64)))
-  (type $type11 (func (param f64 f32) (result f32)))
-  (type $type12 (func (param i64 f64) (result f64)))
-  (type $type13 (func (param i32) (result i32)))
-  (type $type14 (func (param i64) (result i64)))
-  (type $type15 (func (param f32) (result f32)))
-  (type $type16 (func (param f64) (result f64)))
-  (type $type17 (func (param i32) (result i64)))
   (table $table0 23 23 anyfunc)
   (export "type-i32" (func $func16))
   (export "type-i64" (func $func17))
@@ -2932,78 +2852,78 @@
   )
   (func $func16 (result i32)
     i32.const 0
-    call_indirect (type $type1)
+    call_indirect (result i32)
   )
   (func $func17 (result i64)
     i32.const 1
-    call_indirect (type $type2)
+    call_indirect (result i64)
   )
   (func $func18 (result f32)
     i32.const 2
-    call_indirect (type $type3)
+    call_indirect (result f32)
   )
   (func $func19 (result f64)
     i32.const 3
-    call_indirect (type $type4)
+    call_indirect (result f64)
   )
   (func $func20 (result i64)
     i64.const 100
     i32.const 5
-    call_indirect (type $type6)
+    call_indirect (param i64) (result i64)
   )
   (func $func21 (result i32)
     i32.const 32
     i32.const 4
-    call_indirect (type $type5)
+    call_indirect (param i32) (result i32)
   )
   (func $func22 (result i64)
     i64.const 64
     i32.const 5
-    call_indirect (type $type6)
+    call_indirect (param i64) (result i64)
   )
   (func $func23 (result f32)
     f32.const 1.3200000524520874
     i32.const 6
-    call_indirect (type $type7)
+    call_indirect (param f32) (result f32)
   )
   (func $func24 (result f64)
     f64.const 1.64
     i32.const 7
-    call_indirect (type $type8)
+    call_indirect (param f64) (result f64)
   )
   (func $func25 (result i32)
     f32.const 32.099998474121094
     i32.const 32
     i32.const 8
-    call_indirect (type $type9)
+    call_indirect (param f32 i32) (result i32)
   )
   (func $func26 (result i64)
     i32.const 32
     i64.const 64
     i32.const 9
-    call_indirect (type $type10)
+    call_indirect (param i32 i64) (result i64)
   )
   (func $func27 (result f32)
     f64.const 64
     f32.const 32
     i32.const 10
-    call_indirect (type $type11)
+    call_indirect (param f64 f32) (result f32)
   )
   (func $func28 (result f64)
     i64.const 64
     f64.const 64.1
     i32.const 11
-    call_indirect (type $type12)
+    call_indirect (param i64 f64) (result f64)
   )
   (func $func29 (param $var0 i32) (param $var1 i64) (result i64)
     local.get $var1
     local.get $var0
-    call_indirect (type $type6)
+    call_indirect (param i64) (result i64)
   )
   (func $func30 (param $var0 i32) (result i64)
     i64.const 9
     local.get $var0
-    call_indirect (type $type14)
+    call_indirect (param i64) (result i64)
   )
   (func $func31 (param $var0 i64) (result i64)
     local.get $var0
@@ -3016,7 +2936,7 @@
       i64.const 1
       i64.sub
       i32.const 12
-      call_indirect (type $type6)
+      call_indirect (param i64) (result i64)
       i64.mul
     end
   )
@@ -3031,12 +2951,12 @@
       i64.const 2
       i64.sub
       i32.const 13
-      call_indirect (type $type6)
+      call_indirect (param i64) (result i64)
       local.get $var0
       i64.const 1
       i64.sub
       i32.const 13
-      call_indirect (type $type6)
+      call_indirect (param i64) (result i64)
       i64.add
     end
   )
@@ -3050,7 +2970,7 @@
       i32.const 1
       i32.sub
       i32.const 15
-      call_indirect (type $type5)
+      call_indirect (param i32) (result i32)
     end
   )
   (func $func34 (param $var0 i32) (result i32)
@@ -3063,41 +2983,23 @@
       i32.const 1
       i32.sub
       i32.const 14
-      call_indirect (type $type5)
+      call_indirect (param i32) (result i32)
     end
   )
   (func $func35
     i32.const 16
-    call_indirect (type $type0)
+    call_indirect
   )
   (func $func36
     i32.const 18
-    call_indirect (type $type0)
+    call_indirect
   )
   (func $func37
     i32.const 17
-    call_indirect (type $type0)
+    call_indirect
   )
 )
 (module
-  (type $type0 (func))
-  (type $type1 (func (result i32)))
-  (type $type2 (func (result i64)))
-  (type $type3 (func (result f32)))
-  (type $type4 (func (result f64)))
-  (type $type5 (func (param i32) (result i32)))
-  (type $type6 (func (param i64) (result i64)))
-  (type $type7 (func (param f32) (result f32)))
-  (type $type8 (func (param f64) (result f64)))
-  (type $type9 (func (param f32 i32) (result i32)))
-  (type $type10 (func (param i32 i64) (result i64)))
-  (type $type11 (func (param f64 f32) (result f32)))
-  (type $type12 (func (param i64 f64) (result f64)))
-  (type $type13 (func (param i32) (result i32)))
-  (type $type14 (func (param i64) (result i64)))
-  (type $type15 (func (param f32) (result f32)))
-  (type $type16 (func (param f64) (result f64)))
-  (type $type17 (func (param i32) (result i64)))
   (table $table0 23 23 anyfunc)
   (export "type-i32" (func $func16))
   (export "type-i64" (func $func17))
@@ -3171,78 +3073,78 @@
   )
   (func $func16 (result i32)
     i32.const 0
-    call_indirect (type $type1)
+    call_indirect (result i32)
   )
   (func $func17 (result i64)
     i32.const 1
-    call_indirect (type $type2)
+    call_indirect (result i64)
   )
   (func $func18 (result f32)
     i32.const 2
-    call_indirect (type $type3)
+    call_indirect (result f32)
   )
   (func $func19 (result f64)
     i32.const 3
-    call_indirect (type $type4)
+    call_indirect (result f64)
   )
   (func $func20 (result i64)
     i64.const 100
     i32.const 5
-    call_indirect (type $type6)
+    call_indirect (param i64) (result i64)
   )
   (func $func21 (result i32)
     i32.const 32
     i32.const 4
-    call_indirect (type $type5)
+    call_indirect (param i32) (result i32)
   )
   (func $func22 (result i64)
     i64.const 64
     i32.const 5
-    call_indirect (type $type6)
+    call_indirect (param i64) (result i64)
   )
   (func $func23 (result f32)
     f32.const 1.3200000524520874
     i32.const 6
-    call_indirect (type $type7)
+    call_indirect (param f32) (result f32)
   )
   (func $func24 (result f64)
     f64.const 1.64
     i32.const 7
-    call_indirect (type $type8)
+    call_indirect (param f64) (result f64)
   )
   (func $func25 (result i32)
     f32.const 32.099998474121094
     i32.const 32
     i32.const 8
-    call_indirect (type $type9)
+    call_indirect (param f32 i32) (result i32)
   )
   (func $func26 (result i64)
     i32.const 32
     i64.const 64
     i32.const 9
-    call_indirect (type $type10)
+    call_indirect (param i32 i64) (result i64)
   )
   (func $func27 (result f32)
     f64.const 64
     f32.const 32
     i32.const 10
-    call_indirect (type $type11)
+    call_indirect (param f64 f32) (result f32)
   )
   (func $func28 (result f64)
     i64.const 64
     f64.const 64.1
     i32.const 11
-    call_indirect (type $type12)
+    call_indirect (param i64 f64) (result f64)
   )
   (func $func29 (param $var0 i32) (param $var1 i64) (result i64)
     local.get $var1
     local.get $var0
-    call_indirect (type $type6)
+    call_indirect (param i64) (result i64)
   )
   (func $func30 (param $var0 i32) (result i64)
     i64.const 9
     local.get $var0
-    call_indirect (type $type14)
+    call_indirect (param i64) (result i64)
   )
   (func $func31 (param $var0 i64) (result i64)
     local.get $var0
@@ -3255,7 +3157,7 @@
       i64.const 1
       i64.sub
       i32.const 12
-      call_indirect (type $type6)
+      call_indirect (param i64) (result i64)
       i64.mul
     end
   )
@@ -3270,12 +3172,12 @@
       i64.const 2
       i64.sub
       i32.const 13
-      call_indirect (type $type6)
+      call_indirect (param i64) (result i64)
       local.get $var0
       i64.const 1
       i64.sub
       i32.const 13
-      call_indirect (type $type6)
+      call_indirect (param i64) (result i64)
       i64.add
     end
   )
@@ -3289,7 +3191,7 @@
       i32.const 1
       i32.sub
       i32.const 15
-      call_indirect (type $type5)
+      call_indirect (param i32) (result i32)
     end
   )
   (func $func34 (param $var0 i32) (result i32)
@@ -3302,32 +3204,23 @@
       i32.const 1
       i32.sub
       i32.const 14
-      call_indirect (type $type5)
+      call_indirect (param i32) (result i32)
     end
   )
   (func $func35
     i32.const 16
-    call_indirect (type $type0)
+    call_indirect
   )
   (func $func36
     i32.const 18
-    call_indirect (type $type0)
+    call_indirect
   )
   (func $func37
     i32.const 17
-    call_indirect (type $type0)
+    call_indirect
   )
 )
 (module
-  (type $type0 (func))
-  (type $type1 (func (result i32)))
-  (type $type2 (func (result i64)))
-  (type $type3 (func (result f32)))
-  (type $type4 (func (result f64)))
-  (type $type5 (func (param i32) (result i32)))
-  (type $type6 (func (param i32 i32) (result i32)))
-  (type $type7 (func (param i32 i32 i32) (result i32)))
-  (type $type8 (func (param i32 i32 i32) (result i32)))
   (table $table0 1 1 anyfunc)
   (memory $memory0 1)
   (export "type-i32" (func $func1))
@@ -3823,7 +3716,7 @@
       i32.const 1
       i32.const 2
       i32.const 3
-      call_indirect (type $type8)
+      call_indirect (param i32 i32 i32) (result i32)
     end $label0
   )
   (func $func42 (result i32)
@@ -3834,7 +3727,7 @@
       br_table $label0
       i32.const 2
       i32.const 3
-      call_indirect (type $type8)
+      call_indirect (param i32 i32 i32) (result i32)
     end $label0
   )
   (func $func43 (result i32)
@@ -3845,7 +3738,7 @@
       i32.const 1
       br_table $label0
       i32.const 3
-      call_indirect (type $type8)
+      call_indirect (param i32 i32 i32) (result i32)
     end $label0
   )
   (func $func44 (result i32)
@@ -3856,7 +3749,7 @@
       i32.const 23
       i32.const 1
       br_table $label0
-      call_indirect (type $type8)
+      call_indirect (param i32 i32 i32) (result i32)
     end $label0
   )
   (func $func45 (result i32)
@@ -4114,13 +4007,6 @@
   )
 )
 (module
-  (type $type0 (func (param i32 i32)))
-  (type $type1 (func (param i32 i64)))
-  (type $type2 (func (param i32) (result i32)))
-  (type $type3 (func (param i32) (result i64)))
-  (type $type4 (func (param i64) (result i64)))
-  (type $type5 (func (param f32) (result f32)))
-  (type $type6 (func (param f64) (result f64)))
   (memory $memory0 1)
   (export "i32_load16_s" (func $func6))
   (export "i32_load16_u" (func $func7))
@@ -4343,13 +4229,6 @@
   )
 )
 (module
-  (type $type0 (func (param i32 i32)))
-  (type $type1 (func (param i32 i64)))
-  (type $type2 (func (param i32) (result i32)))
-  (type $type3 (func (param i32) (result i64)))
-  (type $type4 (func (param i64) (result i64)))
-  (type $type5 (func (param f32) (result f32)))
-  (type $type6 (func (param f64) (result f64)))
   (memory $memory0 1)
   (export "i32_load16_s" (func $func6))
   (export "i32_load16_u" (func $func7))
@@ -4572,20 +4451,17 @@
   )
 )
 (module
-  (type $type0 (func))
   (export "a" (func $func0))
   (func $func0
   )
 )
 (module
-  (type $type0 (func))
   (export "a" (func $func0))
   (export "b" (func $func0))
   (func $func0
   )
 )
 (module
-  (type $type0 (func))
   (export "a" (func $func0))
   (export "b" (func $func1))
   (func $func0
@@ -4594,43 +4470,36 @@
   )
 )
 (module
-  (type $type0 (func))
   (export "a" (func $func0))
   (func $func0
   )
 )
 (module
-  (type $type0 (func))
   (export "a" (func $func0))
   (func $func0
   )
 )
 (module
-  (type $type0 (func))
   (export "a" (func $func0))
   (func $func0
   )
 )
 (module
-  (type $type0 (func))
   (export "a" (func $func0))
   (func $func0
   )
 )
 (module
-  (type $type0 (func))
   (export "a" (func $func0))
   (func $func0
   )
 )
 (module
-  (type $type0 (func))
   (export "a" (func $func0))
   (func $func0
   )
 )
 (module
-  (type $type0 (func (param i32) (result i32)))
   (export "e" (func $func0))
   (func $func0 (param $var0 i32) (result i32)
     local.get $var0
@@ -4805,18 +4674,6 @@
   (export "a" (memory $memory0))
 )
 (module
-  (type $type0 (func (param i32) (result i64)))
-  (type $type1 (func (param i64) (result i32)))
-  (type $type2 (func (param f32) (result i32)))
-  (type $type3 (func (param f64) (result i32)))
-  (type $type4 (func (param f32) (result i64)))
-  (type $type5 (func (param f64) (result i64)))
-  (type $type6 (func (param i32) (result f32)))
-  (type $type7 (func (param i64) (result f32)))
-  (type $type8 (func (param i32) (result f64)))
-  (type $type9 (func (param i64) (result f64)))
-  (type $type10 (func (param f32) (result f64)))
-  (type $type11 (func (param f64) (result f32)))
   (export "i64.extend_s_i32" (func $func0))
   (export "i64.extend_u_i32" (func $func1))
   (export "i32.wrap_i64" (func $func2))
@@ -4944,18 +4801,6 @@
   )
 )
 (module
-  (type $type0 (func (param i32) (result i64)))
-  (type $type1 (func (param i64) (result i32)))
-  (type $type2 (func (param f32) (result i32)))
-  (type $type3 (func (param f64) (result i32)))
-  (type $type4 (func (param f32) (result i64)))
-  (type $type5 (func (param f64) (result i64)))
-  (type $type6 (func (param i32) (result f32)))
-  (type $type7 (func (param i64) (result f32)))
-  (type $type8 (func (param i32) (result f64)))
-  (type $type9 (func (param i64) (result f64)))
-  (type $type10 (func (param f32) (result f64)))
-  (type $type11 (func (param f64) (result f32)))
   (export "i64.extend_s_i32" (func $func0))
   (export "i64.extend_u_i32" (func $func1))
   (export "i32.wrap_i64" (func $func2))
@@ -5083,20 +4928,17 @@
   )
 )
 (module
-  (type $type0 (func))
   (export "a" (func $func0))
   (func $func0
   )
 )
 (module
-  (type $type0 (func))
   (export "a" (func $func0))
   (export "b" (func $func0))
   (func $func0
   )
 )
 (module
-  (type $type0 (func))
   (export "a" (func $func0))
   (export "b" (func $func1))
   (func $func0
@@ -5105,43 +4947,36 @@
   )
 )
 (module
-  (type $type0 (func))
   (export "a" (func $func0))
   (func $func0
   )
 )
 (module
-  (type $type0 (func))
   (export "a" (func $func0))
   (func $func0
   )
 )
 (module
-  (type $type0 (func))
   (export "a" (func $func0))
   (func $func0
   )
 )
 (module
-  (type $type0 (func))
   (export "a" (func $func0))
   (func $func0
   )
 )
 (module
-  (type $type0 (func))
   (export "a" (func $func0))
   (func $func0
   )
 )
 (module
-  (type $type0 (func))
   (export "a" (func $func0))
   (func $func0
   )
 )
 (module
-  (type $type0 (func (param i32) (result i32)))
   (export "e" (func $func0))
   (func $func0 (param $var0 i32) (result i32)
     local.get $var0
@@ -5316,15 +5151,6 @@
   (export "a" (memory $memory0))
 )
 (module
-  (type $type0 (func))
-  (type $type1 (func (result i32)))
-  (type $type2 (func (result i64)))
-  (type $type3 (func (result f32)))
-  (type $type4 (func (result f64)))
-  (type $type5 (func (param i32) (result i32)))
-  (type $type6 (func (param i32 i32) (result i32)))
-  (type $type7 (func (param i32 i32 i32) (result i32)))
-  (type $type8 (func (param i32 i32 i32) (result i32)))
   (table $table0 1 1 anyfunc)
   (memory $memory0 1)
   (export "type-i32" (func $func1))
@@ -5820,7 +5646,7 @@
       i32.const 1
       i32.const 2
       i32.const 3
-      call_indirect (type $type8)
+      call_indirect (param i32 i32 i32) (result i32)
     end $label0
   )
   (func $func42 (result i32)
@@ -5831,7 +5657,7 @@
       br_table $label0
       i32.const 2
       i32.const 3
-      call_indirect (type $type8)
+      call_indirect (param i32 i32 i32) (result i32)
     end $label0
   )
   (func $func43 (result i32)
@@ -5842,7 +5668,7 @@
       i32.const 1
       br_table $label0
       i32.const 3
-      call_indirect (type $type8)
+      call_indirect (param i32 i32 i32) (result i32)
     end $label0
   )
   (func $func44 (result i32)
@@ -5853,7 +5679,7 @@
       i32.const 23
       i32.const 1
       br_table $label0
-      call_indirect (type $type8)
+      call_indirect (param i32 i32 i32) (result i32)
     end $label0
   )
   (func $func45 (result i32)
@@ -6111,8 +5937,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32 f32) (result f32)))
-  (type $type1 (func (param f32) (result f32)))
   (export "add" (func $func0))
   (export "sub" (func $func1))
   (export "mul" (func $func2))
@@ -6192,8 +6016,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32 f32) (result f32)))
-  (type $type1 (func (param f32) (result f32)))
   (export "add" (func $func0))
   (export "sub" (func $func1))
   (export "mul" (func $func2))
@@ -6273,7 +6095,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32 f32) (result i32)))
   (export "eq" (func $func0))
   (export "ne" (func $func1))
   (export "lt" (func $func2))
@@ -6312,7 +6133,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32 f32) (result i32)))
   (export "eq" (func $func0))
   (export "ne" (func $func1))
   (export "lt" (func $func2))
@@ -6351,8 +6171,6 @@
   )
 )
 (module
-  (type $type0 (func (param f64 f64) (result f64)))
-  (type $type1 (func (param f64) (result f64)))
   (export "add" (func $func0))
   (export "sub" (func $func1))
   (export "mul" (func $func2))
@@ -6432,7 +6250,6 @@
   )
 )
 (module
-  (type $type0 (func (param i64) (result i64)))
   (export "fac-rec" (func $func0))
   (export "fac-rec-named" (func $func1))
   (export "fac-iter" (func $func2))
@@ -6556,8 +6373,6 @@
   )
 )
 (module
-  (type $type0 (func (param f64 f64) (result f64)))
-  (type $type1 (func (param f64) (result f64)))
   (export "add" (func $func0))
   (export "sub" (func $func1))
   (export "mul" (func $func2))
@@ -6637,7 +6452,6 @@
   )
 )
 (module
-  (type $type0 (func (param i64) (result i64)))
   (export "fac-rec" (func $func0))
   (export "fac-rec-named" (func $func1))
   (export "fac-iter" (func $func2))
@@ -6761,7 +6575,6 @@
   )
 )
 (module
-  (type $type0 (func (param f64 f64) (result i32)))
   (export "eq" (func $func0))
   (export "ne" (func $func1))
   (export "lt" (func $func2))
@@ -6800,8 +6613,6 @@
   )
 )
 (module
-  (type $type0 (func (result i32)))
-  (type $type1 (func (result i64)))
   (export "f32.nan" (func $func0))
   (export "f32.positive_nan" (func $func1))
   (export "f32.negative_nan" (func $func2))
@@ -7104,8 +6915,6 @@
   )
 )
 (module
-  (type $type0 (func (result i32)))
-  (type $type1 (func (result i64)))
   (export "f32.nan" (func $func0))
   (export "f32.positive_nan" (func $func1))
   (export "f32.negative_nan" (func $func2))
@@ -7408,9 +7217,6 @@
   )
 )
 (module
-  (type $type0 (func (result f32)))
-  (type $type1 (func (result i32)))
-  (type $type2 (func))
   (memory $memory0 1 1)
   (export "f32.load" (func $func0))
   (export "i32.load" (func $func1))
@@ -7445,9 +7251,6 @@
   )
 )
 (module
-  (type $type0 (func (result f64)))
-  (type $type1 (func (result i64)))
-  (type $type2 (func))
   (memory $memory0 1 1)
   (export "f64.load" (func $func0))
   (export "i64.load" (func $func1))
@@ -7482,9 +7285,6 @@
   )
 )
 (module
-  (type $type0 (func (result f32)))
-  (type $type1 (func (result i32)))
-  (type $type2 (func))
   (memory $memory0 1 1)
   (export "f32.load" (func $func0))
   (export "i32.load" (func $func1))
@@ -7519,9 +7319,6 @@
   )
 )
 (module
-  (type $type0 (func (result f64)))
-  (type $type1 (func (result i64)))
-  (type $type2 (func))
   (memory $memory0 1 1)
   (export "f64.load" (func $func0))
   (export "i64.load" (func $func1))
@@ -7556,9 +7353,6 @@
   )
 )
 (module
-  (type $type0 (func (result f32)))
-  (type $type1 (func (result i32)))
-  (type $type2 (func))
   (memory $memory0 1 1)
   (export "f32.load" (func $func0))
   (export "i32.load" (func $func1))
@@ -7593,9 +7387,6 @@
   )
 )
 (module
-  (type $type0 (func (result f64)))
-  (type $type1 (func (result i64)))
-  (type $type2 (func))
   (memory $memory0 1 1)
   (export "f64.load" (func $func0))
   (export "i64.load" (func $func1))
@@ -7630,7 +7421,6 @@
   )
 )
 (module
-  (type $type0 (func (param f64 f64) (result i32)))
   (export "eq" (func $func0))
   (export "ne" (func $func1))
   (export "lt" (func $func2))
@@ -7669,9 +7459,6 @@
   )
 )
 (module
-  (type $type0 (func (result f32)))
-  (type $type1 (func (result i32)))
-  (type $type2 (func))
   (memory $memory0 1 1)
   (export "f32.load" (func $func0))
   (export "i32.load" (func $func1))
@@ -7706,9 +7493,6 @@
   )
 )
 (module
-  (type $type0 (func (result f64)))
-  (type $type1 (func (result i64)))
-  (type $type2 (func))
   (memory $memory0 1 1)
   (export "f64.load" (func $func0))
   (export "i64.load" (func $func1))
@@ -7743,9 +7527,6 @@
   )
 )
 (module
-  (type $type0 (func (result f32)))
-  (type $type1 (func (result i32)))
-  (type $type2 (func))
   (memory $memory0 1 1)
   (export "f32.load" (func $func0))
   (export "i32.load" (func $func1))
@@ -7780,9 +7561,6 @@
   )
 )
 (module
-  (type $type0 (func (result f64)))
-  (type $type1 (func (result i64)))
-  (type $type2 (func))
   (memory $memory0 1 1)
   (export "f64.load" (func $func0))
   (export "i64.load" (func $func1))
@@ -7817,9 +7595,6 @@
   )
 )
 (module
-  (type $type0 (func (result f32)))
-  (type $type1 (func (result i32)))
-  (type $type2 (func))
   (memory $memory0 1 1)
   (export "f32.load" (func $func0))
   (export "i32.load" (func $func1))
@@ -7854,9 +7629,6 @@
   )
 )
 (module
-  (type $type0 (func (result f64)))
-  (type $type1 (func (result i64)))
-  (type $type2 (func))
   (memory $memory0 1 1)
   (export "f64.load" (func $func0))
   (export "i64.load" (func $func1))
@@ -7891,7 +7663,6 @@
   )
 )
 (module
-  (type $type0 (func (param i32) (result i32)))
   (export "even" (func $func0))
   (export "odd" (func $func1))
   (func $func0 (param $var0 i32) (result i32)
@@ -7922,7 +7693,6 @@
   )
 )
 (module
-  (type $type0 (func (param i32) (result i32)))
   (export "even" (func $func0))
   (export "odd" (func $func1))
   (func $func0 (param $var0 i32) (result i32)
@@ -7953,25 +7723,6 @@
   )
 )
 (module
-  (type $type0 (func))
-  (type $type1 (func (param i32)))
-  (type $type2 (func (param i32 f64 i64)))
-  (type $type3 (func (param i32 f64)))
-  (type $type4 (func (param i32 f32 i64 i32 f64)))
-  (type $type5 (func (result i32)))
-  (type $type6 (func (param i32 f32 i64 i32) (result i32)))
-  (type $type7 (func (result i64)))
-  (type $type8 (func (result f32)))
-  (type $type9 (func (result f64)))
-  (type $type10 (func (param i32 i32) (result i32)))
-  (type $type11 (func (param i64 i64) (result i64)))
-  (type $type12 (func (param f32 f32) (result f32)))
-  (type $type13 (func (param f64 f64) (result f64)))
-  (type $type14 (func (param f32 i32 i64 i32 f64 i32) (result f64)))
-  (type $type15 (func (param i32) (result i32)))
-  (type $type16 (func (param f64 i64 f64 i64 f64 i64 f32 i32)))
-  (type $type17 (func))
-  (type $type18 (func (param f64 i64 f64 i64 f64 i64 f32 i32)))
   (table $table0 5 5 anyfunc)
   (export "f" (func $func2))
   (export "g" (func $func4))
@@ -8331,9 +8082,9 @@
   )
   (func $func76
     i32.const 1
-    call_indirect (type $type0)
+    call_indirect
     i32.const 4
-    call_indirect (type $type0)
+    call_indirect
   )
   (func $func77
     f64.const 0.0
@@ -8345,7 +8096,7 @@
     f32.const 0.0
     i32.const 0
     i32.const 0
-    call_indirect (type $type16)
+    call_indirect (param f64 i64 f64 i64 f64 i64 f32 i32)
     f64.const 0.0
     i64.const 0
     f64.const 0.0
@@ -8355,7 +8106,7 @@
     f32.const 0.0
     i32.const 0
     i32.const 2
-    call_indirect (type $type16)
+    call_indirect (param f64 i64 f64 i64 f64 i64 f32 i32)
     f64.const 0.0
     i64.const 0
     f64.const 0.0
@@ -8365,11 +8116,11 @@
     f32.const 0.0
     i32.const 0
     i32.const 3
-    call_indirect (type $type16)
+    call_indirect (param f64 i64 f64 i64 f64 i64 f32 i32)
   )
   (func $func78
     i32.const 1
-    call_indirect (type $type17)
+    call_indirect
   )
   (func $func79
     f64.const 0.0
@@ -8381,29 +8132,10 @@
     f32.const 0.0
     i32.const 0
     i32.const 0
-    call_indirect (type $type18)
+    call_indirect (param f64 i64 f64 i64 f64 i64 f32 i32)
   )
 )
 (module
-  (type $type0 (func))
-  (type $type1 (func (param i32)))
-  (type $type2 (func (param i32 f64 i64)))
-  (type $type3 (func (param i32 f64)))
-  (type $type4 (func (param i32 f32 i64 i32 f64)))
-  (type $type5 (func (result i32)))
-  (type $type6 (func (param i32 f32 i64 i32) (result i32)))
-  (type $type7 (func (result i64)))
-  (type $type8 (func (result f32)))
-  (type $type9 (func (result f64)))
-  (type $type10 (func (param i32 i32) (result i32)))
-  (type $type11 (func (param i64 i64) (result i64)))
-  (type $type12 (func (param f32 f32) (result f32)))
-  (type $type13 (func (param f64 f64) (result f64)))
-  (type $type14 (func (param f32 i32 i64 i32 f64 i32) (result f64)))
-  (type $type15 (func (param i32) (result i32)))
-  (type $type16 (func (param f64 i64 f64 i64 f64 i64 f32 i32)))
-  (type $type17 (func))
-  (type $type18 (func (param f64 i64 f64 i64 f64 i64 f32 i32)))
   (table $table0 5 5 anyfunc)
   (export "f" (func $func2))
   (export "g" (func $func4))
@@ -8763,9 +8495,9 @@
   )
   (func $func76
     i32.const 1
-    call_indirect (type $type0)
+    call_indirect
     i32.const 4
-    call_indirect (type $type0)
+    call_indirect
   )
   (func $func77
     f64.const 0.0
@@ -8777,7 +8509,7 @@
     f32.const 0.0
     i32.const 0
     i32.const 0
-    call_indirect (type $type16)
+    call_indirect (param f64 i64 f64 i64 f64 i64 f32 i32)
     f64.const 0.0
     i64.const 0
     f64.const 0.0
@@ -8787,7 +8519,7 @@
     f32.const 0.0
     i32.const 0
     i32.const 2
-    call_indirect (type $type16)
+    call_indirect (param f64 i64 f64 i64 f64 i64 f32 i32)
     f64.const 0.0
     i64.const 0
     f64.const 0.0
@@ -8797,11 +8529,11 @@
     f32.const 0.0
     i32.const 0
     i32.const 3
-    call_indirect (type $type16)
+    call_indirect (param f64 i64 f64 i64 f64 i64 f32 i32)
   )
   (func $func78
     i32.const 1
-    call_indirect (type $type17)
+    call_indirect
   )
   (func $func79
     f64.const 0.0
@@ -8813,17 +8545,10 @@
     f32.const 0.0
     i32.const 0
     i32.const 0
-    call_indirect (type $type18)
+    call_indirect (param f64 i64 f64 i64 f64 i64 f32 i32)
   )
 )
 (module
-  (type $type0 (func))
-  (type $type1 (func))
-  (type $type2 (func))
-  (type $type3 (func (result i32)))
-  (type $type4 (func (result i32)))
-  (type $type5 (func (param i32) (result i32)))
-  (type $type6 (func (param i32)))
   (import "spectest" "print" (func $import0 (param i32)))
   (export "one" (func $func3))
   (export "two" (func $func4))
@@ -8852,9 +8577,6 @@
   )
 )
 (module
-  (type $type0 (func (result i32)))
-  (type $type1 (func (result i32)))
-  (type $type2 (func (param i32) (result i32)))
   (table $table0 7 7 anyfunc)
   (export "callt" (func $func5))
   (export "callu" (func $func6))
@@ -8876,16 +8598,14 @@
   )
   (func $func5 (param $var0 i32) (result i32)
     local.get $var0
-    call_indirect (type $type0)
+    call_indirect (result i32)
   )
   (func $func6 (param $var0 i32) (result i32)
     local.get $var0
-    call_indirect (type $type1)
+    call_indirect (result i32)
   )
 )
 (module
-  (type $type0 (func (result i32)))
-  (type $type1 (func (param i32) (result i32)))
   (table $table0 2 2 anyfunc)
   (export "callt" (func $func2))
   (elem (i32.const 0) $func0 $func1)
@@ -8897,17 +8617,10 @@
   )
   (func $func2 (param $var0 i32) (result i32)
     local.get $var0
-    call_indirect (type $type0)
+    call_indirect (result i32)
   )
 )
 (module
-  (type $type0 (func))
-  (type $type1 (func))
-  (type $type2 (func))
-  (type $type3 (func (result i32)))
-  (type $type4 (func (result i32)))
-  (type $type5 (func (param i32) (result i32)))
-  (type $type6 (func (param i32)))
   (import "spectest" "print" (func $import0 (param i32)))
   (export "one" (func $func3))
   (export "two" (func $func4))
@@ -8936,9 +8649,6 @@
   )
 )
 (module
-  (type $type0 (func (result i32)))
-  (type $type1 (func (result i32)))
-  (type $type2 (func (param i32) (result i32)))
   (table $table0 7 7 anyfunc)
   (export "callt" (func $func5))
   (export "callu" (func $func6))
@@ -8960,16 +8670,14 @@
   )
   (func $func5 (param $var0 i32) (result i32)
     local.get $var0
-    call_indirect (type $type0)
+    call_indirect (result i32)
   )
   (func $func6 (param $var0 i32) (result i32)
     local.get $var0
-    call_indirect (type $type1)
+    call_indirect (result i32)
   )
 )
 (module
-  (type $type0 (func (result i32)))
-  (type $type1 (func (param i32) (result i32)))
   (table $table0 2 2 anyfunc)
   (export "callt" (func $func2))
   (elem (i32.const 0) $func0 $func1)
@@ -8981,20 +8689,10 @@
   )
   (func $func2 (param $var0 i32) (result i32)
     local.get $var0
-    call_indirect (type $type0)
+    call_indirect (result i32)
   )
 )
 (module
-  (type $type0 (func (result i32)))
-  (type $type1 (func (result i64)))
-  (type $type2 (func (result f32)))
-  (type $type3 (func (result f64)))
-  (type $type4 (func (param i32) (result i32)))
-  (type $type5 (func (param i64) (result i64)))
-  (type $type6 (func (param f32) (result f32)))
-  (type $type7 (func (param f64) (result f64)))
-  (type $type8 (func (param i64 f32 f64 i32 i32)))
-  (type $type9 (func (param i64 f32 f64 i32 i32) (result f64)))
   (export "type-local-i32" (func $func0))
   (export "type-local-i64" (func $func1))
   (export "type-local-f32" (func $func2))
@@ -9098,16 +8796,6 @@
   )
 )
 (module
-  (type $type0 (func (result i32)))
-  (type $type1 (func (result i64)))
-  (type $type2 (func (result f32)))
-  (type $type3 (func (result f64)))
-  (type $type4 (func (param i32) (result i32)))
-  (type $type5 (func (param i64) (result i64)))
-  (type $type6 (func (param f32) (result f32)))
-  (type $type7 (func (param f64) (result f64)))
-  (type $type8 (func (param i64 f32 f64 i32 i32)))
-  (type $type9 (func (param i64 f32 f64 i32 i32) (result f64)))
   (export "type-local-i32" (func $func0))
   (export "type-local-i64" (func $func1))
   (export "type-local-f32" (func $func2))
@@ -9211,10 +8899,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32 f32) (result f32)))
-  (type $type1 (func (param f32) (result f32)))
-  (type $type2 (func (param f64 f64) (result f64)))
-  (type $type3 (func (param f64) (result f64)))
   (export "f32.add" (func $func0))
   (export "f32.sub" (func $func1))
   (export "f32.mul" (func $func2))
@@ -9371,14 +9055,6 @@
   )
 )
 (module
-  (type $type0 (func (result i32)))
-  (type $type1 (func (result i64)))
-  (type $type2 (func (param i32)))
-  (type $type3 (func (param i64)))
-  (type $type4 (func (result f32)))
-  (type $type5 (func (result f64)))
-  (type $type6 (func (param f32)))
-  (type $type7 (func (param f64)))
   (global $global0 i32 (i32.const -2))
   (global $global1 f32 (f32.const -3))
   (global $global2 f64 (f64.const -4))
@@ -9441,14 +9117,6 @@
   )
 )
 (module
-  (type $type0 (func (result i32)))
-  (type $type1 (func (result i64)))
-  (type $type2 (func (param i32)))
-  (type $type3 (func (param i64)))
-  (type $type4 (func (result f32)))
-  (type $type5 (func (result f64)))
-  (type $type6 (func (param f32)))
-  (type $type7 (func (param f64)))
   (global $global0 i32 (i32.const -2))
   (global $global1 f32 (f32.const -3))
   (global $global2 f64 (f64.const -4))
@@ -9511,10 +9179,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32 f32) (result f32)))
-  (type $type1 (func (param f32) (result f32)))
-  (type $type2 (func (param f64 f64) (result f64)))
-  (type $type3 (func (param f64) (result f64)))
   (export "f32.add" (func $func0))
   (export "f32.sub" (func $func1))
   (export "f32.mul" (func $func2))
@@ -9671,8 +9335,6 @@
   )
 )
 (module
-  (type $type0 (func (param i32 i32) (result i32)))
-  (type $type1 (func (param i32) (result i32)))
   (export "add" (func $func0))
   (export "sub" (func $func1))
   (export "mul" (func $func2))
@@ -9845,8 +9507,6 @@
   )
 )
 (module
-  (type $type0 (func (param i32 i32) (result i32)))
-  (type $type1 (func (param i32) (result i32)))
   (export "add" (func $func0))
   (export "sub" (func $func1))
   (export "mul" (func $func2))
@@ -10019,10 +9679,6 @@
   )
 )
 (module
-  (type $type0 (func (param i64 i64) (result i64)))
-  (type $type1 (func (param i64) (result i64)))
-  (type $type2 (func (param i64) (result i32)))
-  (type $type3 (func (param i64 i64) (result i32)))
   (export "add" (func $func0))
   (export "sub" (func $func1))
   (export "mul" (func $func2))
@@ -10195,7 +9851,6 @@
   )
 )
 (module
-  (type $type0 (func (param f64 f64 f64) (result f64)))
   (export "f64.no_contraction" (func $func0))
   (func $func0 (param $var0 f64) (param $var1 f64) (param $var2 f64) (result f64)
     local.get $var0
@@ -10206,8 +9861,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32 f32 f32) (result f32)))
-  (type $type1 (func (param f64 f64 f64) (result f64)))
   (export "f32.no_fma" (func $func0))
   (export "f64.no_fma" (func $func1))
   (func $func0 (param $var0 f32) (param $var1 f32) (param $var2 f32) (result f32)
@@ -10226,8 +9879,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32) (result f32)))
-  (type $type1 (func (param f64) (result f64)))
   (export "f32.no_fold_add_zero" (func $func0))
   (export "f64.no_fold_add_zero" (func $func1))
   (func $func0 (param $var0 f32) (result f32)
@@ -10242,8 +9893,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32) (result f32)))
-  (type $type1 (func (param f64) (result f64)))
   (export "f32.no_fold_zero_sub" (func $func0))
   (export "f64.no_fold_zero_sub" (func $func1))
   (func $func0 (param $var0 f32) (result f32)
@@ -10258,8 +9907,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32) (result f32)))
-  (type $type1 (func (param f64) (result f64)))
   (export "f32.no_fold_sub_zero" (func $func0))
   (export "f64.no_fold_sub_zero" (func $func1))
   (func $func0 (param $var0 f32) (result f32)
@@ -10274,8 +9921,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32) (result f32)))
-  (type $type1 (func (param f64) (result f64)))
   (export "f32.no_fold_mul_zero" (func $func0))
   (export "f64.no_fold_mul_zero" (func $func1))
   (func $func0 (param $var0 f32) (result f32)
@@ -10290,8 +9935,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32) (result f32)))
-  (type $type1 (func (param f64) (result f64)))
   (export "f32.no_fold_mul_one" (func $func0))
   (export "f64.no_fold_mul_one" (func $func1))
   (func $func0 (param $var0 f32) (result f32)
@@ -10306,8 +9949,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32) (result f32)))
-  (type $type1 (func (param f64) (result f64)))
   (export "f32.no_fold_zero_div" (func $func0))
   (export "f64.no_fold_zero_div" (func $func1))
   (func $func0 (param $var0 f32) (result f32)
@@ -10322,8 +9963,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32) (result f32)))
-  (type $type1 (func (param f64) (result f64)))
   (export "f32.no_fold_div_one" (func $func0))
   (export "f64.no_fold_div_one" (func $func1))
   (func $func0 (param $var0 f32) (result f32)
@@ -10338,8 +9977,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32) (result f32)))
-  (type $type1 (func (param f64) (result f64)))
   (export "f32.no_fold_div_neg1" (func $func0))
   (export "f64.no_fold_div_neg1" (func $func1))
   (func $func0 (param $var0 f32) (result f32)
@@ -10354,8 +9991,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32) (result f32)))
-  (type $type1 (func (param f64) (result f64)))
   (export "f32.no_fold_neg0_sub" (func $func0))
   (export "f64.no_fold_neg0_sub" (func $func1))
   (func $func0 (param $var0 f32) (result f32)
@@ -10370,8 +10005,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32) (result f32)))
-  (type $type1 (func (param f64) (result f64)))
   (export "f32.no_fold_neg1_mul" (func $func0))
   (export "f64.no_fold_neg1_mul" (func $func1))
   (func $func0 (param $var0 f32) (result f32)
@@ -10386,8 +10019,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32) (result i32)))
-  (type $type1 (func (param f64) (result i32)))
   (export "f32.no_fold_eq_self" (func $func0))
   (export "f64.no_fold_eq_self" (func $func1))
   (func $func0 (param $var0 f32) (result i32)
@@ -10402,8 +10033,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32) (result i32)))
-  (type $type1 (func (param f64) (result i32)))
   (export "f32.no_fold_ne_self" (func $func0))
   (export "f64.no_fold_ne_self" (func $func1))
   (func $func0 (param $var0 f32) (result i32)
@@ -10418,8 +10047,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32) (result f32)))
-  (type $type1 (func (param f64) (result f64)))
   (export "f32.no_fold_sub_self" (func $func0))
   (export "f64.no_fold_sub_self" (func $func1))
   (func $func0 (param $var0 f32) (result f32)
@@ -10434,8 +10061,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32) (result f32)))
-  (type $type1 (func (param f64) (result f64)))
   (export "f32.no_fold_div_3" (func $func0))
   (export "f64.no_fold_div_3" (func $func1))
   (func $func0 (param $var0 f32) (result f32)
@@ -10450,8 +10075,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32 f32 f32) (result f32)))
-  (type $type1 (func (param f64 f64 f64) (result f64)))
   (export "f32.no_factor" (func $func0))
   (export "f64.no_factor" (func $func1))
   (func $func0 (param $var0 f32) (param $var1 f32) (param $var2 f32) (result f32)
@@ -10474,8 +10097,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32 f32 f32) (result f32)))
-  (type $type1 (func (param f64 f64 f64) (result f64)))
   (export "f32.no_distribute" (func $func0))
   (export "f64.no_distribute" (func $func1))
   (func $func0 (param $var0 f32) (param $var1 f32) (param $var2 f32) (result f32)
@@ -10494,8 +10115,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32 f32 f32) (result f32)))
-  (type $type1 (func (param f64 f64 f64) (result f64)))
   (export "f32.no_regroup_div_mul" (func $func0))
   (export "f64.no_regroup_div_mul" (func $func1))
   (func $func0 (param $var0 f32) (param $var1 f32) (param $var2 f32) (result f32)
@@ -10514,8 +10133,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32 f32 f32) (result f32)))
-  (type $type1 (func (param f64 f64 f64) (result f64)))
   (export "f32.no_regroup_mul_div" (func $func0))
   (export "f64.no_regroup_mul_div" (func $func1))
   (func $func0 (param $var0 f32) (param $var1 f32) (param $var2 f32) (result f32)
@@ -10534,8 +10151,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32 f32 f32 f32) (result f32)))
-  (type $type1 (func (param f64 f64 f64 f64) (result f64)))
   (export "f32.no_reassociate_add" (func $func0))
   (export "f64.no_reassociate_add" (func $func1))
   (func $func0 (param $var0 f32) (param $var1 f32) (param $var2 f32) (param $var3 f32) (result f32)
@@ -10558,8 +10173,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32 f32 f32 f32) (result f32)))
-  (type $type1 (func (param f64 f64 f64 f64) (result f64)))
   (export "f32.no_reassociate_mul" (func $func0))
   (export "f64.no_reassociate_mul" (func $func1))
   (func $func0 (param $var0 f32) (param $var1 f32) (param $var2 f32) (param $var3 f32) (result f32)
@@ -10582,8 +10195,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32) (result f32)))
-  (type $type1 (func (param f64) (result f64)))
   (export "f32.no_fold_div_0" (func $func0))
   (export "f64.no_fold_div_0" (func $func1))
   (func $func0 (param $var0 f32) (result f32)
@@ -10598,8 +10209,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32) (result f32)))
-  (type $type1 (func (param f64) (result f64)))
   (export "f32.no_fold_div_neg0" (func $func0))
   (export "f64.no_fold_div_neg0" (func $func1))
   (func $func0 (param $var0 f32) (result f32)
@@ -10614,8 +10223,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32 f32) (result f32)))
-  (type $type1 (func (param f64 f64) (result f64)))
   (export "f32.no_fold_to_hypot" (func $func0))
   (export "f64.no_fold_to_hypot" (func $func1))
   (func $func0 (param $var0 f32) (param $var1 f32) (result f32)
@@ -10640,7 +10247,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32) (result f32)))
   (export "f32.no_approximate_reciprocal" (func $func0))
   (func $func0 (param $var0 f32) (result f32)
     f32.const 1
@@ -10649,8 +10255,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32) (result f32)))
-  (type $type1 (func (param f64) (result f64)))
   (export "f32.no_approximate_reciprocal_sqrt" (func $func0))
   (export "f64.no_fuse_reciprocal_sqrt" (func $func1))
   (func $func0 (param $var0 f32) (result f32)
@@ -10667,7 +10271,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32) (result f32)))
   (export "f32.no_approximate_sqrt_reciprocal" (func $func0))
   (func $func0 (param $var0 f32) (result f32)
     f32.const 1
@@ -10677,8 +10280,6 @@
   )
 )
 (module
-  (type $type0 (func (param i32) (result i32)))
-  (type $type1 (func (param i64) (result i64)))
   (export "i32.no_fold_f32_s" (func $func0))
   (export "i32.no_fold_f32_u" (func $func1))
   (export "i64.no_fold_f64_s" (func $func2))
@@ -10705,8 +10306,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32 f32) (result f32)))
-  (type $type1 (func (param f64 f64) (result f64)))
   (export "f32.no_fold_add_sub" (func $func0))
   (export "f64.no_fold_add_sub" (func $func1))
   (func $func0 (param $var0 f32) (param $var1 f32) (result f32)
@@ -10725,8 +10324,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32 f32) (result f32)))
-  (type $type1 (func (param f64 f64) (result f64)))
   (export "f32.no_fold_sub_add" (func $func0))
   (export "f64.no_fold_sub_add" (func $func1))
   (func $func0 (param $var0 f32) (param $var1 f32) (result f32)
@@ -10745,8 +10342,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32 f32) (result f32)))
-  (type $type1 (func (param f64 f64) (result f64)))
   (export "f32.no_fold_mul_div" (func $func0))
   (export "f64.no_fold_mul_div" (func $func1))
   (func $func0 (param $var0 f32) (param $var1 f32) (result f32)
@@ -10765,8 +10360,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32 f32) (result f32)))
-  (type $type1 (func (param f64 f64) (result f64)))
   (export "f32.no_fold_div_mul" (func $func0))
   (export "f64.no_fold_div_mul" (func $func1))
   (func $func0 (param $var0 f32) (param $var1 f32) (result f32)
@@ -10785,7 +10378,6 @@
   )
 )
 (module
-  (type $type0 (func (param f64) (result f64)))
   (export "no_fold_demote_promote" (func $func0))
   (func $func0 (param $var0 f64) (result f64)
     local.get $var0
@@ -10794,7 +10386,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32) (result f32)))
   (export "no_fold_promote_demote" (func $func0))
   (func $func0 (param $var0 f32) (result f32)
     local.get $var0
@@ -10803,8 +10394,6 @@
   )
 )
 (module
-  (type $type0 (func (param f64 f32) (result f32)))
-  (type $type1 (func (param f32 f64) (result f32)))
   (export "no_demote_mixed_add" (func $func0))
   (export "no_demote_mixed_add_commuted" (func $func1))
   (func $func0 (param $var0 f64) (param $var1 f32) (result f32)
@@ -10823,7 +10412,6 @@
   )
 )
 (module
-  (type $type0 (func (param f64 f32) (result f32)))
   (export "no_demote_mixed_sub" (func $func0))
   (func $func0 (param $var0 f64) (param $var1 f32) (result f32)
     local.get $var0
@@ -10834,8 +10422,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32) (result f32)))
-  (type $type1 (func (param f64) (result f64)))
   (export "f32.i32.no_fold_trunc_s_convert_s" (func $func0))
   (export "f32.i32.no_fold_trunc_u_convert_s" (func $func1))
   (export "f32.i32.no_fold_trunc_s_convert_u" (func $func2))
@@ -10934,8 +10520,6 @@
   )
 )
 (module
-  (type $type0 (func (param i32 f32)))
-  (type $type1 (func (param i32) (result f32)))
   (memory $memory0 1 1)
   (export "init" (func $func0))
   (export "run" (func $func1))
@@ -10972,8 +10556,6 @@
   )
 )
 (module
-  (type $type0 (func (param i32 f64)))
-  (type $type1 (func (param i32) (result f64)))
   (memory $memory0 1 1)
   (export "init" (func $func0))
   (export "run" (func $func1))
@@ -11010,8 +10592,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32 f32) (result i32)))
-  (type $type1 (func (param f64 f64) (result i32)))
   (export "f32.ult" (func $func0))
   (export "f32.ule" (func $func1))
   (export "f32.ugt" (func $func2))
@@ -11070,8 +10650,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32 f32) (result f32)))
-  (type $type1 (func (param f64 f64) (result f64)))
   (export "f32.no_fold_lt_select" (func $func0))
   (export "f32.no_fold_le_select" (func $func1))
   (export "f32.no_fold_gt_select" (func $func2))
@@ -11146,8 +10724,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32 f32) (result f32)))
-  (type $type1 (func (param f64 f64) (result f64)))
   (export "f32.no_fold_lt_if" (func $func0))
   (export "f32.no_fold_le_if" (func $func1))
   (export "f32.no_fold_gt_if" (func $func2))
@@ -11238,8 +10814,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32) (result f32)))
-  (type $type1 (func (param f64) (result f64)))
   (export "f32.no_fold_lt_select_to_abs" (func $func0))
   (export "f32.no_fold_le_select_to_abs" (func $func1))
   (export "f32.no_fold_gt_select_to_abs" (func $func2))
@@ -11322,8 +10896,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32) (result f32)))
-  (type $type1 (func (param f64) (result f64)))
   (export "f32.no_fold_lt_if_to_abs" (func $func0))
   (export "f32.no_fold_le_if_to_abs" (func $func1))
   (export "f32.no_fold_gt_if_to_abs" (func $func2))
@@ -11422,7 +10994,6 @@
   )
 )
 (module
-  (type $type0 (func (result f32)))
   (export "incorrect_correction" (func $func0))
   (func $func0 (result f32)
     f32.const 1.3329999446868896
@@ -11435,7 +11006,6 @@
   )
 )
 (module
-  (type $type0 (func (result f64)))
   (export "incorrect_correction" (func $func0))
   (func $func0 (result f64)
     f64.const 1.333
@@ -11448,7 +11018,6 @@
   )
 )
 (module
-  (type $type0 (func (result f32)))
   (export "calculate" (func $func0))
   (func $func0 (result f32)
     (local $var0 f32) (local $var1 f32) (local $var2 f32) (local $var3 f32) (local $var4 f32)
@@ -11491,7 +11060,6 @@
   )
 )
 (module
-  (type $type0 (func (result f64)))
   (export "calculate" (func $func0))
   (func $func0 (result f64)
     (local $var0 f64) (local $var1 f64) (local $var2 f64) (local $var3 f64) (local $var4 f64)
@@ -11534,7 +11102,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32) (result f32)))
   (export "llvm_pr26746" (func $func0))
   (func $func0 (param $var0 f32) (result f32)
     f32.const 0.0
@@ -11545,7 +11112,6 @@
   )
 )
 (module
-  (type $type0 (func (param i32) (result f32)))
   (export "llvm_pr27153" (func $func0))
   (func $func0 (param $var0 i32) (result f32)
     local.get $var0
@@ -11557,7 +11123,6 @@
   )
 )
 (module
-  (type $type0 (func (param i32 i32) (result f32)))
   (export "llvm_pr27036" (func $func0))
   (func $func0 (param $var0 i32) (param $var1 i32) (result f32)
     local.get $var0
@@ -11572,9 +11137,6 @@
   )
 )
 (module
-  (type $type0 (func (param f64 f64 f64 f64) (result f64)))
-  (type $type1 (func (param f64 f64 f64) (result f64)))
-  (type $type2 (func (param f32 f32 f32) (result f32)))
   (export "thepast0" (func $func0))
   (export "thepast1" (func $func1))
   (export "thepast2" (func $func2))
@@ -11603,7 +11165,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32) (result f32)))
   (export "inverse" (func $func0))
   (func $func0 (param $var0 f32) (result f32)
     f32.const 1
@@ -11612,8 +11173,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32) (result f32)))
-  (type $type1 (func (param f64) (result f64)))
   (export "f32_sqrt_minus_2" (func $func0))
   (export "f64_sqrt_minus_2" (func $func1))
   (func $func0 (param $var0 f32) (result f32)
@@ -11630,8 +11189,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32) (result f32)))
-  (type $type1 (func (param f64) (result f64)))
   (export "f32.no_fold_recip_recip" (func $func0))
   (export "f64.no_fold_recip_recip" (func $func1))
   (func $func0 (param $var0 f32) (result f32)
@@ -11650,8 +11207,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32 f32) (result f32)))
-  (type $type1 (func (param f64 f64) (result f64)))
   (export "f32.no_algebraic_factoring" (func $func0))
   (export "f64.no_algebraic_factoring" (func $func1))
   (func $func0 (param $var0 f32) (param $var1 f32) (result f32)
@@ -11674,8 +11229,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32 f32) (result f32)))
-  (type $type1 (func (param f64 f64) (result f64)))
   (export "f32.no_algebraic_factoring" (func $func0))
   (export "f64.no_algebraic_factoring" (func $func1))
   (func $func0 (param $var0 f32) (param $var1 f32) (result f32)
@@ -11698,7 +11251,6 @@
   )
 )
 (module
-  (type $type0 (func (param i32 i32) (result f32)))
   (memory $memory0 1 1)
   (export "f32.kahan_sum" (func $func0))
   (export "f32.plain_sum" (func $func1))
@@ -11762,7 +11314,6 @@
   )
 )
 (module
-  (type $type0 (func (param i32 i32) (result f64)))
   (memory $memory0 1 1)
   (export "f64.kahan_sum" (func $func0))
   (export "f64.plain_sum" (func $func1))
@@ -11826,8 +11377,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32 f32) (result f32)))
-  (type $type1 (func (param f64 f64) (result f64)))
   (export "f32.no_fold_neg_sub" (func $func0))
   (export "f64.no_fold_neg_sub" (func $func1))
   (func $func0 (param $var0 f32) (param $var1 f32) (result f32)
@@ -11844,8 +11393,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32) (result f32)))
-  (type $type1 (func (param f64) (result f64)))
   (export "f32.no_fold_add_neg" (func $func0))
   (export "f64.no_fold_add_neg" (func $func1))
   (func $func0 (param $var0 f32) (result f32)
@@ -11862,8 +11409,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32) (result f32)))
-  (type $type1 (func (param f64) (result f64)))
   (export "f32.no_fold_6x_via_add" (func $func0))
   (export "f64.no_fold_6x_via_add" (func $func1))
   (func $func0 (param $var0 f32) (result f32)
@@ -11894,8 +11439,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32 f32 f32) (result f32)))
-  (type $type1 (func (param f64 f64 f64) (result f64)))
   (export "f32.no_fold_div_div" (func $func0))
   (export "f64.no_fold_div_div" (func $func1))
   (func $func0 (param $var0 f32) (param $var1 f32) (param $var2 f32) (result f32)
@@ -11914,8 +11457,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32 f32 f32 f32) (result f32)))
-  (type $type1 (func (param f64 f64 f64 f64) (result f64)))
   (export "f32.no_fold_mul_divs" (func $func0))
   (export "f64.no_fold_mul_divs" (func $func1))
   (func $func0 (param $var0 f32) (param $var1 f32) (param $var2 f32) (param $var3 f32) (result f32)
@@ -11938,8 +11479,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32 f32 f32) (result f32)))
-  (type $type1 (func (param f64 f64 f64) (result f64)))
   (export "f32.no_fold_add_divs" (func $func0))
   (export "f64.no_fold_add_divs" (func $func1))
   (func $func0 (param $var0 f32) (param $var1 f32) (param $var2 f32) (result f32)
@@ -11962,8 +11501,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32) (result f32)))
-  (type $type1 (func (param f64) (result f64)))
   (export "f32.no_fold_sqrt_square" (func $func0))
   (export "f64.no_fold_sqrt_square" (func $func1))
   (func $func0 (param $var0 f32) (result f32)
@@ -11980,8 +11517,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32 f32) (result f32)))
-  (type $type1 (func (param f64 f64) (result f64)))
   (export "f32.no_fold_mul_sqrts" (func $func0))
   (export "f64.no_fold_mul_sqrts" (func $func1))
   (func $func0 (param $var0 f32) (param $var1 f32) (result f32)
@@ -12000,8 +11535,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32 f32) (result f32)))
-  (type $type1 (func (param f64 f64) (result f64)))
   (export "f32.no_fold_div_sqrts" (func $func0))
   (export "f64.no_fold_div_sqrts" (func $func1))
   (func $func0 (param $var0 f32) (param $var1 f32) (result f32)
@@ -12020,8 +11553,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32 f32) (result f32)))
-  (type $type1 (func (param f64 f64) (result f64)))
   (export "f32.no_fold_mul_sqrt_div" (func $func0))
   (export "f64.no_fold_mul_sqrt_div" (func $func1))
   (func $func0 (param $var0 f32) (param $var1 f32) (result f32)
@@ -12042,8 +11573,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32 f32 f32) (result f32)))
-  (type $type1 (func (param f64 f64 f64) (result f64)))
   (export "f32.no_flush_intermediate_subnormal" (func $func0))
   (export "f64.no_flush_intermediate_subnormal" (func $func1))
   (func $func0 (param $var0 f32) (param $var1 f32) (param $var2 f32) (result f32)
@@ -12062,9 +11591,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32 f32) (result i32)))
-  (type $type1 (func (param f64 f64) (result i32)))
-  (type $type2 (func (param f64 f32) (result f32)))
   (export "f32.recoding_eq" (func $func0))
   (export "f32.recoding_le" (func $func1))
   (export "f32.recoding_lt" (func $func2))
@@ -12122,8 +11648,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32 f32 f32) (result i32)))
-  (type $type1 (func (param f64 f64 f64) (result i32)))
   (export "f32.no_extended_precision_div" (func $func0))
   (export "f64.no_extended_precision_div" (func $func1))
   (func $func0 (param $var0 f32) (param $var1 f32) (param $var2 f32) (result i32)
@@ -12142,8 +11666,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32) (result f32)))
-  (type $type1 (func (param f64) (result f64)))
   (export "f32.no_distribute_exact" (func $func0))
   (export "f64.no_distribute_exact" (func $func1))
   (func $func0 (param $var0 f32) (result f32)
@@ -12166,12 +11688,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32) (result f32)))
-  (type $type1 (func (param f32 f32 f32 f32) (result f32)))
-  (type $type2 (func (param f32 f32 f32) (result f32)))
-  (type $type3 (func (param f64) (result f64)))
-  (type $type4 (func (param f64 f64 f64 f64) (result f64)))
-  (type $type5 (func (param f64 f64 f64) (result f64)))
   (export "f32.sqrt" (func $func0))
   (export "f32.xkcd_sqrt_2" (func $func1))
   (export "f32.xkcd_sqrt_3" (func $func2))
@@ -12272,8 +11788,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32 f32) (result f32)))
-  (type $type1 (func (param f64 f64) (result f64)))
   (export "f32.compute_radix" (func $func0))
   (export "f64.compute_radix" (func $func1))
   (func $func0 (param $var0 f32) (param $var1 f32) (result f32)
@@ -12344,8 +11858,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32 f32) (result f32)))
-  (type $type1 (func (param f64 f64) (result f64)))
   (export "f32.no_fold_sub1_mul_add" (func $func0))
   (export "f64.no_fold_sub1_mul_add" (func $func1))
   (func $func0 (param $var0 f32) (param $var1 f32) (result f32)
@@ -12368,8 +11880,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32 f32 f32) (result i32)))
-  (type $type1 (func (param f64 f64 f64) (result i32)))
   (export "f32.no_fold_add_le_monotonicity" (func $func0))
   (export "f32.no_fold_add_ge_monotonicity" (func $func1))
   (export "f64.no_fold_add_le_monotonicity" (func $func2))
@@ -12412,8 +11922,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32 f32) (result i32)))
-  (type $type1 (func (param f64 f64) (result i32)))
   (export "f32.not_lt" (func $func0))
   (export "f32.not_le" (func $func1))
   (export "f32.not_gt" (func $func2))
@@ -12472,8 +11980,6 @@
   )
 )
 (module
-  (type $type0 (func (result f32)))
-  (type $type1 (func (result f64)))
   (export "f32.epsilon" (func $func0))
   (export "f64.epsilon" (func $func1))
   (func $func0 (result f32)
@@ -12500,8 +12006,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32 f32) (result i32)))
-  (type $type1 (func (param f64 f64) (result i32)))
   (export "f32.no_trichotomy_lt" (func $func0))
   (export "f32.no_trichotomy_le" (func $func1))
   (export "f32.no_trichotomy_gt" (func $func2))
@@ -12584,10 +12088,6 @@
   )
 )
 (module
-  (type $type0 (func (param i64 i64) (result i64)))
-  (type $type1 (func (param i64) (result i64)))
-  (type $type2 (func (param i64) (result i32)))
-  (type $type3 (func (param i64 i64) (result i32)))
   (export "add" (func $func0))
   (export "sub" (func $func1))
   (export "mul" (func $func2))
@@ -12760,7 +12260,6 @@
   )
 )
 (module
-  (type $type0 (func (param f64 f64 f64) (result f64)))
   (export "f64.no_contraction" (func $func0))
   (func $func0 (param $var0 f64) (param $var1 f64) (param $var2 f64) (result f64)
     local.get $var0
@@ -12771,8 +12270,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32 f32 f32) (result f32)))
-  (type $type1 (func (param f64 f64 f64) (result f64)))
   (export "f32.no_fma" (func $func0))
   (export "f64.no_fma" (func $func1))
   (func $func0 (param $var0 f32) (param $var1 f32) (param $var2 f32) (result f32)
@@ -12791,8 +12288,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32) (result f32)))
-  (type $type1 (func (param f64) (result f64)))
   (export "f32.no_fold_add_zero" (func $func0))
   (export "f64.no_fold_add_zero" (func $func1))
   (func $func0 (param $var0 f32) (result f32)
@@ -12807,8 +12302,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32) (result f32)))
-  (type $type1 (func (param f64) (result f64)))
   (export "f32.no_fold_zero_sub" (func $func0))
   (export "f64.no_fold_zero_sub" (func $func1))
   (func $func0 (param $var0 f32) (result f32)
@@ -12823,8 +12316,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32) (result f32)))
-  (type $type1 (func (param f64) (result f64)))
   (export "f32.no_fold_sub_zero" (func $func0))
   (export "f64.no_fold_sub_zero" (func $func1))
   (func $func0 (param $var0 f32) (result f32)
@@ -12839,8 +12330,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32) (result f32)))
-  (type $type1 (func (param f64) (result f64)))
   (export "f32.no_fold_mul_zero" (func $func0))
   (export "f64.no_fold_mul_zero" (func $func1))
   (func $func0 (param $var0 f32) (result f32)
@@ -12855,8 +12344,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32) (result f32)))
-  (type $type1 (func (param f64) (result f64)))
   (export "f32.no_fold_mul_one" (func $func0))
   (export "f64.no_fold_mul_one" (func $func1))
   (func $func0 (param $var0 f32) (result f32)
@@ -12871,8 +12358,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32) (result f32)))
-  (type $type1 (func (param f64) (result f64)))
   (export "f32.no_fold_zero_div" (func $func0))
   (export "f64.no_fold_zero_div" (func $func1))
   (func $func0 (param $var0 f32) (result f32)
@@ -12887,8 +12372,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32) (result f32)))
-  (type $type1 (func (param f64) (result f64)))
   (export "f32.no_fold_div_one" (func $func0))
   (export "f64.no_fold_div_one" (func $func1))
   (func $func0 (param $var0 f32) (result f32)
@@ -12903,8 +12386,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32) (result f32)))
-  (type $type1 (func (param f64) (result f64)))
   (export "f32.no_fold_div_neg1" (func $func0))
   (export "f64.no_fold_div_neg1" (func $func1))
   (func $func0 (param $var0 f32) (result f32)
@@ -12919,8 +12400,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32) (result f32)))
-  (type $type1 (func (param f64) (result f64)))
   (export "f32.no_fold_neg0_sub" (func $func0))
   (export "f64.no_fold_neg0_sub" (func $func1))
   (func $func0 (param $var0 f32) (result f32)
@@ -12935,8 +12414,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32) (result f32)))
-  (type $type1 (func (param f64) (result f64)))
   (export "f32.no_fold_neg1_mul" (func $func0))
   (export "f64.no_fold_neg1_mul" (func $func1))
   (func $func0 (param $var0 f32) (result f32)
@@ -12951,8 +12428,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32) (result i32)))
-  (type $type1 (func (param f64) (result i32)))
   (export "f32.no_fold_eq_self" (func $func0))
   (export "f64.no_fold_eq_self" (func $func1))
   (func $func0 (param $var0 f32) (result i32)
@@ -12967,8 +12442,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32) (result i32)))
-  (type $type1 (func (param f64) (result i32)))
   (export "f32.no_fold_ne_self" (func $func0))
   (export "f64.no_fold_ne_self" (func $func1))
   (func $func0 (param $var0 f32) (result i32)
@@ -12983,8 +12456,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32) (result f32)))
-  (type $type1 (func (param f64) (result f64)))
   (export "f32.no_fold_sub_self" (func $func0))
   (export "f64.no_fold_sub_self" (func $func1))
   (func $func0 (param $var0 f32) (result f32)
@@ -12999,8 +12470,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32) (result f32)))
-  (type $type1 (func (param f64) (result f64)))
   (export "f32.no_fold_div_3" (func $func0))
   (export "f64.no_fold_div_3" (func $func1))
   (func $func0 (param $var0 f32) (result f32)
@@ -13015,8 +12484,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32 f32 f32) (result f32)))
-  (type $type1 (func (param f64 f64 f64) (result f64)))
   (export "f32.no_factor" (func $func0))
   (export "f64.no_factor" (func $func1))
   (func $func0 (param $var0 f32) (param $var1 f32) (param $var2 f32) (result f32)
@@ -13039,8 +12506,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32 f32 f32) (result f32)))
-  (type $type1 (func (param f64 f64 f64) (result f64)))
   (export "f32.no_distribute" (func $func0))
   (export "f64.no_distribute" (func $func1))
   (func $func0 (param $var0 f32) (param $var1 f32) (param $var2 f32) (result f32)
@@ -13059,8 +12524,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32 f32 f32) (result f32)))
-  (type $type1 (func (param f64 f64 f64) (result f64)))
   (export "f32.no_regroup_div_mul" (func $func0))
   (export "f64.no_regroup_div_mul" (func $func1))
   (func $func0 (param $var0 f32) (param $var1 f32) (param $var2 f32) (result f32)
@@ -13079,8 +12542,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32 f32 f32) (result f32)))
-  (type $type1 (func (param f64 f64 f64) (result f64)))
   (export "f32.no_regroup_mul_div" (func $func0))
   (export "f64.no_regroup_mul_div" (func $func1))
   (func $func0 (param $var0 f32) (param $var1 f32) (param $var2 f32) (result f32)
@@ -13099,8 +12560,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32 f32 f32 f32) (result f32)))
-  (type $type1 (func (param f64 f64 f64 f64) (result f64)))
   (export "f32.no_reassociate_add" (func $func0))
   (export "f64.no_reassociate_add" (func $func1))
   (func $func0 (param $var0 f32) (param $var1 f32) (param $var2 f32) (param $var3 f32) (result f32)
@@ -13123,8 +12582,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32 f32 f32 f32) (result f32)))
-  (type $type1 (func (param f64 f64 f64 f64) (result f64)))
   (export "f32.no_reassociate_mul" (func $func0))
   (export "f64.no_reassociate_mul" (func $func1))
   (func $func0 (param $var0 f32) (param $var1 f32) (param $var2 f32) (param $var3 f32) (result f32)
@@ -13147,8 +12604,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32) (result f32)))
-  (type $type1 (func (param f64) (result f64)))
   (export "f32.no_fold_div_0" (func $func0))
   (export "f64.no_fold_div_0" (func $func1))
   (func $func0 (param $var0 f32) (result f32)
@@ -13163,8 +12618,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32) (result f32)))
-  (type $type1 (func (param f64) (result f64)))
   (export "f32.no_fold_div_neg0" (func $func0))
   (export "f64.no_fold_div_neg0" (func $func1))
   (func $func0 (param $var0 f32) (result f32)
@@ -13179,8 +12632,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32 f32) (result f32)))
-  (type $type1 (func (param f64 f64) (result f64)))
   (export "f32.no_fold_to_hypot" (func $func0))
   (export "f64.no_fold_to_hypot" (func $func1))
   (func $func0 (param $var0 f32) (param $var1 f32) (result f32)
@@ -13205,7 +12656,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32) (result f32)))
   (export "f32.no_approximate_reciprocal" (func $func0))
   (func $func0 (param $var0 f32) (result f32)
     f32.const 1
@@ -13214,8 +12664,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32) (result f32)))
-  (type $type1 (func (param f64) (result f64)))
   (export "f32.no_approximate_reciprocal_sqrt" (func $func0))
   (export "f64.no_fuse_reciprocal_sqrt" (func $func1))
   (func $func0 (param $var0 f32) (result f32)
@@ -13232,7 +12680,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32) (result f32)))
   (export "f32.no_approximate_sqrt_reciprocal" (func $func0))
   (func $func0 (param $var0 f32) (result f32)
     f32.const 1
@@ -13242,8 +12689,6 @@
   )
 )
 (module
-  (type $type0 (func (param i32) (result i32)))
-  (type $type1 (func (param i64) (result i64)))
   (export "i32.no_fold_f32_s" (func $func0))
   (export "i32.no_fold_f32_u" (func $func1))
   (export "i64.no_fold_f64_s" (func $func2))
@@ -13270,8 +12715,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32 f32) (result f32)))
-  (type $type1 (func (param f64 f64) (result f64)))
   (export "f32.no_fold_add_sub" (func $func0))
   (export "f64.no_fold_add_sub" (func $func1))
   (func $func0 (param $var0 f32) (param $var1 f32) (result f32)
@@ -13290,8 +12733,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32 f32) (result f32)))
-  (type $type1 (func (param f64 f64) (result f64)))
   (export "f32.no_fold_sub_add" (func $func0))
   (export "f64.no_fold_sub_add" (func $func1))
   (func $func0 (param $var0 f32) (param $var1 f32) (result f32)
@@ -13310,8 +12751,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32 f32) (result f32)))
-  (type $type1 (func (param f64 f64) (result f64)))
   (export "f32.no_fold_mul_div" (func $func0))
   (export "f64.no_fold_mul_div" (func $func1))
   (func $func0 (param $var0 f32) (param $var1 f32) (result f32)
@@ -13330,8 +12769,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32 f32) (result f32)))
-  (type $type1 (func (param f64 f64) (result f64)))
   (export "f32.no_fold_div_mul" (func $func0))
   (export "f64.no_fold_div_mul" (func $func1))
   (func $func0 (param $var0 f32) (param $var1 f32) (result f32)
@@ -13350,7 +12787,6 @@
   )
 )
 (module
-  (type $type0 (func (param f64) (result f64)))
   (export "no_fold_demote_promote" (func $func0))
   (func $func0 (param $var0 f64) (result f64)
     local.get $var0
@@ -13359,7 +12795,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32) (result f32)))
   (export "no_fold_promote_demote" (func $func0))
   (func $func0 (param $var0 f32) (result f32)
     local.get $var0
@@ -13368,8 +12803,6 @@
   )
 )
 (module
-  (type $type0 (func (param f64 f32) (result f32)))
-  (type $type1 (func (param f32 f64) (result f32)))
   (export "no_demote_mixed_add" (func $func0))
   (export "no_demote_mixed_add_commuted" (func $func1))
   (func $func0 (param $var0 f64) (param $var1 f32) (result f32)
@@ -13388,7 +12821,6 @@
   )
 )
 (module
-  (type $type0 (func (param f64 f32) (result f32)))
   (export "no_demote_mixed_sub" (func $func0))
   (func $func0 (param $var0 f64) (param $var1 f32) (result f32)
     local.get $var0
@@ -13399,8 +12831,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32) (result f32)))
-  (type $type1 (func (param f64) (result f64)))
   (export "f32.i32.no_fold_trunc_s_convert_s" (func $func0))
   (export "f32.i32.no_fold_trunc_u_convert_s" (func $func1))
   (export "f32.i32.no_fold_trunc_s_convert_u" (func $func2))
@@ -13499,8 +12929,6 @@
   )
 )
 (module
-  (type $type0 (func (param i32 f32)))
-  (type $type1 (func (param i32) (result f32)))
   (memory $memory0 1 1)
   (export "init" (func $func0))
   (export "run" (func $func1))
@@ -13537,8 +12965,6 @@
   )
 )
 (module
-  (type $type0 (func (param i32 f64)))
-  (type $type1 (func (param i32) (result f64)))
   (memory $memory0 1 1)
   (export "init" (func $func0))
   (export "run" (func $func1))
@@ -13575,8 +13001,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32 f32) (result i32)))
-  (type $type1 (func (param f64 f64) (result i32)))
   (export "f32.ult" (func $func0))
   (export "f32.ule" (func $func1))
   (export "f32.ugt" (func $func2))
@@ -13635,8 +13059,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32 f32) (result f32)))
-  (type $type1 (func (param f64 f64) (result f64)))
   (export "f32.no_fold_lt_select" (func $func0))
   (export "f32.no_fold_le_select" (func $func1))
   (export "f32.no_fold_gt_select" (func $func2))
@@ -13711,8 +13133,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32 f32) (result f32)))
-  (type $type1 (func (param f64 f64) (result f64)))
   (export "f32.no_fold_lt_if" (func $func0))
   (export "f32.no_fold_le_if" (func $func1))
   (export "f32.no_fold_gt_if" (func $func2))
@@ -13803,8 +13223,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32) (result f32)))
-  (type $type1 (func (param f64) (result f64)))
   (export "f32.no_fold_lt_select_to_abs" (func $func0))
   (export "f32.no_fold_le_select_to_abs" (func $func1))
   (export "f32.no_fold_gt_select_to_abs" (func $func2))
@@ -13887,8 +13305,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32) (result f32)))
-  (type $type1 (func (param f64) (result f64)))
   (export "f32.no_fold_lt_if_to_abs" (func $func0))
   (export "f32.no_fold_le_if_to_abs" (func $func1))
   (export "f32.no_fold_gt_if_to_abs" (func $func2))
@@ -13987,7 +13403,6 @@
   )
 )
 (module
-  (type $type0 (func (result f32)))
   (export "incorrect_correction" (func $func0))
   (func $func0 (result f32)
     f32.const 1.3329999446868896
@@ -14000,7 +13415,6 @@
   )
 )
 (module
-  (type $type0 (func (result f64)))
   (export "incorrect_correction" (func $func0))
   (func $func0 (result f64)
     f64.const 1.333
@@ -14013,7 +13427,6 @@
   )
 )
 (module
-  (type $type0 (func (result f32)))
   (export "calculate" (func $func0))
   (func $func0 (result f32)
     (local $var0 f32) (local $var1 f32) (local $var2 f32) (local $var3 f32) (local $var4 f32)
@@ -14056,7 +13469,6 @@
   )
 )
 (module
-  (type $type0 (func (result f64)))
   (export "calculate" (func $func0))
   (func $func0 (result f64)
     (local $var0 f64) (local $var1 f64) (local $var2 f64) (local $var3 f64) (local $var4 f64)
@@ -14099,7 +13511,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32) (result f32)))
   (export "llvm_pr26746" (func $func0))
   (func $func0 (param $var0 f32) (result f32)
     f32.const 0.0
@@ -14110,7 +13521,6 @@
   )
 )
 (module
-  (type $type0 (func (param i32) (result f32)))
   (export "llvm_pr27153" (func $func0))
   (func $func0 (param $var0 i32) (result f32)
     local.get $var0
@@ -14122,7 +13532,6 @@
   )
 )
 (module
-  (type $type0 (func (param i32 i32) (result f32)))
   (export "llvm_pr27036" (func $func0))
   (func $func0 (param $var0 i32) (param $var1 i32) (result f32)
     local.get $var0
@@ -14137,9 +13546,6 @@
   )
 )
 (module
-  (type $type0 (func (param f64 f64 f64 f64) (result f64)))
-  (type $type1 (func (param f64 f64 f64) (result f64)))
-  (type $type2 (func (param f32 f32 f32) (result f32)))
   (export "thepast0" (func $func0))
   (export "thepast1" (func $func1))
   (export "thepast2" (func $func2))
@@ -14168,7 +13574,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32) (result f32)))
   (export "inverse" (func $func0))
   (func $func0 (param $var0 f32) (result f32)
     f32.const 1
@@ -14177,8 +13582,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32) (result f32)))
-  (type $type1 (func (param f64) (result f64)))
   (export "f32_sqrt_minus_2" (func $func0))
   (export "f64_sqrt_minus_2" (func $func1))
   (func $func0 (param $var0 f32) (result f32)
@@ -14195,8 +13598,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32) (result f32)))
-  (type $type1 (func (param f64) (result f64)))
   (export "f32.no_fold_recip_recip" (func $func0))
   (export "f64.no_fold_recip_recip" (func $func1))
   (func $func0 (param $var0 f32) (result f32)
@@ -14215,8 +13616,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32 f32) (result f32)))
-  (type $type1 (func (param f64 f64) (result f64)))
   (export "f32.no_algebraic_factoring" (func $func0))
   (export "f64.no_algebraic_factoring" (func $func1))
   (func $func0 (param $var0 f32) (param $var1 f32) (result f32)
@@ -14239,8 +13638,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32 f32) (result f32)))
-  (type $type1 (func (param f64 f64) (result f64)))
   (export "f32.no_algebraic_factoring" (func $func0))
   (export "f64.no_algebraic_factoring" (func $func1))
   (func $func0 (param $var0 f32) (param $var1 f32) (result f32)
@@ -14263,7 +13660,6 @@
   )
 )
 (module
-  (type $type0 (func (param i32 i32) (result f32)))
   (memory $memory0 1 1)
   (export "f32.kahan_sum" (func $func0))
   (export "f32.plain_sum" (func $func1))
@@ -14327,7 +13723,6 @@
   )
 )
 (module
-  (type $type0 (func (param i32 i32) (result f64)))
   (memory $memory0 1 1)
   (export "f64.kahan_sum" (func $func0))
   (export "f64.plain_sum" (func $func1))
@@ -14391,8 +13786,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32 f32) (result f32)))
-  (type $type1 (func (param f64 f64) (result f64)))
   (export "f32.no_fold_neg_sub" (func $func0))
   (export "f64.no_fold_neg_sub" (func $func1))
   (func $func0 (param $var0 f32) (param $var1 f32) (result f32)
@@ -14409,8 +13802,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32) (result f32)))
-  (type $type1 (func (param f64) (result f64)))
   (export "f32.no_fold_add_neg" (func $func0))
   (export "f64.no_fold_add_neg" (func $func1))
   (func $func0 (param $var0 f32) (result f32)
@@ -14427,8 +13818,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32) (result f32)))
-  (type $type1 (func (param f64) (result f64)))
   (export "f32.no_fold_6x_via_add" (func $func0))
   (export "f64.no_fold_6x_via_add" (func $func1))
   (func $func0 (param $var0 f32) (result f32)
@@ -14459,8 +13848,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32 f32 f32) (result f32)))
-  (type $type1 (func (param f64 f64 f64) (result f64)))
   (export "f32.no_fold_div_div" (func $func0))
   (export "f64.no_fold_div_div" (func $func1))
   (func $func0 (param $var0 f32) (param $var1 f32) (param $var2 f32) (result f32)
@@ -14479,8 +13866,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32 f32 f32 f32) (result f32)))
-  (type $type1 (func (param f64 f64 f64 f64) (result f64)))
   (export "f32.no_fold_mul_divs" (func $func0))
   (export "f64.no_fold_mul_divs" (func $func1))
   (func $func0 (param $var0 f32) (param $var1 f32) (param $var2 f32) (param $var3 f32) (result f32)
@@ -14503,8 +13888,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32 f32 f32) (result f32)))
-  (type $type1 (func (param f64 f64 f64) (result f64)))
   (export "f32.no_fold_add_divs" (func $func0))
   (export "f64.no_fold_add_divs" (func $func1))
   (func $func0 (param $var0 f32) (param $var1 f32) (param $var2 f32) (result f32)
@@ -14527,8 +13910,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32) (result f32)))
-  (type $type1 (func (param f64) (result f64)))
   (export "f32.no_fold_sqrt_square" (func $func0))
   (export "f64.no_fold_sqrt_square" (func $func1))
   (func $func0 (param $var0 f32) (result f32)
@@ -14545,8 +13926,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32 f32) (result f32)))
-  (type $type1 (func (param f64 f64) (result f64)))
   (export "f32.no_fold_mul_sqrts" (func $func0))
   (export "f64.no_fold_mul_sqrts" (func $func1))
   (func $func0 (param $var0 f32) (param $var1 f32) (result f32)
@@ -14565,8 +13944,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32 f32) (result f32)))
-  (type $type1 (func (param f64 f64) (result f64)))
   (export "f32.no_fold_div_sqrts" (func $func0))
   (export "f64.no_fold_div_sqrts" (func $func1))
   (func $func0 (param $var0 f32) (param $var1 f32) (result f32)
@@ -14585,8 +13962,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32 f32) (result f32)))
-  (type $type1 (func (param f64 f64) (result f64)))
   (export "f32.no_fold_mul_sqrt_div" (func $func0))
   (export "f64.no_fold_mul_sqrt_div" (func $func1))
   (func $func0 (param $var0 f32) (param $var1 f32) (result f32)
@@ -14607,8 +13982,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32 f32 f32) (result f32)))
-  (type $type1 (func (param f64 f64 f64) (result f64)))
   (export "f32.no_flush_intermediate_subnormal" (func $func0))
   (export "f64.no_flush_intermediate_subnormal" (func $func1))
   (func $func0 (param $var0 f32) (param $var1 f32) (param $var2 f32) (result f32)
@@ -14627,9 +14000,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32 f32) (result i32)))
-  (type $type1 (func (param f64 f64) (result i32)))
-  (type $type2 (func (param f64 f32) (result f32)))
   (export "f32.recoding_eq" (func $func0))
   (export "f32.recoding_le" (func $func1))
   (export "f32.recoding_lt" (func $func2))
@@ -14687,8 +14057,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32 f32 f32) (result i32)))
-  (type $type1 (func (param f64 f64 f64) (result i32)))
   (export "f32.no_extended_precision_div" (func $func0))
   (export "f64.no_extended_precision_div" (func $func1))
   (func $func0 (param $var0 f32) (param $var1 f32) (param $var2 f32) (result i32)
@@ -14707,8 +14075,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32) (result f32)))
-  (type $type1 (func (param f64) (result f64)))
   (export "f32.no_distribute_exact" (func $func0))
   (export "f64.no_distribute_exact" (func $func1))
   (func $func0 (param $var0 f32) (result f32)
@@ -14731,12 +14097,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32) (result f32)))
-  (type $type1 (func (param f32 f32 f32 f32) (result f32)))
-  (type $type2 (func (param f32 f32 f32) (result f32)))
-  (type $type3 (func (param f64) (result f64)))
-  (type $type4 (func (param f64 f64 f64 f64) (result f64)))
-  (type $type5 (func (param f64 f64 f64) (result f64)))
   (export "f32.sqrt" (func $func0))
   (export "f32.xkcd_sqrt_2" (func $func1))
   (export "f32.xkcd_sqrt_3" (func $func2))
@@ -14837,8 +14197,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32 f32) (result f32)))
-  (type $type1 (func (param f64 f64) (result f64)))
   (export "f32.compute_radix" (func $func0))
   (export "f64.compute_radix" (func $func1))
   (func $func0 (param $var0 f32) (param $var1 f32) (result f32)
@@ -14909,8 +14267,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32 f32) (result f32)))
-  (type $type1 (func (param f64 f64) (result f64)))
   (export "f32.no_fold_sub1_mul_add" (func $func0))
   (export "f64.no_fold_sub1_mul_add" (func $func1))
   (func $func0 (param $var0 f32) (param $var1 f32) (result f32)
@@ -14933,8 +14289,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32 f32 f32) (result i32)))
-  (type $type1 (func (param f64 f64 f64) (result i32)))
   (export "f32.no_fold_add_le_monotonicity" (func $func0))
   (export "f32.no_fold_add_ge_monotonicity" (func $func1))
   (export "f64.no_fold_add_le_monotonicity" (func $func2))
@@ -14977,8 +14331,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32 f32) (result i32)))
-  (type $type1 (func (param f64 f64) (result i32)))
   (export "f32.not_lt" (func $func0))
   (export "f32.not_le" (func $func1))
   (export "f32.not_gt" (func $func2))
@@ -15037,8 +14389,6 @@
   )
 )
 (module
-  (type $type0 (func (result f32)))
-  (type $type1 (func (result f64)))
   (export "f32.epsilon" (func $func0))
   (export "f64.epsilon" (func $func1))
   (func $func0 (result f32)
@@ -15065,8 +14415,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32 f32) (result i32)))
-  (type $type1 (func (param f64 f64) (result i32)))
   (export "f32.no_trichotomy_lt" (func $func0))
   (export "f32.no_trichotomy_le" (func $func1))
   (export "f32.no_trichotomy_gt" (func $func2))
@@ -15149,8 +14497,6 @@
   )
 )
 (module
-  (type $type0 (func (result i32)))
-  (type $type1 (func (result i64)))
   (export "i32.test" (func $func0))
   (export "i32.umax" (func $func1))
   (export "i32.smax" (func $func2))
@@ -15267,8 +14613,6 @@
   )
 )
 (module
-  (type $type0 (func (result i32)))
-  (type $type1 (func (result i64)))
   (export "i32.test" (func $func0))
   (export "i32.umax" (func $func1))
   (export "i32.smax" (func $func2))
@@ -15385,8 +14729,6 @@
   )
 )
 (module
-  (type $type0 (func (param i32 i32) (result i32)))
-  (type $type1 (func (param i64 i64) (result i32)))
   (export "i32.no_fold_cmp_s_offset" (func $func0))
   (export "i32.no_fold_cmp_u_offset" (func $func1))
   (export "i64.no_fold_cmp_s_offset" (func $func2))
@@ -15429,7 +14771,6 @@
   )
 )
 (module
-  (type $type0 (func (param i64) (result i64)))
   (export "i64.no_fold_wrap_extend_s" (func $func0))
   (func $func0 (param $var0 i64) (result i64)
     local.get $var0
@@ -15438,7 +14779,6 @@
   )
 )
 (module
-  (type $type0 (func (param i64) (result i64)))
   (export "i64.no_fold_wrap_extend_u" (func $func0))
   (func $func0 (param $var0 i64) (result i64)
     local.get $var0
@@ -15447,8 +14787,6 @@
   )
 )
 (module
-  (type $type0 (func (param i32) (result i32)))
-  (type $type1 (func (param i64) (result i64)))
   (export "i32.no_fold_shl_shr_s" (func $func0))
   (export "i32.no_fold_shl_shr_u" (func $func1))
   (export "i64.no_fold_shl_shr_s" (func $func2))
@@ -15483,8 +14821,6 @@
   )
 )
 (module
-  (type $type0 (func (param i32) (result i32)))
-  (type $type1 (func (param i64) (result i64)))
   (export "i32.no_fold_shr_s_shl" (func $func0))
   (export "i32.no_fold_shr_u_shl" (func $func1))
   (export "i64.no_fold_shr_s_shl" (func $func2))
@@ -15519,8 +14855,6 @@
   )
 )
 (module
-  (type $type0 (func (param i32) (result i32)))
-  (type $type1 (func (param i64) (result i64)))
   (export "i32.no_fold_div_s_mul" (func $func0))
   (export "i32.no_fold_div_u_mul" (func $func1))
   (export "i64.no_fold_div_s_mul" (func $func2))
@@ -15555,8 +14889,6 @@
   )
 )
 (module
-  (type $type0 (func (param i32) (result i32)))
-  (type $type1 (func (param i64) (result i64)))
   (export "i32.no_fold_mul_div_s" (func $func0))
   (export "i32.no_fold_mul_div_u" (func $func1))
   (export "i64.no_fold_mul_div_s" (func $func2))
@@ -15591,8 +14923,6 @@
   )
 )
 (module
-  (type $type0 (func (param i32) (result i32)))
-  (type $type1 (func (param i64) (result i64)))
   (export "i32.no_fold_div_s_2" (func $func0))
   (export "i64.no_fold_div_s_2" (func $func1))
   (func $func0 (param $var0 i32) (result i32)
@@ -15607,8 +14937,6 @@
   )
 )
 (module
-  (type $type0 (func (param i32) (result i32)))
-  (type $type1 (func (param i64) (result i64)))
   (export "i32.no_fold_rem_s_2" (func $func0))
   (export "i64.no_fold_rem_s_2" (func $func1))
   (func $func0 (param $var0 i32) (result i32)
@@ -15623,8 +14951,6 @@
   )
 )
 (module
-  (type $type0 (func (param i32) (result i32)))
-  (type $type1 (func (param i64) (result i64)))
   (export "i32.div_s_3" (func $func0))
   (export "i32.div_u_3" (func $func1))
   (export "i64.div_s_3" (func $func2))
@@ -15651,8 +14977,6 @@
   )
 )
 (module
-  (type $type0 (func (param i32) (result i32)))
-  (type $type1 (func (param i64) (result i64)))
   (export "i32.div_s_3" (func $func0))
   (export "i32.div_u_3" (func $func1))
   (export "i64.div_s_3" (func $func2))
@@ -15679,8 +15003,6 @@
   )
 )
 (module
-  (type $type0 (func (param i32) (result i32)))
-  (type $type1 (func (param i64) (result i64)))
   (export "i32.div_s_5" (func $func0))
   (export "i32.div_u_5" (func $func1))
   (export "i64.div_s_5" (func $func2))
@@ -15707,8 +15029,6 @@
   )
 )
 (module
-  (type $type0 (func (param i32) (result i32)))
-  (type $type1 (func (param i64) (result i64)))
   (export "i32.div_s_7" (func $func0))
   (export "i32.div_u_7" (func $func1))
   (export "i64.div_s_7" (func $func2))
@@ -15735,8 +15055,6 @@
   )
 )
 (module
-  (type $type0 (func (param i32) (result i32)))
-  (type $type1 (func (param i64) (result i64)))
   (export "i32.rem_s_3" (func $func0))
   (export "i32.rem_u_3" (func $func1))
   (export "i64.rem_s_3" (func $func2))
@@ -15763,8 +15081,6 @@
   )
 )
 (module
-  (type $type0 (func (param i32) (result i32)))
-  (type $type1 (func (param i64) (result i64)))
   (export "i32.rem_s_5" (func $func0))
   (export "i32.rem_u_5" (func $func1))
   (export "i64.rem_s_5" (func $func2))
@@ -15791,8 +15107,6 @@
   )
 )
 (module
-  (type $type0 (func (param i32) (result i32)))
-  (type $type1 (func (param i64) (result i64)))
   (export "i32.rem_s_7" (func $func0))
   (export "i32.rem_u_7" (func $func1))
   (export "i64.rem_s_7" (func $func2))
@@ -15819,8 +15133,6 @@
   )
 )
 (module
-  (type $type0 (func (result i32)))
-  (type $type1 (func (param i32) (result i32)))
   (export "block" (func $func0))
   (export "loop1" (func $func1))
   (export "loop2" (func $func2))
@@ -16265,8 +15577,6 @@
   )
 )
 (module
-  (type $type0 (func (param i32 i32) (result i32)))
-  (type $type1 (func (param i64 i64) (result i32)))
   (export "i32.no_fold_cmp_s_offset" (func $func0))
   (export "i32.no_fold_cmp_u_offset" (func $func1))
   (export "i64.no_fold_cmp_s_offset" (func $func2))
@@ -16309,7 +15619,6 @@
   )
 )
 (module
-  (type $type0 (func (param i64) (result i64)))
   (export "i64.no_fold_wrap_extend_s" (func $func0))
   (func $func0 (param $var0 i64) (result i64)
     local.get $var0
@@ -16318,7 +15627,6 @@
   )
 )
 (module
-  (type $type0 (func (param i64) (result i64)))
   (export "i64.no_fold_wrap_extend_u" (func $func0))
   (func $func0 (param $var0 i64) (result i64)
     local.get $var0
@@ -16327,8 +15635,6 @@
   )
 )
 (module
-  (type $type0 (func (param i32) (result i32)))
-  (type $type1 (func (param i64) (result i64)))
   (export "i32.no_fold_shl_shr_s" (func $func0))
   (export "i32.no_fold_shl_shr_u" (func $func1))
   (export "i64.no_fold_shl_shr_s" (func $func2))
@@ -16363,8 +15669,6 @@
   )
 )
 (module
-  (type $type0 (func (param i32) (result i32)))
-  (type $type1 (func (param i64) (result i64)))
   (export "i32.no_fold_shr_s_shl" (func $func0))
   (export "i32.no_fold_shr_u_shl" (func $func1))
   (export "i64.no_fold_shr_s_shl" (func $func2))
@@ -16399,8 +15703,6 @@
   )
 )
 (module
-  (type $type0 (func (param i32) (result i32)))
-  (type $type1 (func (param i64) (result i64)))
   (export "i32.no_fold_div_s_mul" (func $func0))
   (export "i32.no_fold_div_u_mul" (func $func1))
   (export "i64.no_fold_div_s_mul" (func $func2))
@@ -16435,8 +15737,6 @@
   )
 )
 (module
-  (type $type0 (func (param i32) (result i32)))
-  (type $type1 (func (param i64) (result i64)))
   (export "i32.no_fold_mul_div_s" (func $func0))
   (export "i32.no_fold_mul_div_u" (func $func1))
   (export "i64.no_fold_mul_div_s" (func $func2))
@@ -16471,8 +15771,6 @@
   )
 )
 (module
-  (type $type0 (func (param i32) (result i32)))
-  (type $type1 (func (param i64) (result i64)))
   (export "i32.no_fold_div_s_2" (func $func0))
   (export "i64.no_fold_div_s_2" (func $func1))
   (func $func0 (param $var0 i32) (result i32)
@@ -16487,8 +15785,6 @@
   )
 )
 (module
-  (type $type0 (func (param i32) (result i32)))
-  (type $type1 (func (param i64) (result i64)))
   (export "i32.no_fold_rem_s_2" (func $func0))
   (export "i64.no_fold_rem_s_2" (func $func1))
   (func $func0 (param $var0 i32) (result i32)
@@ -16503,8 +15799,6 @@
   )
 )
 (module
-  (type $type0 (func (param i32) (result i32)))
-  (type $type1 (func (param i64) (result i64)))
   (export "i32.div_s_3" (func $func0))
   (export "i32.div_u_3" (func $func1))
   (export "i64.div_s_3" (func $func2))
@@ -16531,8 +15825,6 @@
   )
 )
 (module
-  (type $type0 (func (param i32) (result i32)))
-  (type $type1 (func (param i64) (result i64)))
   (export "i32.div_s_3" (func $func0))
   (export "i32.div_u_3" (func $func1))
   (export "i64.div_s_3" (func $func2))
@@ -16559,8 +15851,6 @@
   )
 )
 (module
-  (type $type0 (func (param i32) (result i32)))
-  (type $type1 (func (param i64) (result i64)))
   (export "i32.div_s_5" (func $func0))
   (export "i32.div_u_5" (func $func1))
   (export "i64.div_s_5" (func $func2))
@@ -16587,8 +15877,6 @@
   )
 )
 (module
-  (type $type0 (func (param i32) (result i32)))
-  (type $type1 (func (param i64) (result i64)))
   (export "i32.div_s_7" (func $func0))
   (export "i32.div_u_7" (func $func1))
   (export "i64.div_s_7" (func $func2))
@@ -16615,8 +15903,6 @@
   )
 )
 (module
-  (type $type0 (func (param i32) (result i32)))
-  (type $type1 (func (param i64) (result i64)))
   (export "i32.rem_s_3" (func $func0))
   (export "i32.rem_u_3" (func $func1))
   (export "i64.rem_s_3" (func $func2))
@@ -16643,8 +15929,6 @@
   )
 )
 (module
-  (type $type0 (func (param i32) (result i32)))
-  (type $type1 (func (param i64) (result i64)))
   (export "i32.rem_s_5" (func $func0))
   (export "i32.rem_u_5" (func $func1))
   (export "i64.rem_s_5" (func $func2))
@@ -16671,8 +15955,6 @@
   )
 )
 (module
-  (type $type0 (func (param i32) (result i32)))
-  (type $type1 (func (param i64) (result i64)))
   (export "i32.rem_s_7" (func $func0))
   (export "i32.rem_u_7" (func $func1))
   (export "i64.rem_s_7" (func $func2))
@@ -16699,8 +15981,6 @@
   )
 )
 (module
-  (type $type0 (func (result i32)))
-  (type $type1 (func (param i32) (result i32)))
   (export "block" (func $func0))
   (export "loop1" (func $func1))
   (export "loop2" (func $func2))
@@ -17145,19 +16425,6 @@
   )
 )
 (module
-  (type $type0 (func (param i32 i32) (result i32)))
-  (type $type1 (func (param i64 i64) (result i32)))
-  (type $type2 (func (param f32 f32) (result i32)))
-  (type $type3 (func (param f64 f64) (result i32)))
-  (type $type4 (func))
-  (type $type5 (func (result i32)))
-  (type $type6 (func (result i64)))
-  (type $type7 (func (result f32)))
-  (type $type8 (func (result f64)))
-  (type $type9 (func (param i32 i32)))
-  (type $type10 (func (param i64 i64)))
-  (type $type11 (func (param f32 f32)))
-  (type $type12 (func (param f64 f64)))
   (table $table0 8 8 anyfunc)
   (memory $memory0 1)
   (export "i32_add" (func $func35))
@@ -17671,7 +16938,7 @@
     call $func11
     call $func12
     call $func14
-    call_indirect (type $type0)
+    call_indirect (param i32 i32) (result i32)
     drop
     call $func10
   )
@@ -17908,7 +17175,7 @@
     call $func16
     call $func17
     call $func19
-    call_indirect (type $type1)
+    call_indirect (param i64 i64) (result i32)
     drop
     call $func10
   )
@@ -18044,7 +17311,7 @@
     call $func21
     call $func22
     call $func24
-    call_indirect (type $type2)
+    call_indirect (param f32 f32) (result i32)
     drop
     call $func10
   )
@@ -18180,7 +17447,7 @@
     call $func26
     call $func27
     call $func29
-    call_indirect (type $type3)
+    call_indirect (param f64 f64) (result i32)
     drop
     call $func10
   )
@@ -18219,10 +17486,6 @@
   )
 )
 (module
-  (type $type0 (func))
-  (type $type1 (func (result i32)))
-  (type $type2 (func (param i64) (result i64)))
-  (type $type3 (func (param f32 f32) (result f32)))
   (export "empty" (func $func1))
   (export "singular" (func $func2))
   (export "multi" (func $func3))
@@ -18696,19 +17959,6 @@
   )
 )
 (module
-  (type $type0 (func (param i32 i32) (result i32)))
-  (type $type1 (func (param i64 i64) (result i32)))
-  (type $type2 (func (param f32 f32) (result i32)))
-  (type $type3 (func (param f64 f64) (result i32)))
-  (type $type4 (func))
-  (type $type5 (func (result i32)))
-  (type $type6 (func (result i64)))
-  (type $type7 (func (result f32)))
-  (type $type8 (func (result f64)))
-  (type $type9 (func (param i32 i32)))
-  (type $type10 (func (param i64 i64)))
-  (type $type11 (func (param f32 f32)))
-  (type $type12 (func (param f64 f64)))
   (table $table0 8 8 anyfunc)
   (memory $memory0 1)
   (export "i32_add" (func $func35))
@@ -19222,7 +18472,7 @@
     call $func11
     call $func12
     call $func14
-    call_indirect (type $type0)
+    call_indirect (param i32 i32) (result i32)
     drop
     call $func10
   )
@@ -19459,7 +18709,7 @@
     call $func16
     call $func17
     call $func19
-    call_indirect (type $type1)
+    call_indirect (param i64 i64) (result i32)
     drop
     call $func10
   )
@@ -19595,7 +18845,7 @@
     call $func21
     call $func22
     call $func24
-    call_indirect (type $type2)
+    call_indirect (param f32 f32) (result i32)
     drop
     call $func10
   )
@@ -19731,7 +18981,7 @@
     call $func26
     call $func27
     call $func29
-    call_indirect (type $type3)
+    call_indirect (param f64 f64) (result i32)
     drop
     call $func10
   )
@@ -19770,10 +19020,6 @@
   )
 )
 (module
-  (type $type0 (func))
-  (type $type1 (func (result i32)))
-  (type $type2 (func (param i64) (result i64)))
-  (type $type3 (func (param f32 f32) (result f32)))
   (export "empty" (func $func1))
   (export "singular" (func $func2))
   (export "multi" (func $func3))
@@ -20247,9 +19493,6 @@
   )
 )
 (module
-  (type $type0 (func))
-  (type $type1 (func (result i32)))
-  (type $type2 (func (result f32)))
   (memory $memory0 1 1)
   (export "zero_everything" (func $func0))
   (export "test_store_to_load" (func $func1))
@@ -20309,9 +19552,6 @@
   )
 )
 (module
-  (type $type0 (func))
-  (type $type1 (func (result i32)))
-  (type $type2 (func (result f32)))
   (memory $memory0 1 1)
   (export "zero_everything" (func $func0))
   (export "test_store_to_load" (func $func1))
@@ -20371,9 +19611,6 @@
   )
 )
 (module
-  (type $type0 (func (result i32)))
-  (type $type1 (func (param i32 i32)))
-  (type $type2 (func (param i32) (result i32)))
   (memory $memory0 1)
   (export "store" (func $func1))
   (export "load" (func $func2))
@@ -20402,9 +19639,6 @@
   )
 )
 (module
-  (type $type0 (func (result i32)))
-  (type $type1 (func (param i32 i32)))
-  (type $type2 (func (param i32) (result i32)))
   (memory $memory0 1)
   (export "store" (func $func1))
   (export "load" (func $func2))
@@ -20433,21 +19667,18 @@
   )
 )
 (module
-  (type $type0 (func (result i32)))
   (export "foo" (func $func0))
   (func $func0 (result i32)
     i32.const 0
   )
 )
 (module
-  (type $type0 (func (result i32)))
   (export "foo" (func $func0))
   (func $func0 (result i32)
     i32.const 1
   )
 )
 (module
-  (type $type0 (func (result f32)))
   (export "" (func $func0))
   (export "0" (func $func1))
   (export "_" (func $func2))
@@ -20498,8 +19729,6 @@
   )
 )
 (module
-  (type $type0 (func (param i32)))
-  (type $type1 (func (param i32 i32)))
   (import "spectest" "print" (func $import0 (param i32)))
   (import "spectest" "print" (func $import1 (param i32)))
   (export "print32" (func $func2))
@@ -20511,21 +19740,18 @@
   )
 )
 (module
-  (type $type0 (func (result i32)))
   (export "foo" (func $func0))
   (func $func0 (result i32)
     i32.const 0
   )
 )
 (module
-  (type $type0 (func (result i32)))
   (export "foo" (func $func0))
   (func $func0 (result i32)
     i32.const 1
   )
 )
 (module
-  (type $type0 (func (result f32)))
   (export "" (func $func0))
   (export "0" (func $func1))
   (export "_" (func $func2))
@@ -20576,8 +19802,6 @@
   )
 )
 (module
-  (type $type0 (func (param i32)))
-  (type $type1 (func (param i32 i32)))
   (import "spectest" "print" (func $import0 (param i32)))
   (import "spectest" "print" (func $import1 (param i32)))
   (export "print32" (func $func2))
@@ -20589,9 +19813,6 @@
   )
 )
 (module
-  (type $type0 (func (result i32)))
-  (type $type1 (func))
-  (type $type2 (func (param i32) (result i32)))
   (memory $memory0 0)
   (export "load_at_zero" (func $func0))
   (export "store_at_zero" (func $func1))
@@ -20626,7 +19847,6 @@
   )
 )
 (module
-  (type $type0 (func (param i32) (result i32)))
   (memory $memory0 0)
   (export "grow" (func $func0))
   (func $func0 (param $var0 i32) (result i32)
@@ -20635,7 +19855,6 @@
   )
 )
 (module
-  (type $type0 (func (param i32) (result i32)))
   (memory $memory0 0 10)
   (export "grow" (func $func0))
   (func $func0 (param $var0 i32) (result i32)
@@ -20644,9 +19863,6 @@
   )
 )
 (module
-  (type $type0 (func (result i32)))
-  (type $type1 (func))
-  (type $type2 (func (param i32) (result i32)))
   (memory $memory0 0)
   (export "load_at_zero" (func $func0))
   (export "store_at_zero" (func $func1))
@@ -20681,7 +19897,6 @@
   )
 )
 (module
-  (type $type0 (func (param i32) (result i32)))
   (memory $memory0 0)
   (export "grow" (func $func0))
   (func $func0 (param $var0 i32) (result i32)
@@ -20690,7 +19905,6 @@
   )
 )
 (module
-  (type $type0 (func (param i32) (result i32)))
   (memory $memory0 0 10)
   (export "grow" (func $func0))
   (func $func0 (param $var0 i32) (result i32)
@@ -20699,11 +19913,6 @@
   )
 )
 (module
-  (type $type0 (func))
-  (type $type1 (func (param i32 i32 i32) (result i32)))
-  (type $type2 (func (result i32)))
-  (type $type3 (func (param i32)))
-  (type $type4 (func (param i32) (result i32)))
   (memory $memory0 1)
   (export "as-func-first" (func $func2))
   (export "as-func-mid" (func $func3))
@@ -21125,11 +20334,6 @@
   )
 )
 (module
-  (type $type0 (func))
-  (type $type1 (func (param i32 i32 i32) (result i32)))
-  (type $type2 (func (result i32)))
-  (type $type3 (func (param i32)))
-  (type $type4 (func (param i32) (result i32)))
   (memory $memory0 1)
   (export "as-func-first" (func $func2))
   (export "as-func-mid" (func $func3))
@@ -21551,14 +20755,6 @@
   )
 )
 (module
-  (type $type0 (func))
-  (type $type1 (func (result f64)))
-  (type $type2 (func (result i32)))
-  (type $type3 (func (result i64)))
-  (type $type4 (func (param i32 i32) (result i32)))
-  (type $type5 (func (param i32 i32 i32) (result i32)))
-  (type $type6 (func (param i32 i32 i32) (result i32)))
-  (type $type7 (func (result f32)))
   (table $table0 1 1 anyfunc)
   (memory $memory0 1)
   (export "type-i32" (func $func1))
@@ -21859,7 +21055,7 @@
     i32.const 1
     i32.const 2
     i32.const 3
-    call_indirect (type $type6)
+    call_indirect (param i32 i32 i32) (result i32)
   )
   (func $func37 (result i32)
     i32.const 0
@@ -21867,7 +21063,7 @@
     return
     i32.const 2
     i32.const 3
-    call_indirect (type $type6)
+    call_indirect (param i32 i32 i32) (result i32)
   )
   (func $func38 (result i32)
     i32.const 0
@@ -21875,7 +21071,7 @@
     i32.const 22
     return
     i32.const 3
-    call_indirect (type $type6)
+    call_indirect (param i32 i32 i32) (result i32)
   )
   (func $func39 (result i32)
     i32.const 0
@@ -21883,7 +21079,7 @@
     i32.const 2
     i32.const 23
     return
-    call_indirect (type $type6)
+    call_indirect (param i32 i32 i32) (result i32)
   )
   (func $func40 (result i32)
     (local $var0 f32)
@@ -21976,14 +21172,6 @@
   )
 )
 (module
-  (type $type0 (func))
-  (type $type1 (func (result f64)))
-  (type $type2 (func (result i32)))
-  (type $type3 (func (result i64)))
-  (type $type4 (func (param i32 i32) (result i32)))
-  (type $type5 (func (param i32 i32 i32) (result i32)))
-  (type $type6 (func (param i32 i32 i32) (result i32)))
-  (type $type7 (func (result f32)))
   (table $table0 1 1 anyfunc)
   (memory $memory0 1)
   (export "type-i32" (func $func1))
@@ -22284,7 +21472,7 @@
     i32.const 1
     i32.const 2
     i32.const 3
-    call_indirect (type $type6)
+    call_indirect (param i32 i32 i32) (result i32)
   )
   (func $func37 (result i32)
     i32.const 0
@@ -22292,7 +21480,7 @@
     return
     i32.const 2
     i32.const 3
-    call_indirect (type $type6)
+    call_indirect (param i32 i32 i32) (result i32)
   )
   (func $func38 (result i32)
     i32.const 0
@@ -22300,7 +21488,7 @@
     i32.const 22
     return
     i32.const 3
-    call_indirect (type $type6)
+    call_indirect (param i32 i32 i32) (result i32)
   )
   (func $func39 (result i32)
     i32.const 0
@@ -22308,7 +21496,7 @@
     i32.const 2
     i32.const 23
     return
-    call_indirect (type $type6)
+    call_indirect (param i32 i32 i32) (result i32)
   )
   (func $func40 (result i32)
     (local $var0 f32)
@@ -22401,11 +21589,6 @@
   )
 )
 (module
-  (type $type0 (func (param i32 i32 i32) (result i32)))
-  (type $type1 (func (param i64 i64 i32) (result i64)))
-  (type $type2 (func (param f32 f32 i32) (result f32)))
-  (type $type3 (func (param f64 f64 i32) (result f64)))
-  (type $type4 (func (param i32) (result i32)))
   (export "select_i32" (func $func0))
   (export "select_i64" (func $func1))
   (export "select_f32" (func $func2))
@@ -22450,11 +21633,6 @@
   )
 )
 (module
-  (type $type0 (func (param i32 i32 i32) (result i32)))
-  (type $type1 (func (param i64 i64 i32) (result i64)))
-  (type $type2 (func (param f32 f32 i32) (result f32)))
-  (type $type3 (func (param f64 f64 i32) (result f64)))
-  (type $type4 (func (param i32) (result i32)))
   (export "select_i32" (func $func0))
   (export "select_i64" (func $func1))
   (export "select_f32" (func $func2))
@@ -22499,13 +21677,6 @@
   )
 )
 (module
-  (type $type0 (func))
-  (type $type1 (func (param i32)))
-  (type $type2 (func (param i64)))
-  (type $type3 (func (param f32)))
-  (type $type4 (func (param f64)))
-  (type $type5 (func (param i64 f32 f64 i32 i32)))
-  (type $type6 (func (param i64 f32 f64 i32 i32) (result i64)))
   (export "type-local-i32" (func $func0))
   (export "type-local-i64" (func $func1))
   (export "type-local-f32" (func $func2))
@@ -22615,13 +21786,6 @@
   )
 )
 (module
-  (type $type0 (func))
-  (type $type1 (func (param i32)))
-  (type $type2 (func (param i64)))
-  (type $type3 (func (param f32)))
-  (type $type4 (func (param f64)))
-  (type $type5 (func (param i64 f32 f64 i32 i32)))
-  (type $type6 (func (param i64 f32 f64 i32 i32) (result i64)))
   (export "type-local-i32" (func $func0))
   (export "type-local-i64" (func $func1))
   (export "type-local-f32" (func $func2))
@@ -22731,7 +21895,6 @@
   )
 )
 (module
-  (type $type0 (func (param i64) (result i64)))
   (export "fac-expr" (func $func0))
   (export "fac-stack" (func $func1))
   (export "fac-stack-raw" (func $func2))
@@ -22881,7 +22044,6 @@
   )
 )
 (module
-  (type $type0 (func (param i64) (result i64)))
   (export "fac-expr" (func $func0))
   (export "fac-stack" (func $func1))
   (export "fac-stack-raw" (func $func2))
@@ -23031,8 +22193,6 @@
   )
 )
 (module
-  (type $type0 (func (param i32)))
-  (type $type1 (func))
   (memory $memory0 1)
   (export "test-guard-page-skip" (func $func0))
   (func $func0 (param $var0 i32)
@@ -29390,8 +28550,6 @@
   )
 )
 (module
-  (type $type0 (func))
-  (type $type1 (func (result i32)))
   (memory $memory0 1 1)
   (export "inc" (func $func0))
   (export "get" (func $func1))
@@ -29419,8 +28577,6 @@
   )
 )
 (module
-  (type $type0 (func))
-  (type $type1 (func (result i32)))
   (memory $memory0 1 1)
   (export "inc" (func $func0))
   (export "get" (func $func1))
@@ -29448,8 +28604,6 @@
   )
 )
 (module
-  (type $type0 (func (param i32)))
-  (type $type1 (func))
   (import "spectest" "print" (func $import0 (param i32)))
   (start $func1)
   (func $func1
@@ -29458,8 +28612,6 @@
   )
 )
 (module
-  (type $type0 (func (param i32)))
-  (type $type1 (func))
   (import "spectest" "print" (func $import0 (param i32)))
   (start $func1)
   (func $func1
@@ -29468,15 +28620,12 @@
   )
 )
 (module
-  (type $type0 (func))
   (start $func0)
   (func $func0
     unreachable
   )
 )
 (module
-  (type $type0 (func))
-  (type $type1 (func (result i32)))
   (memory $memory0 1 1)
   (export "inc" (func $func0))
   (export "get" (func $func1))
@@ -29504,8 +28653,6 @@
   )
 )
 (module
-  (type $type0 (func))
-  (type $type1 (func (result i32)))
   (memory $memory0 1 1)
   (export "inc" (func $func0))
   (export "get" (func $func1))
@@ -29533,8 +28680,6 @@
   )
 )
 (module
-  (type $type0 (func (param i32)))
-  (type $type1 (func))
   (import "spectest" "print" (func $import0 (param i32)))
   (start $func1)
   (func $func1
@@ -29543,8 +28688,6 @@
   )
 )
 (module
-  (type $type0 (func (param i32)))
-  (type $type1 (func))
   (import "spectest" "print" (func $import0 (param i32)))
   (start $func1)
   (func $func1
@@ -29553,15 +28696,12 @@
   )
 )
 (module
-  (type $type0 (func))
   (start $func0)
   (func $func0
     unreachable
   )
 )
 (module
-  (type $type0 (func (param i32)))
-  (type $type1 (func))
   (memory $memory0 1)
   (export "test-guard-page-skip" (func $func0))
   (func $func0 (param $var0 i32)
@@ -35919,9 +35059,6 @@
   )
 )
 (module
-  (type $type0 (func (param i32) (result i32)))
-  (type $type1 (func (param i64) (result i64)))
-  (type $type2 (func (result i32)))
   (export "stmt" (func $func0))
   (export "expr" (func $func1))
   (export "arg" (func $func2))
@@ -36045,8 +35182,6 @@
   )
 )
 (module
-  (type $type0 (func (param i32 i32) (result i32)))
-  (type $type1 (func (param i64 i64) (result i64)))
   (export "no_dce.i32.div_s" (func $func0))
   (export "no_dce.i32.div_u" (func $func1))
   (export "no_dce.i64.div_s" (func $func2))
@@ -36073,8 +35208,6 @@
   )
 )
 (module
-  (type $type0 (func (param i32 i32) (result i32)))
-  (type $type1 (func (param i64 i64) (result i64)))
   (export "no_dce.i32.rem_s" (func $func0))
   (export "no_dce.i32.rem_u" (func $func1))
   (export "no_dce.i64.rem_s" (func $func2))
@@ -36101,10 +35234,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32) (result i32)))
-  (type $type1 (func (param f64) (result i32)))
-  (type $type2 (func (param f32) (result i64)))
-  (type $type3 (func (param f64) (result i64)))
   (export "no_dce.i32.trunc_s_f32" (func $func0))
   (export "no_dce.i32.trunc_u_f32" (func $func1))
   (export "no_dce.i32.trunc_s_f64" (func $func2))
@@ -36147,10 +35276,6 @@
   )
 )
 (module
-  (type $type0 (func (param i32) (result i32)))
-  (type $type1 (func (param i32) (result i64)))
-  (type $type2 (func (param i32) (result f32)))
-  (type $type3 (func (param i32) (result f64)))
   (memory $memory0 1)
   (export "no_dce.i32.load" (func $func0))
   (export "no_dce.i64.load" (func $func1))
@@ -36174,9 +35299,6 @@
   )
 )
 (module
-  (type $type0 (func (param i32) (result i32)))
-  (type $type1 (func (param i64) (result i64)))
-  (type $type2 (func (result i32)))
   (export "stmt" (func $func0))
   (export "expr" (func $func1))
   (export "arg" (func $func2))
@@ -36300,8 +35422,6 @@
   )
 )
 (module
-  (type $type0 (func (param i32 i32) (result i32)))
-  (type $type1 (func (param i64 i64) (result i64)))
   (export "no_dce.i32.div_s" (func $func0))
   (export "no_dce.i32.div_u" (func $func1))
   (export "no_dce.i64.div_s" (func $func2))
@@ -36328,8 +35448,6 @@
   )
 )
 (module
-  (type $type0 (func (param i32 i32) (result i32)))
-  (type $type1 (func (param i64 i64) (result i64)))
   (export "no_dce.i32.rem_s" (func $func0))
   (export "no_dce.i32.rem_u" (func $func1))
   (export "no_dce.i64.rem_s" (func $func2))
@@ -36356,10 +35474,6 @@
   )
 )
 (module
-  (type $type0 (func (param f32) (result i32)))
-  (type $type1 (func (param f64) (result i32)))
-  (type $type2 (func (param f32) (result i64)))
-  (type $type3 (func (param f64) (result i64)))
   (export "no_dce.i32.trunc_s_f32" (func $func0))
   (export "no_dce.i32.trunc_u_f32" (func $func1))
   (export "no_dce.i32.trunc_s_f64" (func $func2))
@@ -36402,10 +35516,6 @@
   )
 )
 (module
-  (type $type0 (func (param i32) (result i32)))
-  (type $type1 (func (param i32) (result i64)))
-  (type $type2 (func (param i32) (result f32)))
-  (type $type3 (func (param i32) (result f64)))
   (memory $memory0 1)
   (export "no_dce.i32.load" (func $func0))
   (export "no_dce.i64.load" (func $func1))
@@ -36429,17 +35539,6 @@
   )
 )
 (module
-  (type $type0 (func (result i32)))
-  (type $type1 (func (result i64)))
-  (type $type2 (func (result f32)))
-  (type $type3 (func (result f64)))
-  (type $type4 (func (param i32) (result i32)))
-  (type $type5 (func (param i64) (result i64)))
-  (type $type6 (func (param f32) (result f32)))
-  (type $type7 (func (param f64) (result f64)))
-  (type $type8 (func (param i64 f32 f64 i32 i32)))
-  (type $type9 (func (param i64 f32 f64 i32 i32) (result i64)))
-  (type $type10 (func (param i64 f32 f64 i32 i32) (result f64)))
   (export "type-local-i32" (func $func0))
   (export "type-local-i64" (func $func1))
   (export "type-local-f32" (func $func2))
@@ -36610,17 +35709,6 @@
   )
 )
 (module
-  (type $type0 (func (result i32)))
-  (type $type1 (func (result i64)))
-  (type $type2 (func (result f32)))
-  (type $type3 (func (result f64)))
-  (type $type4 (func (param i32) (result i32)))
-  (type $type5 (func (param i64) (result i64)))
-  (type $type6 (func (param f32) (result f32)))
-  (type $type7 (func (param f64) (result f64)))
-  (type $type8 (func (param i64 f32 f64 i32 i32)))
-  (type $type9 (func (param i64 f32 f64 i32 i32) (result i64)))
-  (type $type10 (func (param i64 f32 f64 i32 i32) (result f64)))
   (export "type-local-i32" (func $func0))
   (export "type-local-i64" (func $func1))
   (export "type-local-f32" (func $func2))
@@ -36791,8 +35879,6 @@
   )
 )
 (module
-  (type $type0 (func))
-  (type $type1 (func (result i32)))
   (export "func-unwind-by-unreachable" (func $func0))
   (export "func-unwind-by-br" (func $func1))
   (export "func-unwind-by-br-value" (func $func2))
@@ -37136,14 +36222,6 @@
   )
 )
 (module
-  (type $type0 (func))
-  (type $type1 (func (param i32 i32 i32)))
-  (type $type2 (func (result i32)))
-  (type $type3 (func (result f64)))
-  (type $type4 (func (result i64)))
-  (type $type5 (func (param i32 i32) (result i32)))
-  (type $type6 (func (param i32 i32 i32)))
-  (type $type7 (func (result f32)))
   (table $table0 1 1 anyfunc)
   (memory $memory0 1)
   (export "type-i32" (func $func2))
@@ -37419,28 +36497,28 @@
     i32.const 1
     i32.const 2
     i32.const 3
-    call_indirect (type $type6)
+    call_indirect (param i32 i32 i32)
   )
   (func $func37
     i32.const 0
     unreachable
     i32.const 2
     i32.const 3
-    call_indirect (type $type6)
+    call_indirect (param i32 i32 i32)
   )
   (func $func38
     i32.const 0
     i32.const 1
     unreachable
     i32.const 3
-    call_indirect (type $type6)
+    call_indirect (param i32 i32 i32)
   )
   (func $func39
     i32.const 0
     i32.const 1
     i32.const 2
     unreachable
-    call_indirect (type $type6)
+    call_indirect (param i32 i32 i32)
   )
   (func $func40
     (local $var0 f32)
@@ -37513,8 +36591,6 @@
   )
 )
 (module
-  (type $type0 (func))
-  (type $type1 (func (result i32)))
   (export "func-unwind-by-unreachable" (func $func0))
   (export "func-unwind-by-br" (func $func1))
   (export "func-unwind-by-br-value" (func $func2))
@@ -37858,14 +36934,6 @@
   )
 )
 (module
-  (type $type0 (func))
-  (type $type1 (func (param i32 i32 i32)))
-  (type $type2 (func (result i32)))
-  (type $type3 (func (result f64)))
-  (type $type4 (func (result i64)))
-  (type $type5 (func (param i32 i32) (result i32)))
-  (type $type6 (func (param i32 i32 i32)))
-  (type $type7 (func (result f32)))
   (table $table0 1 1 anyfunc)
   (memory $memory0 1)
   (export "type-i32" (func $func2))
@@ -38141,28 +37209,28 @@
     i32.const 1
     i32.const 2
     i32.const 3
-    call_indirect (type $type6)
+    call_indirect (param i32 i32 i32)
   )
   (func $func37
     i32.const 0
     unreachable
     i32.const 2
     i32.const 3
-    call_indirect (type $type6)
+    call_indirect (param i32 i32 i32)
   )
   (func $func38
     i32.const 0
     i32.const 1
     unreachable
     i32.const 3
-    call_indirect (type $type6)
+    call_indirect (param i32 i32 i32)
   )
   (func $func39
     i32.const 0
     i32.const 1
     i32.const 2
     unreachable
-    call_indirect (type $type6)
+    call_indirect (param i32 i32 i32)
   )
   (func $func40
     (local $var0 f32)

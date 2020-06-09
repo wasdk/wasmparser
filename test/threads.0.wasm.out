@@ -1,6 +1,4 @@
 (module
-  (type $type0 (func (param i32) (result i32)))
-  (type $type1 (func (param i32)))
   (import "env" "memory" (memory $memory0 1 1 shared))
   (export "tryLockMutex" (func $func0))
   (export "lockMutex" (func $func1))

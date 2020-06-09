@@ -1,5 +1,4 @@
 (module
-  (type $type0 (func))
   (export "a" (func $func0))
   (func $func0
   )

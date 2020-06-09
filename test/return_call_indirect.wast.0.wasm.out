@@ -1,7 +1,4 @@
 (module
-  (type $type0 (func (param i32 i32 i32) (result i32)))
-  (type $type1 (func (param i32 i32 i32) (result i32)))
-  (type $type2 (func (param i32) (result i32)))
   (table $table0 2 anyfunc)
   (export "main" (func $func1))
   (elem (i32.const 0) $func0 $func1)
@@ -20,7 +17,7 @@
       i32.mul
       local.get $var2
       local.get $var2
-      return_call_indirect (type $type0)
+      return_call_indirect (param i32 i32 i32) (result i32)
     end
   )
   (func $func1 (param $var0 i32) (result i32)

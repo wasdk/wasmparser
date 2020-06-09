@@ -1,5 +1,4 @@
 (module
-  (type $type0 (func))
   (table $table0 0 anyfunc)
   (memory $memory0 0)
   (elem  anyfunc (ref.func $func0) (ref.null))

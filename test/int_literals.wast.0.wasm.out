@@ -1,6 +1,4 @@
 (module
-  (type $type0 (func (result i32)))
-  (type $type1 (func (result i64)))
   (export "i32.test" (func $func0))
   (export "i32.umax" (func $func1))
   (export "i32.smax" (func $func2))

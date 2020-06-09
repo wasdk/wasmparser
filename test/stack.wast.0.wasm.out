@@ -1,5 +1,4 @@
 (module
-  (type $type0 (func (param i64) (result i64)))
   (export "fac-expr" (func $func0))
   (export "fac-stack" (func $func1))
   (export "fac-stack-raw" (func $func2))

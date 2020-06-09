@@ -1,7 +1,4 @@
 (module
-  (type $type0 (func (param f64 f64 f64 f64) (result f64)))
-  (type $type1 (func (param f64 f64 f64) (result f64)))
-  (type $type2 (func (param f32 f32 f32) (result f32)))
   (export "thepast0" (func $func0))
   (export "thepast1" (func $func1))
   (export "thepast2" (func $func2))

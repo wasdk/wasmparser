@@ -1,5 +1,4 @@
 (module
-  (type $type0 (func (result f32)))
   (export "calculate" (func $func0))
   (func $func0 (result f32)
     (local $var0 f32) (local $var1 f32) (local $var2 f32) (local $var3 f32) (local $var4 f32)

@@ -1,11 +1,4 @@
 (module
-  (type $type0 (func (param i32)))
-  (type $type1 (func (param i64)))
-  (type $type2 (func (param f32)))
-  (type $type3 (func (param f64)))
-  (type $type4 (func (param i32 f32)))
-  (type $type5 (func (param f64 f64)))
-  (type $type6 (func (param i64) (result i64)))
   (import "spectest" "print" (func $import0 (param i32)))
   (import "spectest" "print" (func $import1 (param i32)))
   (import "spectest" "print" (func $import2 (param f32)))
@@ -39,7 +32,7 @@
     call $import2
     local.get $var0
     i32.const 0
-    call_indirect (type $type0)
+    call_indirect (param i32)
   )
   (func $func10 (param $var0 i64)
     (local $var1 f64)
@@ -58,6 +51,6 @@
     call $import7
     local.get $var1
     i32.const 1
-    call_indirect (type $type3)
+    call_indirect (param f64)
   )
 )

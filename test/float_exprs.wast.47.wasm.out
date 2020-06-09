@@ -1,6 +1,4 @@
 (module
-  (type $type0 (func (result f32)))
-  (type $type1 (func (result f64)))
   (export "f32.incorrect_correction" (func $func0))
   (export "f64.incorrect_correction" (func $func1))
   (func $func0 (result f32)

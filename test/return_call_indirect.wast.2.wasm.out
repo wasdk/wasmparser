@@ -1,12 +1,4 @@
 (module
-  (type $type0 (func (result i32)))
-  (type $type1 (func (param i32) (result i32)))
-  (type $type2 (func (param i32) (result i32)))
-  (type $type3 (func (param i32) (result i32)))
-  (type $type4 (func (param i32) (result i32)))
-  (type $type5 (func (param i32) (result i32)))
-  (type $type6 (func (param i32) (result i32)))
-  (type $type7 (func (param i32) (result i32)))
   (table $table0 3 anyfunc)
   (table $table1 3 anyfunc)
   (table $table2 5 anyfunc)
@@ -39,28 +31,28 @@
   )
   (func $func6 (param $var0 i32) (result i32)
     local.get $var0
-    call_indirect (type $type0)
+    call_indirect (result i32)
   )
   (func $func7 (param $var0 i32) (result i32)
     local.get $var0
-    return_call_indirect (type $type0)
+    return_call_indirect (result i32)
   )
   (func $func8 (param $var0 i32) (result i32)
     local.get $var0
-    call_indirect (type $type0)
+    call_indirect (result i32)
   )
   (func $func9 (param $var0 i32) (result i32)
     local.get $var0
-    return_call_indirect (type $type0)
+    return_call_indirect (result i32)
   )
   (func $func10 (param $var0 i32) (result i32)
     local.get $var0
     local.get $var0
-    call_indirect (type $type1)
+    call_indirect (param i32) (result i32)
   )
   (func $func11 (param $var0 i32) (result i32)
     local.get $var0
     local.get $var0
-    return_call_indirect (type $type1)
+    return_call_indirect (param i32) (result i32)
   )
 )

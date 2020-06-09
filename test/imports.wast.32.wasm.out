@@ -1,4 +1,3 @@
 (module
-  (type $type0 (func))
   (import "spectest" "memory" (func $import0))
 )

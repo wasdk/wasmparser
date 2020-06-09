@@ -1,17 +1,4 @@
 (module
-  (type $type0 (func (param i32 i32) (result i32)))
-  (type $type1 (func (param i64 i64) (result i32)))
-  (type $type2 (func (param f32 f32) (result i32)))
-  (type $type3 (func (param f64 f64) (result i32)))
-  (type $type4 (func))
-  (type $type5 (func (result i32)))
-  (type $type6 (func (result i64)))
-  (type $type7 (func (result f32)))
-  (type $type8 (func (result f64)))
-  (type $type9 (func (param i32 i32)))
-  (type $type10 (func (param i64 i64)))
-  (type $type11 (func (param f32 f32)))
-  (type $type12 (func (param f64 f64)))
   (table $table0 8 8 anyfunc)
   (memory $memory0 1)
   (export "i32_add" (func $func35))
@@ -525,7 +512,7 @@
     call $func11
     call $func12
     call $func14
-    call_indirect (type $type0)
+    call_indirect (param i32 i32) (result i32)
     drop
     call $func10
   )
@@ -762,7 +749,7 @@
     call $func16
     call $func17
     call $func19
-    call_indirect (type $type1)
+    call_indirect (param i64 i64) (result i32)
     drop
     call $func10
   )
@@ -898,7 +885,7 @@
     call $func21
     call $func22
     call $func24
-    call_indirect (type $type2)
+    call_indirect (param f32 f32) (result i32)
     drop
     call $func10
   )
@@ -1034,7 +1021,7 @@
     call $func26
     call $func27
     call $func29
-    call_indirect (type $type3)
+    call_indirect (param f64 f64) (result i32)
     drop
     call $func10
   )

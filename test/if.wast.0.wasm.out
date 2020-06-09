@@ -1,9 +1,4 @@
 (module
-  (type $type0 (func))
-  (type $type1 (func (param i32)))
-  (type $type2 (func (param i32) (result i32)))
-  (type $type3 (func (param i32 i32) (result i32)))
-  (type $type4 (func (result i32)))
   (export "empty" (func $func1))
   (export "singular" (func $func2))
   (export "multi" (func $func3))

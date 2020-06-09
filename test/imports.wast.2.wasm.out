@@ -1,4 +1,3 @@
 (module
-  (type $type0 (func))
   (import "test" "func" (func $import0))
 )

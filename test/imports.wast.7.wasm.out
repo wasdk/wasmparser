@@ -1,4 +1,3 @@
 (module
-  (type $type0 (func (param i32) (result i32)))
   (import "test" "func-i32->i32" (func $import0 (param i32) (result i32)))
 )

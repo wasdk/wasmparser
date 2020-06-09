@@ -1,10 +1,4 @@
 (module
-  (type $type0 (func (param f32) (result f32)))
-  (type $type1 (func (param f32 f32 f32 f32) (result f32)))
-  (type $type2 (func (param f32 f32 f32) (result f32)))
-  (type $type3 (func (param f64) (result f64)))
-  (type $type4 (func (param f64 f64 f64 f64) (result f64)))
-  (type $type5 (func (param f64 f64 f64) (result f64)))
   (export "f32.sqrt" (func $func0))
   (export "f32.xkcd_sqrt_2" (func $func1))
   (export "f32.xkcd_sqrt_3" (func $func2))

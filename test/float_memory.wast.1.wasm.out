@@ -1,7 +1,4 @@
 (module
-  (type $type0 (func (result f64)))
-  (type $type1 (func (result i64)))
-  (type $type2 (func))
   (memory $memory0 1 1)
   (export "f64.load" (func $func0))
   (export "i64.load" (func $func1))

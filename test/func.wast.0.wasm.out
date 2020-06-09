@@ -1,23 +1,4 @@
 (module
-  (type $type0 (func))
-  (type $type1 (func (param i32)))
-  (type $type2 (func (param i32 f64 i64)))
-  (type $type3 (func (param i32 f64)))
-  (type $type4 (func (param i32 f32 i64 i32 f64)))
-  (type $type5 (func (result i32)))
-  (type $type6 (func (param i32 f32 i64 i32) (result i32)))
-  (type $type7 (func (result i64)))
-  (type $type8 (func (result f32)))
-  (type $type9 (func (result f64)))
-  (type $type10 (func (param i32 i32) (result i32)))
-  (type $type11 (func (param i64 i64) (result i64)))
-  (type $type12 (func (param f32 f32) (result f32)))
-  (type $type13 (func (param f64 f64) (result f64)))
-  (type $type14 (func (param f32 i32 i64 i32 f64 i32) (result f64)))
-  (type $type15 (func (param i32) (result i32)))
-  (type $type16 (func (param f64 i64 f64 i64 f64 i64 f32 i32)))
-  (type $type17 (func))
-  (type $type18 (func (param f64 i64 f64 i64 f64 i64 f32 i32)))
   (table $table0 5 5 anyfunc)
   (export "f" (func $func2))
   (export "g" (func $func4))
@@ -377,9 +358,9 @@
   )
   (func $func76
     i32.const 1
-    call_indirect (type $type0)
+    call_indirect
     i32.const 4
-    call_indirect (type $type0)
+    call_indirect
   )
   (func $func77
     f64.const 0.0
@@ -391,7 +372,7 @@
     f32.const 0.0
     i32.const 0
     i32.const 0
-    call_indirect (type $type16)
+    call_indirect (param f64 i64 f64 i64 f64 i64 f32 i32)
     f64.const 0.0
     i64.const 0
     f64.const 0.0
@@ -401,7 +382,7 @@
     f32.const 0.0
     i32.const 0
     i32.const 2
-    call_indirect (type $type16)
+    call_indirect (param f64 i64 f64 i64 f64 i64 f32 i32)
     f64.const 0.0
     i64.const 0
     f64.const 0.0
@@ -411,11 +392,11 @@
     f32.const 0.0
     i32.const 0
     i32.const 3
-    call_indirect (type $type16)
+    call_indirect (param f64 i64 f64 i64 f64 i64 f32 i32)
   )
   (func $func78
     i32.const 1
-    call_indirect (type $type17)
+    call_indirect
   )
   (func $func79
     f64.const 0.0
@@ -427,6 +408,6 @@
     f32.const 0.0
     i32.const 0
     i32.const 0
-    call_indirect (type $type18)
+    call_indirect (param f64 i64 f64 i64 f64 i64 f32 i32)
   )
 )

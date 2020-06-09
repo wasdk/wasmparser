@@ -1,5 +1,4 @@
 (module
-  (type $type0 (func))
   (export "br" (func $func0))
   (export "br_if" (func $func1))
   (export "br_table" (func $func2))

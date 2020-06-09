@@ -1,5 +1,4 @@
 (module
-  (type $type0 (func (param i32) (result i32)))
   (memory $memory0 1 5)
   (export "mem" (memory $memory0))
   (export "load" (func $func0))
