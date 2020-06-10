@@ -31,17 +31,17 @@
     "@commitlint/config-conventional": "^8.3.4",
     "@semantic-release/changelog": "^5.0.1",
     "@semantic-release/git": "^9.0.0",
-    "@types/jest": "^24.9.1",
+    "@types/jest": "^26.0.0",
     "concurrently": "^5.2.0",
     "husky": "^4.2.5",
-    "jest": "^25.1.0",
+    "jest": "^26.0.1",
     "semantic-release": "^17.0.8",
-    "ts-jest": "^24.3.0",
-    "typescript": "^3.8.3",
-    "wabt": "^1.0.13"
+    "ts-jest": "^26.1.0",
+    "typescript": "^3.9.5",
+    "wabt": "1.0.13"
   },
   "dependencies": {
-    "@types/node": "^12.12.30"
+    "@types/node": "^14.0.13"
   },
   "husky": {
     "hooks": {
