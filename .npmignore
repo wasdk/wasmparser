@@ -1,7 +1,6 @@
 *~
 /examples
 /node_modules
-/src
 /test
 .editorconfig
 .travis.yml
