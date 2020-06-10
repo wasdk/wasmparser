@@ -1,3 +1,10 @@
+# [2.1.0](https://github.com/wasdk/wasmparser/compare/v2.0.0...v2.1.0) (2020-06-10)
+
+
+### Features
+
+* use abbreviated syntax for all imports ([39ee77c](https://github.com/wasdk/wasmparser/commit/39ee77ce42f579fc7e0e21c73d0eb9158cc20753)), closes [#56](https://github.com/wasdk/wasmparser/issues/56)
+
 # [2.0.0](https://github.com/wasdk/wasmparser/compare/v1.0.0...v2.0.0) (2020-06-10)
 
 
