@@ -14,58 +14,58 @@
  * limitations under the License.
  */
 
-import { readdirSync, readFileSync }  from 'fs';
-import { extname, join } from 'path';
+import { readdirSync, readFileSync } from "fs";
+import { extname, join } from "path";
 const { parseWat } = require("wabt")();
 
 const TEST_FOLDER = "./test";
 
-const INCOMPATIBLE_FILE_NAMES = [
-  "spec.wasm.out",
-];
+const INCOMPATIBLE_FILE_NAMES = ["spec.wasm.out"];
 
 // This dict is used to select corresponding feature flags for corresponding files.
 const FEATURE_FLAGS_FOR_FILES = {
   "return_call_indirect.wast.0.wasm.out": {
-    'tail_call': true,
+    tail_call: true,
   },
   "return_call_indirect.wast.1.wasm.out": {
-    'tail_call': true,
+    tail_call: true,
   },
   "return_call_indirect.wast.2.wasm.out": {
-    'tail_call': true,
+    tail_call: true,
   },
   "return_call.wast.0.wasm.out": {
-    'tail_call': true,
+    tail_call: true,
   },
   "return_call.wast.1.wasm.out": {
-    'tail_call': true,
+    tail_call: true,
   },
   "conversion_sat.wasm.out": {
-    'sat_float_to_int': true,
+    sat_float_to_int: true,
   },
   "ref_types.0.wasm.out": {
-    'reference_types': true,
+    reference_types: true,
   },
   "simd.wasm.out": {
-    'simd': true,
+    simd: true,
   },
   "memory_bulk.0.wasm.out": {
-    'bulk_memory': true,
+    bulk_memory: true,
   },
 };
 
 // Run wabt over .out files.
 readdirSync(TEST_FOLDER)
-  .filter(fileName => extname(fileName) === ".out" && INCOMPATIBLE_FILE_NAMES.indexOf(fileName) === -1)
-  .forEach(fileName => {
+  .filter(
+    (fileName) =>
+      extname(fileName) === ".out" &&
+      INCOMPATIBLE_FILE_NAMES.indexOf(fileName) === -1
+  )
+  .forEach((fileName) => {
     test(`wabt ${fileName}`, () => {
       const filePath = join(TEST_FOLDER, fileName);
-      let data = new Uint8Array(readFileSync(filePath));
+      const data = new Uint8Array(readFileSync(filePath));
       // Always turn on 'threads' flag.
-      const feature = {'threads': true, ...FEATURE_FLAGS_FOR_FILES[fileName]} ;
+      const feature = { threads: true, ...FEATURE_FLAGS_FOR_FILES[fileName] };
       expect(parseWat(fileName, data, feature)).toBeDefined();
     });
   });
-
-

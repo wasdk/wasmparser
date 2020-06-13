@@ -14,47 +14,65 @@
  * limitations under the License.
  */
 
-import { readdirSync, readFileSync }  from 'fs';
-import { extname, join } from 'path';
+import { readdirSync, readFileSync } from "fs";
+import { extname, join } from "path";
 import { WasmDisassembler } from "./src/WasmDis";
 import { BinaryReader } from "./src/WasmParser";
 
 const TEST_FOLDER = "./test";
 
 readdirSync(TEST_FOLDER)
-  .filter(fileName => extname(fileName) === ".wasm")
-  .forEach(fileName => {
+  .filter((fileName) => extname(fileName) === ".wasm")
+  .forEach((fileName) => {
     test(`${fileName}`, () => {
       const filePath = join(TEST_FOLDER, fileName);
-      let dis = new WasmDisassembler();
-      let data = new Uint8Array(readFileSync(filePath));
-      let parser = new BinaryReader();
+      const dis = new WasmDisassembler();
+      const data = new Uint8Array(readFileSync(filePath));
+      const parser = new BinaryReader();
       parser.setData(data.buffer, 0, data.length);
-      let out = dis.disassemble(parser);
-      let outFile = filePath + ".out";
-      let outFileData = readFileSync(outFile, "utf8");
+      const out = dis.disassemble(parser);
+      const outFile = filePath + ".out";
+      const outFileData = readFileSync(outFile, "utf8");
       expect(out).toBe(outFileData);
     });
   });
 
-for (const maxLines of [1, 3, 6, 7, 8, 20, 30, 32, 34, 35, 36, 37, 38, 39, 80]) {
+for (const maxLines of [
+  1,
+  3,
+  6,
+  7,
+  8,
+  20,
+  30,
+  32,
+  34,
+  35,
+  36,
+  37,
+  38,
+  39,
+  80,
+]) {
   test(`truncate_after_${maxLines}`, () => {
     const testFilePath = join(TEST_FOLDER, "memory_bulk.0.wasm");
-    let dis = new WasmDisassembler();
+    const dis = new WasmDisassembler();
     dis.maxLines = maxLines;
-    let data = new Uint8Array(readFileSync(testFilePath));
-    let parser = new BinaryReader();
+    const data = new Uint8Array(readFileSync(testFilePath));
+    const parser = new BinaryReader();
     parser.setData(data.buffer, 0, data.length);
-    let out = dis.disassemble(parser);
-    let outFile = testFilePath + ".out";
-    let outFileData = readFileSync(outFile, "utf8");
-    let outLines = out.trimRight().split("\n");
-    let allLines = outFileData.trimRight().split("\n");
+    const out = dis.disassemble(parser);
+    const outFile = testFilePath + ".out";
+    const outFileData = readFileSync(outFile, "utf8");
+    const outLines = out.trimRight().split("\n");
+    const allLines = outFileData.trimRight().split("\n");
     if (outLines.length > maxLines) {
       // truncated case
       expect(outLines.length).toBe(maxLines + 1);
       expect(outLines[maxLines]).toMatch("truncated");
-      expect(outLines.slice(0, maxLines).join("\n")).toBe(allLines.slice(0, maxLines).join("\n"));
+      expect(outLines.slice(0, maxLines).join("\n")).toBe(
+        allLines.slice(0, maxLines).join("\n")
+      );
     } else {
       // full file should be output
       expect(out).toBe(outFileData);

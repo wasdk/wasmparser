@@ -12,6 +12,7 @@
     "build": "concurrently \"npm:build:cjs\" \"npm:build:esm\"",
     "build:cjs": "tsc --module commonjs --outDir dist/cjs --target es5",
     "build:esm": "tsc --module es2015 --moduleResolution node --outDir dist/esm --target es2015",
+    "lint": "eslint '**/*.ts' --quiet",
     "prepare": "npm run build",
     "test": "jest"
   },
@@ -32,9 +33,16 @@
     "@semantic-release/changelog": "^5.0.1",
     "@semantic-release/git": "^9.0.0",
     "@types/jest": "^26.0.0",
+    "@typescript-eslint/eslint-plugin": "^3.2.0",
+    "@typescript-eslint/parser": "^3.2.0",
     "concurrently": "^5.2.0",
+    "eslint": "^7.2.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-prettier": "^3.1.3",
     "husky": "^4.2.5",
     "jest": "^26.0.1",
+    "lint-staged": "^10.2.10",
+    "prettier": "^2.0.5",
     "semantic-release": "^17.0.8",
     "ts-jest": "^26.1.0",
     "typescript": "^3.9.5",
@@ -45,12 +53,18 @@
   },
   "husky": {
     "hooks": {
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+      "pre-commit": "lint-staged"
     }
   },
   "commitlint": {
     "extends": [
       "@commitlint/config-conventional"
+    ]
+  },
+  "lint-staged": {
+    "*.ts": [
+      "eslint --fix"
     ]
   },
   "release": {
