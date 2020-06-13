@@ -408,7 +408,7 @@
   (func $func47 (param $var0 i32) (result i32)
     local.get $var0
     nop
-    grow_memory
+    memory.grow
   )
   (func $func48 (param $var0 i32) (result i32)
     nop
@@ -416,6 +416,6 @@
     local.get $var0
     nop
     nop
-    grow_memory
+    memory.grow
   )
 )

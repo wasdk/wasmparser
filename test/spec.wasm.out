@@ -1426,7 +1426,7 @@
     block $label0 (result i32)
       i32.const 40
       br $label0
-      grow_memory
+      memory.grow
     end $label0
   )
   (func $func53 (result i32)
@@ -2247,7 +2247,7 @@
     block $label0 (result i32)
       i32.const 40
       br $label0
-      grow_memory
+      memory.grow
     end $label0
   )
   (func $func53 (result i32)
@@ -3879,7 +3879,7 @@
       i32.const 40
       i32.const 0
       br_table $label0
-      grow_memory
+      memory.grow
     end $label0
   )
   (func $func60 (param $var0 i32) (result i32)
@@ -5809,7 +5809,7 @@
       i32.const 40
       i32.const 0
       br_table $label0
-      grow_memory
+      memory.grow
     end $label0
   )
   (func $func60 (param $var0 i32) (result i32)
@@ -19599,7 +19599,7 @@
   )
   (func $func3 (param $var0 i32) (result i32)
     local.get $var0
-    grow_memory
+    memory.grow
   )
 )
 (module
@@ -19627,7 +19627,7 @@
   )
   (func $func3 (param $var0 i32) (result i32)
     local.get $var0
-    grow_memory
+    memory.grow
   )
 )
 (module
@@ -19804,7 +19804,7 @@
   )
   (func $func4 (param $var0 i32) (result i32)
     local.get $var0
-    grow_memory
+    memory.grow
   )
   (func $func5 (result i32)
     current_memory
@@ -19815,7 +19815,7 @@
   (export "grow" (func $func0))
   (func $func0 (param $var0 i32) (result i32)
     local.get $var0
-    grow_memory
+    memory.grow
   )
 )
 (module
@@ -19823,7 +19823,7 @@
   (export "grow" (func $func0))
   (func $func0 (param $var0 i32) (result i32)
     local.get $var0
-    grow_memory
+    memory.grow
   )
 )
 (module
@@ -19854,7 +19854,7 @@
   )
   (func $func4 (param $var0 i32) (result i32)
     local.get $var0
-    grow_memory
+    memory.grow
   )
   (func $func5 (result i32)
     current_memory
@@ -19865,7 +19865,7 @@
   (export "grow" (func $func0))
   (func $func0 (param $var0 i32) (result i32)
     local.get $var0
-    grow_memory
+    memory.grow
   )
 )
 (module
@@ -19873,7 +19873,7 @@
   (export "grow" (func $func0))
   (func $func0 (param $var0 i32) (result i32)
     local.get $var0
-    grow_memory
+    memory.grow
   )
 )
 (module
@@ -20286,7 +20286,7 @@
   (func $func47 (param $var0 i32) (result i32)
     local.get $var0
     nop
-    grow_memory
+    memory.grow
   )
   (func $func48 (param $var0 i32) (result i32)
     nop
@@ -20294,7 +20294,7 @@
     local.get $var0
     nop
     nop
-    grow_memory
+    memory.grow
   )
 )
 (module
@@ -20707,7 +20707,7 @@
   (func $func47 (param $var0 i32) (result i32)
     local.get $var0
     nop
-    grow_memory
+    memory.grow
   )
   (func $func48 (param $var0 i32) (result i32)
     nop
@@ -20715,7 +20715,7 @@
     local.get $var0
     nop
     nop
-    grow_memory
+    memory.grow
   )
 )
 (module
@@ -21132,7 +21132,7 @@
   (func $func54 (result i32)
     i32.const 40
     return
-    grow_memory
+    memory.grow
   )
 )
 (module
@@ -21549,7 +21549,7 @@
   (func $func54 (result i32)
     i32.const 40
     return
-    grow_memory
+    memory.grow
   )
 )
 (module
@@ -36543,7 +36543,7 @@
   )
   (func $func54 (result i32)
     unreachable
-    grow_memory
+    memory.grow
   )
 )
 (module
@@ -37255,6 +37255,6 @@
   )
   (func $func54 (result i32)
     unreachable
-    grow_memory
+    memory.grow
   )
 )

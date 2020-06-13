@@ -382,6 +382,6 @@
   )
   (func $func56 (result i32)
     unreachable
-    grow_memory
+    memory.grow
   )
 )

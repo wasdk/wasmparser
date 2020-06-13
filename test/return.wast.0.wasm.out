@@ -411,6 +411,6 @@
   (func $func54 (result i32)
     i32.const 40
     return
-    grow_memory
+    memory.grow
   )
 )
