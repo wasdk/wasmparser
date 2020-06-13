@@ -484,7 +484,7 @@
     block $label0 (result i32)
       i32.const 40
       br $label0
-      grow_memory
+      memory.grow
     end $label0
   )
   (func $func53 (result i32)

@@ -662,7 +662,7 @@
       i32.const 40
       i32.const 0
       br_table $label0
-      grow_memory
+      memory.grow
     end $label0
   )
   (func $func60 (param $var0 i32) (result i32)

@@ -554,7 +554,7 @@ export const OperatorCodeNames = [
   "i64.store16",
   "i64.store32",
   "current_memory",
-  "grow_memory",
+  "memory.grow",
   "i32.const",
   "i64.const",
   "f32.const",

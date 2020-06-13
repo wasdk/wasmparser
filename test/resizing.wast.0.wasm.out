@@ -26,7 +26,7 @@
   )
   (func $func4 (param $var0 i32) (result i32)
     local.get $var0
-    grow_memory
+    memory.grow
   )
   (func $func5 (result i32)
     current_memory
