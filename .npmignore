@@ -3,7 +3,9 @@
 /node_modules
 /test
 .editorconfig
+.eslint*
 .travis.yml
+.vscode/
 jest.config.js
 npm-debug.log
 test.ts
