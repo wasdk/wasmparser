@@ -1,3 +1,10 @@
+## [2.2.3](https://github.com/wasdk/wasmparser/compare/v2.2.2...v2.2.3) (2020-06-21)
+
+
+### Bug Fixes
+
+* correct import from "WasmParser" in "WasmDis.ts" ([8abb34b](https://github.com/wasdk/wasmparser/commit/8abb34b59ec0820259587db07cac95a94a54958e))
+
 ## [2.2.2](https://github.com/wasdk/wasmparser/compare/v2.2.1...v2.2.2) (2020-06-16)
 
 
