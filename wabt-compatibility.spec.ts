@@ -20,7 +20,11 @@ const { parseWat } = require("wabt")();
 
 const TEST_FOLDER = "./test";
 
-const INCOMPATIBLE_FILE_NAMES = ["spec.wasm.out"];
+const INCOMPATIBLE_FILE_NAMES = [
+  "atomic.1.wasm.out",
+  "spec.wasm.out",
+  "threads.0.wasm.out",
+];
 
 // This dict is used to select corresponding feature flags for corresponding files.
 const FEATURE_FLAGS_FOR_FILES = {

@@ -12,18 +12,18 @@
   (func $func1 (param $var0 i32) (param $var1 i32) (result i32)
     local.get $var0
     local.get $var1
-    atomic.notify
+    memory.atomic.notify
   )
   (func $func2 (param $var0 i32) (param $var1 i64) (param $var2 i64) (result i32)
     local.get $var0
     local.get $var1
     local.get $var2
-    i64.atomic.wait
+    memory.atomic.wait64
   )
   (func $func3 (param $var0 i32) (param $var1 i32) (param $var2 i64) (result i32)
     local.get $var0
     local.get $var1
     local.get $var2
-    i32.atomic.wait
+    memory.atomic.wait32
   )
 )
