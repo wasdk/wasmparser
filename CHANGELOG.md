@@ -1,3 +1,10 @@
+## [2.2.4](https://github.com/wasdk/wasmparser/compare/v2.2.3...v2.2.4) (2020-06-23)
+
+
+### Bug Fixes
+
+* rename atomic.notify and *.atomic.wait ([9d10a22](https://github.com/wasdk/wasmparser/commit/9d10a22193e66ac3e953a3722c1c3bf673c00914)), closes [WebAssembly/threads#149](https://github.com/WebAssembly/threads/issues/149)
+
 ## [2.2.3](https://github.com/wasdk/wasmparser/compare/v2.2.2...v2.2.3) (2020-06-21)
 
 
