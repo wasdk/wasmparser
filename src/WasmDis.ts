@@ -46,7 +46,7 @@ import {
   NULL_FUNCTION_INDEX,
   isTypeIndex,
   ILocalNameEntry,
-} from "./WasmParser";
+} from "./WasmParser.js";
 
 const NAME_SECTION_NAME = "name";
 const INVALID_NAME_SYMBOLS_REGEX = /[^0-9A-Za-z!#$%&'*+.:<=>?@^_`|~\/\-]/;
