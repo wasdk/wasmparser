@@ -1,3 +1,0 @@
-(module
-  (func $import0 (import "test" "func-i32") (param i32))
-)

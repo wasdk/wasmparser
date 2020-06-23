@@ -1,6 +1,0 @@
-(module
-  (table $table0 (import "Mt" "tab") 0 anyfunc)
-  (elem (i32.const 10) $func0)
-  (func $func0
-  )
-)

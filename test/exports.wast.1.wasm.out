@@ -1,6 +1,0 @@
-(module
-  (export "a" (func $func0))
-  (export "b" (func $func0))
-  (func $func0
-  )
-)

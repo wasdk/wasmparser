@@ -1,3 +1,0 @@
-(module
-  (func $import0 (import "test" "global-i32") (result i32))
-)

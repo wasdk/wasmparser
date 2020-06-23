@@ -1,9 +1,0 @@
-(module
-  (export "call" (func $func0))
-  (func $func0 (result i32)
-    call $func1
-  )
-  (func $func1 (result i32)
-    i32.const 2
-  )
-)

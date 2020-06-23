@@ -1,4 +1,0 @@
-(module
-  (memory $memory0 (import "Mm" "mem") 0)
-  (data (i32.const 65536) "a")
-)

@@ -1,8 +1,0 @@
-(module
-  (memory $memory0 1 1)
-  (export "memsize" (func $func0))
-  (func $func0 (result i32)
-    current_memory
-  )
-  (data (i32.const 0) "x")
-)

@@ -1,5 +1,0 @@
-(module
-  (memory $memory0 1 2)
-  (data (i32.const 0) "a")
-  (data (i32.const 98304) "b")
-)

@@ -1,3 +1,0 @@
-(module
-  (func $import0 (import "test" "table-10-inf"))
-)

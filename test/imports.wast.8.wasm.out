@@ -1,3 +1,0 @@
-(module
-  (func $import0 (import "test" "func-i64->i64") (param i64) (result i64))
-)

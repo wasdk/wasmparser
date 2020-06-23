@@ -1,3 +1,0 @@
-(module
-  (func $import0 (import "reexport_f" "print") (param i32) (result i32))
-)

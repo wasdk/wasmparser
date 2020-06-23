@@ -1,9 +1,0 @@
-(module
-  (table $table0 (import "Mt" "tab") 10 anyfunc)
-  (memory $memory0 1)
-  (elem (i32.const 7) $func0)
-  (func $func0 (result i32)
-    i32.const 0
-  )
-  (data (i32.const 65536) "d")
-)

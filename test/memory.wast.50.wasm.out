@@ -1,8 +1,0 @@
-(module
-  (memory $memory0 0)
-  (func $func0
-    i32.const 0
-    i32.load16_u
-    drop
-  )
-)
