@@ -1,3 +1,10 @@
+## [2.2.5](https://github.com/wasdk/wasmparser/compare/v2.2.4...v2.2.5) (2020-06-23)
+
+
+### Bug Fixes
+
+* imports need to use .js suffix to work correctly ([64a7f77](https://github.com/wasdk/wasmparser/commit/64a7f776e896e3c5aea8371456d84d0052b577be))
+
 ## [2.2.4](https://github.com/wasdk/wasmparser/compare/v2.2.3...v2.2.4) (2020-06-23)
 
 
