@@ -1,8 +1,0 @@
-(module
-  (func $import0 (import "spectest" "print") (param i32))
-  (start $func1)
-  (func $func1
-    i32.const 2
-    call $import0
-  )
-)

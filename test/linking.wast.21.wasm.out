@@ -1,6 +1,0 @@
-(module
-  (func $import0 (import "spectest" "print"))
-  (memory $memory0 (import "Mm" "mem") 1)
-  (table $table0 (import "Mm" "tab") 0 anyfunc)
-  (data (i32.const 0) "abc")
-)

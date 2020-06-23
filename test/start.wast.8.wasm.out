@@ -1,6 +1,0 @@
-(module
-  (start $func0)
-  (func $func0
-    unreachable
-  )
-)

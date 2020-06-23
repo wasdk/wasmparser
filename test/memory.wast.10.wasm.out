@@ -1,5 +1,0 @@
-(module
-  (global $global0 (import "spectest" "global") i32)
-  (memory $memory0 1)
-  (data (global.get $global0) "a")
-)

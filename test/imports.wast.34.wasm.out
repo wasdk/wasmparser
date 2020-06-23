@@ -1,3 +1,0 @@
-(module
-  (global $global0 (import "test" "global-i32") i32)
-)

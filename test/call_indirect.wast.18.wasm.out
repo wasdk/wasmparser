@@ -1,6 +1,0 @@
-(module
-  (table $table0 10 anyfunc)
-  (elem (i32.const -1) $func0)
-  (func $func0
-  )
-)

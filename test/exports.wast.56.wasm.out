@@ -1,5 +1,0 @@
-(module
-  (memory $memory0 0)
-  (export "a" (memory $memory0))
-  (export "b" (memory $memory0))
-)

@@ -1,3 +1,0 @@
-(module
-  (memory $memory0 (import "test" "func-i32") 1)
-)

@@ -1,3 +1,0 @@
-(module
-  (global $global0 (import "spectest" "print") i32)
-)

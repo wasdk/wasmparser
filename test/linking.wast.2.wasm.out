@@ -1,4 +1,0 @@
-(module
-  (func $import0 (import "spectest" "print") (param i32))
-  (export "print" (func $import0))
-)

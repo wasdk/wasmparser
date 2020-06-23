@@ -1,8 +1,0 @@
-(module
-  (memory $memory0 (import "Mm" "mem") 1 8)
-  (export "grow" (func $func0))
-  (func $func0 (param $var0 i32) (result i32)
-    local.get $var0
-    memory.grow
-  )
-)

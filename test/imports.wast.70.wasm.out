@@ -1,9 +1,0 @@
-(module
-  (memory $memory0 (import "spectest" "memory") 1 2)
-  (export "load" (func $func0))
-  (func $func0 (param $var0 i32) (result i32)
-    local.get $var0
-    i32.load
-  )
-  (data (i32.const 10) "\10")
-)

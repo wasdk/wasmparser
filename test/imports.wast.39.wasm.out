@@ -1,3 +1,0 @@
-(module
-  (global $global0 (import "test" "table-10-inf") i32)
-)

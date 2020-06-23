@@ -1,9 +1,0 @@
-(module
-  (table $table0 1 anyref)
-  (func $func0
-    i32.const 0
-    i32.const 0
-    table.get $table0
-    table.set $table0
-  )
-)
