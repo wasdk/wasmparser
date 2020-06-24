@@ -1,3 +1,24 @@
+# [3.0.0](https://github.com/wasdk/wasmparser/compare/v2.2.5...v3.0.0) (2020-06-24)
+
+
+* revert!: add option to truncate disassembly ([2eb0025](https://github.com/wasdk/wasmparser/commit/2eb002523493efbe286f3661696fa8f4fd31d402)), closes [#30](https://github.com/wasdk/wasmparser/issues/30)
+
+
+### BREAKING CHANGES
+
+* dropping the `WasmDisassembler#maxLines`
+feature that was introduced earlier.
+
+The `WasmDisassembler#maxLines` feature doesn't interact well
+with the chunked disassembly machinery, in particular the
+logic in `getResult()` to avoid breaking def-use chains for
+labels didn't play well with the `maxLines` feature at all
+(it would remove `;; -- text is truncated due to size --`
+marker when the line limit was reached).
+
+Since there's already support for chunked disassembly built
+into wasmparser by design, that should be used instead.
+
 ## [2.2.5](https://github.com/wasdk/wasmparser/compare/v2.2.4...v2.2.5) (2020-06-23)
 
 
