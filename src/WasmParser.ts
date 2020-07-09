@@ -1793,32 +1793,43 @@ export class BinaryReader {
   }
   private readElementEntryBody(): boolean {
     let funcType = Type.unspecified;
+    const pos = this._pos;
     if (
       this._segmentFlags &
       (SegmentFlags.IsPassive | SegmentFlags.HasTableIndex)
     ) {
+      if (!this.hasMoreBytes()) return false;
       funcType = this.readVarInt7();
     }
-    if (!this.hasVarIntBytes()) return false;
-    const pos = this._pos;
-    const numElemements = this.readVarUint32();
-    if (!this.hasBytes(numElemements)) {
-      // Shall have at least the numElemements amount of bytes.
+    if (!this.hasVarIntBytes()) {
       this._pos = pos;
       return false;
     }
+    const numElemements = this.readVarUint32();
     const elements = new Uint32Array(numElemements);
     for (let i = 0; i < numElemements; i++) {
       if (this._segmentFlags & SegmentFlags.FunctionsAsElements) {
+        if (!this.hasMoreBytes()) {
+          this._pos = pos;
+          return false;
+        }
         // Read initializer expression, which must either be null ref or func ref
         let operator = this.readUint8();
         if (operator == OperatorCode.ref_null) {
           elements[i] = NULL_FUNCTION_INDEX;
         } else if (operator == OperatorCode.ref_func) {
+          if (!this.hasVarIntBytes()) {
+            this._pos = pos;
+            return false;
+          }
           elements[i] = this.readVarInt32();
         } else {
           this.error = new Error("Invalid initializer expression for element");
           return true;
+        }
+        if (!this.hasMoreBytes()) {
+          this._pos = pos;
+          return false;
         }
         operator = this.readUint8();
         if (operator != OperatorCode.end) {
