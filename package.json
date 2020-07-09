@@ -16,6 +16,13 @@
     "prepare": "npm run build",
     "test": "jest"
   },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "moduleNameMapper": {
+      "(.+/WasmParser).js": "$1.ts"
+    }
+  },
   "author": "Yury Delendik <ydelendik@mozilla.com.",
   "contributors": [
     "Benedikt Meurer <bmeurer@google.com>",
