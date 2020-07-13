@@ -1,3 +1,15 @@
+# [3.1.0](https://github.com/wasdk/wasmparser/compare/v3.0.0...v3.1.0) (2020-07-13)
+
+
+### Bug Fixes
+
+* make chunked parsing work for element entries ([34d35d0](https://github.com/wasdk/wasmparser/commit/34d35d0820da552963d619ee473877be4e1fbcca)), closes [#22](https://github.com/wasdk/wasmparser/issues/22)
+
+
+### Features
+
+* add tests for chunked disassembly ([4976b44](https://github.com/wasdk/wasmparser/commit/4976b4404c3e6fcf48481ac205d8b6fc611b2b29))
+
 # [3.0.0](https://github.com/wasdk/wasmparser/compare/v2.2.5...v3.0.0) (2020-06-24)
 
 
