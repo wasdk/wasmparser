@@ -250,21 +250,13 @@ describe("NameSectionReader", () => {
   });
 
   test("Wasm module with bad names", () => {
-    const { buffer } = parseWat(
+    expect(() => parseWat(
       `test.wat`,
       `(module
          (import "import" "function" (func $foo))
          (import "import" "function2" (func $foo))
          )`
-    ).toBinary({ write_debug_names: true });
-    const reader = new BinaryReader();
-    reader.setData(buffer.buffer, 0, buffer.byteLength);
-    const ng = new NameSectionReader();
-    ng.read(reader);
-    expect(ng.hasValidNames()).toBe(true);
-    const nr = ng.getNameResolver();
-    expect(nr.getFunctionName(0, true, true)).toBe("$unknown0");
-    expect(nr.getFunctionName(1, true, true)).toBe("$unknown1");
+    )).toThrow('redefinition of function "$foo"')
   });
 
   test("Wasm module with local names", () => {
