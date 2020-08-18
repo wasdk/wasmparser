@@ -1033,7 +1033,7 @@ export const OperatorCodeNames = [
   "memory.atomic.notify",
   "memory.atomic.wait32",
   "memory.atomic.wait64",
-  undefined,
+  "atomic.fence",
   undefined,
   undefined,
   undefined,
