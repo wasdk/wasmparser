@@ -481,6 +481,16 @@ exports[`Parsing and disassembling atomic.1.wasm generates expected output 1`] =
 "
 `;
 
+exports[`Parsing and disassembling atomic.3.wasm generates expected output 1`] = `
+"(module
+  (func $func0
+    atomic.fence
+    atomic.fence
+  )
+)
+"
+`;
+
 exports[`Parsing and disassembling binary.wast.0.wasm generates expected output 1`] = `
 "(module
 )
