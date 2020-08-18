@@ -2409,6 +2409,7 @@ export class BinaryReader {
           this.state = BinaryReaderState.ERROR;
           return true;
         }
+        break;
       }
       default:
         this.error = new Error(`Unknown operator: ${code}`);
