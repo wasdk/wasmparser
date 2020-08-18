@@ -248,6 +248,7 @@ export const enum OperatorCode {
   atomic_notify = 0xfe00,
   i32_atomic_wait = 0xfe01,
   i64_atomic_wait = 0xfe02,
+  atomic_fence = 0xfe03,
   i32_atomic_load = 0xfe10,
   i64_atomic_load = 0xfe11,
   i32_atomic_load8_u = 0xfe12,
@@ -2401,6 +2402,14 @@ export class BinaryReader {
       case OperatorCode.i64_atomic_rmw32_cmpxchg_u:
         memoryAddress = this.readMemoryImmediate();
         break;
+      case OperatorCode.atomic_fence: {
+        var consistency_model = this.readUint8();
+        if (consistency_model != 0) {
+          this.error = new Error("atomic.fence consistency model must be 0");
+          this.state = BinaryReaderState.ERROR;
+          return true;
+        }
+      }
       default:
         this.error = new Error(`Unknown operator: ${code}`);
         this.state = BinaryReaderState.ERROR;
