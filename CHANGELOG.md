@@ -1,3 +1,10 @@
+## [3.1.1](https://github.com/wasdk/wasmparser/compare/v3.1.0...v3.1.1) (2020-08-19)
+
+
+### Bug Fixes
+
+* **threads:** add atomic.fence ([a9fd605](https://github.com/wasdk/wasmparser/commit/a9fd605d175fe91f4991321cd43d0db7868f01df)), closes [/github.com/WebAssembly/wabt/commit/d041025854ba2b00b3df9f308914c8aba05dcda9#diff-25d902c24283ab8cfbac54dfa101ad31](https://github.com//github.com/WebAssembly/wabt/commit/d041025854ba2b00b3df9f308914c8aba05dcda9/issues/diff-25d902c24283ab8cfbac54dfa101ad31)
+
 # [3.1.0](https://github.com/wasdk/wasmparser/compare/v3.0.0...v3.1.0) (2020-07-13)
 
 
