@@ -250,13 +250,15 @@ describe("NameSectionReader", () => {
   });
 
   test("Wasm module with bad names", () => {
-    expect(() => parseWat(
-      `test.wat`,
-      `(module
+    expect(() =>
+      parseWat(
+        `test.wat`,
+        `(module
          (import "import" "function" (func $foo))
          (import "import" "function2" (func $foo))
          )`
-    )).toThrow('redefinition of function "$foo"')
+      )
+    ).toThrow('redefinition of function "$foo"');
   });
 
   test("Wasm module with local names", () => {
