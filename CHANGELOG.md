@@ -1,3 +1,10 @@
+## [3.1.2](https://github.com/wasdk/wasmparser/compare/v3.1.1...v3.1.2) (2020-08-26)
+
+
+### Bug Fixes
+
+* extensions have an leb128 opcode ([#77](https://github.com/wasdk/wasmparser/issues/77)) ([149816c](https://github.com/wasdk/wasmparser/commit/149816c5aa42f7c30bcced7d36742ad9984683fa))
+
 ## [3.1.1](https://github.com/wasdk/wasmparser/compare/v3.1.0...v3.1.1) (2020-08-19)
 
 
