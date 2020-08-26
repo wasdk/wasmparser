@@ -2073,7 +2073,10 @@ export class BinaryReader {
   }
 
   private readCodeOperator_0xfc(): boolean {
-    var code = this._data[this._pos++] | 0xfc00;
+    if (!this.hasVarIntBytes()) {
+      return false;
+    }
+    var code = this.readVarUint32() | 0xfc00;
     var reserved, segmentIndex, destinationIndex, tableIndex;
     switch (code) {
       case OperatorCode.i32_trunc_sat_f32_s:
@@ -2143,6 +2146,9 @@ export class BinaryReader {
     const MAX_CODE_OPERATOR_0XFD_SIZE = 17;
     var pos = this._pos;
     if (!this._eof && pos + MAX_CODE_OPERATOR_0XFD_SIZE > this._length) {
+      return false;
+    }
+    if (!this.hasVarIntBytes()) {
       return false;
     }
     var code = this.readVarUint32() | 0xfd00;
@@ -2331,7 +2337,10 @@ export class BinaryReader {
     if (!this._eof && pos + MAX_CODE_OPERATOR_0XFE_SIZE > this._length) {
       return false;
     }
-    var code = this._data[this._pos++] | 0xfe00;
+    if (!this.hasVarIntBytes()) {
+      return false;
+    }
+    var code = this.readVarUint32() | 0xfe00;
     var memoryAddress;
     switch (code) {
       case OperatorCode.atomic_notify:
