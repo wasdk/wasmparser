@@ -1148,6 +1148,10 @@ export const enum NameType {
   Module = 0,
   Function = 1,
   Local = 2,
+  Type = 4,
+  Table = 5,
+  Memory = 6,
+  Global = 7,
 }
 export const enum BinaryReaderState {
   ERROR = -1,
@@ -1287,6 +1291,18 @@ export interface ILocalName {
 }
 export interface ILocalNameEntry extends INameEntry {
   funcs: ILocalName[];
+}
+export interface ITypeNameEntry extends INameEntry {
+  names: INaming[];
+}
+export interface ITableNameEntry extends INameEntry {
+  names: INaming[];
+}
+export interface IMemoryNameEntry extends INameEntry {
+  names: INaming[];
+}
+export interface IGlobalNameEntry extends INameEntry {
+  names: INaming[];
 }
 export interface ILinkingEntry {
   type: LinkingType;
@@ -1930,17 +1946,28 @@ export class BinaryReader {
       this._pos = pos;
       return false;
     }
-    var result: IModuleNameEntry | IFunctionNameEntry | ILocalNameEntry;
+    var result:
+      | IModuleNameEntry
+      | IFunctionNameEntry
+      | ILocalNameEntry
+      | ITypeNameEntry
+      | ITableNameEntry
+      | IMemoryNameEntry
+      | IGlobalNameEntry;
     switch (type) {
       case NameType.Module:
         result = {
-          type: type,
+          type,
           moduleName: this.readStringBytes(),
         };
         break;
       case NameType.Function:
+      case NameType.Type:
+      case NameType.Table:
+      case NameType.Memory:
+      case NameType.Global:
         result = {
-          type: type,
+          type,
           names: this.readNameMap(),
         };
         break;
@@ -1955,7 +1982,7 @@ export class BinaryReader {
           });
         }
         result = {
-          type: type,
+          type,
           funcs: funcs,
         };
         break;
