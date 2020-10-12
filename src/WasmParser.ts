@@ -1605,6 +1605,9 @@ export class BinaryReader {
     this._pos += length;
     return new Uint8Array(result); // making a clone of the data
   }
+  private skipBytes(length: number) {
+    this._pos += length;
+  }
   private hasStringBytes(): boolean {
     if (!this.hasVarIntBytes()) return false;
     var pos = this._pos;
@@ -1957,9 +1960,10 @@ export class BinaryReader {
         };
         break;
       default:
-        this.error = new Error(`Bad name entry type: ${type}`);
-        this.state = BinaryReaderState.ERROR;
-        return true;
+        // Skip this unknown name subsection (as per specification,
+        // custom section errors shouldn't cause Wasm parsing to fail).
+        this.skipBytes(payloadLength);
+        return this.read();
     }
     this.state = BinaryReaderState.NAME_SECTION_ENTRY;
     this.result = result;

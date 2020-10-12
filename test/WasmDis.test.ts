@@ -207,6 +207,39 @@ describe("NameSectionReader", () => {
     expect(nsr.getNameResolver.bind(nsr)).toThrowError();
   });
 
+  test("Wasm module with unsupported name subsection", () => {
+    const data = new Uint8Array([
+      // Wasm header
+      0x00,
+      0x61,
+      0x73,
+      0x6d,
+      0x01,
+      0x00,
+      0x00,
+      0x00,
+      // name section
+      0x00, // id
+      0x08, // size
+      // 'name'
+      0x04,
+      0x6e,
+      0x61,
+      0x6d,
+      0x65,
+      // Unsupported 255 name subsection
+      0xff, // id
+      0x02, // size
+      0x42, // payload
+      0x42,
+    ]);
+    const reader = new BinaryReader();
+    reader.setData(data.buffer, 0, data.byteLength);
+    const nsr = new NameSectionReader();
+    nsr.read(reader);
+    expect(nsr.hasValidNames()).toBe(false);
+  });
+
   test("Wasm module with function name", () => {
     const { buffer } = parseWat(
       `test.wat`,
