@@ -1,3 +1,10 @@
+## [3.1.3](https://github.com/wasdk/wasmparser/compare/v3.1.2...v3.1.3) (2020-10-12)
+
+
+### Bug Fixes
+
+* ignore unsupported "name" subsections ([652f0f7](https://github.com/wasdk/wasmparser/commit/652f0f7c79db00edcc21d9049bb73e4d41383740))
+
 ## [3.1.2](https://github.com/wasdk/wasmparser/compare/v3.1.1...v3.1.2) (2020-08-26)
 
 
