@@ -1,3 +1,10 @@
+# [3.2.0](https://github.com/wasdk/wasmparser/compare/v3.1.3...v3.2.0) (2020-10-13)
+
+
+### Features
+
+* support some extended name subsections ([d3efc60](https://github.com/wasdk/wasmparser/commit/d3efc60a93326c09502d8bbace5d2d6231df03e3))
+
 ## [3.1.3](https://github.com/wasdk/wasmparser/compare/v3.1.2...v3.1.3) (2020-10-12)
 
 
