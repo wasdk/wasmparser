@@ -463,19 +463,19 @@ exports[`Parsing and disassembling atomic.1.wasm generates expected output 1`] =
   (func $func1 (param $var0 i32) (param $var1 i32) (result i32)
     local.get $var0
     local.get $var1
-    memory.atomic.notify
+    atomic.notify
   )
   (func $func2 (param $var0 i32) (param $var1 i64) (param $var2 i64) (result i32)
     local.get $var0
     local.get $var1
     local.get $var2
-    memory.atomic.wait64
+    i64.atomic.wait
   )
   (func $func3 (param $var0 i32) (param $var1 i32) (param $var2 i64) (result i32)
     local.get $var0
     local.get $var1
     local.get $var2
-    memory.atomic.wait32
+    i32.atomic.wait
   )
 )
 "
@@ -846,7 +846,7 @@ exports[`Parsing and disassembling block-typed.wasm generates expected output 1`
 
 exports[`Parsing and disassembling br.wast.0.wasm generates expected output 1`] = `
 "(module
-  (table $table0 1 1 anyfunc)
+  (table $table0 1 1 funcref)
   (memory $memory0 1)
   (export \\"type-i32\\" (func $func1))
   (export \\"type-i64\\" (func $func2))
@@ -905,7 +905,7 @@ exports[`Parsing and disassembling br.wast.0.wasm generates expected output 1`] 
   (export \\"nested-br_if-value-cond\\" (func $func56))
   (export \\"nested-br_table-value\\" (func $func57))
   (export \\"nested-br_table-value-index\\" (func $func58))
-  (elem (i32.const 0) $func30)
+  (elem $elem0 (i32.const 0) funcref (ref.func $func30))
   (func $func0
   )
   (func $func1
@@ -1675,7 +1675,7 @@ exports[`Parsing and disassembling br_if.wast.0.wasm generates expected output 1
 
 exports[`Parsing and disassembling br_table.wast.0.wasm generates expected output 1`] = `
 "(module
-  (table $table0 1 1 anyfunc)
+  (table $table0 1 1 funcref)
   (memory $memory0 1)
   (export \\"type-i32\\" (func $func1))
   (export \\"type-i64\\" (func $func2))
@@ -1742,7 +1742,7 @@ exports[`Parsing and disassembling br_table.wast.0.wasm generates expected outpu
   (export \\"nested-br_table-value\\" (func $func64))
   (export \\"nested-br_table-value-index\\" (func $func65))
   (export \\"nested-br_table-loop-block\\" (func $func66))
-  (elem (i32.const 0) $func37)
+  (elem $elem0 (i32.const 0) funcref (ref.func $func37))
   (func $func0
   )
   (func $func1
@@ -2507,6 +2507,372 @@ exports[`Parsing and disassembling break-drop.wast.0.wasm generates expected out
 "
 `;
 
+exports[`Parsing and disassembling bulk.0.wasm generates expected output 1`] = `
+"(module
+  (memory $memory0 1)
+  (data \\"foo\\")
+)
+"
+`;
+
+exports[`Parsing and disassembling bulk.1.wasm generates expected output 1`] = `
+"(module
+  (table $table0 3 funcref)
+  (elem $elem0 funcref (ref.func $func0) (ref.null func) (ref.func $func1))
+  (func $func0
+  )
+  (func $func1
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling bulk.2.wasm generates expected output 1`] = `
+"(module
+  (memory $memory0 1)
+  (export \\"fill\\" (func $func0))
+  (export \\"load8_u\\" (func $func1))
+  (func $func0 (param $var0 i32) (param $var1 i32) (param $var2 i32)
+    local.get $var0
+    local.get $var1
+    local.get $var2
+    memory.fill
+  )
+  (func $func1 (param $var0 i32) (result i32)
+    local.get $var0
+    i32.load8_u
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling bulk.3.wasm generates expected output 1`] = `
+"(module
+  (memory $memory0 1 1)
+  (export \\"copy\\" (func $func0))
+  (export \\"load8_u\\" (func $func1))
+  (func $func0 (param $var0 i32) (param $var1 i32) (param $var2 i32)
+    local.get $var0
+    local.get $var1
+    local.get $var2
+    memory.copy
+  )
+  (func $func1 (param $var0 i32) (result i32)
+    local.get $var0
+    i32.load8_u
+  )
+  (data (i32.const 0) \\"\\\\aa\\\\bb\\\\cc\\\\dd\\")
+)
+"
+`;
+
+exports[`Parsing and disassembling bulk.4.wasm generates expected output 1`] = `
+"(module
+  (memory $memory0 1)
+  (export \\"init\\" (func $func0))
+  (export \\"load8_u\\" (func $func1))
+  (func $func0 (param $var0 i32) (param $var1 i32) (param $var2 i32)
+    local.get $var0
+    local.get $var1
+    local.get $var2
+    memory.init 0
+  )
+  (func $func1 (param $var0 i32) (result i32)
+    local.get $var0
+    i32.load8_u
+  )
+  (data \\"\\\\aa\\\\bb\\\\cc\\\\dd\\")
+)
+"
+`;
+
+exports[`Parsing and disassembling bulk.5.wasm generates expected output 1`] = `
+"(module
+  (memory $memory0 1)
+  (export \\"drop_passive\\" (func $func0))
+  (export \\"init_passive\\" (func $func1))
+  (export \\"drop_active\\" (func $func2))
+  (export \\"init_active\\" (func $func3))
+  (func $func0
+    data.drop 0
+  )
+  (func $func1 (param $var0 i32)
+    i32.const 0
+    i32.const 0
+    local.get $var0
+    memory.init 0
+  )
+  (func $func2
+    data.drop 1
+  )
+  (func $func3 (param $var0 i32)
+    i32.const 0
+    i32.const 0
+    local.get $var0
+    memory.init 1
+  )
+  (data \\"x\\")
+  (data (i32.const 0) \\"x\\")
+)
+"
+`;
+
+exports[`Parsing and disassembling bulk.6.wasm generates expected output 1`] = `
+"(module
+  (func $func0
+    data.drop 64
+  )
+  (data \\"\\")
+  (data \\"\\")
+  (data \\"\\")
+  (data \\"\\")
+  (data \\"\\")
+  (data \\"\\")
+  (data \\"\\")
+  (data \\"\\")
+  (data \\"\\")
+  (data \\"\\")
+  (data \\"\\")
+  (data \\"\\")
+  (data \\"\\")
+  (data \\"\\")
+  (data \\"\\")
+  (data \\"\\")
+  (data \\"\\")
+  (data \\"\\")
+  (data \\"\\")
+  (data \\"\\")
+  (data \\"\\")
+  (data \\"\\")
+  (data \\"\\")
+  (data \\"\\")
+  (data \\"\\")
+  (data \\"\\")
+  (data \\"\\")
+  (data \\"\\")
+  (data \\"\\")
+  (data \\"\\")
+  (data \\"\\")
+  (data \\"\\")
+  (data \\"\\")
+  (data \\"\\")
+  (data \\"\\")
+  (data \\"\\")
+  (data \\"\\")
+  (data \\"\\")
+  (data \\"\\")
+  (data \\"\\")
+  (data \\"\\")
+  (data \\"\\")
+  (data \\"\\")
+  (data \\"\\")
+  (data \\"\\")
+  (data \\"\\")
+  (data \\"\\")
+  (data \\"\\")
+  (data \\"\\")
+  (data \\"\\")
+  (data \\"\\")
+  (data \\"\\")
+  (data \\"\\")
+  (data \\"\\")
+  (data \\"\\")
+  (data \\"\\")
+  (data \\"\\")
+  (data \\"\\")
+  (data \\"\\")
+  (data \\"\\")
+  (data \\"\\")
+  (data \\"\\")
+  (data \\"\\")
+  (data \\"\\")
+  (data \\"\\")
+)
+"
+`;
+
+exports[`Parsing and disassembling bulk.7.wasm generates expected output 1`] = `
+"(module
+  (func $func0
+    data.drop 0
+  )
+  (data \\"goodbye\\")
+)
+"
+`;
+
+exports[`Parsing and disassembling bulk.8.wasm generates expected output 1`] = `
+"(module
+  (table $table0 3 funcref)
+  (export \\"init\\" (func $func2))
+  (export \\"call\\" (func $func3))
+  (elem $elem0 funcref (ref.func $func0) (ref.func $func1) (ref.func $func0) (ref.func $func1))
+  (func $func0 (result i32)
+    i32.const 0
+  )
+  (func $func1 (result i32)
+    i32.const 1
+  )
+  (func $func2 (param $var0 i32) (param $var1 i32) (param $var2 i32)
+    local.get $var0
+    local.get $var1
+    local.get $var2
+    table.init $elem0
+  )
+  (func $func3 (param $var0 i32) (result i32)
+    local.get $var0
+    call_indirect (result i32)
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling bulk.9.wasm generates expected output 1`] = `
+"(module
+  (table $table0 1 funcref)
+  (export \\"drop_passive\\" (func $func1))
+  (export \\"init_passive\\" (func $func2))
+  (export \\"drop_active\\" (func $func3))
+  (export \\"init_active\\" (func $func4))
+  (elem $elem0 funcref (ref.func $func0))
+  (elem $elem1 (i32.const 0) funcref (ref.func $func0))
+  (func $func0
+  )
+  (func $func1
+    elem.drop $elem0
+  )
+  (func $func2 (param $var0 i32)
+    i32.const 0
+    i32.const 0
+    local.get $var0
+    table.init $elem0
+  )
+  (func $func3
+    elem.drop $elem1
+  )
+  (func $func4 (param $var0 i32)
+    i32.const 0
+    i32.const 0
+    local.get $var0
+    table.init $elem1
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling bulk.10.wasm generates expected output 1`] = `
+"(module
+  (elem $elem0 funcref)
+  (elem $elem1 funcref)
+  (elem $elem2 funcref)
+  (elem $elem3 funcref)
+  (elem $elem4 funcref)
+  (elem $elem5 funcref)
+  (elem $elem6 funcref)
+  (elem $elem7 funcref)
+  (elem $elem8 funcref)
+  (elem $elem9 funcref)
+  (elem $elem10 funcref)
+  (elem $elem11 funcref)
+  (elem $elem12 funcref)
+  (elem $elem13 funcref)
+  (elem $elem14 funcref)
+  (elem $elem15 funcref)
+  (elem $elem16 funcref)
+  (elem $elem17 funcref)
+  (elem $elem18 funcref)
+  (elem $elem19 funcref)
+  (elem $elem20 funcref)
+  (elem $elem21 funcref)
+  (elem $elem22 funcref)
+  (elem $elem23 funcref)
+  (elem $elem24 funcref)
+  (elem $elem25 funcref)
+  (elem $elem26 funcref)
+  (elem $elem27 funcref)
+  (elem $elem28 funcref)
+  (elem $elem29 funcref)
+  (elem $elem30 funcref)
+  (elem $elem31 funcref)
+  (elem $elem32 funcref)
+  (elem $elem33 funcref)
+  (elem $elem34 funcref)
+  (elem $elem35 funcref)
+  (elem $elem36 funcref)
+  (elem $elem37 funcref)
+  (elem $elem38 funcref)
+  (elem $elem39 funcref)
+  (elem $elem40 funcref)
+  (elem $elem41 funcref)
+  (elem $elem42 funcref)
+  (elem $elem43 funcref)
+  (elem $elem44 funcref)
+  (elem $elem45 funcref)
+  (elem $elem46 funcref)
+  (elem $elem47 funcref)
+  (elem $elem48 funcref)
+  (elem $elem49 funcref)
+  (elem $elem50 funcref)
+  (elem $elem51 funcref)
+  (elem $elem52 funcref)
+  (elem $elem53 funcref)
+  (elem $elem54 funcref)
+  (elem $elem55 funcref)
+  (elem $elem56 funcref)
+  (elem $elem57 funcref)
+  (elem $elem58 funcref)
+  (elem $elem59 funcref)
+  (elem $elem60 funcref)
+  (elem $elem61 funcref)
+  (elem $elem62 funcref)
+  (elem $elem63 funcref)
+  (elem $elem64 funcref)
+  (func $func0
+    elem.drop $elem64
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling bulk.11.wasm generates expected output 1`] = `
+"(module
+  (elem $elem0 funcref (ref.func $func0))
+  (func $func0
+    elem.drop $elem0
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling bulk.12.wasm generates expected output 1`] = `
+"(module
+  (table $table0 10 funcref)
+  (export \\"copy\\" (func $func3))
+  (export \\"call\\" (func $func4))
+  (elem $elem0 (i32.const 0) funcref (ref.func $func0) (ref.func $func1) (ref.func $func2))
+  (func $func0 (result i32)
+    i32.const 0
+  )
+  (func $func1 (result i32)
+    i32.const 1
+  )
+  (func $func2 (result i32)
+    i32.const 2
+  )
+  (func $func3 (param $var0 i32) (param $var1 i32) (param $var2 i32)
+    local.get $var0
+    local.get $var1
+    local.get $var2
+    table.copy
+  )
+  (func $func4 (param $var0 i32) (result i32)
+    local.get $var0
+    call_indirect (result i32)
+  )
+)
+"
+`;
+
 exports[`Parsing and disassembling call.wast.0.wasm generates expected output 1`] = `
 "(module
   (export \\"type-i32\\" (func $func12))
@@ -2698,7 +3064,7 @@ exports[`Parsing and disassembling call.wast.0.wasm generates expected output 1`
 
 exports[`Parsing and disassembling call_indirect.wast.0.wasm generates expected output 1`] = `
 "(module
-  (table $table0 23 23 anyfunc)
+  (table $table0 23 23 funcref)
   (export \\"type-i32\\" (func $func16))
   (export \\"type-i64\\" (func $func17))
   (export \\"type-f32\\" (func $func18))
@@ -2720,7 +3086,7 @@ exports[`Parsing and disassembling call_indirect.wast.0.wasm generates expected 
   (export \\"odd\\" (func $func34))
   (export \\"runaway\\" (func $func35))
   (export \\"mutual-runaway\\" (func $func36))
-  (elem (i32.const 0) $func0 $func1 $func2 $func3 $func4 $func5 $func6 $func7 $func10 $func8 $func11 $func9 $func31 $func32 $func33 $func34 $func35 $func36 $func37 $func12 $func13 $func14 $func15)
+  (elem $elem0 (i32.const 0) funcref (ref.func $func0) (ref.func $func1) (ref.func $func2) (ref.func $func3) (ref.func $func4) (ref.func $func5) (ref.func $func6) (ref.func $func7) (ref.func $func10) (ref.func $func8) (ref.func $func11) (ref.func $func9) (ref.func $func31) (ref.func $func32) (ref.func $func33) (ref.func $func34) (ref.func $func35) (ref.func $func36) (ref.func $func37) (ref.func $func12) (ref.func $func13) (ref.func $func14) (ref.func $func15))
   (func $func0 (result i32)
     i32.const 306
   )
@@ -2923,8 +3289,8 @@ exports[`Parsing and disassembling call_indirect.wast.0.wasm generates expected 
 
 exports[`Parsing and disassembling call_indirect.wast.17.wasm generates expected output 1`] = `
 "(module
-  (table $table0 10 anyfunc)
-  (elem (i32.const 10) $func0)
+  (table $table0 10 funcref)
+  (elem $elem0 (i32.const 10) funcref (ref.func $func0))
   (func $func0
   )
 )
@@ -2933,8 +3299,8 @@ exports[`Parsing and disassembling call_indirect.wast.17.wasm generates expected
 
 exports[`Parsing and disassembling call_indirect.wast.18.wasm generates expected output 1`] = `
 "(module
-  (table $table0 10 anyfunc)
-  (elem (i32.const -1) $func0)
+  (table $table0 10 funcref)
+  (elem $elem0 (i32.const -1) funcref (ref.func $func0))
   (func $func0
   )
 )
@@ -2943,8 +3309,8 @@ exports[`Parsing and disassembling call_indirect.wast.18.wasm generates expected
 
 exports[`Parsing and disassembling call_indirect.wast.19.wasm generates expected output 1`] = `
 "(module
-  (table $table0 10 anyfunc)
-  (elem (i32.const -10) $func0)
+  (table $table0 10 funcref)
+  (elem $elem0 (i32.const -10) funcref (ref.func $func0))
   (func $func0
   )
 )
@@ -3171,6 +3537,487 @@ exports[`Parsing and disassembling custom_section.wast.2.wasm generates expected
     local.get $var0
     local.get $var1
     i32.add
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling elem.0.wasm generates expected output 1`] = `
+"(module
+  (table $table0 10 funcref)
+  (elem $elem0 funcref)
+  (elem $elem1 funcref (ref.func $func0) (ref.func $func0) (ref.null func) (ref.func $func1))
+  (elem $elem2 funcref)
+  (elem $elem3 funcref (ref.func $func0) (ref.func $func0) (ref.func $func1) (ref.func $func1))
+  (elem $elem4 funcref)
+  (elem $elem5 funcref (ref.func $func0) (ref.func $func0) (ref.null func) (ref.func $func1))
+  (elem $elem6 funcref)
+  (elem $elem7 funcref (ref.func $func0) (ref.func $func0) (ref.func $func1) (ref.func $func1))
+  (elem $elem8 (i32.const 0) funcref)
+  (elem $elem9 (i32.const 0) funcref (ref.func $func0) (ref.null func))
+  (elem $elem10 (i32.const 0) funcref)
+  (elem $elem11 (i32.const 0) funcref (ref.func $func0) (ref.func $func1))
+  (elem $elem12 (i32.const 0) funcref)
+  (elem $elem13 (i32.const 0) funcref (ref.func $func0) (ref.func $func1))
+  (elem $elem14 (i32.const 0) funcref)
+  (elem $elem15 (i32.const 0) funcref (ref.func $func0) (ref.func $func0))
+  (elem $elem16 (i32.const 0) funcref)
+  (elem $elem17 (i32.const 0) funcref (ref.func $func0) (ref.func $func0))
+  (elem $elem18 (i32.const 0) funcref)
+  (elem $elem19 (i32.const 0) funcref (ref.func $func0) (ref.func $func0))
+  (elem $elem20 (i32.const 0) funcref)
+  (elem $elem21 (i32.const 0) funcref (ref.func $func0) (ref.func $func0))
+  (elem $elem22 (i32.const 0) funcref)
+  (elem $elem23 (i32.const 0) funcref (ref.func $func0) (ref.null func))
+  (elem $elem24 (i32.const 0) funcref (ref.func $func0) (ref.func $func0))
+  (elem $elem25 (i32.const 0) funcref (ref.func $func0) (ref.func $func0))
+  (elem $elem26 (i32.const 0) funcref)
+  (elem $elem27 (i32.const 0) funcref (ref.func $func0) (ref.null func))
+  (elem $elem28 (i32.const 0) funcref (ref.func $func0) (ref.func $func0))
+  (elem $elem29 (i32.const 0) funcref (ref.func $func0) (ref.func $func0))
+  (elem $elem30 (i32.const 0) funcref)
+  (elem $elem31 (i32.const 0) funcref (ref.func $func0) (ref.null func))
+  (elem $elem32 (i32.const 0) funcref)
+  (elem $elem33 (i32.const 0) funcref (ref.func $func0) (ref.func $func1))
+  (elem $elem34 (i32.const 0) funcref)
+  (elem $elem35 (i32.const 0) funcref (ref.func $func0) (ref.func $func1))
+  (elem $elem36 (i32.const 0) funcref)
+  (elem $elem37 (i32.const 0) funcref (ref.func $func0) (ref.func $func0))
+  (elem $elem38 (i32.const 0) funcref)
+  (elem $elem39 (i32.const 0) funcref (ref.func $func0) (ref.func $func0))
+  (elem $elem40 (i32.const 0) funcref)
+  (elem $elem41 (i32.const 0) funcref (ref.func $func0) (ref.func $func0))
+  (elem $elem42 (i32.const 0) funcref)
+  (elem $elem43 (i32.const 0) funcref (ref.func $func0) (ref.func $func0))
+  (elem $elem44 (i32.const 0) funcref)
+  (elem $elem45 (i32.const 0) funcref (ref.func $func0) (ref.null func))
+  (elem $elem46 (i32.const 0) funcref (ref.func $func0) (ref.func $func0))
+  (elem $elem47 (i32.const 0) funcref (ref.func $func0) (ref.func $func0))
+  (elem $elem48 (i32.const 0) funcref)
+  (elem $elem49 (i32.const 0) funcref (ref.func $func0) (ref.null func))
+  (elem $elem50 (i32.const 0) funcref (ref.func $func0) (ref.func $func0))
+  (elem $elem51 (i32.const 0) funcref (ref.func $func0) (ref.func $func0))
+  (func $func0
+  )
+  (func $func1
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling elem.1.wasm generates expected output 1`] = `
+"(module
+  (table $table0 3 3 funcref)
+  (elem $elem0 (i32.const 0) funcref (ref.func $func0) (ref.null func) (ref.func $func1))
+  (func $func0
+  )
+  (func $func1
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling elem.2.wasm generates expected output 1`] = `
+"(module
+  (table $table0 10 funcref)
+  (elem $elem0 (i32.const 0) funcref (ref.func $func0))
+  (func $func0
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling elem.3.wasm generates expected output 1`] = `
+"(module
+  (table $table0 (import \\"spectest\\" \\"table\\") 10 funcref)
+  (elem $elem0 (i32.const 0) funcref (ref.func $func0))
+  (func $func0
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling elem.4.wasm generates expected output 1`] = `
+"(module
+  (table $table0 10 funcref)
+  (elem $elem0 (i32.const 0) funcref (ref.func $func0))
+  (elem $elem1 (i32.const 3) funcref (ref.func $func0))
+  (elem $elem2 (i32.const 7) funcref (ref.func $func0))
+  (elem $elem3 (i32.const 5) funcref (ref.func $func0))
+  (elem $elem4 (i32.const 3) funcref (ref.func $func0))
+  (func $func0
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling elem.5.wasm generates expected output 1`] = `
+"(module
+  (table $table0 (import \\"spectest\\" \\"table\\") 10 funcref)
+  (elem $elem0 (i32.const 9) funcref (ref.func $func0))
+  (elem $elem1 (i32.const 3) funcref (ref.func $func0))
+  (elem $elem2 (i32.const 7) funcref (ref.func $func0))
+  (elem $elem3 (i32.const 3) funcref (ref.func $func0))
+  (elem $elem4 (i32.const 5) funcref (ref.func $func0))
+  (func $func0
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling elem.6.wasm generates expected output 1`] = `
+"(module
+  (global $global0 (import \\"spectest\\" \\"global_i32\\") i32)
+  (table $table0 1000 funcref)
+  (elem $elem0 (global.get $global0) funcref (ref.func $func0))
+  (func $func0
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling elem.7.wasm generates expected output 1`] = `
+"(module
+  (global $global0 (import \\"spectest\\" \\"global_i32\\") i32)
+  (table $table0 1000 funcref)
+  (elem $elem0 (global.get $global0) funcref (ref.func $func0))
+  (func $func0
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling elem.8.wasm generates expected output 1`] = `
+"(module
+  (table $table0 10 funcref)
+  (export \\"call-7\\" (func $func2))
+  (export \\"call-9\\" (func $func3))
+  (elem $elem0 (i32.const 7) funcref (ref.func $func0))
+  (elem $elem1 (i32.const 9) funcref (ref.func $func1))
+  (func $func0 (result i32)
+    i32.const 65
+  )
+  (func $func1 (result i32)
+    i32.const 66
+  )
+  (func $func2 (result i32)
+    i32.const 7
+    call_indirect (result i32)
+  )
+  (func $func3 (result i32)
+    i32.const 9
+    call_indirect (result i32)
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling elem.9.wasm generates expected output 1`] = `
+"(module
+  (table $table0 10 funcref)
+  (elem $elem0 (i32.const 9) funcref (ref.func $func0))
+  (func $func0
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling elem.10.wasm generates expected output 1`] = `
+"(module
+  (table $table0 (import \\"spectest\\" \\"table\\") 10 funcref)
+  (elem $elem0 (i32.const 9) funcref (ref.func $func0))
+  (func $func0
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling elem.11.wasm generates expected output 1`] = `
+"(module
+  (table $table0 0 funcref)
+  (elem $elem0 (i32.const 0) funcref)
+)
+"
+`;
+
+exports[`Parsing and disassembling elem.12.wasm generates expected output 1`] = `
+"(module
+  (table $table0 (import \\"spectest\\" \\"table\\") 0 funcref)
+  (elem $elem0 (i32.const 0) funcref)
+)
+"
+`;
+
+exports[`Parsing and disassembling elem.13.wasm generates expected output 1`] = `
+"(module
+  (table $table0 0 0 funcref)
+  (elem $elem0 (i32.const 0) funcref)
+)
+"
+`;
+
+exports[`Parsing and disassembling elem.14.wasm generates expected output 1`] = `
+"(module
+  (table $table0 20 funcref)
+  (elem $elem0 (i32.const 20) funcref)
+)
+"
+`;
+
+exports[`Parsing and disassembling elem.15.wasm generates expected output 1`] = `
+"(module
+  (table $table0 (import \\"spectest\\" \\"table\\") 0 funcref)
+  (elem $elem0 (i32.const 0) funcref (ref.func $func0))
+  (func $func0
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling elem.16.wasm generates expected output 1`] = `
+"(module
+  (table $table0 (import \\"spectest\\" \\"table\\") 0 100 funcref)
+  (elem $elem0 (i32.const 0) funcref (ref.func $func0))
+  (func $func0
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling elem.17.wasm generates expected output 1`] = `
+"(module
+  (table $table0 (import \\"spectest\\" \\"table\\") 0 funcref)
+  (elem $elem0 (i32.const 1) funcref (ref.func $func0))
+  (func $func0
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling elem.18.wasm generates expected output 1`] = `
+"(module
+  (table $table0 (import \\"spectest\\" \\"table\\") 0 30 funcref)
+  (elem $elem0 (i32.const 1) funcref (ref.func $func0))
+  (func $func0
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling elem.19.wasm generates expected output 1`] = `
+"(module
+  (table $table0 0 funcref)
+  (elem $elem0 (i32.const 0) funcref (ref.func $func0))
+  (func $func0
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling elem.20.wasm generates expected output 1`] = `
+"(module
+  (table $table0 0 0 funcref)
+  (elem $elem0 (i32.const 0) funcref (ref.func $func0))
+  (func $func0
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling elem.21.wasm generates expected output 1`] = `
+"(module
+  (table $table0 0 1 funcref)
+  (elem $elem0 (i32.const 0) funcref (ref.func $func0))
+  (func $func0
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling elem.22.wasm generates expected output 1`] = `
+"(module
+  (table $table0 0 funcref)
+  (elem $elem0 (i32.const 1) funcref)
+)
+"
+`;
+
+exports[`Parsing and disassembling elem.23.wasm generates expected output 1`] = `
+"(module
+  (table $table0 10 funcref)
+  (elem $elem0 (i32.const 10) funcref (ref.func $func0))
+  (func $func0
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling elem.24.wasm generates expected output 1`] = `
+"(module
+  (table $table0 (import \\"spectest\\" \\"table\\") 10 funcref)
+  (elem $elem0 (i32.const 10) funcref (ref.func $func0))
+  (func $func0
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling elem.25.wasm generates expected output 1`] = `
+"(module
+  (table $table0 10 20 funcref)
+  (elem $elem0 (i32.const 10) funcref (ref.func $func0))
+  (func $func0
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling elem.26.wasm generates expected output 1`] = `
+"(module
+  (table $table0 (import \\"spectest\\" \\"table\\") 10 funcref)
+  (elem $elem0 (i32.const 10) funcref (ref.func $func0))
+  (func $func0
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling elem.27.wasm generates expected output 1`] = `
+"(module
+  (table $table0 10 funcref)
+  (elem $elem0 (i32.const -1) funcref (ref.func $func0))
+  (func $func0
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling elem.28.wasm generates expected output 1`] = `
+"(module
+  (table $table0 (import \\"spectest\\" \\"table\\") 10 funcref)
+  (elem $elem0 (i32.const -1) funcref (ref.func $func0))
+  (func $func0
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling elem.29.wasm generates expected output 1`] = `
+"(module
+  (table $table0 10 funcref)
+  (elem $elem0 (i32.const -10) funcref (ref.func $func0))
+  (func $func0
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling elem.30.wasm generates expected output 1`] = `
+"(module
+  (table $table0 (import \\"spectest\\" \\"table\\") 10 funcref)
+  (elem $elem0 (i32.const -10) funcref (ref.func $func0))
+  (func $func0
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling elem.37.wasm generates expected output 1`] = `
+"(module
+  (table $table0 10 funcref)
+  (export \\"call-overwritten\\" (func $func2))
+  (elem $elem0 (i32.const 9) funcref (ref.func $func0))
+  (elem $elem1 (i32.const 9) funcref (ref.func $func1))
+  (func $func0 (result i32)
+    i32.const 65
+  )
+  (func $func1 (result i32)
+    i32.const 66
+  )
+  (func $func2 (result i32)
+    i32.const 9
+    call_indirect (result i32)
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling elem.38.wasm generates expected output 1`] = `
+"(module
+  (table $table0 (import \\"spectest\\" \\"table\\") 10 funcref)
+  (export \\"call-overwritten-element\\" (func $func2))
+  (elem $elem0 (i32.const 9) funcref (ref.func $func0))
+  (elem $elem1 (i32.const 9) funcref (ref.func $func1))
+  (func $func0 (result i32)
+    i32.const 65
+  )
+  (func $func1 (result i32)
+    i32.const 66
+  )
+  (func $func2 (result i32)
+    i32.const 9
+    call_indirect (result i32)
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling elem.39.wasm generates expected output 1`] = `
+"(module
+  (table $table0 10 funcref)
+  (export \\"shared-table\\" (table $table0))
+  (export \\"call-7\\" (func $func2))
+  (export \\"call-8\\" (func $func3))
+  (export \\"call-9\\" (func $func4))
+  (elem $elem0 (i32.const 8) funcref (ref.func $func0))
+  (elem $elem1 (i32.const 9) funcref (ref.func $func1))
+  (func $func0 (result i32)
+    i32.const 65
+  )
+  (func $func1 (result i32)
+    i32.const 66
+  )
+  (func $func2 (result i32)
+    i32.const 7
+    call_indirect (result i32)
+  )
+  (func $func3 (result i32)
+    i32.const 8
+    call_indirect (result i32)
+  )
+  (func $func4 (result i32)
+    i32.const 9
+    call_indirect (result i32)
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling elem.40.wasm generates expected output 1`] = `
+"(module
+  (table $table0 (import \\"module1\\" \\"shared-table\\") 10 funcref)
+  (elem $elem0 (i32.const 7) funcref (ref.func $func0))
+  (elem $elem1 (i32.const 8) funcref (ref.func $func1))
+  (func $func0 (result i32)
+    i32.const 67
+  )
+  (func $func1 (result i32)
+    i32.const 68
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling elem.41.wasm generates expected output 1`] = `
+"(module
+  (table $table0 (import \\"module1\\" \\"shared-table\\") 10 funcref)
+  (elem $elem0 (i32.const 8) funcref (ref.func $func0))
+  (elem $elem1 (i32.const 9) funcref (ref.func $func1))
+  (func $func0 (result i32)
+    i32.const 69
+  )
+  (func $func1 (result i32)
+    i32.const 70
   )
 )
 "
@@ -3609,7 +4456,7 @@ exports[`Parsing and disassembling exports.wast.29.wasm generates expected outpu
 
 exports[`Parsing and disassembling exports.wast.36.wasm generates expected output 1`] = `
 "(module
-  (table $table0 0 anyfunc)
+  (table $table0 0 funcref)
   (export \\"a\\" (table $table0))
 )
 "
@@ -3617,7 +4464,7 @@ exports[`Parsing and disassembling exports.wast.36.wasm generates expected outpu
 
 exports[`Parsing and disassembling exports.wast.37.wasm generates expected output 1`] = `
 "(module
-  (table $table0 0 anyfunc)
+  (table $table0 0 funcref)
   (export \\"a\\" (table $table0))
   (export \\"b\\" (table $table0))
 )
@@ -3626,7 +4473,7 @@ exports[`Parsing and disassembling exports.wast.37.wasm generates expected outpu
 
 exports[`Parsing and disassembling exports.wast.38.wasm generates expected output 1`] = `
 "(module
-  (table $table0 0 anyfunc)
+  (table $table0 0 funcref)
   (export \\"a\\" (table $table0))
 )
 "
@@ -3634,7 +4481,7 @@ exports[`Parsing and disassembling exports.wast.38.wasm generates expected outpu
 
 exports[`Parsing and disassembling exports.wast.39.wasm generates expected output 1`] = `
 "(module
-  (table $table0 0 1 anyfunc)
+  (table $table0 0 1 funcref)
   (export \\"a\\" (table $table0))
 )
 "
@@ -3642,7 +4489,7 @@ exports[`Parsing and disassembling exports.wast.39.wasm generates expected outpu
 
 exports[`Parsing and disassembling exports.wast.40.wasm generates expected output 1`] = `
 "(module
-  (table $table0 0 anyfunc)
+  (table $table0 0 funcref)
   (export \\"a\\" (table $table0))
 )
 "
@@ -3650,7 +4497,7 @@ exports[`Parsing and disassembling exports.wast.40.wasm generates expected outpu
 
 exports[`Parsing and disassembling exports.wast.41.wasm generates expected output 1`] = `
 "(module
-  (table $table0 0 1 anyfunc)
+  (table $table0 0 1 funcref)
   (export \\"a\\" (table $table0))
 )
 "
@@ -3658,7 +4505,7 @@ exports[`Parsing and disassembling exports.wast.41.wasm generates expected outpu
 
 exports[`Parsing and disassembling exports.wast.42.wasm generates expected output 1`] = `
 "(module
-  (table $table0 0 anyfunc)
+  (table $table0 0 funcref)
   (export \\"a\\" (table $table0))
 )
 "
@@ -3666,7 +4513,7 @@ exports[`Parsing and disassembling exports.wast.42.wasm generates expected outpu
 
 exports[`Parsing and disassembling exports.wast.43.wasm generates expected output 1`] = `
 "(module
-  (table $table0 0 1 anyfunc)
+  (table $table0 0 1 funcref)
   (export \\"a\\" (table $table0))
 )
 "
@@ -3674,7 +4521,7 @@ exports[`Parsing and disassembling exports.wast.43.wasm generates expected outpu
 
 exports[`Parsing and disassembling exports.wast.44.wasm generates expected output 1`] = `
 "(module
-  (table $table0 0 anyfunc)
+  (table $table0 0 funcref)
   (export \\"a\\" (table $table0))
 )
 "
@@ -3682,7 +4529,7 @@ exports[`Parsing and disassembling exports.wast.44.wasm generates expected outpu
 
 exports[`Parsing and disassembling exports.wast.45.wasm generates expected output 1`] = `
 "(module
-  (table $table0 0 1 anyfunc)
+  (table $table0 0 1 funcref)
   (export \\"a\\" (table $table0))
 )
 "
@@ -3690,7 +4537,7 @@ exports[`Parsing and disassembling exports.wast.45.wasm generates expected outpu
 
 exports[`Parsing and disassembling exports.wast.46.wasm generates expected output 1`] = `
 "(module
-  (table $table0 0 anyfunc)
+  (table $table0 0 funcref)
   (export \\"a\\" (table $table0))
 )
 "
@@ -3698,7 +4545,7 @@ exports[`Parsing and disassembling exports.wast.46.wasm generates expected outpu
 
 exports[`Parsing and disassembling exports.wast.47.wasm generates expected output 1`] = `
 "(module
-  (table $table0 0 1 anyfunc)
+  (table $table0 0 1 funcref)
   (export \\"a\\" (table $table0))
 )
 "
@@ -3706,7 +4553,7 @@ exports[`Parsing and disassembling exports.wast.47.wasm generates expected outpu
 
 exports[`Parsing and disassembling exports.wast.48.wasm generates expected output 1`] = `
 "(module
-  (table $table0 0 anyfunc)
+  (table $table0 0 funcref)
   (export \\"a\\" (table $table0))
 )
 "
@@ -3714,7 +4561,7 @@ exports[`Parsing and disassembling exports.wast.48.wasm generates expected outpu
 
 exports[`Parsing and disassembling exports.wast.49.wasm generates expected output 1`] = `
 "(module
-  (table $table0 0 1 anyfunc)
+  (table $table0 0 1 funcref)
   (export \\"a\\" (table $table0))
 )
 "
@@ -8192,7 +9039,7 @@ exports[`Parsing and disassembling forward.wast.0.wasm generates expected output
 
 exports[`Parsing and disassembling func.wast.0.wasm generates expected output 1`] = `
 "(module
-  (table $table0 5 5 anyfunc)
+  (table $table0 5 5 funcref)
   (export \\"f\\" (func $func2))
   (export \\"g\\" (func $func4))
   (export \\"local-first-i32\\" (func $func23))
@@ -8247,7 +9094,7 @@ exports[`Parsing and disassembling func.wast.0.wasm generates expected output 1`
   (export \\"signature-implicit-reused\\" (func $func77))
   (export \\"signature-explicit-duplicate\\" (func $func78))
   (export \\"signature-implicit-duplicate\\" (func $func79))
-  (elem (i32.const 0) $func75 $func73 $func72 $func75 $func71)
+  (elem $elem0 (i32.const 0) funcref (ref.func $func75) (ref.func $func73) (ref.func $func72) (ref.func $func75) (ref.func $func71))
   (func $func0
   )
   (func $func1
@@ -8641,10 +9488,10 @@ exports[`Parsing and disassembling func_ptrs.wast.0.wasm generates expected outp
 
 exports[`Parsing and disassembling func_ptrs.wast.8.wasm generates expected output 1`] = `
 "(module
-  (table $table0 7 7 anyfunc)
+  (table $table0 7 7 funcref)
   (export \\"callt\\" (func $func5))
   (export \\"callu\\" (func $func6))
-  (elem (i32.const 0) $func0 $func1 $func2 $func3 $func4 $func0 $func2)
+  (elem $elem0 (i32.const 0) funcref (ref.func $func0) (ref.func $func1) (ref.func $func2) (ref.func $func3) (ref.func $func4) (ref.func $func0) (ref.func $func2))
   (func $func0 (result i32)
     i32.const 1
   )
@@ -8674,9 +9521,9 @@ exports[`Parsing and disassembling func_ptrs.wast.8.wasm generates expected outp
 
 exports[`Parsing and disassembling func_ptrs.wast.9.wasm generates expected output 1`] = `
 "(module
-  (table $table0 2 2 anyfunc)
+  (table $table0 2 2 funcref)
   (export \\"callt\\" (func $func2))
-  (elem (i32.const 0) $func0 $func1)
+  (elem $elem0 (i32.const 0) funcref (ref.func $func0) (ref.func $func1))
   (func $func0 (result i32)
     i32.const 1
   )
@@ -9544,7 +10391,7 @@ exports[`Parsing and disassembling if.wast.0.wasm generates expected output 1`] 
 
 exports[`Parsing and disassembling imports.wast.0.wasm generates expected output 1`] = `
 "(module
-  (table $table0 10 anyfunc)
+  (table $table0 10 funcref)
   (memory $memory0 2)
   (global $global0 i32 (i32.const 55))
   (global $global1 f32 (f32.const 44))
@@ -9592,10 +10439,10 @@ exports[`Parsing and disassembling imports.wast.1.wasm generates expected output
   (func $import6 (import \\"spectest\\" \\"print\\") (param i32))
   (func $import7 (import \\"spectest\\" \\"print\\") (param f64))
   (func $import8 (import \\"test\\" \\"func-i64->i64\\") (param i64) (result i64))
-  (table $table0 2 2 anyfunc)
+  (table $table0 2 2 funcref)
   (export \\"print32\\" (func $func9))
   (export \\"print64\\" (func $func10))
-  (elem (i32.const 0) $import1 $import3)
+  (elem $elem0 (i32.const 0) funcref (ref.func $import1) (ref.func $import3))
   (func $func9 (param $var0 i32)
     (local $var1 f32)
     local.get $var0
@@ -9958,9 +10805,9 @@ exports[`Parsing and disassembling imports.wast.43.wasm generates expected outpu
 
 exports[`Parsing and disassembling imports.wast.44.wasm generates expected output 1`] = `
 "(module
-  (table $table0 (import \\"spectest\\" \\"table\\") 10 20 anyfunc)
+  (table $table0 (import \\"spectest\\" \\"table\\") 10 20 funcref)
   (export \\"call\\" (func $func0))
-  (elem (i32.const 1) $func1 $func2)
+  (elem $elem0 (i32.const 1) funcref (ref.func $func1) (ref.func $func2))
   (func $func0 (param $var0 i32) (result i32)
     local.get $var0
     call_indirect (result i32)
@@ -9977,9 +10824,9 @@ exports[`Parsing and disassembling imports.wast.44.wasm generates expected outpu
 
 exports[`Parsing and disassembling imports.wast.45.wasm generates expected output 1`] = `
 "(module
-  (table $table0 (import \\"spectest\\" \\"table\\") 10 20 anyfunc)
+  (table $table0 (import \\"spectest\\" \\"table\\") 10 20 funcref)
   (export \\"call\\" (func $func0))
-  (elem (i32.const 1) $func1 $func2)
+  (elem $elem0 (i32.const 1) funcref (ref.func $func1) (ref.func $func2))
   (func $func0 (param $var0 i32) (result i32)
     local.get $var0
     call_indirect (result i32)
@@ -9996,147 +10843,147 @@ exports[`Parsing and disassembling imports.wast.45.wasm generates expected outpu
 
 exports[`Parsing and disassembling imports.wast.49.wasm generates expected output 1`] = `
 "(module
-  (table $table0 (import \\"test\\" \\"table-10-inf\\") 10 anyfunc)
+  (table $table0 (import \\"test\\" \\"table-10-inf\\") 10 funcref)
 )
 "
 `;
 
 exports[`Parsing and disassembling imports.wast.50.wasm generates expected output 1`] = `
 "(module
-  (table $table0 (import \\"test\\" \\"table-10-inf\\") 5 anyfunc)
+  (table $table0 (import \\"test\\" \\"table-10-inf\\") 5 funcref)
 )
 "
 `;
 
 exports[`Parsing and disassembling imports.wast.51.wasm generates expected output 1`] = `
 "(module
-  (table $table0 (import \\"test\\" \\"table-10-inf\\") 0 anyfunc)
+  (table $table0 (import \\"test\\" \\"table-10-inf\\") 0 funcref)
 )
 "
 `;
 
 exports[`Parsing and disassembling imports.wast.52.wasm generates expected output 1`] = `
 "(module
-  (table $table0 (import \\"spectest\\" \\"table\\") 10 anyfunc)
+  (table $table0 (import \\"spectest\\" \\"table\\") 10 funcref)
 )
 "
 `;
 
 exports[`Parsing and disassembling imports.wast.53.wasm generates expected output 1`] = `
 "(module
-  (table $table0 (import \\"spectest\\" \\"table\\") 5 anyfunc)
+  (table $table0 (import \\"spectest\\" \\"table\\") 5 funcref)
 )
 "
 `;
 
 exports[`Parsing and disassembling imports.wast.54.wasm generates expected output 1`] = `
 "(module
-  (table $table0 (import \\"spectest\\" \\"table\\") 0 anyfunc)
+  (table $table0 (import \\"spectest\\" \\"table\\") 0 funcref)
 )
 "
 `;
 
 exports[`Parsing and disassembling imports.wast.55.wasm generates expected output 1`] = `
 "(module
-  (table $table0 (import \\"spectest\\" \\"table\\") 10 20 anyfunc)
+  (table $table0 (import \\"spectest\\" \\"table\\") 10 20 funcref)
 )
 "
 `;
 
 exports[`Parsing and disassembling imports.wast.56.wasm generates expected output 1`] = `
 "(module
-  (table $table0 (import \\"spectest\\" \\"table\\") 5 20 anyfunc)
+  (table $table0 (import \\"spectest\\" \\"table\\") 5 20 funcref)
 )
 "
 `;
 
 exports[`Parsing and disassembling imports.wast.57.wasm generates expected output 1`] = `
 "(module
-  (table $table0 (import \\"spectest\\" \\"table\\") 0 20 anyfunc)
+  (table $table0 (import \\"spectest\\" \\"table\\") 0 20 funcref)
 )
 "
 `;
 
 exports[`Parsing and disassembling imports.wast.58.wasm generates expected output 1`] = `
 "(module
-  (table $table0 (import \\"spectest\\" \\"table\\") 10 25 anyfunc)
+  (table $table0 (import \\"spectest\\" \\"table\\") 10 25 funcref)
 )
 "
 `;
 
 exports[`Parsing and disassembling imports.wast.59.wasm generates expected output 1`] = `
 "(module
-  (table $table0 (import \\"spectest\\" \\"table\\") 5 25 anyfunc)
+  (table $table0 (import \\"spectest\\" \\"table\\") 5 25 funcref)
 )
 "
 `;
 
 exports[`Parsing and disassembling imports.wast.60.wasm generates expected output 1`] = `
 "(module
-  (table $table0 (import \\"test\\" \\"unknown\\") 10 anyfunc)
+  (table $table0 (import \\"test\\" \\"unknown\\") 10 funcref)
 )
 "
 `;
 
 exports[`Parsing and disassembling imports.wast.61.wasm generates expected output 1`] = `
 "(module
-  (table $table0 (import \\"spectest\\" \\"unknown\\") 10 anyfunc)
+  (table $table0 (import \\"spectest\\" \\"unknown\\") 10 funcref)
 )
 "
 `;
 
 exports[`Parsing and disassembling imports.wast.62.wasm generates expected output 1`] = `
 "(module
-  (table $table0 (import \\"test\\" \\"table-10-inf\\") 12 anyfunc)
+  (table $table0 (import \\"test\\" \\"table-10-inf\\") 12 funcref)
 )
 "
 `;
 
 exports[`Parsing and disassembling imports.wast.63.wasm generates expected output 1`] = `
 "(module
-  (table $table0 (import \\"test\\" \\"table-10-inf\\") 10 20 anyfunc)
+  (table $table0 (import \\"test\\" \\"table-10-inf\\") 10 20 funcref)
 )
 "
 `;
 
 exports[`Parsing and disassembling imports.wast.64.wasm generates expected output 1`] = `
 "(module
-  (table $table0 (import \\"spectest\\" \\"table\\") 12 anyfunc)
+  (table $table0 (import \\"spectest\\" \\"table\\") 12 funcref)
 )
 "
 `;
 
 exports[`Parsing and disassembling imports.wast.65.wasm generates expected output 1`] = `
 "(module
-  (table $table0 (import \\"spectest\\" \\"table\\") 10 15 anyfunc)
+  (table $table0 (import \\"spectest\\" \\"table\\") 10 15 funcref)
 )
 "
 `;
 
 exports[`Parsing and disassembling imports.wast.66.wasm generates expected output 1`] = `
 "(module
-  (table $table0 (import \\"test\\" \\"func\\") 10 anyfunc)
+  (table $table0 (import \\"test\\" \\"func\\") 10 funcref)
 )
 "
 `;
 
 exports[`Parsing and disassembling imports.wast.67.wasm generates expected output 1`] = `
 "(module
-  (table $table0 (import \\"test\\" \\"global-i32\\") 10 anyfunc)
+  (table $table0 (import \\"test\\" \\"global-i32\\") 10 funcref)
 )
 "
 `;
 
 exports[`Parsing and disassembling imports.wast.68.wasm generates expected output 1`] = `
 "(module
-  (table $table0 (import \\"test\\" \\"memory-2-inf\\") 10 anyfunc)
+  (table $table0 (import \\"test\\" \\"memory-2-inf\\") 10 funcref)
 )
 "
 `;
 
 exports[`Parsing and disassembling imports.wast.69.wasm generates expected output 1`] = `
 "(module
-  (table $table0 (import \\"spectest\\" \\"print\\") 10 anyfunc)
+  (table $table0 (import \\"spectest\\" \\"print\\") 10 funcref)
 )
 "
 `;
@@ -11456,7 +12303,7 @@ exports[`Parsing and disassembling labels.wast.0.wasm generates expected output 
 
 exports[`Parsing and disassembling left-to-right.wast.0.wasm generates expected output 1`] = `
 "(module
-  (table $table0 8 8 anyfunc)
+  (table $table0 8 8 funcref)
   (memory $memory0 1)
   (export \\"i32_add\\" (func $func35))
   (export \\"i32_sub\\" (func $func36))
@@ -11553,7 +12400,7 @@ exports[`Parsing and disassembling left-to-right.wast.0.wasm generates expected 
   (export \\"f64_select\\" (func $func127))
   (export \\"br_if\\" (func $func128))
   (export \\"br_table\\" (func $func129))
-  (elem (i32.const 0) $func0 $func1 $func2 $func3 $func4 $func5 $func6 $func7)
+  (elem $elem0 (i32.const 0) funcref (ref.func $func0) (ref.func $func1) (ref.func $func2) (ref.func $func3) (ref.func $func4) (ref.func $func5) (ref.func $func6) (ref.func $func7))
   (func $func0 (param $var0 i32) (param $var1 i32) (result i32)
     i32.const -1
   )
@@ -12603,11 +13450,11 @@ exports[`Parsing and disassembling linking.wast.6.wasm generates expected output
 
 exports[`Parsing and disassembling linking.wast.7.wasm generates expected output 1`] = `
 "(module
-  (table $table0 10 anyfunc)
+  (table $table0 10 funcref)
   (export \\"tab\\" (table $table0))
   (export \\"h\\" (func $func1))
   (export \\"call\\" (func $func2))
-  (elem (i32.const 2) $func0 $func0 $func0 $func0)
+  (elem $elem0 (i32.const 2) funcref (ref.func $func0) (ref.func $func0) (ref.func $func0) (ref.func $func0))
   (func $func0 (result i32)
     i32.const 4
   )
@@ -12626,11 +13473,11 @@ exports[`Parsing and disassembling linking.wast.8.wasm generates expected output
 "(module
   (func $import0 (import \\"Mt\\" \\"call\\") (param i32) (result i32))
   (func $import1 (import \\"Mt\\" \\"h\\") (result i32))
-  (table $table0 5 5 anyfunc)
+  (table $table0 5 5 funcref)
   (export \\"Mt.call\\" (func $import0))
   (export \\"call Mt.call\\" (func $func3))
   (export \\"call\\" (func $func4))
-  (elem (i32.const 0) $func2 $func2 $func2 $import1 $import0)
+  (elem $elem0 (i32.const 0) funcref (ref.func $func2) (ref.func $func2) (ref.func $func2) (ref.func $import1) (ref.func $import0))
   (func $func2 (result i32)
     i32.const 5
   )
@@ -12649,9 +13496,9 @@ exports[`Parsing and disassembling linking.wast.8.wasm generates expected output
 exports[`Parsing and disassembling linking.wast.9.wasm generates expected output 1`] = `
 "(module
   (func $import0 (import \\"Mt\\" \\"h\\") (result i32))
-  (table $table0 (import \\"Mt\\" \\"tab\\") 5 anyfunc)
+  (table $table0 (import \\"Mt\\" \\"tab\\") 5 funcref)
   (export \\"call\\" (func $func2))
-  (elem (i32.const 1) $func1 $import0)
+  (elem $elem0 (i32.const 1) funcref (ref.func $func1) (ref.func $import0))
   (func $func1 (result i32)
     i32.const 6
   )
@@ -12665,8 +13512,8 @@ exports[`Parsing and disassembling linking.wast.9.wasm generates expected output
 
 exports[`Parsing and disassembling linking.wast.10.wasm generates expected output 1`] = `
 "(module
-  (table $table0 (import \\"Mt\\" \\"tab\\") 0 anyfunc)
-  (elem (i32.const 9) $func0)
+  (table $table0 (import \\"Mt\\" \\"tab\\") 0 funcref)
+  (elem $elem0 (i32.const 9) funcref (ref.func $func0))
   (func $func0
   )
 )
@@ -12675,8 +13522,8 @@ exports[`Parsing and disassembling linking.wast.10.wasm generates expected outpu
 
 exports[`Parsing and disassembling linking.wast.11.wasm generates expected output 1`] = `
 "(module
-  (table $table0 (import \\"Mt\\" \\"tab\\") 0 anyfunc)
-  (elem (i32.const 10) $func0)
+  (table $table0 (import \\"Mt\\" \\"tab\\") 0 funcref)
+  (elem $elem0 (i32.const 10) funcref (ref.func $func0))
   (func $func0
   )
 )
@@ -12685,10 +13532,10 @@ exports[`Parsing and disassembling linking.wast.11.wasm generates expected outpu
 
 exports[`Parsing and disassembling linking.wast.12.wasm generates expected output 1`] = `
 "(module
-  (table $table0 (import \\"Mt\\" \\"tab\\") 10 anyfunc)
+  (table $table0 (import \\"Mt\\" \\"tab\\") 10 funcref)
   (memory $memory0 (import \\"Mt\\" \\"mem\\") 1)
-  (elem (i32.const 7) $func0)
-  (elem (i32.const 9) $func0)
+  (elem $elem0 (i32.const 7) funcref (ref.func $func0))
+  (elem $elem1 (i32.const 9) funcref (ref.func $func0))
   (func $func0 (result i32)
     i32.const 0
   )
@@ -12698,9 +13545,9 @@ exports[`Parsing and disassembling linking.wast.12.wasm generates expected outpu
 
 exports[`Parsing and disassembling linking.wast.13.wasm generates expected output 1`] = `
 "(module
-  (table $table0 (import \\"Mt\\" \\"tab\\") 10 anyfunc)
-  (elem (i32.const 7) $func0)
-  (elem (i32.const 12) $func0)
+  (table $table0 (import \\"Mt\\" \\"tab\\") 10 funcref)
+  (elem $elem0 (i32.const 7) funcref (ref.func $func0))
+  (elem $elem1 (i32.const 12) funcref (ref.func $func0))
   (func $func0 (result i32)
     i32.const 0
   )
@@ -12710,9 +13557,9 @@ exports[`Parsing and disassembling linking.wast.13.wasm generates expected outpu
 
 exports[`Parsing and disassembling linking.wast.14.wasm generates expected output 1`] = `
 "(module
-  (table $table0 (import \\"Mt\\" \\"tab\\") 10 anyfunc)
+  (table $table0 (import \\"Mt\\" \\"tab\\") 10 funcref)
   (memory $memory0 1)
-  (elem (i32.const 7) $func0)
+  (elem $elem0 (i32.const 7) funcref (ref.func $func0))
   (func $func0 (result i32)
     i32.const 0
   )
@@ -12795,7 +13642,7 @@ exports[`Parsing and disassembling linking.wast.21.wasm generates expected outpu
 "(module
   (func $import0 (import \\"spectest\\" \\"print\\"))
   (memory $memory0 (import \\"Mm\\" \\"mem\\") 1)
-  (table $table0 (import \\"Mm\\" \\"tab\\") 0 anyfunc)
+  (table $table0 (import \\"Mm\\" \\"tab\\") 0 funcref)
   (data (i32.const 0) \\"abc\\")
 )
 "
@@ -12813,8 +13660,8 @@ exports[`Parsing and disassembling linking.wast.22.wasm generates expected outpu
 exports[`Parsing and disassembling linking.wast.23.wasm generates expected output 1`] = `
 "(module
   (memory $memory0 (import \\"Mm\\" \\"mem\\") 1)
-  (table $table0 0 anyfunc)
-  (elem (i32.const 0) $func0)
+  (table $table0 0 funcref)
+  (elem $elem0 (i32.const 0) funcref (ref.func $func0))
   (func $func0
   )
   (data (i32.const 0) \\"abc\\")
@@ -13317,7 +14164,7 @@ exports[`Parsing and disassembling malloc.wasm generates expected output 1`] = `
   (func $import4 (import \\"env\\" \\"_emscripten_memcpy_big\\") (param i32 i32 i32) (result i32))
   (func $import5 (import \\"env\\" \\"___setErrNo\\") (param i32))
   (memory $memory0 (import \\"env\\" \\"memory\\") 256)
-  (table $table0 (import \\"env\\" \\"table\\") 0 0 anyfunc)
+  (table $table0 (import \\"env\\" \\"table\\") 0 0 funcref)
   (global $global9 (import \\"env\\" \\"memoryBase\\") i32)
   (global $global10 (import \\"env\\" \\"tableBase\\") i32)
   (global $global11 (mut i32) (global.get $global0))
@@ -26963,43 +27810,6 @@ exports[`Parsing and disassembling memory.wast.62.wasm generates expected output
 "
 `;
 
-exports[`Parsing and disassembling memory_bulk.0.wasm generates expected output 1`] = `
-"(module
-  (table $table0 0 anyfunc)
-  (memory $memory0 0)
-  (elem  anyfunc (ref.func $func0) (ref.null))
-  (elem  $func1)
-  (func $func0
-    i32.const 0
-    i32.const 0
-    i32.const 0
-    memory.init 0
-    data.drop 0
-    i32.const 0
-    i32.const 0
-    i32.const 0
-    memory.copy
-    i32.const 0
-    i32.const 0
-    i32.const 0
-    memory.fill
-    i32.const 0
-    i32.const 0
-    i32.const 0
-    table.init 0
-    elem.drop 0
-    i32.const 0
-    i32.const 0
-    i32.const 0
-    table.copy
-  )
-  (func $func1
-  )
-  (data  \\"hi\\")
-)
-"
-`;
-
 exports[`Parsing and disassembling memory_redundancy.wast.0.wasm generates expected output 1`] = `
 "(module
   (memory $memory0 1 1)
@@ -29191,7 +30001,7 @@ exports[`Parsing and disassembling naming.wasm generates expected output 1`] = `
   (global $global7 (import \\"global\\" \\"NaN\\") f64)
   (global $global8 (import \\"global\\" \\"Infinity\\") f64)
   (memory $memory0 (import \\"env\\" \\"memory\\") 256 256)
-  (table $table0 (import \\"env\\" \\"table\\") 0 0 anyfunc)
+  (table $table0 (import \\"env\\" \\"table\\") 0 0 funcref)
   (global $global9 (import \\"env\\" \\"memoryBase\\") i32)
   (global $global10 (import \\"env\\" \\"tableBase\\") i32)
   (global $global11 (mut i32) (global.get $global0))
@@ -29767,9 +30577,170 @@ exports[`Parsing and disassembling nop.wast.0.wasm generates expected output 1`]
 "
 `;
 
+exports[`Parsing and disassembling ref_func.0.wasm generates expected output 1`] = `
+"(module
+  (export \\"f\\" (func $func0))
+  (func $func0 (param $var0 i32) (result i32)
+    local.get $var0
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling ref_func.1.wasm generates expected output 1`] = `
+"(module
+  (func $import0 (import \\"M\\" \\"f\\") (param i32) (result i32))
+  (table $table0 1 funcref)
+  (global $global0 funcref (ref.func $import0))
+  (global $global1 funcref (ref.func $func1))
+  (global $global2 (mut funcref) (ref.func $import0))
+  (global $global3 funcref (ref.func $func3))
+  (global $global4 funcref (ref.func $func4))
+  (export \\"is_null-f\\" (func $func7))
+  (export \\"is_null-g\\" (func $func8))
+  (export \\"is_null-v\\" (func $func9))
+  (export \\"set-f\\" (func $func10))
+  (export \\"set-g\\" (func $func11))
+  (export \\"call-f\\" (func $func12))
+  (export \\"call-g\\" (func $func13))
+  (export \\"call-v\\" (func $func14))
+  (elem $elem0 declare funcref (ref.func $func3) (ref.func $func5))
+  (elem $elem1 declare funcref (ref.func $func4) (ref.func $func6))
+  (elem $elem2 declare funcref (ref.func $import0) (ref.func $func1))
+  (func $func1 (param $var0 i32) (result i32)
+    local.get $var0
+    i32.const 1
+    i32.add
+  )
+  (func $func2
+    ref.func $func5
+    drop
+    ref.func $func6
+    drop
+  )
+  (func $func3
+  )
+  (func $func4
+  )
+  (func $func5
+  )
+  (func $func6
+  )
+  (func $func7 (result i32)
+    ref.func $import0
+    ref.is_null
+  )
+  (func $func8 (result i32)
+    ref.func $func1
+    ref.is_null
+  )
+  (func $func9 (result i32)
+    global.get $global2
+    ref.is_null
+  )
+  (func $func10
+    ref.func $import0
+    global.set $global2
+  )
+  (func $func11
+    ref.func $func1
+    global.set $global2
+  )
+  (func $func12 (param $var0 i32) (result i32)
+    i32.const 0
+    ref.func $import0
+    table.set $table0
+    local.get $var0
+    i32.const 0
+    call_indirect (param i32) (result i32)
+  )
+  (func $func13 (param $var0 i32) (result i32)
+    i32.const 0
+    ref.func $func1
+    table.set $table0
+    local.get $var0
+    i32.const 0
+    call_indirect (param i32) (result i32)
+  )
+  (func $func14 (param $var0 i32) (result i32)
+    i32.const 0
+    global.get $global2
+    table.set $table0
+    local.get $var0
+    i32.const 0
+    call_indirect (param i32) (result i32)
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling ref_is_null.0.wasm generates expected output 1`] = `
+"(module
+  (table $table0 2 funcref)
+  (table $table1 2 externref)
+  (export \\"funcref\\" (func $func0))
+  (export \\"externref\\" (func $func1))
+  (export \\"init\\" (func $func3))
+  (export \\"deinit\\" (func $func4))
+  (export \\"funcref-elem\\" (func $func5))
+  (export \\"externref-elem\\" (func $func6))
+  (elem $elem0 (i32.const 1) funcref (ref.func $func2))
+  (func $func0 (param $var0 funcref) (result i32)
+    local.get $var0
+    ref.is_null
+  )
+  (func $func1 (param $var0 externref) (result i32)
+    local.get $var0
+    ref.is_null
+  )
+  (func $func2
+  )
+  (func $func3 (param $var0 externref)
+    i32.const 1
+    local.get $var0
+    table.set $table1
+  )
+  (func $func4
+    i32.const 1
+    ref.null func
+    table.set $table0
+    i32.const 1
+    ref.null extern
+    table.set $table1
+  )
+  (func $func5 (param $var0 i32) (result i32)
+    local.get $var0
+    table.get $table0
+    call $func0
+  )
+  (func $func6 (param $var0 i32) (result i32)
+    local.get $var0
+    table.get $table1
+    call $func1
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling ref_null.0.wasm generates expected output 1`] = `
+"(module
+  (global $global0 externref (ref.null extern))
+  (global $global1 funcref (ref.null func))
+  (export \\"externref\\" (func $func0))
+  (export \\"funcref\\" (func $func1))
+  (func $func0 (result externref)
+    ref.null extern
+  )
+  (func $func1 (result funcref)
+    ref.null func
+  )
+)
+"
+`;
+
 exports[`Parsing and disassembling ref_types.0.wasm generates expected output 1`] = `
 "(module
-  (table $table0 1 anyref)
+  (table $table0 1 externref)
   (func $func0
     i32.const 0
     i32.const 0
@@ -29783,7 +30754,7 @@ exports[`Parsing and disassembling ref_types.0.wasm generates expected output 1`
 exports[`Parsing and disassembling reloc.wasm generates expected output 1`] = `
 "(module
   (global $global0 (import \\"env\\" \\"STACKTOP\\") i32)
-  (table $table0 0 anyfunc)
+  (table $table0 0 funcref)
   (memory $memory0 4)
   (global $global1 (mut i32) (global.get $global0))
   (global $global2 i32 (i32.const 0))
@@ -30012,7 +30983,7 @@ exports[`Parsing and disassembling resizing.wast.2.wasm generates expected outpu
 
 exports[`Parsing and disassembling return.wast.0.wasm generates expected output 1`] = `
 "(module
-  (table $table0 1 1 anyfunc)
+  (table $table0 1 1 funcref)
   (memory $memory0 1)
   (export \\"type-i32\\" (func $func1))
   (export \\"type-i64\\" (func $func2))
@@ -30067,7 +31038,7 @@ exports[`Parsing and disassembling return.wast.0.wasm generates expected output 
   (export \\"as-compare-right\\" (func $func52))
   (export \\"as-convert-operand\\" (func $func53))
   (export \\"as-grow_memory-size\\" (func $func54))
-  (elem (i32.const 0) $func32)
+  (elem $elem0 (i32.const 0) funcref (ref.func $func32))
   (func $func0
   )
   (func $func1
@@ -30474,9 +31445,9 @@ exports[`Parsing and disassembling return_call.wast.1.wasm generates expected ou
 
 exports[`Parsing and disassembling return_call_indirect.wast.0.wasm generates expected output 1`] = `
 "(module
-  (table $table0 2 anyfunc)
+  (table $table0 2 funcref)
   (export \\"main\\" (func $func1))
-  (elem (i32.const 0) $func0 $func1)
+  (elem $elem0 (i32.const 0) funcref (ref.func $func0) (ref.func $func1))
   (func $func0 (param $var0 i32) (param $var1 i32) (param $var2 i32) (result i32)
     local.get $var0
     i32.const 1
@@ -30508,10 +31479,10 @@ exports[`Parsing and disassembling return_call_indirect.wast.0.wasm generates ex
 exports[`Parsing and disassembling return_call_indirect.wast.1.wasm generates expected output 1`] = `
 "(module
   (func $import0 (import \\"q\\" \\"pick\\") (param i32 i32 i32) (result i32))
-  (table $table0 6 anyfunc)
+  (table $table0 6 funcref)
   (export \\"main\\" (func $func1))
-  (elem (i32.const 3) $import0)
-  (elem (i32.const 4) $import0 $func1)
+  (elem $elem0 (i32.const 3) funcref (ref.func $import0))
+  (elem $elem1 (i32.const 4) funcref (ref.func $import0) (ref.func $func1))
   (func $func1 (param $var0 i32) (param $var1 i32) (param $var2 i32) (result i32)
     local.get $var1
     local.get $var2
@@ -30525,18 +31496,18 @@ exports[`Parsing and disassembling return_call_indirect.wast.1.wasm generates ex
 
 exports[`Parsing and disassembling return_call_indirect.wast.2.wasm generates expected output 1`] = `
 "(module
-  (table $table0 3 anyfunc)
-  (table $table1 3 anyfunc)
-  (table $table2 5 anyfunc)
+  (table $table0 3 funcref)
+  (table $table1 3 funcref)
+  (table $table2 5 funcref)
   (export \\"call1\\" (func $func6))
   (export \\"return_call1\\" (func $func7))
   (export \\"call2\\" (func $func8))
   (export \\"return_call2\\" (func $func9))
   (export \\"call_invalid_sig\\" (func $func10))
   (export \\"return_call_invalid_sig\\" (func $func11))
-  (elem (i32.const 0) $func0 $func0 $func0)
-  (elem (i32.const 0) $func1 $func2 $func3)
-  (elem (i32.const 1) $func0 $func0 $func4 $func5)
+  (elem $elem0 (i32.const 0) funcref (ref.func $func0) (ref.func $func0) (ref.func $func0))
+  (elem $elem1 (table $table1) (i32.const 0) funcref (ref.func $func1) (ref.func $func2) (ref.func $func3))
+  (elem $elem2 (table $table2) (i32.const 1) funcref (ref.func $func0) (ref.func $func0) (ref.func $func4) (ref.func $func5))
   (func $func0 (result i32)
     unreachable
   )
@@ -35371,7 +36342,7 @@ exports[`Parsing and disassembling simd_const.384.wasm generates expected output
 
 exports[`Parsing and disassembling simd_const.385.wasm generates expected output 1`] = `
 "(module
-  (table $table0 2 2 anyfunc)
+  (table $table0 2 2 funcref)
   (memory $memory0 1)
   (export \\"as-br-retval\\" (func $func0))
   (export \\"as-br_if-retval\\" (func $func1))
@@ -35393,7 +36364,7 @@ exports[`Parsing and disassembling simd_const.385.wasm generates expected output
   (export \\"as-block-retval2\\" (func $func19))
   (export \\"as-loop-retval2\\" (func $func20))
   (export \\"as-drop-operand2\\" (func $func21))
-  (elem (i32.const 0) $func5 $func15)
+  (elem $elem0 (i32.const 0) funcref (ref.func $func5) (ref.func $func15))
   (func $func0 (result v128)
     block $label0 (result v128)
       v128.const i32x4 0x03020100 0x07060504 0x0B0A0908 0x0F0E0D0C
@@ -47153,6 +48124,3260 @@ exports[`Parsing and disassembling switch.wast.0.wasm generates expected output 
 "
 `;
 
+exports[`Parsing and disassembling table_copy.0.wasm generates expected output 1`] = `
+"(module
+  (export \\"ef0\\" (func $func0))
+  (export \\"ef1\\" (func $func1))
+  (export \\"ef2\\" (func $func2))
+  (export \\"ef3\\" (func $func3))
+  (export \\"ef4\\" (func $func4))
+  (func $func0 (result i32)
+    i32.const 0
+  )
+  (func $func1 (result i32)
+    i32.const 1
+  )
+  (func $func2 (result i32)
+    i32.const 2
+  )
+  (func $func3 (result i32)
+    i32.const 3
+  )
+  (func $func4 (result i32)
+    i32.const 4
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling table_copy.1.wasm generates expected output 1`] = `
+"(module
+  (func $import0 (import \\"a\\" \\"ef0\\") (result i32))
+  (func $import1 (import \\"a\\" \\"ef1\\") (result i32))
+  (func $import2 (import \\"a\\" \\"ef2\\") (result i32))
+  (func $import3 (import \\"a\\" \\"ef3\\") (result i32))
+  (func $import4 (import \\"a\\" \\"ef4\\") (result i32))
+  (table $table0 30 30 funcref)
+  (export \\"test\\" (func $func10))
+  (export \\"check\\" (func $func11))
+  (elem $elem0 (i32.const 2) funcref (ref.func $import3) (ref.func $import1) (ref.func $import4) (ref.func $import1))
+  (elem $elem1 funcref (ref.func $import2) (ref.func $func7) (ref.func $import1) (ref.func $func8))
+  (elem $elem2 (i32.const 12) funcref (ref.func $func7) (ref.func $func5) (ref.func $import2) (ref.func $import3) (ref.func $func6))
+  (elem $elem3 funcref (ref.func $func5) (ref.func $func9) (ref.func $import2) (ref.func $func7) (ref.func $func6))
+  (func $func5 (result i32)
+    i32.const 5
+  )
+  (func $func6 (result i32)
+    i32.const 6
+  )
+  (func $func7 (result i32)
+    i32.const 7
+  )
+  (func $func8 (result i32)
+    i32.const 8
+  )
+  (func $func9 (result i32)
+    i32.const 9
+  )
+  (func $func10
+    nop
+  )
+  (func $func11 (param $var0 i32) (result i32)
+    local.get $var0
+    call_indirect (result i32)
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling table_copy.2.wasm generates expected output 1`] = `
+"(module
+  (func $import0 (import \\"a\\" \\"ef0\\") (result i32))
+  (func $import1 (import \\"a\\" \\"ef1\\") (result i32))
+  (func $import2 (import \\"a\\" \\"ef2\\") (result i32))
+  (func $import3 (import \\"a\\" \\"ef3\\") (result i32))
+  (func $import4 (import \\"a\\" \\"ef4\\") (result i32))
+  (table $table0 30 30 funcref)
+  (export \\"test\\" (func $func10))
+  (export \\"check\\" (func $func11))
+  (elem $elem0 (i32.const 2) funcref (ref.func $import3) (ref.func $import1) (ref.func $import4) (ref.func $import1))
+  (elem $elem1 funcref (ref.func $import2) (ref.func $func7) (ref.func $import1) (ref.func $func8))
+  (elem $elem2 (i32.const 12) funcref (ref.func $func7) (ref.func $func5) (ref.func $import2) (ref.func $import3) (ref.func $func6))
+  (elem $elem3 funcref (ref.func $func5) (ref.func $func9) (ref.func $import2) (ref.func $func7) (ref.func $func6))
+  (func $func5 (result i32)
+    i32.const 5
+  )
+  (func $func6 (result i32)
+    i32.const 6
+  )
+  (func $func7 (result i32)
+    i32.const 7
+  )
+  (func $func8 (result i32)
+    i32.const 8
+  )
+  (func $func9 (result i32)
+    i32.const 9
+  )
+  (func $func10
+    i32.const 13
+    i32.const 2
+    i32.const 3
+    table.copy
+  )
+  (func $func11 (param $var0 i32) (result i32)
+    local.get $var0
+    call_indirect (result i32)
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling table_copy.3.wasm generates expected output 1`] = `
+"(module
+  (func $import0 (import \\"a\\" \\"ef0\\") (result i32))
+  (func $import1 (import \\"a\\" \\"ef1\\") (result i32))
+  (func $import2 (import \\"a\\" \\"ef2\\") (result i32))
+  (func $import3 (import \\"a\\" \\"ef3\\") (result i32))
+  (func $import4 (import \\"a\\" \\"ef4\\") (result i32))
+  (table $table0 30 30 funcref)
+  (export \\"test\\" (func $func10))
+  (export \\"check\\" (func $func11))
+  (elem $elem0 (i32.const 2) funcref (ref.func $import3) (ref.func $import1) (ref.func $import4) (ref.func $import1))
+  (elem $elem1 funcref (ref.func $import2) (ref.func $func7) (ref.func $import1) (ref.func $func8))
+  (elem $elem2 (i32.const 12) funcref (ref.func $func7) (ref.func $func5) (ref.func $import2) (ref.func $import3) (ref.func $func6))
+  (elem $elem3 funcref (ref.func $func5) (ref.func $func9) (ref.func $import2) (ref.func $func7) (ref.func $func6))
+  (func $func5 (result i32)
+    i32.const 5
+  )
+  (func $func6 (result i32)
+    i32.const 6
+  )
+  (func $func7 (result i32)
+    i32.const 7
+  )
+  (func $func8 (result i32)
+    i32.const 8
+  )
+  (func $func9 (result i32)
+    i32.const 9
+  )
+  (func $func10
+    i32.const 25
+    i32.const 15
+    i32.const 2
+    table.copy
+  )
+  (func $func11 (param $var0 i32) (result i32)
+    local.get $var0
+    call_indirect (result i32)
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling table_copy.4.wasm generates expected output 1`] = `
+"(module
+  (func $import0 (import \\"a\\" \\"ef0\\") (result i32))
+  (func $import1 (import \\"a\\" \\"ef1\\") (result i32))
+  (func $import2 (import \\"a\\" \\"ef2\\") (result i32))
+  (func $import3 (import \\"a\\" \\"ef3\\") (result i32))
+  (func $import4 (import \\"a\\" \\"ef4\\") (result i32))
+  (table $table0 30 30 funcref)
+  (export \\"test\\" (func $func10))
+  (export \\"check\\" (func $func11))
+  (elem $elem0 (i32.const 2) funcref (ref.func $import3) (ref.func $import1) (ref.func $import4) (ref.func $import1))
+  (elem $elem1 funcref (ref.func $import2) (ref.func $func7) (ref.func $import1) (ref.func $func8))
+  (elem $elem2 (i32.const 12) funcref (ref.func $func7) (ref.func $func5) (ref.func $import2) (ref.func $import3) (ref.func $func6))
+  (elem $elem3 funcref (ref.func $func5) (ref.func $func9) (ref.func $import2) (ref.func $func7) (ref.func $func6))
+  (func $func5 (result i32)
+    i32.const 5
+  )
+  (func $func6 (result i32)
+    i32.const 6
+  )
+  (func $func7 (result i32)
+    i32.const 7
+  )
+  (func $func8 (result i32)
+    i32.const 8
+  )
+  (func $func9 (result i32)
+    i32.const 9
+  )
+  (func $func10
+    i32.const 13
+    i32.const 25
+    i32.const 3
+    table.copy
+  )
+  (func $func11 (param $var0 i32) (result i32)
+    local.get $var0
+    call_indirect (result i32)
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling table_copy.5.wasm generates expected output 1`] = `
+"(module
+  (func $import0 (import \\"a\\" \\"ef0\\") (result i32))
+  (func $import1 (import \\"a\\" \\"ef1\\") (result i32))
+  (func $import2 (import \\"a\\" \\"ef2\\") (result i32))
+  (func $import3 (import \\"a\\" \\"ef3\\") (result i32))
+  (func $import4 (import \\"a\\" \\"ef4\\") (result i32))
+  (table $table0 30 30 funcref)
+  (export \\"test\\" (func $func10))
+  (export \\"check\\" (func $func11))
+  (elem $elem0 (i32.const 2) funcref (ref.func $import3) (ref.func $import1) (ref.func $import4) (ref.func $import1))
+  (elem $elem1 funcref (ref.func $import2) (ref.func $func7) (ref.func $import1) (ref.func $func8))
+  (elem $elem2 (i32.const 12) funcref (ref.func $func7) (ref.func $func5) (ref.func $import2) (ref.func $import3) (ref.func $func6))
+  (elem $elem3 funcref (ref.func $func5) (ref.func $func9) (ref.func $import2) (ref.func $func7) (ref.func $func6))
+  (func $func5 (result i32)
+    i32.const 5
+  )
+  (func $func6 (result i32)
+    i32.const 6
+  )
+  (func $func7 (result i32)
+    i32.const 7
+  )
+  (func $func8 (result i32)
+    i32.const 8
+  )
+  (func $func9 (result i32)
+    i32.const 9
+  )
+  (func $func10
+    i32.const 20
+    i32.const 22
+    i32.const 4
+    table.copy
+  )
+  (func $func11 (param $var0 i32) (result i32)
+    local.get $var0
+    call_indirect (result i32)
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling table_copy.6.wasm generates expected output 1`] = `
+"(module
+  (func $import0 (import \\"a\\" \\"ef0\\") (result i32))
+  (func $import1 (import \\"a\\" \\"ef1\\") (result i32))
+  (func $import2 (import \\"a\\" \\"ef2\\") (result i32))
+  (func $import3 (import \\"a\\" \\"ef3\\") (result i32))
+  (func $import4 (import \\"a\\" \\"ef4\\") (result i32))
+  (table $table0 30 30 funcref)
+  (export \\"test\\" (func $func10))
+  (export \\"check\\" (func $func11))
+  (elem $elem0 (i32.const 2) funcref (ref.func $import3) (ref.func $import1) (ref.func $import4) (ref.func $import1))
+  (elem $elem1 funcref (ref.func $import2) (ref.func $func7) (ref.func $import1) (ref.func $func8))
+  (elem $elem2 (i32.const 12) funcref (ref.func $func7) (ref.func $func5) (ref.func $import2) (ref.func $import3) (ref.func $func6))
+  (elem $elem3 funcref (ref.func $func5) (ref.func $func9) (ref.func $import2) (ref.func $func7) (ref.func $func6))
+  (func $func5 (result i32)
+    i32.const 5
+  )
+  (func $func6 (result i32)
+    i32.const 6
+  )
+  (func $func7 (result i32)
+    i32.const 7
+  )
+  (func $func8 (result i32)
+    i32.const 8
+  )
+  (func $func9 (result i32)
+    i32.const 9
+  )
+  (func $func10
+    i32.const 25
+    i32.const 1
+    i32.const 3
+    table.copy
+  )
+  (func $func11 (param $var0 i32) (result i32)
+    local.get $var0
+    call_indirect (result i32)
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling table_copy.7.wasm generates expected output 1`] = `
+"(module
+  (func $import0 (import \\"a\\" \\"ef0\\") (result i32))
+  (func $import1 (import \\"a\\" \\"ef1\\") (result i32))
+  (func $import2 (import \\"a\\" \\"ef2\\") (result i32))
+  (func $import3 (import \\"a\\" \\"ef3\\") (result i32))
+  (func $import4 (import \\"a\\" \\"ef4\\") (result i32))
+  (table $table0 30 30 funcref)
+  (export \\"test\\" (func $func10))
+  (export \\"check\\" (func $func11))
+  (elem $elem0 (i32.const 2) funcref (ref.func $import3) (ref.func $import1) (ref.func $import4) (ref.func $import1))
+  (elem $elem1 funcref (ref.func $import2) (ref.func $func7) (ref.func $import1) (ref.func $func8))
+  (elem $elem2 (i32.const 12) funcref (ref.func $func7) (ref.func $func5) (ref.func $import2) (ref.func $import3) (ref.func $func6))
+  (elem $elem3 funcref (ref.func $func5) (ref.func $func9) (ref.func $import2) (ref.func $func7) (ref.func $func6))
+  (func $func5 (result i32)
+    i32.const 5
+  )
+  (func $func6 (result i32)
+    i32.const 6
+  )
+  (func $func7 (result i32)
+    i32.const 7
+  )
+  (func $func8 (result i32)
+    i32.const 8
+  )
+  (func $func9 (result i32)
+    i32.const 9
+  )
+  (func $func10
+    i32.const 10
+    i32.const 12
+    i32.const 7
+    table.copy
+  )
+  (func $func11 (param $var0 i32) (result i32)
+    local.get $var0
+    call_indirect (result i32)
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling table_copy.8.wasm generates expected output 1`] = `
+"(module
+  (func $import0 (import \\"a\\" \\"ef0\\") (result i32))
+  (func $import1 (import \\"a\\" \\"ef1\\") (result i32))
+  (func $import2 (import \\"a\\" \\"ef2\\") (result i32))
+  (func $import3 (import \\"a\\" \\"ef3\\") (result i32))
+  (func $import4 (import \\"a\\" \\"ef4\\") (result i32))
+  (table $table0 30 30 funcref)
+  (export \\"test\\" (func $func10))
+  (export \\"check\\" (func $func11))
+  (elem $elem0 (i32.const 2) funcref (ref.func $import3) (ref.func $import1) (ref.func $import4) (ref.func $import1))
+  (elem $elem1 funcref (ref.func $import2) (ref.func $func7) (ref.func $import1) (ref.func $func8))
+  (elem $elem2 (i32.const 12) funcref (ref.func $func7) (ref.func $func5) (ref.func $import2) (ref.func $import3) (ref.func $func6))
+  (elem $elem3 funcref (ref.func $func5) (ref.func $func9) (ref.func $import2) (ref.func $func7) (ref.func $func6))
+  (func $func5 (result i32)
+    i32.const 5
+  )
+  (func $func6 (result i32)
+    i32.const 6
+  )
+  (func $func7 (result i32)
+    i32.const 7
+  )
+  (func $func8 (result i32)
+    i32.const 8
+  )
+  (func $func9 (result i32)
+    i32.const 9
+  )
+  (func $func10
+    i32.const 12
+    i32.const 10
+    i32.const 7
+    table.copy
+  )
+  (func $func11 (param $var0 i32) (result i32)
+    local.get $var0
+    call_indirect (result i32)
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling table_copy.9.wasm generates expected output 1`] = `
+"(module
+  (table $table0 30 30 funcref)
+  (export \\"test\\" (func $func10))
+  (elem $elem0 (i32.const 2) funcref (ref.func $func3) (ref.func $func1) (ref.func $func4) (ref.func $func1))
+  (elem $elem1 funcref (ref.func $func2) (ref.func $func7) (ref.func $func1) (ref.func $func8))
+  (elem $elem2 (i32.const 12) funcref (ref.func $func7) (ref.func $func5) (ref.func $func2) (ref.func $func3) (ref.func $func6))
+  (elem $elem3 funcref (ref.func $func5) (ref.func $func9) (ref.func $func2) (ref.func $func7) (ref.func $func6))
+  (func $func0 (result i32)
+    i32.const 0
+  )
+  (func $func1 (result i32)
+    i32.const 1
+  )
+  (func $func2 (result i32)
+    i32.const 2
+  )
+  (func $func3 (result i32)
+    i32.const 3
+  )
+  (func $func4 (result i32)
+    i32.const 4
+  )
+  (func $func5 (result i32)
+    i32.const 5
+  )
+  (func $func6 (result i32)
+    i32.const 6
+  )
+  (func $func7 (result i32)
+    i32.const 7
+  )
+  (func $func8 (result i32)
+    i32.const 8
+  )
+  (func $func9 (result i32)
+    i32.const 9
+  )
+  (func $func10
+    i32.const 28
+    i32.const 1
+    i32.const 3
+    table.copy
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling table_copy.10.wasm generates expected output 1`] = `
+"(module
+  (table $table0 30 30 funcref)
+  (export \\"test\\" (func $func10))
+  (elem $elem0 (i32.const 2) funcref (ref.func $func3) (ref.func $func1) (ref.func $func4) (ref.func $func1))
+  (elem $elem1 funcref (ref.func $func2) (ref.func $func7) (ref.func $func1) (ref.func $func8))
+  (elem $elem2 (i32.const 12) funcref (ref.func $func7) (ref.func $func5) (ref.func $func2) (ref.func $func3) (ref.func $func6))
+  (elem $elem3 funcref (ref.func $func5) (ref.func $func9) (ref.func $func2) (ref.func $func7) (ref.func $func6))
+  (func $func0 (result i32)
+    i32.const 0
+  )
+  (func $func1 (result i32)
+    i32.const 1
+  )
+  (func $func2 (result i32)
+    i32.const 2
+  )
+  (func $func3 (result i32)
+    i32.const 3
+  )
+  (func $func4 (result i32)
+    i32.const 4
+  )
+  (func $func5 (result i32)
+    i32.const 5
+  )
+  (func $func6 (result i32)
+    i32.const 6
+  )
+  (func $func7 (result i32)
+    i32.const 7
+  )
+  (func $func8 (result i32)
+    i32.const 8
+  )
+  (func $func9 (result i32)
+    i32.const 9
+  )
+  (func $func10
+    i32.const -2
+    i32.const 1
+    i32.const 2
+    table.copy
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling table_copy.11.wasm generates expected output 1`] = `
+"(module
+  (table $table0 30 30 funcref)
+  (export \\"test\\" (func $func10))
+  (elem $elem0 (i32.const 2) funcref (ref.func $func3) (ref.func $func1) (ref.func $func4) (ref.func $func1))
+  (elem $elem1 funcref (ref.func $func2) (ref.func $func7) (ref.func $func1) (ref.func $func8))
+  (elem $elem2 (i32.const 12) funcref (ref.func $func7) (ref.func $func5) (ref.func $func2) (ref.func $func3) (ref.func $func6))
+  (elem $elem3 funcref (ref.func $func5) (ref.func $func9) (ref.func $func2) (ref.func $func7) (ref.func $func6))
+  (func $func0 (result i32)
+    i32.const 0
+  )
+  (func $func1 (result i32)
+    i32.const 1
+  )
+  (func $func2 (result i32)
+    i32.const 2
+  )
+  (func $func3 (result i32)
+    i32.const 3
+  )
+  (func $func4 (result i32)
+    i32.const 4
+  )
+  (func $func5 (result i32)
+    i32.const 5
+  )
+  (func $func6 (result i32)
+    i32.const 6
+  )
+  (func $func7 (result i32)
+    i32.const 7
+  )
+  (func $func8 (result i32)
+    i32.const 8
+  )
+  (func $func9 (result i32)
+    i32.const 9
+  )
+  (func $func10
+    i32.const 15
+    i32.const 25
+    i32.const 6
+    table.copy
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling table_copy.12.wasm generates expected output 1`] = `
+"(module
+  (table $table0 30 30 funcref)
+  (export \\"test\\" (func $func10))
+  (elem $elem0 (i32.const 2) funcref (ref.func $func3) (ref.func $func1) (ref.func $func4) (ref.func $func1))
+  (elem $elem1 funcref (ref.func $func2) (ref.func $func7) (ref.func $func1) (ref.func $func8))
+  (elem $elem2 (i32.const 12) funcref (ref.func $func7) (ref.func $func5) (ref.func $func2) (ref.func $func3) (ref.func $func6))
+  (elem $elem3 funcref (ref.func $func5) (ref.func $func9) (ref.func $func2) (ref.func $func7) (ref.func $func6))
+  (func $func0 (result i32)
+    i32.const 0
+  )
+  (func $func1 (result i32)
+    i32.const 1
+  )
+  (func $func2 (result i32)
+    i32.const 2
+  )
+  (func $func3 (result i32)
+    i32.const 3
+  )
+  (func $func4 (result i32)
+    i32.const 4
+  )
+  (func $func5 (result i32)
+    i32.const 5
+  )
+  (func $func6 (result i32)
+    i32.const 6
+  )
+  (func $func7 (result i32)
+    i32.const 7
+  )
+  (func $func8 (result i32)
+    i32.const 8
+  )
+  (func $func9 (result i32)
+    i32.const 9
+  )
+  (func $func10
+    i32.const 15
+    i32.const -2
+    i32.const 2
+    table.copy
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling table_copy.13.wasm generates expected output 1`] = `
+"(module
+  (table $table0 30 30 funcref)
+  (export \\"test\\" (func $func10))
+  (elem $elem0 (i32.const 2) funcref (ref.func $func3) (ref.func $func1) (ref.func $func4) (ref.func $func1))
+  (elem $elem1 funcref (ref.func $func2) (ref.func $func7) (ref.func $func1) (ref.func $func8))
+  (elem $elem2 (i32.const 12) funcref (ref.func $func7) (ref.func $func5) (ref.func $func2) (ref.func $func3) (ref.func $func6))
+  (elem $elem3 funcref (ref.func $func5) (ref.func $func9) (ref.func $func2) (ref.func $func7) (ref.func $func6))
+  (func $func0 (result i32)
+    i32.const 0
+  )
+  (func $func1 (result i32)
+    i32.const 1
+  )
+  (func $func2 (result i32)
+    i32.const 2
+  )
+  (func $func3 (result i32)
+    i32.const 3
+  )
+  (func $func4 (result i32)
+    i32.const 4
+  )
+  (func $func5 (result i32)
+    i32.const 5
+  )
+  (func $func6 (result i32)
+    i32.const 6
+  )
+  (func $func7 (result i32)
+    i32.const 7
+  )
+  (func $func8 (result i32)
+    i32.const 8
+  )
+  (func $func9 (result i32)
+    i32.const 9
+  )
+  (func $func10
+    i32.const 15
+    i32.const 25
+    i32.const 0
+    table.copy
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling table_copy.14.wasm generates expected output 1`] = `
+"(module
+  (table $table0 30 30 funcref)
+  (export \\"test\\" (func $func10))
+  (elem $elem0 (i32.const 2) funcref (ref.func $func3) (ref.func $func1) (ref.func $func4) (ref.func $func1))
+  (elem $elem1 funcref (ref.func $func2) (ref.func $func7) (ref.func $func1) (ref.func $func8))
+  (elem $elem2 (i32.const 12) funcref (ref.func $func7) (ref.func $func5) (ref.func $func2) (ref.func $func3) (ref.func $func6))
+  (elem $elem3 funcref (ref.func $func5) (ref.func $func9) (ref.func $func2) (ref.func $func7) (ref.func $func6))
+  (func $func0 (result i32)
+    i32.const 0
+  )
+  (func $func1 (result i32)
+    i32.const 1
+  )
+  (func $func2 (result i32)
+    i32.const 2
+  )
+  (func $func3 (result i32)
+    i32.const 3
+  )
+  (func $func4 (result i32)
+    i32.const 4
+  )
+  (func $func5 (result i32)
+    i32.const 5
+  )
+  (func $func6 (result i32)
+    i32.const 6
+  )
+  (func $func7 (result i32)
+    i32.const 7
+  )
+  (func $func8 (result i32)
+    i32.const 8
+  )
+  (func $func9 (result i32)
+    i32.const 9
+  )
+  (func $func10
+    i32.const 30
+    i32.const 15
+    i32.const 0
+    table.copy
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling table_copy.15.wasm generates expected output 1`] = `
+"(module
+  (table $table0 30 30 funcref)
+  (export \\"test\\" (func $func10))
+  (elem $elem0 (i32.const 2) funcref (ref.func $func3) (ref.func $func1) (ref.func $func4) (ref.func $func1))
+  (elem $elem1 funcref (ref.func $func2) (ref.func $func7) (ref.func $func1) (ref.func $func8))
+  (elem $elem2 (i32.const 12) funcref (ref.func $func7) (ref.func $func5) (ref.func $func2) (ref.func $func3) (ref.func $func6))
+  (elem $elem3 funcref (ref.func $func5) (ref.func $func9) (ref.func $func2) (ref.func $func7) (ref.func $func6))
+  (func $func0 (result i32)
+    i32.const 0
+  )
+  (func $func1 (result i32)
+    i32.const 1
+  )
+  (func $func2 (result i32)
+    i32.const 2
+  )
+  (func $func3 (result i32)
+    i32.const 3
+  )
+  (func $func4 (result i32)
+    i32.const 4
+  )
+  (func $func5 (result i32)
+    i32.const 5
+  )
+  (func $func6 (result i32)
+    i32.const 6
+  )
+  (func $func7 (result i32)
+    i32.const 7
+  )
+  (func $func8 (result i32)
+    i32.const 8
+  )
+  (func $func9 (result i32)
+    i32.const 9
+  )
+  (func $func10
+    i32.const 31
+    i32.const 15
+    i32.const 0
+    table.copy
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling table_copy.16.wasm generates expected output 1`] = `
+"(module
+  (table $table0 30 30 funcref)
+  (export \\"test\\" (func $func10))
+  (elem $elem0 (i32.const 2) funcref (ref.func $func3) (ref.func $func1) (ref.func $func4) (ref.func $func1))
+  (elem $elem1 funcref (ref.func $func2) (ref.func $func7) (ref.func $func1) (ref.func $func8))
+  (elem $elem2 (i32.const 12) funcref (ref.func $func7) (ref.func $func5) (ref.func $func2) (ref.func $func3) (ref.func $func6))
+  (elem $elem3 funcref (ref.func $func5) (ref.func $func9) (ref.func $func2) (ref.func $func7) (ref.func $func6))
+  (func $func0 (result i32)
+    i32.const 0
+  )
+  (func $func1 (result i32)
+    i32.const 1
+  )
+  (func $func2 (result i32)
+    i32.const 2
+  )
+  (func $func3 (result i32)
+    i32.const 3
+  )
+  (func $func4 (result i32)
+    i32.const 4
+  )
+  (func $func5 (result i32)
+    i32.const 5
+  )
+  (func $func6 (result i32)
+    i32.const 6
+  )
+  (func $func7 (result i32)
+    i32.const 7
+  )
+  (func $func8 (result i32)
+    i32.const 8
+  )
+  (func $func9 (result i32)
+    i32.const 9
+  )
+  (func $func10
+    i32.const 15
+    i32.const 30
+    i32.const 0
+    table.copy
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling table_copy.17.wasm generates expected output 1`] = `
+"(module
+  (table $table0 30 30 funcref)
+  (export \\"test\\" (func $func10))
+  (elem $elem0 (i32.const 2) funcref (ref.func $func3) (ref.func $func1) (ref.func $func4) (ref.func $func1))
+  (elem $elem1 funcref (ref.func $func2) (ref.func $func7) (ref.func $func1) (ref.func $func8))
+  (elem $elem2 (i32.const 12) funcref (ref.func $func7) (ref.func $func5) (ref.func $func2) (ref.func $func3) (ref.func $func6))
+  (elem $elem3 funcref (ref.func $func5) (ref.func $func9) (ref.func $func2) (ref.func $func7) (ref.func $func6))
+  (func $func0 (result i32)
+    i32.const 0
+  )
+  (func $func1 (result i32)
+    i32.const 1
+  )
+  (func $func2 (result i32)
+    i32.const 2
+  )
+  (func $func3 (result i32)
+    i32.const 3
+  )
+  (func $func4 (result i32)
+    i32.const 4
+  )
+  (func $func5 (result i32)
+    i32.const 5
+  )
+  (func $func6 (result i32)
+    i32.const 6
+  )
+  (func $func7 (result i32)
+    i32.const 7
+  )
+  (func $func8 (result i32)
+    i32.const 8
+  )
+  (func $func9 (result i32)
+    i32.const 9
+  )
+  (func $func10
+    i32.const 15
+    i32.const 31
+    i32.const 0
+    table.copy
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling table_copy.18.wasm generates expected output 1`] = `
+"(module
+  (table $table0 30 30 funcref)
+  (export \\"test\\" (func $func10))
+  (elem $elem0 (i32.const 2) funcref (ref.func $func3) (ref.func $func1) (ref.func $func4) (ref.func $func1))
+  (elem $elem1 funcref (ref.func $func2) (ref.func $func7) (ref.func $func1) (ref.func $func8))
+  (elem $elem2 (i32.const 12) funcref (ref.func $func7) (ref.func $func5) (ref.func $func2) (ref.func $func3) (ref.func $func6))
+  (elem $elem3 funcref (ref.func $func5) (ref.func $func9) (ref.func $func2) (ref.func $func7) (ref.func $func6))
+  (func $func0 (result i32)
+    i32.const 0
+  )
+  (func $func1 (result i32)
+    i32.const 1
+  )
+  (func $func2 (result i32)
+    i32.const 2
+  )
+  (func $func3 (result i32)
+    i32.const 3
+  )
+  (func $func4 (result i32)
+    i32.const 4
+  )
+  (func $func5 (result i32)
+    i32.const 5
+  )
+  (func $func6 (result i32)
+    i32.const 6
+  )
+  (func $func7 (result i32)
+    i32.const 7
+  )
+  (func $func8 (result i32)
+    i32.const 8
+  )
+  (func $func9 (result i32)
+    i32.const 9
+  )
+  (func $func10
+    i32.const 30
+    i32.const 30
+    i32.const 0
+    table.copy
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling table_copy.19.wasm generates expected output 1`] = `
+"(module
+  (table $table0 30 30 funcref)
+  (export \\"test\\" (func $func10))
+  (elem $elem0 (i32.const 2) funcref (ref.func $func3) (ref.func $func1) (ref.func $func4) (ref.func $func1))
+  (elem $elem1 funcref (ref.func $func2) (ref.func $func7) (ref.func $func1) (ref.func $func8))
+  (elem $elem2 (i32.const 12) funcref (ref.func $func7) (ref.func $func5) (ref.func $func2) (ref.func $func3) (ref.func $func6))
+  (elem $elem3 funcref (ref.func $func5) (ref.func $func9) (ref.func $func2) (ref.func $func7) (ref.func $func6))
+  (func $func0 (result i32)
+    i32.const 0
+  )
+  (func $func1 (result i32)
+    i32.const 1
+  )
+  (func $func2 (result i32)
+    i32.const 2
+  )
+  (func $func3 (result i32)
+    i32.const 3
+  )
+  (func $func4 (result i32)
+    i32.const 4
+  )
+  (func $func5 (result i32)
+    i32.const 5
+  )
+  (func $func6 (result i32)
+    i32.const 6
+  )
+  (func $func7 (result i32)
+    i32.const 7
+  )
+  (func $func8 (result i32)
+    i32.const 8
+  )
+  (func $func9 (result i32)
+    i32.const 9
+  )
+  (func $func10
+    i32.const 31
+    i32.const 31
+    i32.const 0
+    table.copy
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling table_copy.20.wasm generates expected output 1`] = `
+"(module
+  (table $table0 32 64 funcref)
+  (export \\"f0\\" (func $func0))
+  (export \\"f1\\" (func $func1))
+  (export \\"f2\\" (func $func2))
+  (export \\"f3\\" (func $func3))
+  (export \\"f4\\" (func $func4))
+  (export \\"f5\\" (func $func5))
+  (export \\"f6\\" (func $func6))
+  (export \\"f7\\" (func $func7))
+  (export \\"f8\\" (func $func8))
+  (export \\"f9\\" (func $func9))
+  (export \\"f10\\" (func $func10))
+  (export \\"f11\\" (func $func11))
+  (export \\"f12\\" (func $func12))
+  (export \\"f13\\" (func $func13))
+  (export \\"f14\\" (func $func14))
+  (export \\"f15\\" (func $func15))
+  (export \\"test\\" (func $func16))
+  (export \\"run\\" (func $func17))
+  (elem $elem0 (i32.const 0) funcref (ref.func $func0) (ref.func $func1) (ref.func $func2) (ref.func $func3) (ref.func $func4) (ref.func $func5) (ref.func $func6) (ref.func $func7))
+  (func $func0 (result i32)
+    i32.const 0
+  )
+  (func $func1 (result i32)
+    i32.const 1
+  )
+  (func $func2 (result i32)
+    i32.const 2
+  )
+  (func $func3 (result i32)
+    i32.const 3
+  )
+  (func $func4 (result i32)
+    i32.const 4
+  )
+  (func $func5 (result i32)
+    i32.const 5
+  )
+  (func $func6 (result i32)
+    i32.const 6
+  )
+  (func $func7 (result i32)
+    i32.const 7
+  )
+  (func $func8 (result i32)
+    i32.const 8
+  )
+  (func $func9 (result i32)
+    i32.const 9
+  )
+  (func $func10 (result i32)
+    i32.const 10
+  )
+  (func $func11 (result i32)
+    i32.const 11
+  )
+  (func $func12 (result i32)
+    i32.const 12
+  )
+  (func $func13 (result i32)
+    i32.const 13
+  )
+  (func $func14 (result i32)
+    i32.const 14
+  )
+  (func $func15 (result i32)
+    i32.const 15
+  )
+  (func $func16 (param $var0 i32) (result i32)
+    local.get $var0
+    call_indirect (result i32)
+  )
+  (func $func17 (param $var0 i32) (param $var1 i32) (param $var2 i32)
+    local.get $var0
+    local.get $var1
+    local.get $var2
+    table.copy
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling table_copy.21.wasm generates expected output 1`] = `
+"(module
+  (table $table0 32 64 funcref)
+  (export \\"f0\\" (func $func0))
+  (export \\"f1\\" (func $func1))
+  (export \\"f2\\" (func $func2))
+  (export \\"f3\\" (func $func3))
+  (export \\"f4\\" (func $func4))
+  (export \\"f5\\" (func $func5))
+  (export \\"f6\\" (func $func6))
+  (export \\"f7\\" (func $func7))
+  (export \\"f8\\" (func $func8))
+  (export \\"f9\\" (func $func9))
+  (export \\"f10\\" (func $func10))
+  (export \\"f11\\" (func $func11))
+  (export \\"f12\\" (func $func12))
+  (export \\"f13\\" (func $func13))
+  (export \\"f14\\" (func $func14))
+  (export \\"f15\\" (func $func15))
+  (export \\"test\\" (func $func16))
+  (export \\"run\\" (func $func17))
+  (elem $elem0 (i32.const 0) funcref (ref.func $func0) (ref.func $func1) (ref.func $func2) (ref.func $func3) (ref.func $func4) (ref.func $func5) (ref.func $func6) (ref.func $func7) (ref.func $func8))
+  (func $func0 (result i32)
+    i32.const 0
+  )
+  (func $func1 (result i32)
+    i32.const 1
+  )
+  (func $func2 (result i32)
+    i32.const 2
+  )
+  (func $func3 (result i32)
+    i32.const 3
+  )
+  (func $func4 (result i32)
+    i32.const 4
+  )
+  (func $func5 (result i32)
+    i32.const 5
+  )
+  (func $func6 (result i32)
+    i32.const 6
+  )
+  (func $func7 (result i32)
+    i32.const 7
+  )
+  (func $func8 (result i32)
+    i32.const 8
+  )
+  (func $func9 (result i32)
+    i32.const 9
+  )
+  (func $func10 (result i32)
+    i32.const 10
+  )
+  (func $func11 (result i32)
+    i32.const 11
+  )
+  (func $func12 (result i32)
+    i32.const 12
+  )
+  (func $func13 (result i32)
+    i32.const 13
+  )
+  (func $func14 (result i32)
+    i32.const 14
+  )
+  (func $func15 (result i32)
+    i32.const 15
+  )
+  (func $func16 (param $var0 i32) (result i32)
+    local.get $var0
+    call_indirect (result i32)
+  )
+  (func $func17 (param $var0 i32) (param $var1 i32) (param $var2 i32)
+    local.get $var0
+    local.get $var1
+    local.get $var2
+    table.copy
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling table_copy.22.wasm generates expected output 1`] = `
+"(module
+  (table $table0 32 64 funcref)
+  (export \\"f0\\" (func $func0))
+  (export \\"f1\\" (func $func1))
+  (export \\"f2\\" (func $func2))
+  (export \\"f3\\" (func $func3))
+  (export \\"f4\\" (func $func4))
+  (export \\"f5\\" (func $func5))
+  (export \\"f6\\" (func $func6))
+  (export \\"f7\\" (func $func7))
+  (export \\"f8\\" (func $func8))
+  (export \\"f9\\" (func $func9))
+  (export \\"f10\\" (func $func10))
+  (export \\"f11\\" (func $func11))
+  (export \\"f12\\" (func $func12))
+  (export \\"f13\\" (func $func13))
+  (export \\"f14\\" (func $func14))
+  (export \\"f15\\" (func $func15))
+  (export \\"test\\" (func $func16))
+  (export \\"run\\" (func $func17))
+  (elem $elem0 (i32.const 24) funcref (ref.func $func0) (ref.func $func1) (ref.func $func2) (ref.func $func3) (ref.func $func4) (ref.func $func5) (ref.func $func6) (ref.func $func7))
+  (func $func0 (result i32)
+    i32.const 0
+  )
+  (func $func1 (result i32)
+    i32.const 1
+  )
+  (func $func2 (result i32)
+    i32.const 2
+  )
+  (func $func3 (result i32)
+    i32.const 3
+  )
+  (func $func4 (result i32)
+    i32.const 4
+  )
+  (func $func5 (result i32)
+    i32.const 5
+  )
+  (func $func6 (result i32)
+    i32.const 6
+  )
+  (func $func7 (result i32)
+    i32.const 7
+  )
+  (func $func8 (result i32)
+    i32.const 8
+  )
+  (func $func9 (result i32)
+    i32.const 9
+  )
+  (func $func10 (result i32)
+    i32.const 10
+  )
+  (func $func11 (result i32)
+    i32.const 11
+  )
+  (func $func12 (result i32)
+    i32.const 12
+  )
+  (func $func13 (result i32)
+    i32.const 13
+  )
+  (func $func14 (result i32)
+    i32.const 14
+  )
+  (func $func15 (result i32)
+    i32.const 15
+  )
+  (func $func16 (param $var0 i32) (result i32)
+    local.get $var0
+    call_indirect (result i32)
+  )
+  (func $func17 (param $var0 i32) (param $var1 i32) (param $var2 i32)
+    local.get $var0
+    local.get $var1
+    local.get $var2
+    table.copy
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling table_copy.23.wasm generates expected output 1`] = `
+"(module
+  (table $table0 32 64 funcref)
+  (export \\"f0\\" (func $func0))
+  (export \\"f1\\" (func $func1))
+  (export \\"f2\\" (func $func2))
+  (export \\"f3\\" (func $func3))
+  (export \\"f4\\" (func $func4))
+  (export \\"f5\\" (func $func5))
+  (export \\"f6\\" (func $func6))
+  (export \\"f7\\" (func $func7))
+  (export \\"f8\\" (func $func8))
+  (export \\"f9\\" (func $func9))
+  (export \\"f10\\" (func $func10))
+  (export \\"f11\\" (func $func11))
+  (export \\"f12\\" (func $func12))
+  (export \\"f13\\" (func $func13))
+  (export \\"f14\\" (func $func14))
+  (export \\"f15\\" (func $func15))
+  (export \\"test\\" (func $func16))
+  (export \\"run\\" (func $func17))
+  (elem $elem0 (i32.const 23) funcref (ref.func $func0) (ref.func $func1) (ref.func $func2) (ref.func $func3) (ref.func $func4) (ref.func $func5) (ref.func $func6) (ref.func $func7) (ref.func $func8))
+  (func $func0 (result i32)
+    i32.const 0
+  )
+  (func $func1 (result i32)
+    i32.const 1
+  )
+  (func $func2 (result i32)
+    i32.const 2
+  )
+  (func $func3 (result i32)
+    i32.const 3
+  )
+  (func $func4 (result i32)
+    i32.const 4
+  )
+  (func $func5 (result i32)
+    i32.const 5
+  )
+  (func $func6 (result i32)
+    i32.const 6
+  )
+  (func $func7 (result i32)
+    i32.const 7
+  )
+  (func $func8 (result i32)
+    i32.const 8
+  )
+  (func $func9 (result i32)
+    i32.const 9
+  )
+  (func $func10 (result i32)
+    i32.const 10
+  )
+  (func $func11 (result i32)
+    i32.const 11
+  )
+  (func $func12 (result i32)
+    i32.const 12
+  )
+  (func $func13 (result i32)
+    i32.const 13
+  )
+  (func $func14 (result i32)
+    i32.const 14
+  )
+  (func $func15 (result i32)
+    i32.const 15
+  )
+  (func $func16 (param $var0 i32) (result i32)
+    local.get $var0
+    call_indirect (result i32)
+  )
+  (func $func17 (param $var0 i32) (param $var1 i32) (param $var2 i32)
+    local.get $var0
+    local.get $var1
+    local.get $var2
+    table.copy
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling table_copy.24.wasm generates expected output 1`] = `
+"(module
+  (table $table0 32 64 funcref)
+  (export \\"f0\\" (func $func0))
+  (export \\"f1\\" (func $func1))
+  (export \\"f2\\" (func $func2))
+  (export \\"f3\\" (func $func3))
+  (export \\"f4\\" (func $func4))
+  (export \\"f5\\" (func $func5))
+  (export \\"f6\\" (func $func6))
+  (export \\"f7\\" (func $func7))
+  (export \\"f8\\" (func $func8))
+  (export \\"f9\\" (func $func9))
+  (export \\"f10\\" (func $func10))
+  (export \\"f11\\" (func $func11))
+  (export \\"f12\\" (func $func12))
+  (export \\"f13\\" (func $func13))
+  (export \\"f14\\" (func $func14))
+  (export \\"f15\\" (func $func15))
+  (export \\"test\\" (func $func16))
+  (export \\"run\\" (func $func17))
+  (elem $elem0 (i32.const 11) funcref (ref.func $func0) (ref.func $func1) (ref.func $func2) (ref.func $func3) (ref.func $func4) (ref.func $func5) (ref.func $func6) (ref.func $func7))
+  (func $func0 (result i32)
+    i32.const 0
+  )
+  (func $func1 (result i32)
+    i32.const 1
+  )
+  (func $func2 (result i32)
+    i32.const 2
+  )
+  (func $func3 (result i32)
+    i32.const 3
+  )
+  (func $func4 (result i32)
+    i32.const 4
+  )
+  (func $func5 (result i32)
+    i32.const 5
+  )
+  (func $func6 (result i32)
+    i32.const 6
+  )
+  (func $func7 (result i32)
+    i32.const 7
+  )
+  (func $func8 (result i32)
+    i32.const 8
+  )
+  (func $func9 (result i32)
+    i32.const 9
+  )
+  (func $func10 (result i32)
+    i32.const 10
+  )
+  (func $func11 (result i32)
+    i32.const 11
+  )
+  (func $func12 (result i32)
+    i32.const 12
+  )
+  (func $func13 (result i32)
+    i32.const 13
+  )
+  (func $func14 (result i32)
+    i32.const 14
+  )
+  (func $func15 (result i32)
+    i32.const 15
+  )
+  (func $func16 (param $var0 i32) (result i32)
+    local.get $var0
+    call_indirect (result i32)
+  )
+  (func $func17 (param $var0 i32) (param $var1 i32) (param $var2 i32)
+    local.get $var0
+    local.get $var1
+    local.get $var2
+    table.copy
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling table_copy.25.wasm generates expected output 1`] = `
+"(module
+  (table $table0 32 64 funcref)
+  (export \\"f0\\" (func $func0))
+  (export \\"f1\\" (func $func1))
+  (export \\"f2\\" (func $func2))
+  (export \\"f3\\" (func $func3))
+  (export \\"f4\\" (func $func4))
+  (export \\"f5\\" (func $func5))
+  (export \\"f6\\" (func $func6))
+  (export \\"f7\\" (func $func7))
+  (export \\"f8\\" (func $func8))
+  (export \\"f9\\" (func $func9))
+  (export \\"f10\\" (func $func10))
+  (export \\"f11\\" (func $func11))
+  (export \\"f12\\" (func $func12))
+  (export \\"f13\\" (func $func13))
+  (export \\"f14\\" (func $func14))
+  (export \\"f15\\" (func $func15))
+  (export \\"test\\" (func $func16))
+  (export \\"run\\" (func $func17))
+  (elem $elem0 (i32.const 24) funcref (ref.func $func0) (ref.func $func1) (ref.func $func2) (ref.func $func3) (ref.func $func4) (ref.func $func5) (ref.func $func6) (ref.func $func7))
+  (func $func0 (result i32)
+    i32.const 0
+  )
+  (func $func1 (result i32)
+    i32.const 1
+  )
+  (func $func2 (result i32)
+    i32.const 2
+  )
+  (func $func3 (result i32)
+    i32.const 3
+  )
+  (func $func4 (result i32)
+    i32.const 4
+  )
+  (func $func5 (result i32)
+    i32.const 5
+  )
+  (func $func6 (result i32)
+    i32.const 6
+  )
+  (func $func7 (result i32)
+    i32.const 7
+  )
+  (func $func8 (result i32)
+    i32.const 8
+  )
+  (func $func9 (result i32)
+    i32.const 9
+  )
+  (func $func10 (result i32)
+    i32.const 10
+  )
+  (func $func11 (result i32)
+    i32.const 11
+  )
+  (func $func12 (result i32)
+    i32.const 12
+  )
+  (func $func13 (result i32)
+    i32.const 13
+  )
+  (func $func14 (result i32)
+    i32.const 14
+  )
+  (func $func15 (result i32)
+    i32.const 15
+  )
+  (func $func16 (param $var0 i32) (result i32)
+    local.get $var0
+    call_indirect (result i32)
+  )
+  (func $func17 (param $var0 i32) (param $var1 i32) (param $var2 i32)
+    local.get $var0
+    local.get $var1
+    local.get $var2
+    table.copy
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling table_copy.26.wasm generates expected output 1`] = `
+"(module
+  (table $table0 32 64 funcref)
+  (export \\"f0\\" (func $func0))
+  (export \\"f1\\" (func $func1))
+  (export \\"f2\\" (func $func2))
+  (export \\"f3\\" (func $func3))
+  (export \\"f4\\" (func $func4))
+  (export \\"f5\\" (func $func5))
+  (export \\"f6\\" (func $func6))
+  (export \\"f7\\" (func $func7))
+  (export \\"f8\\" (func $func8))
+  (export \\"f9\\" (func $func9))
+  (export \\"f10\\" (func $func10))
+  (export \\"f11\\" (func $func11))
+  (export \\"f12\\" (func $func12))
+  (export \\"f13\\" (func $func13))
+  (export \\"f14\\" (func $func14))
+  (export \\"f15\\" (func $func15))
+  (export \\"test\\" (func $func16))
+  (export \\"run\\" (func $func17))
+  (elem $elem0 (i32.const 21) funcref (ref.func $func0) (ref.func $func1) (ref.func $func2) (ref.func $func3) (ref.func $func4) (ref.func $func5) (ref.func $func6) (ref.func $func7))
+  (func $func0 (result i32)
+    i32.const 0
+  )
+  (func $func1 (result i32)
+    i32.const 1
+  )
+  (func $func2 (result i32)
+    i32.const 2
+  )
+  (func $func3 (result i32)
+    i32.const 3
+  )
+  (func $func4 (result i32)
+    i32.const 4
+  )
+  (func $func5 (result i32)
+    i32.const 5
+  )
+  (func $func6 (result i32)
+    i32.const 6
+  )
+  (func $func7 (result i32)
+    i32.const 7
+  )
+  (func $func8 (result i32)
+    i32.const 8
+  )
+  (func $func9 (result i32)
+    i32.const 9
+  )
+  (func $func10 (result i32)
+    i32.const 10
+  )
+  (func $func11 (result i32)
+    i32.const 11
+  )
+  (func $func12 (result i32)
+    i32.const 12
+  )
+  (func $func13 (result i32)
+    i32.const 13
+  )
+  (func $func14 (result i32)
+    i32.const 14
+  )
+  (func $func15 (result i32)
+    i32.const 15
+  )
+  (func $func16 (param $var0 i32) (result i32)
+    local.get $var0
+    call_indirect (result i32)
+  )
+  (func $func17 (param $var0 i32) (param $var1 i32) (param $var2 i32)
+    local.get $var0
+    local.get $var1
+    local.get $var2
+    table.copy
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling table_copy.27.wasm generates expected output 1`] = `
+"(module
+  (table $table0 32 64 funcref)
+  (export \\"f0\\" (func $func0))
+  (export \\"f1\\" (func $func1))
+  (export \\"f2\\" (func $func2))
+  (export \\"f3\\" (func $func3))
+  (export \\"f4\\" (func $func4))
+  (export \\"f5\\" (func $func5))
+  (export \\"f6\\" (func $func6))
+  (export \\"f7\\" (func $func7))
+  (export \\"f8\\" (func $func8))
+  (export \\"f9\\" (func $func9))
+  (export \\"f10\\" (func $func10))
+  (export \\"f11\\" (func $func11))
+  (export \\"f12\\" (func $func12))
+  (export \\"f13\\" (func $func13))
+  (export \\"f14\\" (func $func14))
+  (export \\"f15\\" (func $func15))
+  (export \\"test\\" (func $func16))
+  (export \\"run\\" (func $func17))
+  (elem $elem0 (i32.const 24) funcref (ref.func $func0) (ref.func $func1) (ref.func $func2) (ref.func $func3) (ref.func $func4) (ref.func $func5) (ref.func $func6) (ref.func $func7))
+  (func $func0 (result i32)
+    i32.const 0
+  )
+  (func $func1 (result i32)
+    i32.const 1
+  )
+  (func $func2 (result i32)
+    i32.const 2
+  )
+  (func $func3 (result i32)
+    i32.const 3
+  )
+  (func $func4 (result i32)
+    i32.const 4
+  )
+  (func $func5 (result i32)
+    i32.const 5
+  )
+  (func $func6 (result i32)
+    i32.const 6
+  )
+  (func $func7 (result i32)
+    i32.const 7
+  )
+  (func $func8 (result i32)
+    i32.const 8
+  )
+  (func $func9 (result i32)
+    i32.const 9
+  )
+  (func $func10 (result i32)
+    i32.const 10
+  )
+  (func $func11 (result i32)
+    i32.const 11
+  )
+  (func $func12 (result i32)
+    i32.const 12
+  )
+  (func $func13 (result i32)
+    i32.const 13
+  )
+  (func $func14 (result i32)
+    i32.const 14
+  )
+  (func $func15 (result i32)
+    i32.const 15
+  )
+  (func $func16 (param $var0 i32) (result i32)
+    local.get $var0
+    call_indirect (result i32)
+  )
+  (func $func17 (param $var0 i32) (param $var1 i32) (param $var2 i32)
+    local.get $var0
+    local.get $var1
+    local.get $var2
+    table.copy
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling table_copy.28.wasm generates expected output 1`] = `
+"(module
+  (table $table0 32 64 funcref)
+  (export \\"f0\\" (func $func0))
+  (export \\"f1\\" (func $func1))
+  (export \\"f2\\" (func $func2))
+  (export \\"f3\\" (func $func3))
+  (export \\"f4\\" (func $func4))
+  (export \\"f5\\" (func $func5))
+  (export \\"f6\\" (func $func6))
+  (export \\"f7\\" (func $func7))
+  (export \\"f8\\" (func $func8))
+  (export \\"f9\\" (func $func9))
+  (export \\"f10\\" (func $func10))
+  (export \\"f11\\" (func $func11))
+  (export \\"f12\\" (func $func12))
+  (export \\"f13\\" (func $func13))
+  (export \\"f14\\" (func $func14))
+  (export \\"f15\\" (func $func15))
+  (export \\"test\\" (func $func16))
+  (export \\"run\\" (func $func17))
+  (elem $elem0 (i32.const 21) funcref (ref.func $func0) (ref.func $func1) (ref.func $func2) (ref.func $func3) (ref.func $func4) (ref.func $func5) (ref.func $func6) (ref.func $func7) (ref.func $func8) (ref.func $func9) (ref.func $func10))
+  (func $func0 (result i32)
+    i32.const 0
+  )
+  (func $func1 (result i32)
+    i32.const 1
+  )
+  (func $func2 (result i32)
+    i32.const 2
+  )
+  (func $func3 (result i32)
+    i32.const 3
+  )
+  (func $func4 (result i32)
+    i32.const 4
+  )
+  (func $func5 (result i32)
+    i32.const 5
+  )
+  (func $func6 (result i32)
+    i32.const 6
+  )
+  (func $func7 (result i32)
+    i32.const 7
+  )
+  (func $func8 (result i32)
+    i32.const 8
+  )
+  (func $func9 (result i32)
+    i32.const 9
+  )
+  (func $func10 (result i32)
+    i32.const 10
+  )
+  (func $func11 (result i32)
+    i32.const 11
+  )
+  (func $func12 (result i32)
+    i32.const 12
+  )
+  (func $func13 (result i32)
+    i32.const 13
+  )
+  (func $func14 (result i32)
+    i32.const 14
+  )
+  (func $func15 (result i32)
+    i32.const 15
+  )
+  (func $func16 (param $var0 i32) (result i32)
+    local.get $var0
+    call_indirect (result i32)
+  )
+  (func $func17 (param $var0 i32) (param $var1 i32) (param $var2 i32)
+    local.get $var0
+    local.get $var1
+    local.get $var2
+    table.copy
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling table_copy.29.wasm generates expected output 1`] = `
+"(module
+  (table $table0 128 128 funcref)
+  (export \\"f0\\" (func $func0))
+  (export \\"f1\\" (func $func1))
+  (export \\"f2\\" (func $func2))
+  (export \\"f3\\" (func $func3))
+  (export \\"f4\\" (func $func4))
+  (export \\"f5\\" (func $func5))
+  (export \\"f6\\" (func $func6))
+  (export \\"f7\\" (func $func7))
+  (export \\"f8\\" (func $func8))
+  (export \\"f9\\" (func $func9))
+  (export \\"f10\\" (func $func10))
+  (export \\"f11\\" (func $func11))
+  (export \\"f12\\" (func $func12))
+  (export \\"f13\\" (func $func13))
+  (export \\"f14\\" (func $func14))
+  (export \\"f15\\" (func $func15))
+  (export \\"test\\" (func $func16))
+  (export \\"run\\" (func $func17))
+  (elem $elem0 (i32.const 112) funcref (ref.func $func0) (ref.func $func1) (ref.func $func2) (ref.func $func3) (ref.func $func4) (ref.func $func5) (ref.func $func6) (ref.func $func7) (ref.func $func8) (ref.func $func9) (ref.func $func10) (ref.func $func11) (ref.func $func12) (ref.func $func13) (ref.func $func14) (ref.func $func15))
+  (func $func0 (result i32)
+    i32.const 0
+  )
+  (func $func1 (result i32)
+    i32.const 1
+  )
+  (func $func2 (result i32)
+    i32.const 2
+  )
+  (func $func3 (result i32)
+    i32.const 3
+  )
+  (func $func4 (result i32)
+    i32.const 4
+  )
+  (func $func5 (result i32)
+    i32.const 5
+  )
+  (func $func6 (result i32)
+    i32.const 6
+  )
+  (func $func7 (result i32)
+    i32.const 7
+  )
+  (func $func8 (result i32)
+    i32.const 8
+  )
+  (func $func9 (result i32)
+    i32.const 9
+  )
+  (func $func10 (result i32)
+    i32.const 10
+  )
+  (func $func11 (result i32)
+    i32.const 11
+  )
+  (func $func12 (result i32)
+    i32.const 12
+  )
+  (func $func13 (result i32)
+    i32.const 13
+  )
+  (func $func14 (result i32)
+    i32.const 14
+  )
+  (func $func15 (result i32)
+    i32.const 15
+  )
+  (func $func16 (param $var0 i32) (result i32)
+    local.get $var0
+    call_indirect (result i32)
+  )
+  (func $func17 (param $var0 i32) (param $var1 i32) (param $var2 i32)
+    local.get $var0
+    local.get $var1
+    local.get $var2
+    table.copy
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling table_copy.30.wasm generates expected output 1`] = `
+"(module
+  (table $table0 128 128 funcref)
+  (export \\"f0\\" (func $func0))
+  (export \\"f1\\" (func $func1))
+  (export \\"f2\\" (func $func2))
+  (export \\"f3\\" (func $func3))
+  (export \\"f4\\" (func $func4))
+  (export \\"f5\\" (func $func5))
+  (export \\"f6\\" (func $func6))
+  (export \\"f7\\" (func $func7))
+  (export \\"f8\\" (func $func8))
+  (export \\"f9\\" (func $func9))
+  (export \\"f10\\" (func $func10))
+  (export \\"f11\\" (func $func11))
+  (export \\"f12\\" (func $func12))
+  (export \\"f13\\" (func $func13))
+  (export \\"f14\\" (func $func14))
+  (export \\"f15\\" (func $func15))
+  (export \\"test\\" (func $func16))
+  (export \\"run\\" (func $func17))
+  (elem $elem0 (i32.const 0) funcref (ref.func $func0) (ref.func $func1) (ref.func $func2) (ref.func $func3) (ref.func $func4) (ref.func $func5) (ref.func $func6) (ref.func $func7) (ref.func $func8) (ref.func $func9) (ref.func $func10) (ref.func $func11) (ref.func $func12) (ref.func $func13) (ref.func $func14) (ref.func $func15))
+  (func $func0 (result i32)
+    i32.const 0
+  )
+  (func $func1 (result i32)
+    i32.const 1
+  )
+  (func $func2 (result i32)
+    i32.const 2
+  )
+  (func $func3 (result i32)
+    i32.const 3
+  )
+  (func $func4 (result i32)
+    i32.const 4
+  )
+  (func $func5 (result i32)
+    i32.const 5
+  )
+  (func $func6 (result i32)
+    i32.const 6
+  )
+  (func $func7 (result i32)
+    i32.const 7
+  )
+  (func $func8 (result i32)
+    i32.const 8
+  )
+  (func $func9 (result i32)
+    i32.const 9
+  )
+  (func $func10 (result i32)
+    i32.const 10
+  )
+  (func $func11 (result i32)
+    i32.const 11
+  )
+  (func $func12 (result i32)
+    i32.const 12
+  )
+  (func $func13 (result i32)
+    i32.const 13
+  )
+  (func $func14 (result i32)
+    i32.const 14
+  )
+  (func $func15 (result i32)
+    i32.const 15
+  )
+  (func $func16 (param $var0 i32) (result i32)
+    local.get $var0
+    call_indirect (result i32)
+  )
+  (func $func17 (param $var0 i32) (param $var1 i32) (param $var2 i32)
+    local.get $var0
+    local.get $var1
+    local.get $var2
+    table.copy
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling table_init.0.wasm generates expected output 1`] = `
+"(module
+  (export \\"ef0\\" (func $func0))
+  (export \\"ef1\\" (func $func1))
+  (export \\"ef2\\" (func $func2))
+  (export \\"ef3\\" (func $func3))
+  (export \\"ef4\\" (func $func4))
+  (func $func0 (result i32)
+    i32.const 0
+  )
+  (func $func1 (result i32)
+    i32.const 1
+  )
+  (func $func2 (result i32)
+    i32.const 2
+  )
+  (func $func3 (result i32)
+    i32.const 3
+  )
+  (func $func4 (result i32)
+    i32.const 4
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling table_init.1.wasm generates expected output 1`] = `
+"(module
+  (func $import0 (import \\"a\\" \\"ef0\\") (result i32))
+  (func $import1 (import \\"a\\" \\"ef1\\") (result i32))
+  (func $import2 (import \\"a\\" \\"ef2\\") (result i32))
+  (func $import3 (import \\"a\\" \\"ef3\\") (result i32))
+  (func $import4 (import \\"a\\" \\"ef4\\") (result i32))
+  (table $table0 30 30 funcref)
+  (export \\"test\\" (func $func10))
+  (export \\"check\\" (func $func11))
+  (elem $elem0 (i32.const 2) funcref (ref.func $import3) (ref.func $import1) (ref.func $import4) (ref.func $import1))
+  (elem $elem1 funcref (ref.func $import2) (ref.func $func7) (ref.func $import1) (ref.func $func8))
+  (elem $elem2 (i32.const 12) funcref (ref.func $func7) (ref.func $func5) (ref.func $import2) (ref.func $import3) (ref.func $func6))
+  (elem $elem3 funcref (ref.func $func5) (ref.func $func9) (ref.func $import2) (ref.func $func7) (ref.func $func6))
+  (func $func5 (result i32)
+    i32.const 5
+  )
+  (func $func6 (result i32)
+    i32.const 6
+  )
+  (func $func7 (result i32)
+    i32.const 7
+  )
+  (func $func8 (result i32)
+    i32.const 8
+  )
+  (func $func9 (result i32)
+    i32.const 9
+  )
+  (func $func10
+    i32.const 7
+    i32.const 0
+    i32.const 4
+    table.init $elem1
+  )
+  (func $func11 (param $var0 i32) (result i32)
+    local.get $var0
+    call_indirect (result i32)
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling table_init.2.wasm generates expected output 1`] = `
+"(module
+  (func $import0 (import \\"a\\" \\"ef0\\") (result i32))
+  (func $import1 (import \\"a\\" \\"ef1\\") (result i32))
+  (func $import2 (import \\"a\\" \\"ef2\\") (result i32))
+  (func $import3 (import \\"a\\" \\"ef3\\") (result i32))
+  (func $import4 (import \\"a\\" \\"ef4\\") (result i32))
+  (table $table0 30 30 funcref)
+  (export \\"test\\" (func $func10))
+  (export \\"check\\" (func $func11))
+  (elem $elem0 (i32.const 2) funcref (ref.func $import3) (ref.func $import1) (ref.func $import4) (ref.func $import1))
+  (elem $elem1 funcref (ref.func $import2) (ref.func $func7) (ref.func $import1) (ref.func $func8))
+  (elem $elem2 (i32.const 12) funcref (ref.func $func7) (ref.func $func5) (ref.func $import2) (ref.func $import3) (ref.func $func6))
+  (elem $elem3 funcref (ref.func $func5) (ref.func $func9) (ref.func $import2) (ref.func $func7) (ref.func $func6))
+  (func $func5 (result i32)
+    i32.const 5
+  )
+  (func $func6 (result i32)
+    i32.const 6
+  )
+  (func $func7 (result i32)
+    i32.const 7
+  )
+  (func $func8 (result i32)
+    i32.const 8
+  )
+  (func $func9 (result i32)
+    i32.const 9
+  )
+  (func $func10
+    i32.const 15
+    i32.const 1
+    i32.const 3
+    table.init $elem3
+  )
+  (func $func11 (param $var0 i32) (result i32)
+    local.get $var0
+    call_indirect (result i32)
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling table_init.3.wasm generates expected output 1`] = `
+"(module
+  (func $import0 (import \\"a\\" \\"ef0\\") (result i32))
+  (func $import1 (import \\"a\\" \\"ef1\\") (result i32))
+  (func $import2 (import \\"a\\" \\"ef2\\") (result i32))
+  (func $import3 (import \\"a\\" \\"ef3\\") (result i32))
+  (func $import4 (import \\"a\\" \\"ef4\\") (result i32))
+  (table $table0 30 30 funcref)
+  (export \\"test\\" (func $func10))
+  (export \\"check\\" (func $func11))
+  (elem $elem0 (i32.const 2) funcref (ref.func $import3) (ref.func $import1) (ref.func $import4) (ref.func $import1))
+  (elem $elem1 funcref (ref.func $import2) (ref.func $func7) (ref.func $import1) (ref.func $func8))
+  (elem $elem2 (i32.const 12) funcref (ref.func $func7) (ref.func $func5) (ref.func $import2) (ref.func $import3) (ref.func $func6))
+  (elem $elem3 funcref (ref.func $func5) (ref.func $func9) (ref.func $import2) (ref.func $func7) (ref.func $func6))
+  (func $func5 (result i32)
+    i32.const 5
+  )
+  (func $func6 (result i32)
+    i32.const 6
+  )
+  (func $func7 (result i32)
+    i32.const 7
+  )
+  (func $func8 (result i32)
+    i32.const 8
+  )
+  (func $func9 (result i32)
+    i32.const 9
+  )
+  (func $func10
+    i32.const 7
+    i32.const 0
+    i32.const 4
+    table.init $elem1
+    elem.drop $elem1
+    i32.const 15
+    i32.const 1
+    i32.const 3
+    table.init $elem3
+    elem.drop $elem3
+    i32.const 20
+    i32.const 15
+    i32.const 5
+    table.copy
+    i32.const 21
+    i32.const 29
+    i32.const 1
+    table.copy
+    i32.const 24
+    i32.const 10
+    i32.const 1
+    table.copy
+    i32.const 13
+    i32.const 11
+    i32.const 4
+    table.copy
+    i32.const 19
+    i32.const 20
+    i32.const 5
+    table.copy
+  )
+  (func $func11 (param $var0 i32) (result i32)
+    local.get $var0
+    call_indirect (result i32)
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling table_init.8.wasm generates expected output 1`] = `
+"(module
+  (table $table0 30 30 funcref)
+  (export \\"test\\" (func $func10))
+  (elem $elem0 (i32.const 2) funcref (ref.func $func3) (ref.func $func1) (ref.func $func4) (ref.func $func1))
+  (elem $elem1 funcref (ref.func $func2) (ref.func $func7) (ref.func $func1) (ref.func $func8))
+  (elem $elem2 (i32.const 12) funcref (ref.func $func7) (ref.func $func5) (ref.func $func2) (ref.func $func3) (ref.func $func6))
+  (elem $elem3 funcref (ref.func $func5) (ref.func $func9) (ref.func $func2) (ref.func $func7) (ref.func $func6))
+  (func $func0 (result i32)
+    i32.const 0
+  )
+  (func $func1 (result i32)
+    i32.const 1
+  )
+  (func $func2 (result i32)
+    i32.const 2
+  )
+  (func $func3 (result i32)
+    i32.const 3
+  )
+  (func $func4 (result i32)
+    i32.const 4
+  )
+  (func $func5 (result i32)
+    i32.const 5
+  )
+  (func $func6 (result i32)
+    i32.const 6
+  )
+  (func $func7 (result i32)
+    i32.const 7
+  )
+  (func $func8 (result i32)
+    i32.const 8
+  )
+  (func $func9 (result i32)
+    i32.const 9
+  )
+  (func $func10
+    elem.drop $elem2
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling table_init.9.wasm generates expected output 1`] = `
+"(module
+  (table $table0 30 30 funcref)
+  (export \\"test\\" (func $func10))
+  (elem $elem0 (i32.const 2) funcref (ref.func $func3) (ref.func $func1) (ref.func $func4) (ref.func $func1))
+  (elem $elem1 funcref (ref.func $func2) (ref.func $func7) (ref.func $func1) (ref.func $func8))
+  (elem $elem2 (i32.const 12) funcref (ref.func $func7) (ref.func $func5) (ref.func $func2) (ref.func $func3) (ref.func $func6))
+  (elem $elem3 funcref (ref.func $func5) (ref.func $func9) (ref.func $func2) (ref.func $func7) (ref.func $func6))
+  (func $func0 (result i32)
+    i32.const 0
+  )
+  (func $func1 (result i32)
+    i32.const 1
+  )
+  (func $func2 (result i32)
+    i32.const 2
+  )
+  (func $func3 (result i32)
+    i32.const 3
+  )
+  (func $func4 (result i32)
+    i32.const 4
+  )
+  (func $func5 (result i32)
+    i32.const 5
+  )
+  (func $func6 (result i32)
+    i32.const 6
+  )
+  (func $func7 (result i32)
+    i32.const 7
+  )
+  (func $func8 (result i32)
+    i32.const 8
+  )
+  (func $func9 (result i32)
+    i32.const 9
+  )
+  (func $func10
+    i32.const 12
+    i32.const 1
+    i32.const 1
+    table.init $elem2
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling table_init.10.wasm generates expected output 1`] = `
+"(module
+  (table $table0 30 30 funcref)
+  (export \\"test\\" (func $func10))
+  (elem $elem0 (i32.const 2) funcref (ref.func $func3) (ref.func $func1) (ref.func $func4) (ref.func $func1))
+  (elem $elem1 funcref (ref.func $func2) (ref.func $func7) (ref.func $func1) (ref.func $func8))
+  (elem $elem2 (i32.const 12) funcref (ref.func $func7) (ref.func $func5) (ref.func $func2) (ref.func $func3) (ref.func $func6))
+  (elem $elem3 funcref (ref.func $func5) (ref.func $func9) (ref.func $func2) (ref.func $func7) (ref.func $func6))
+  (func $func0 (result i32)
+    i32.const 0
+  )
+  (func $func1 (result i32)
+    i32.const 1
+  )
+  (func $func2 (result i32)
+    i32.const 2
+  )
+  (func $func3 (result i32)
+    i32.const 3
+  )
+  (func $func4 (result i32)
+    i32.const 4
+  )
+  (func $func5 (result i32)
+    i32.const 5
+  )
+  (func $func6 (result i32)
+    i32.const 6
+  )
+  (func $func7 (result i32)
+    i32.const 7
+  )
+  (func $func8 (result i32)
+    i32.const 8
+  )
+  (func $func9 (result i32)
+    i32.const 9
+  )
+  (func $func10
+    i32.const 12
+    i32.const 1
+    i32.const 1
+    table.init $elem1
+    i32.const 21
+    i32.const 1
+    i32.const 1
+    table.init $elem1
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling table_init.11.wasm generates expected output 1`] = `
+"(module
+  (table $table0 30 30 funcref)
+  (export \\"test\\" (func $func10))
+  (elem $elem0 (i32.const 2) funcref (ref.func $func3) (ref.func $func1) (ref.func $func4) (ref.func $func1))
+  (elem $elem1 funcref (ref.func $func2) (ref.func $func7) (ref.func $func1) (ref.func $func8))
+  (elem $elem2 (i32.const 12) funcref (ref.func $func7) (ref.func $func5) (ref.func $func2) (ref.func $func3) (ref.func $func6))
+  (elem $elem3 funcref (ref.func $func5) (ref.func $func9) (ref.func $func2) (ref.func $func7) (ref.func $func6))
+  (func $func0 (result i32)
+    i32.const 0
+  )
+  (func $func1 (result i32)
+    i32.const 1
+  )
+  (func $func2 (result i32)
+    i32.const 2
+  )
+  (func $func3 (result i32)
+    i32.const 3
+  )
+  (func $func4 (result i32)
+    i32.const 4
+  )
+  (func $func5 (result i32)
+    i32.const 5
+  )
+  (func $func6 (result i32)
+    i32.const 6
+  )
+  (func $func7 (result i32)
+    i32.const 7
+  )
+  (func $func8 (result i32)
+    i32.const 8
+  )
+  (func $func9 (result i32)
+    i32.const 9
+  )
+  (func $func10
+    elem.drop $elem1
+    elem.drop $elem1
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling table_init.12.wasm generates expected output 1`] = `
+"(module
+  (table $table0 30 30 funcref)
+  (export \\"test\\" (func $func10))
+  (elem $elem0 (i32.const 2) funcref (ref.func $func3) (ref.func $func1) (ref.func $func4) (ref.func $func1))
+  (elem $elem1 funcref (ref.func $func2) (ref.func $func7) (ref.func $func1) (ref.func $func8))
+  (elem $elem2 (i32.const 12) funcref (ref.func $func7) (ref.func $func5) (ref.func $func2) (ref.func $func3) (ref.func $func6))
+  (elem $elem3 funcref (ref.func $func5) (ref.func $func9) (ref.func $func2) (ref.func $func7) (ref.func $func6))
+  (func $func0 (result i32)
+    i32.const 0
+  )
+  (func $func1 (result i32)
+    i32.const 1
+  )
+  (func $func2 (result i32)
+    i32.const 2
+  )
+  (func $func3 (result i32)
+    i32.const 3
+  )
+  (func $func4 (result i32)
+    i32.const 4
+  )
+  (func $func5 (result i32)
+    i32.const 5
+  )
+  (func $func6 (result i32)
+    i32.const 6
+  )
+  (func $func7 (result i32)
+    i32.const 7
+  )
+  (func $func8 (result i32)
+    i32.const 8
+  )
+  (func $func9 (result i32)
+    i32.const 9
+  )
+  (func $func10
+    elem.drop $elem1
+    i32.const 12
+    i32.const 1
+    i32.const 1
+    table.init $elem1
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling table_init.13.wasm generates expected output 1`] = `
+"(module
+  (table $table0 30 30 funcref)
+  (export \\"test\\" (func $func10))
+  (elem $elem0 (i32.const 2) funcref (ref.func $func3) (ref.func $func1) (ref.func $func4) (ref.func $func1))
+  (elem $elem1 funcref (ref.func $func2) (ref.func $func7) (ref.func $func1) (ref.func $func8))
+  (elem $elem2 (i32.const 12) funcref (ref.func $func7) (ref.func $func5) (ref.func $func2) (ref.func $func3) (ref.func $func6))
+  (elem $elem3 funcref (ref.func $func5) (ref.func $func9) (ref.func $func2) (ref.func $func7) (ref.func $func6))
+  (func $func0 (result i32)
+    i32.const 0
+  )
+  (func $func1 (result i32)
+    i32.const 1
+  )
+  (func $func2 (result i32)
+    i32.const 2
+  )
+  (func $func3 (result i32)
+    i32.const 3
+  )
+  (func $func4 (result i32)
+    i32.const 4
+  )
+  (func $func5 (result i32)
+    i32.const 5
+  )
+  (func $func6 (result i32)
+    i32.const 6
+  )
+  (func $func7 (result i32)
+    i32.const 7
+  )
+  (func $func8 (result i32)
+    i32.const 8
+  )
+  (func $func9 (result i32)
+    i32.const 9
+  )
+  (func $func10
+    i32.const 12
+    i32.const 0
+    i32.const 5
+    table.init $elem1
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling table_init.14.wasm generates expected output 1`] = `
+"(module
+  (table $table0 30 30 funcref)
+  (export \\"test\\" (func $func10))
+  (elem $elem0 (i32.const 2) funcref (ref.func $func3) (ref.func $func1) (ref.func $func4) (ref.func $func1))
+  (elem $elem1 funcref (ref.func $func2) (ref.func $func7) (ref.func $func1) (ref.func $func8))
+  (elem $elem2 (i32.const 12) funcref (ref.func $func7) (ref.func $func5) (ref.func $func2) (ref.func $func3) (ref.func $func6))
+  (elem $elem3 funcref (ref.func $func5) (ref.func $func9) (ref.func $func2) (ref.func $func7) (ref.func $func6))
+  (func $func0 (result i32)
+    i32.const 0
+  )
+  (func $func1 (result i32)
+    i32.const 1
+  )
+  (func $func2 (result i32)
+    i32.const 2
+  )
+  (func $func3 (result i32)
+    i32.const 3
+  )
+  (func $func4 (result i32)
+    i32.const 4
+  )
+  (func $func5 (result i32)
+    i32.const 5
+  )
+  (func $func6 (result i32)
+    i32.const 6
+  )
+  (func $func7 (result i32)
+    i32.const 7
+  )
+  (func $func8 (result i32)
+    i32.const 8
+  )
+  (func $func9 (result i32)
+    i32.const 9
+  )
+  (func $func10
+    i32.const 12
+    i32.const 2
+    i32.const 3
+    table.init $elem1
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling table_init.15.wasm generates expected output 1`] = `
+"(module
+  (table $table0 30 30 funcref)
+  (export \\"test\\" (func $func10))
+  (elem $elem0 (i32.const 2) funcref (ref.func $func3) (ref.func $func1) (ref.func $func4) (ref.func $func1))
+  (elem $elem1 funcref (ref.func $func2) (ref.func $func7) (ref.func $func1) (ref.func $func8))
+  (elem $elem2 (i32.const 12) funcref (ref.func $func7) (ref.func $func5) (ref.func $func2) (ref.func $func3) (ref.func $func6))
+  (elem $elem3 funcref (ref.func $func5) (ref.func $func9) (ref.func $func2) (ref.func $func7) (ref.func $func6))
+  (func $func0 (result i32)
+    i32.const 0
+  )
+  (func $func1 (result i32)
+    i32.const 1
+  )
+  (func $func2 (result i32)
+    i32.const 2
+  )
+  (func $func3 (result i32)
+    i32.const 3
+  )
+  (func $func4 (result i32)
+    i32.const 4
+  )
+  (func $func5 (result i32)
+    i32.const 5
+  )
+  (func $func6 (result i32)
+    i32.const 6
+  )
+  (func $func7 (result i32)
+    i32.const 7
+  )
+  (func $func8 (result i32)
+    i32.const 8
+  )
+  (func $func9 (result i32)
+    i32.const 9
+  )
+  (func $func10
+    i32.const 28
+    i32.const 1
+    i32.const 3
+    table.init $elem1
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling table_init.16.wasm generates expected output 1`] = `
+"(module
+  (table $table0 30 30 funcref)
+  (export \\"test\\" (func $func10))
+  (elem $elem0 (i32.const 2) funcref (ref.func $func3) (ref.func $func1) (ref.func $func4) (ref.func $func1))
+  (elem $elem1 funcref (ref.func $func2) (ref.func $func7) (ref.func $func1) (ref.func $func8))
+  (elem $elem2 (i32.const 12) funcref (ref.func $func7) (ref.func $func5) (ref.func $func2) (ref.func $func3) (ref.func $func6))
+  (elem $elem3 funcref (ref.func $func5) (ref.func $func9) (ref.func $func2) (ref.func $func7) (ref.func $func6))
+  (func $func0 (result i32)
+    i32.const 0
+  )
+  (func $func1 (result i32)
+    i32.const 1
+  )
+  (func $func2 (result i32)
+    i32.const 2
+  )
+  (func $func3 (result i32)
+    i32.const 3
+  )
+  (func $func4 (result i32)
+    i32.const 4
+  )
+  (func $func5 (result i32)
+    i32.const 5
+  )
+  (func $func6 (result i32)
+    i32.const 6
+  )
+  (func $func7 (result i32)
+    i32.const 7
+  )
+  (func $func8 (result i32)
+    i32.const 8
+  )
+  (func $func9 (result i32)
+    i32.const 9
+  )
+  (func $func10
+    i32.const 12
+    i32.const 4
+    i32.const 0
+    table.init $elem1
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling table_init.17.wasm generates expected output 1`] = `
+"(module
+  (table $table0 30 30 funcref)
+  (export \\"test\\" (func $func10))
+  (elem $elem0 (i32.const 2) funcref (ref.func $func3) (ref.func $func1) (ref.func $func4) (ref.func $func1))
+  (elem $elem1 funcref (ref.func $func2) (ref.func $func7) (ref.func $func1) (ref.func $func8))
+  (elem $elem2 (i32.const 12) funcref (ref.func $func7) (ref.func $func5) (ref.func $func2) (ref.func $func3) (ref.func $func6))
+  (elem $elem3 funcref (ref.func $func5) (ref.func $func9) (ref.func $func2) (ref.func $func7) (ref.func $func6))
+  (func $func0 (result i32)
+    i32.const 0
+  )
+  (func $func1 (result i32)
+    i32.const 1
+  )
+  (func $func2 (result i32)
+    i32.const 2
+  )
+  (func $func3 (result i32)
+    i32.const 3
+  )
+  (func $func4 (result i32)
+    i32.const 4
+  )
+  (func $func5 (result i32)
+    i32.const 5
+  )
+  (func $func6 (result i32)
+    i32.const 6
+  )
+  (func $func7 (result i32)
+    i32.const 7
+  )
+  (func $func8 (result i32)
+    i32.const 8
+  )
+  (func $func9 (result i32)
+    i32.const 9
+  )
+  (func $func10
+    i32.const 12
+    i32.const 5
+    i32.const 0
+    table.init $elem1
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling table_init.18.wasm generates expected output 1`] = `
+"(module
+  (table $table0 30 30 funcref)
+  (export \\"test\\" (func $func10))
+  (elem $elem0 (i32.const 2) funcref (ref.func $func3) (ref.func $func1) (ref.func $func4) (ref.func $func1))
+  (elem $elem1 funcref (ref.func $func2) (ref.func $func7) (ref.func $func1) (ref.func $func8))
+  (elem $elem2 (i32.const 12) funcref (ref.func $func7) (ref.func $func5) (ref.func $func2) (ref.func $func3) (ref.func $func6))
+  (elem $elem3 funcref (ref.func $func5) (ref.func $func9) (ref.func $func2) (ref.func $func7) (ref.func $func6))
+  (func $func0 (result i32)
+    i32.const 0
+  )
+  (func $func1 (result i32)
+    i32.const 1
+  )
+  (func $func2 (result i32)
+    i32.const 2
+  )
+  (func $func3 (result i32)
+    i32.const 3
+  )
+  (func $func4 (result i32)
+    i32.const 4
+  )
+  (func $func5 (result i32)
+    i32.const 5
+  )
+  (func $func6 (result i32)
+    i32.const 6
+  )
+  (func $func7 (result i32)
+    i32.const 7
+  )
+  (func $func8 (result i32)
+    i32.const 8
+  )
+  (func $func9 (result i32)
+    i32.const 9
+  )
+  (func $func10
+    i32.const 30
+    i32.const 2
+    i32.const 0
+    table.init $elem1
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling table_init.19.wasm generates expected output 1`] = `
+"(module
+  (table $table0 30 30 funcref)
+  (export \\"test\\" (func $func10))
+  (elem $elem0 (i32.const 2) funcref (ref.func $func3) (ref.func $func1) (ref.func $func4) (ref.func $func1))
+  (elem $elem1 funcref (ref.func $func2) (ref.func $func7) (ref.func $func1) (ref.func $func8))
+  (elem $elem2 (i32.const 12) funcref (ref.func $func7) (ref.func $func5) (ref.func $func2) (ref.func $func3) (ref.func $func6))
+  (elem $elem3 funcref (ref.func $func5) (ref.func $func9) (ref.func $func2) (ref.func $func7) (ref.func $func6))
+  (func $func0 (result i32)
+    i32.const 0
+  )
+  (func $func1 (result i32)
+    i32.const 1
+  )
+  (func $func2 (result i32)
+    i32.const 2
+  )
+  (func $func3 (result i32)
+    i32.const 3
+  )
+  (func $func4 (result i32)
+    i32.const 4
+  )
+  (func $func5 (result i32)
+    i32.const 5
+  )
+  (func $func6 (result i32)
+    i32.const 6
+  )
+  (func $func7 (result i32)
+    i32.const 7
+  )
+  (func $func8 (result i32)
+    i32.const 8
+  )
+  (func $func9 (result i32)
+    i32.const 9
+  )
+  (func $func10
+    i32.const 31
+    i32.const 2
+    i32.const 0
+    table.init $elem1
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling table_init.20.wasm generates expected output 1`] = `
+"(module
+  (table $table0 30 30 funcref)
+  (export \\"test\\" (func $func10))
+  (elem $elem0 (i32.const 2) funcref (ref.func $func3) (ref.func $func1) (ref.func $func4) (ref.func $func1))
+  (elem $elem1 funcref (ref.func $func2) (ref.func $func7) (ref.func $func1) (ref.func $func8))
+  (elem $elem2 (i32.const 12) funcref (ref.func $func7) (ref.func $func5) (ref.func $func2) (ref.func $func3) (ref.func $func6))
+  (elem $elem3 funcref (ref.func $func5) (ref.func $func9) (ref.func $func2) (ref.func $func7) (ref.func $func6))
+  (func $func0 (result i32)
+    i32.const 0
+  )
+  (func $func1 (result i32)
+    i32.const 1
+  )
+  (func $func2 (result i32)
+    i32.const 2
+  )
+  (func $func3 (result i32)
+    i32.const 3
+  )
+  (func $func4 (result i32)
+    i32.const 4
+  )
+  (func $func5 (result i32)
+    i32.const 5
+  )
+  (func $func6 (result i32)
+    i32.const 6
+  )
+  (func $func7 (result i32)
+    i32.const 7
+  )
+  (func $func8 (result i32)
+    i32.const 8
+  )
+  (func $func9 (result i32)
+    i32.const 9
+  )
+  (func $func10
+    i32.const 30
+    i32.const 4
+    i32.const 0
+    table.init $elem1
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling table_init.21.wasm generates expected output 1`] = `
+"(module
+  (table $table0 30 30 funcref)
+  (export \\"test\\" (func $func10))
+  (elem $elem0 (i32.const 2) funcref (ref.func $func3) (ref.func $func1) (ref.func $func4) (ref.func $func1))
+  (elem $elem1 funcref (ref.func $func2) (ref.func $func7) (ref.func $func1) (ref.func $func8))
+  (elem $elem2 (i32.const 12) funcref (ref.func $func7) (ref.func $func5) (ref.func $func2) (ref.func $func3) (ref.func $func6))
+  (elem $elem3 funcref (ref.func $func5) (ref.func $func9) (ref.func $func2) (ref.func $func7) (ref.func $func6))
+  (func $func0 (result i32)
+    i32.const 0
+  )
+  (func $func1 (result i32)
+    i32.const 1
+  )
+  (func $func2 (result i32)
+    i32.const 2
+  )
+  (func $func3 (result i32)
+    i32.const 3
+  )
+  (func $func4 (result i32)
+    i32.const 4
+  )
+  (func $func5 (result i32)
+    i32.const 5
+  )
+  (func $func6 (result i32)
+    i32.const 6
+  )
+  (func $func7 (result i32)
+    i32.const 7
+  )
+  (func $func8 (result i32)
+    i32.const 8
+  )
+  (func $func9 (result i32)
+    i32.const 9
+  )
+  (func $func10
+    i32.const 31
+    i32.const 5
+    i32.const 0
+    table.init $elem1
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling table_init.85.wasm generates expected output 1`] = `
+"(module
+  (table $table0 32 64 funcref)
+  (export \\"f0\\" (func $func0))
+  (export \\"f1\\" (func $func1))
+  (export \\"f2\\" (func $func2))
+  (export \\"f3\\" (func $func3))
+  (export \\"f4\\" (func $func4))
+  (export \\"f5\\" (func $func5))
+  (export \\"f6\\" (func $func6))
+  (export \\"f7\\" (func $func7))
+  (export \\"f8\\" (func $func8))
+  (export \\"f9\\" (func $func9))
+  (export \\"f10\\" (func $func10))
+  (export \\"f11\\" (func $func11))
+  (export \\"f12\\" (func $func12))
+  (export \\"f13\\" (func $func13))
+  (export \\"f14\\" (func $func14))
+  (export \\"f15\\" (func $func15))
+  (export \\"test\\" (func $func16))
+  (export \\"run\\" (func $func17))
+  (elem $elem0 funcref (ref.func $func0) (ref.func $func1) (ref.func $func2) (ref.func $func3) (ref.func $func4) (ref.func $func5) (ref.func $func6) (ref.func $func7) (ref.func $func8) (ref.func $func9) (ref.func $func10) (ref.func $func11) (ref.func $func12) (ref.func $func13) (ref.func $func14) (ref.func $func15))
+  (func $func0 (result i32)
+    i32.const 0
+  )
+  (func $func1 (result i32)
+    i32.const 1
+  )
+  (func $func2 (result i32)
+    i32.const 2
+  )
+  (func $func3 (result i32)
+    i32.const 3
+  )
+  (func $func4 (result i32)
+    i32.const 4
+  )
+  (func $func5 (result i32)
+    i32.const 5
+  )
+  (func $func6 (result i32)
+    i32.const 6
+  )
+  (func $func7 (result i32)
+    i32.const 7
+  )
+  (func $func8 (result i32)
+    i32.const 8
+  )
+  (func $func9 (result i32)
+    i32.const 9
+  )
+  (func $func10 (result i32)
+    i32.const 10
+  )
+  (func $func11 (result i32)
+    i32.const 11
+  )
+  (func $func12 (result i32)
+    i32.const 12
+  )
+  (func $func13 (result i32)
+    i32.const 13
+  )
+  (func $func14 (result i32)
+    i32.const 14
+  )
+  (func $func15 (result i32)
+    i32.const 15
+  )
+  (func $func16 (param $var0 i32) (result i32)
+    local.get $var0
+    call_indirect (result i32)
+  )
+  (func $func17 (param $var0 i32) (param $var1 i32)
+    local.get $var0
+    i32.const 0
+    local.get $var1
+    table.init $elem0
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling table_init.86.wasm generates expected output 1`] = `
+"(module
+  (table $table0 32 64 funcref)
+  (export \\"f0\\" (func $func0))
+  (export \\"f1\\" (func $func1))
+  (export \\"f2\\" (func $func2))
+  (export \\"f3\\" (func $func3))
+  (export \\"f4\\" (func $func4))
+  (export \\"f5\\" (func $func5))
+  (export \\"f6\\" (func $func6))
+  (export \\"f7\\" (func $func7))
+  (export \\"f8\\" (func $func8))
+  (export \\"f9\\" (func $func9))
+  (export \\"f10\\" (func $func10))
+  (export \\"f11\\" (func $func11))
+  (export \\"f12\\" (func $func12))
+  (export \\"f13\\" (func $func13))
+  (export \\"f14\\" (func $func14))
+  (export \\"f15\\" (func $func15))
+  (export \\"test\\" (func $func16))
+  (export \\"run\\" (func $func17))
+  (elem $elem0 funcref (ref.func $func0) (ref.func $func1) (ref.func $func2) (ref.func $func3) (ref.func $func4) (ref.func $func5) (ref.func $func6) (ref.func $func7) (ref.func $func8) (ref.func $func9) (ref.func $func10) (ref.func $func11) (ref.func $func12) (ref.func $func13) (ref.func $func14) (ref.func $func15))
+  (func $func0 (result i32)
+    i32.const 0
+  )
+  (func $func1 (result i32)
+    i32.const 1
+  )
+  (func $func2 (result i32)
+    i32.const 2
+  )
+  (func $func3 (result i32)
+    i32.const 3
+  )
+  (func $func4 (result i32)
+    i32.const 4
+  )
+  (func $func5 (result i32)
+    i32.const 5
+  )
+  (func $func6 (result i32)
+    i32.const 6
+  )
+  (func $func7 (result i32)
+    i32.const 7
+  )
+  (func $func8 (result i32)
+    i32.const 8
+  )
+  (func $func9 (result i32)
+    i32.const 9
+  )
+  (func $func10 (result i32)
+    i32.const 10
+  )
+  (func $func11 (result i32)
+    i32.const 11
+  )
+  (func $func12 (result i32)
+    i32.const 12
+  )
+  (func $func13 (result i32)
+    i32.const 13
+  )
+  (func $func14 (result i32)
+    i32.const 14
+  )
+  (func $func15 (result i32)
+    i32.const 15
+  )
+  (func $func16 (param $var0 i32) (result i32)
+    local.get $var0
+    call_indirect (result i32)
+  )
+  (func $func17 (param $var0 i32) (param $var1 i32)
+    local.get $var0
+    i32.const 0
+    local.get $var1
+    table.init $elem0
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling table_init.87.wasm generates expected output 1`] = `
+"(module
+  (table $table0 160 320 funcref)
+  (export \\"f0\\" (func $func0))
+  (export \\"f1\\" (func $func1))
+  (export \\"f2\\" (func $func2))
+  (export \\"f3\\" (func $func3))
+  (export \\"f4\\" (func $func4))
+  (export \\"f5\\" (func $func5))
+  (export \\"f6\\" (func $func6))
+  (export \\"f7\\" (func $func7))
+  (export \\"f8\\" (func $func8))
+  (export \\"f9\\" (func $func9))
+  (export \\"f10\\" (func $func10))
+  (export \\"f11\\" (func $func11))
+  (export \\"f12\\" (func $func12))
+  (export \\"f13\\" (func $func13))
+  (export \\"f14\\" (func $func14))
+  (export \\"f15\\" (func $func15))
+  (export \\"test\\" (func $func16))
+  (export \\"run\\" (func $func17))
+  (elem $elem0 funcref (ref.func $func0) (ref.func $func1) (ref.func $func2) (ref.func $func3) (ref.func $func4) (ref.func $func5) (ref.func $func6) (ref.func $func7) (ref.func $func8) (ref.func $func9) (ref.func $func10) (ref.func $func11) (ref.func $func12) (ref.func $func13) (ref.func $func14) (ref.func $func15))
+  (func $func0 (result i32)
+    i32.const 0
+  )
+  (func $func1 (result i32)
+    i32.const 1
+  )
+  (func $func2 (result i32)
+    i32.const 2
+  )
+  (func $func3 (result i32)
+    i32.const 3
+  )
+  (func $func4 (result i32)
+    i32.const 4
+  )
+  (func $func5 (result i32)
+    i32.const 5
+  )
+  (func $func6 (result i32)
+    i32.const 6
+  )
+  (func $func7 (result i32)
+    i32.const 7
+  )
+  (func $func8 (result i32)
+    i32.const 8
+  )
+  (func $func9 (result i32)
+    i32.const 9
+  )
+  (func $func10 (result i32)
+    i32.const 10
+  )
+  (func $func11 (result i32)
+    i32.const 11
+  )
+  (func $func12 (result i32)
+    i32.const 12
+  )
+  (func $func13 (result i32)
+    i32.const 13
+  )
+  (func $func14 (result i32)
+    i32.const 14
+  )
+  (func $func15 (result i32)
+    i32.const 15
+  )
+  (func $func16 (param $var0 i32) (result i32)
+    local.get $var0
+    call_indirect (result i32)
+  )
+  (func $func17 (param $var0 i32) (param $var1 i32)
+    local.get $var0
+    i32.const 0
+    local.get $var1
+    table.init $elem0
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling table_init.88.wasm generates expected output 1`] = `
+"(module
+  (table $table0 160 320 funcref)
+  (export \\"f0\\" (func $func0))
+  (export \\"f1\\" (func $func1))
+  (export \\"f2\\" (func $func2))
+  (export \\"f3\\" (func $func3))
+  (export \\"f4\\" (func $func4))
+  (export \\"f5\\" (func $func5))
+  (export \\"f6\\" (func $func6))
+  (export \\"f7\\" (func $func7))
+  (export \\"f8\\" (func $func8))
+  (export \\"f9\\" (func $func9))
+  (export \\"f10\\" (func $func10))
+  (export \\"f11\\" (func $func11))
+  (export \\"f12\\" (func $func12))
+  (export \\"f13\\" (func $func13))
+  (export \\"f14\\" (func $func14))
+  (export \\"f15\\" (func $func15))
+  (export \\"test\\" (func $func16))
+  (export \\"run\\" (func $func17))
+  (elem $elem0 funcref (ref.func $func0) (ref.func $func1) (ref.func $func2) (ref.func $func3) (ref.func $func4) (ref.func $func5) (ref.func $func6) (ref.func $func7) (ref.func $func8) (ref.func $func9) (ref.func $func10) (ref.func $func11) (ref.func $func12) (ref.func $func13) (ref.func $func14) (ref.func $func15))
+  (func $func0 (result i32)
+    i32.const 0
+  )
+  (func $func1 (result i32)
+    i32.const 1
+  )
+  (func $func2 (result i32)
+    i32.const 2
+  )
+  (func $func3 (result i32)
+    i32.const 3
+  )
+  (func $func4 (result i32)
+    i32.const 4
+  )
+  (func $func5 (result i32)
+    i32.const 5
+  )
+  (func $func6 (result i32)
+    i32.const 6
+  )
+  (func $func7 (result i32)
+    i32.const 7
+  )
+  (func $func8 (result i32)
+    i32.const 8
+  )
+  (func $func9 (result i32)
+    i32.const 9
+  )
+  (func $func10 (result i32)
+    i32.const 10
+  )
+  (func $func11 (result i32)
+    i32.const 11
+  )
+  (func $func12 (result i32)
+    i32.const 12
+  )
+  (func $func13 (result i32)
+    i32.const 13
+  )
+  (func $func14 (result i32)
+    i32.const 14
+  )
+  (func $func15 (result i32)
+    i32.const 15
+  )
+  (func $func16 (param $var0 i32) (result i32)
+    local.get $var0
+    call_indirect (result i32)
+  )
+  (func $func17 (param $var0 i32) (param $var1 i32)
+    local.get $var0
+    i32.const 0
+    local.get $var1
+    table.init $elem0
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling table_init.89.wasm generates expected output 1`] = `
+"(module
+  (table $table0 64 64 funcref)
+  (export \\"f0\\" (func $func0))
+  (export \\"f1\\" (func $func1))
+  (export \\"f2\\" (func $func2))
+  (export \\"f3\\" (func $func3))
+  (export \\"f4\\" (func $func4))
+  (export \\"f5\\" (func $func5))
+  (export \\"f6\\" (func $func6))
+  (export \\"f7\\" (func $func7))
+  (export \\"f8\\" (func $func8))
+  (export \\"f9\\" (func $func9))
+  (export \\"f10\\" (func $func10))
+  (export \\"f11\\" (func $func11))
+  (export \\"f12\\" (func $func12))
+  (export \\"f13\\" (func $func13))
+  (export \\"f14\\" (func $func14))
+  (export \\"f15\\" (func $func15))
+  (export \\"test\\" (func $func16))
+  (export \\"run\\" (func $func17))
+  (elem $elem0 funcref (ref.func $func0) (ref.func $func1) (ref.func $func2) (ref.func $func3) (ref.func $func4) (ref.func $func5) (ref.func $func6) (ref.func $func7) (ref.func $func8) (ref.func $func9) (ref.func $func10) (ref.func $func11) (ref.func $func12) (ref.func $func13) (ref.func $func14) (ref.func $func15))
+  (func $func0 (result i32)
+    i32.const 0
+  )
+  (func $func1 (result i32)
+    i32.const 1
+  )
+  (func $func2 (result i32)
+    i32.const 2
+  )
+  (func $func3 (result i32)
+    i32.const 3
+  )
+  (func $func4 (result i32)
+    i32.const 4
+  )
+  (func $func5 (result i32)
+    i32.const 5
+  )
+  (func $func6 (result i32)
+    i32.const 6
+  )
+  (func $func7 (result i32)
+    i32.const 7
+  )
+  (func $func8 (result i32)
+    i32.const 8
+  )
+  (func $func9 (result i32)
+    i32.const 9
+  )
+  (func $func10 (result i32)
+    i32.const 10
+  )
+  (func $func11 (result i32)
+    i32.const 11
+  )
+  (func $func12 (result i32)
+    i32.const 12
+  )
+  (func $func13 (result i32)
+    i32.const 13
+  )
+  (func $func14 (result i32)
+    i32.const 14
+  )
+  (func $func15 (result i32)
+    i32.const 15
+  )
+  (func $func16 (param $var0 i32) (result i32)
+    local.get $var0
+    call_indirect (result i32)
+  )
+  (func $func17 (param $var0 i32) (param $var1 i32)
+    local.get $var0
+    i32.const 0
+    local.get $var1
+    table.init $elem0
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling table_init.90.wasm generates expected output 1`] = `
+"(module
+  (table $table0 16 16 funcref)
+  (export \\"f0\\" (func $func0))
+  (export \\"f1\\" (func $func1))
+  (export \\"f2\\" (func $func2))
+  (export \\"f3\\" (func $func3))
+  (export \\"f4\\" (func $func4))
+  (export \\"f5\\" (func $func5))
+  (export \\"f6\\" (func $func6))
+  (export \\"f7\\" (func $func7))
+  (export \\"f8\\" (func $func8))
+  (export \\"f9\\" (func $func9))
+  (export \\"f10\\" (func $func10))
+  (export \\"f11\\" (func $func11))
+  (export \\"f12\\" (func $func12))
+  (export \\"f13\\" (func $func13))
+  (export \\"f14\\" (func $func14))
+  (export \\"f15\\" (func $func15))
+  (export \\"test\\" (func $func16))
+  (export \\"run\\" (func $func17))
+  (elem $elem0 funcref (ref.func $func0) (ref.func $func1) (ref.func $func2) (ref.func $func3) (ref.func $func4) (ref.func $func5) (ref.func $func6) (ref.func $func7) (ref.func $func8) (ref.func $func9) (ref.func $func10) (ref.func $func11) (ref.func $func12) (ref.func $func13) (ref.func $func14) (ref.func $func15))
+  (func $func0 (result i32)
+    i32.const 0
+  )
+  (func $func1 (result i32)
+    i32.const 1
+  )
+  (func $func2 (result i32)
+    i32.const 2
+  )
+  (func $func3 (result i32)
+    i32.const 3
+  )
+  (func $func4 (result i32)
+    i32.const 4
+  )
+  (func $func5 (result i32)
+    i32.const 5
+  )
+  (func $func6 (result i32)
+    i32.const 6
+  )
+  (func $func7 (result i32)
+    i32.const 7
+  )
+  (func $func8 (result i32)
+    i32.const 8
+  )
+  (func $func9 (result i32)
+    i32.const 9
+  )
+  (func $func10 (result i32)
+    i32.const 10
+  )
+  (func $func11 (result i32)
+    i32.const 11
+  )
+  (func $func12 (result i32)
+    i32.const 12
+  )
+  (func $func13 (result i32)
+    i32.const 13
+  )
+  (func $func14 (result i32)
+    i32.const 14
+  )
+  (func $func15 (result i32)
+    i32.const 15
+  )
+  (func $func16 (param $var0 i32) (result i32)
+    local.get $var0
+    call_indirect (result i32)
+  )
+  (func $func17 (param $var0 i32) (param $var1 i32)
+    local.get $var0
+    i32.const 8
+    local.get $var1
+    table.init $elem0
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling table_init.91.wasm generates expected output 1`] = `
+"(module
+  (table $table0 1 funcref)
+  (elem $elem0 funcref)
+  (elem $elem1 funcref)
+  (elem $elem2 funcref)
+  (elem $elem3 funcref)
+  (elem $elem4 funcref)
+  (elem $elem5 funcref)
+  (elem $elem6 funcref)
+  (elem $elem7 funcref)
+  (elem $elem8 funcref)
+  (elem $elem9 funcref)
+  (elem $elem10 funcref)
+  (elem $elem11 funcref)
+  (elem $elem12 funcref)
+  (elem $elem13 funcref)
+  (elem $elem14 funcref)
+  (elem $elem15 funcref)
+  (elem $elem16 funcref)
+  (elem $elem17 funcref)
+  (elem $elem18 funcref)
+  (elem $elem19 funcref)
+  (elem $elem20 funcref)
+  (elem $elem21 funcref)
+  (elem $elem22 funcref)
+  (elem $elem23 funcref)
+  (elem $elem24 funcref)
+  (elem $elem25 funcref)
+  (elem $elem26 funcref)
+  (elem $elem27 funcref)
+  (elem $elem28 funcref)
+  (elem $elem29 funcref)
+  (elem $elem30 funcref)
+  (elem $elem31 funcref)
+  (elem $elem32 funcref)
+  (elem $elem33 funcref)
+  (elem $elem34 funcref)
+  (elem $elem35 funcref)
+  (elem $elem36 funcref)
+  (elem $elem37 funcref)
+  (elem $elem38 funcref)
+  (elem $elem39 funcref)
+  (elem $elem40 funcref)
+  (elem $elem41 funcref)
+  (elem $elem42 funcref)
+  (elem $elem43 funcref)
+  (elem $elem44 funcref)
+  (elem $elem45 funcref)
+  (elem $elem46 funcref)
+  (elem $elem47 funcref)
+  (elem $elem48 funcref)
+  (elem $elem49 funcref)
+  (elem $elem50 funcref)
+  (elem $elem51 funcref)
+  (elem $elem52 funcref)
+  (elem $elem53 funcref)
+  (elem $elem54 funcref)
+  (elem $elem55 funcref)
+  (elem $elem56 funcref)
+  (elem $elem57 funcref)
+  (elem $elem58 funcref)
+  (elem $elem59 funcref)
+  (elem $elem60 funcref)
+  (elem $elem61 funcref)
+  (elem $elem62 funcref)
+  (elem $elem63 funcref)
+  (elem $elem64 funcref)
+  (func $func0
+    i32.const 0
+    i32.const 0
+    i32.const 0
+    table.init $elem64
+  )
+)
+"
+`;
+
 exports[`Parsing and disassembling tee_local.wast.0.wasm generates expected output 1`] = `
 "(module
   (export \\"type-local-i32\\" (func $func0))
@@ -47349,7 +51574,7 @@ exports[`Parsing and disassembling threads.0.wasm generates expected output 1`] 
         local.get $var0
         i32.const 1
         i64.const -1
-        memory.atomic.wait32
+        i32.atomic.wait
         drop
         br $label1
       end $label1
@@ -47361,7 +51586,7 @@ exports[`Parsing and disassembling threads.0.wasm generates expected output 1`] 
     i32.atomic.store
     local.get $var0
     i32.const 1
-    memory.atomic.notify
+    atomic.notify
     drop
   )
 )
@@ -47583,7 +51808,7 @@ exports[`Parsing and disassembling traps.wast.3.wasm generates expected output 1
 
 exports[`Parsing and disassembling unreachable.wast.0.wasm generates expected output 1`] = `
 "(module
-  (table $table0 1 1 anyfunc)
+  (table $table0 1 1 funcref)
   (memory $memory0 1)
   (export \\"type-i32\\" (func $func2))
   (export \\"type-i64\\" (func $func3))
@@ -47640,7 +51865,7 @@ exports[`Parsing and disassembling unreachable.wast.0.wasm generates expected ou
   (export \\"as-compare-right\\" (func $func54))
   (export \\"as-convert-operand\\" (func $func55))
   (export \\"as-grow_memory-size\\" (func $func56))
-  (elem (i32.const 0) $func1)
+  (elem $elem0 (i32.const 0) funcref (ref.func $func1))
   (func $func0
   )
   (func $func1 (param $var0 i32) (param $var1 i32) (param $var2 i32)

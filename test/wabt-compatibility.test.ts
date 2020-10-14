@@ -18,7 +18,7 @@ import { readFileSync } from "fs";
 import { WasmDisassembler } from "../src/WasmDis";
 import { BinaryReader } from "../src/WasmParser";
 import { getWasmFixtures } from "./utils";
-const { parseWat } = require("wabt")();
+const wabtPromise = require("wabt")();
 
 const WABT_FEATURES = {
   bulk_memory: true,
@@ -32,16 +32,10 @@ const WABT_FEATURES = {
 
 describe("Disassembling", () => {
   describe.each(getWasmFixtures())("%s", (fileName, filePath) => {
-    test("generates wabt compatible text", () => {
-      // TODO(bmeurer): We need to update wabt here.
-      if (
-        fileName === "atomic.1.wasm" ||
-        fileName === "threads.0.wasm" ||
-        fileName === "simd.wasm" ||
-        fileName === "simd_boolean.0.wasm"
-      ) {
-        return;
-      }
+    test("generates wabt compatible text", async () => {
+      // TODO(bmeurer): wabt still chokes on the i8x16.shuffle syntax
+      if (fileName === "simd.wasm") return;
+      const { parseWat } = await wabtPromise;
       const data = new Uint8Array(readFileSync(filePath));
       const dis = new WasmDisassembler();
       const parser = new BinaryReader();

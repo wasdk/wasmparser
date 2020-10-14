@@ -18,10 +18,11 @@ import { NameSectionReader, WasmDisassembler } from "../src/WasmDis";
 import { DevToolsNameGenerator } from "../src/WasmDis";
 import { BinaryReader } from "../src/WasmParser";
 
-const { parseWat } = require("wabt")();
+const wabtPromise = require("wabt")();
 
 describe("DevToolsNameGenerator", () => {
-  test("Wasm module with export names only for function, memory, global and table", () => {
+  test("Wasm module with export names only for function, memory, global and table", async () => {
+    const { parseWat } = await wabtPromise;
     const { buffer } = parseWat(
       `test.wat`,
       `(module
@@ -49,7 +50,8 @@ describe("DevToolsNameGenerator", () => {
     expect(nr.getGlobalName(0, false)).toBe("$export.global (;0;)");
   });
 
-  test("Wasm module with import names only for function, memory, global and table", () => {
+  test("Wasm module with import names only for function, memory, global and table", async () => {
+    const { parseWat } = await wabtPromise;
     const { buffer } = parseWat(
       `test.wat`,
       `(module
@@ -75,7 +77,8 @@ describe("DevToolsNameGenerator", () => {
     expect(nr.getGlobalName(0, false)).toBe("$import.global (;0;)");
   });
 
-  test("Wasm module with function and export name", () => {
+  test("Wasm module with function and export name", async () => {
+    const { parseWat } = await wabtPromise;
     const { buffer } = parseWat(
       `test.wat`,
       `(module
@@ -91,7 +94,8 @@ describe("DevToolsNameGenerator", () => {
     expect(nr.getFunctionName(0, false, false)).toBe("$f (;0;)");
   });
 
-  test("Wasm module with import and export name", () => {
+  test("Wasm module with import and export name", async () => {
+    const { parseWat } = await wabtPromise;
     const { buffer } = parseWat(
       `test.wat`,
       `(module
@@ -107,7 +111,8 @@ describe("DevToolsNameGenerator", () => {
     expect(nr.getFunctionName(0, true, false)).toBe("$import.function (;0;)");
   });
 
-  test("Wasm module with no set names", () => {
+  test("Wasm module with no set names", async () => {
+    const { parseWat } = await wabtPromise;
     const { buffer } = parseWat(
       `test.wat`,
       `(module
@@ -135,7 +140,8 @@ describe("DevToolsNameGenerator", () => {
     expect(nr.getGlobalName(0, false)).toBe("$global0");
   });
 
-  test("Wasm module with defined and undefined param names", () => {
+  test("Wasm module with defined and undefined param names", async () => {
+    const { parseWat } = await wabtPromise;
     const { buffer } = parseWat(
       `test.wat`,
       `(module
@@ -152,7 +158,8 @@ describe("DevToolsNameGenerator", () => {
     expect(nr.getVariableName(0, 1, false)).toBe("$x (;1;)");
   });
 
-  test("Wasm module with defined and undefined local names", () => {
+  test("Wasm module with defined and undefined local names", async () => {
+    const { parseWat } = await wabtPromise;
     const { buffer } = parseWat(
       `test.wat`,
       `(module
@@ -169,7 +176,8 @@ describe("DevToolsNameGenerator", () => {
     expect(nr.getVariableName(0, 1, false)).toBe("$x (;1;)");
   });
 
-  test("Wasm module with invalid export name", () => {
+  test("Wasm module with invalid export name", async () => {
+    const { parseWat } = await wabtPromise;
     const { buffer } = parseWat(
       `test.wat`,
       `(module
@@ -420,7 +428,8 @@ describe("NameSectionReader", () => {
     expect(nsr.hasValidNames()).toBe(false);
   });
 
-  test("Wasm module with function name", () => {
+  test("Wasm module with function name", async () => {
+    const { parseWat } = await wabtPromise;
     const { buffer } = parseWat(
       `test.wat`,
       `(module (func $foo (result i32) i32.const 0))`
@@ -441,7 +450,8 @@ describe("NameSectionReader", () => {
     expect(nr.getVariableName(0, 1, false)).toBe("$var1");
   });
 
-  test("Wasm module with parameter name", () => {
+  test("Wasm module with parameter name", async () => {
+    const { parseWat } = await wabtPromise;
     const { buffer } = parseWat(
       `test.wat`,
       `(module (func $foo (param $x i32) (result i32) local.get $x))`
@@ -462,7 +472,8 @@ describe("NameSectionReader", () => {
     expect(nr.getVariableName(0, 1, false)).toBe("$var1");
   });
 
-  test("Wasm module with bad names", () => {
+  test("Wasm module with bad names", async () => {
+    const { parseWat } = await wabtPromise;
     expect(() =>
       parseWat(
         `test.wat`,
@@ -474,7 +485,8 @@ describe("NameSectionReader", () => {
     ).toThrow('redefinition of function "$foo"');
   });
 
-  test("Wasm module with local names", () => {
+  test("Wasm module with local names", async () => {
+    const { parseWat } = await wabtPromise;
     const { buffer } = parseWat(
       `test.wat`,
       `(module (func $foo (local $x i32) (local $y f32)
@@ -695,7 +707,8 @@ describe("NameSectionReader", () => {
 });
 
 describe("WasmDisassembler with export metadata", () => {
-  function parseAndDisassemble(lines: string[]) {
+  async function parseAndDisassemble(lines: string[]) {
+    const { parseWat } = await wabtPromise;
     const { buffer } = parseWat("functions.js", lines.join("\n")).toBinary({
       write_debug_names: true,
     });
@@ -710,7 +723,7 @@ describe("WasmDisassembler with export metadata", () => {
     return dis.getResult().lines;
   }
 
-  test("functions", () => {
+  test("functions", async () => {
     const lines = [
       `(module`,
       `  (func $import0 (export "bar") (export "foo") (import "foo" "bar") (param i32 f32) (result i64))`,
@@ -719,45 +732,45 @@ describe("WasmDisassembler with export metadata", () => {
       `  )`,
       `)`,
     ];
-    expect(parseAndDisassemble(lines)).toEqual(lines);
+    expect(await parseAndDisassemble(lines)).toEqual(lines);
   });
 
-  test("globals", () => {
+  test("globals", async () => {
     const lines = [
       `(module`,
       `  (global $global0 (export "bar") (export "foo") (import "foo" "bar") i32)`,
       `  (global $global1 (export "baz") f32 (f32.const 42))`,
       `)`,
     ];
-    expect(parseAndDisassemble(lines)).toEqual(lines);
+    expect(await parseAndDisassemble(lines)).toEqual(lines);
   });
 
-  test("imported memory", () => {
+  test("imported memory", async () => {
     const lines = [
       `(module`,
       `  (memory $memory0 (export "bar") (export "foo") (import "foo" "bar") 100)`,
       `)`,
     ];
-    expect(parseAndDisassemble(lines)).toEqual(lines);
+    expect(await parseAndDisassemble(lines)).toEqual(lines);
   });
 
-  test("memory", () => {
+  test("memory", async () => {
     const lines = [
       `(module`,
       `  (memory $memory0 (export "bar") (export "foo") 100)`,
       `)`,
     ];
-    expect(parseAndDisassemble(lines)).toEqual(lines);
+    expect(await parseAndDisassemble(lines)).toEqual(lines);
   });
 
-  test("tables", () => {
+  test("tables", async () => {
     const lines = [
       `(module`,
-      `  (table $table0 (export "bar") (export "foo") (import "foo" "bar") 10 anyfunc)`,
-      `  (table $table1 (export "baz") 5 20 anyfunc)`,
+      `  (table $table0 (export "bar") (export "foo") (import "foo" "bar") 10 funcref)`,
+      `  (table $table1 (export "baz") 5 20 funcref)`,
       `)`,
     ];
-    expect(parseAndDisassemble(lines)).toEqual(lines);
+    expect(await parseAndDisassemble(lines)).toEqual(lines);
   });
 });
 
@@ -782,7 +795,8 @@ describe("WasmDisassembler.getResult() with function code", () => {
     ")",
   ];
 
-  test("addOffsets is true", () => {
+  test("addOffsets is true", async () => {
+    const { parseWat } = await wabtPromise;
     const { buffer } = parseWat(fileName, watString).toBinary({
       write_debug_names: true,
     });
@@ -808,7 +822,8 @@ describe("WasmDisassembler.getResult() with function code", () => {
     ]);
   });
 
-  test("addOffsets is false", () => {
+  test("addOffsets is false", async () => {
+    const { parseWat } = await wabtPromise;
     const { buffer } = parseWat(fileName, watString).toBinary({
       write_debug_names: true,
     });
@@ -843,7 +858,8 @@ describe("WasmDisassembler.getResult() without function code", () => {
   ];
   const watString = expectedLines.join("\n");
 
-  test("addOffsets is true", () => {
+  test("addOffsets is true", async () => {
+    const { parseWat } = await wabtPromise;
     const { buffer } = parseWat(fileName, watString).toBinary({
       write_debug_names: true,
     });
@@ -860,7 +876,8 @@ describe("WasmDisassembler.getResult() without function code", () => {
     expect(result.functionBodyOffsets).toEqual([]);
   });
 
-  test("addOffsets is false", () => {
+  test("addOffsets is false", async () => {
+    const { parseWat } = await wabtPromise;
     const { buffer } = parseWat(fileName, watString).toBinary({
       write_debug_names: true,
     });
@@ -877,7 +894,8 @@ describe("WasmDisassembler.getResult() without function code", () => {
     expect(result.functionBodyOffsets).toBeUndefined();
   });
 
-  test("skipTypes is false", () => {
+  test("skipTypes is false", async () => {
+    const { parseWat } = await wabtPromise;
     const { buffer } = parseWat(fileName, watString).toBinary({
       write_debug_names: true,
     });
