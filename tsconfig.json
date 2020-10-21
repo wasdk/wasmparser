@@ -11,7 +11,6 @@
         "src/index.ts",
         "src/WasmParser.ts",
         "src/WasmParserTransform.ts",
-        "src/WasmEmitter.ts",
         "src/WasmDis.ts"
     ]
 }
