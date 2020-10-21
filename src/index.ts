@@ -45,7 +45,6 @@ export {
   IOperatorInformation,
   IBinaryReaderData,
 } from "./WasmParser.js";
-export { Emitter } from "./WasmEmitter.js";
 export { BinaryReaderTransform } from "./WasmParserTransform.js";
 export {
   DefaultNameResolver,
