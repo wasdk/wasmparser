@@ -1,3 +1,10 @@
+## [3.2.1](https://github.com/wasdk/wasmparser/compare/v3.2.0...v3.2.1) (2020-10-23)
+
+
+### Bug Fixes
+
+* print opcodes in errors in hexadecimal form ([687ba47](https://github.com/wasdk/wasmparser/commit/687ba47c0cafb5cec040d1bee7796d37f9627071))
+
 # [3.2.0](https://github.com/wasdk/wasmparser/compare/v3.1.3...v3.2.0) (2020-10-13)
 
 
