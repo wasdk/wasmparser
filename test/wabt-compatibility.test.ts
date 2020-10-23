@@ -34,7 +34,14 @@ describe("Disassembling", () => {
   describe.each(getWasmFixtures())("%s", (fileName, filePath) => {
     test("generates wabt compatible text", () => {
       // TODO(bmeurer): We need to update wabt here.
-      if (fileName === "atomic.1.wasm" || fileName === "threads.0.wasm") return;
+      if (
+        fileName === "atomic.1.wasm" ||
+        fileName === "threads.0.wasm" ||
+        fileName === "simd.wasm" ||
+        fileName === "simd_boolean.0.wasm"
+      ) {
+        return;
+      }
       const data = new Uint8Array(readFileSync(filePath));
       const dis = new WasmDisassembler();
       const parser = new BinaryReader();
