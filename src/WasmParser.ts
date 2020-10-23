@@ -2149,7 +2149,9 @@ export class BinaryReader {
         segmentIndex = this.readVarUint32() >>> 0;
         break;
       default:
-        this.error = new Error(`Unknown operator: ${code}`);
+        this.error = new Error(
+          `Unknown operator: 0x${code.toString(16).padStart(4, "0")}`
+        );
         this.state = BinaryReaderState.ERROR;
         return true;
     }
@@ -2339,7 +2341,9 @@ export class BinaryReader {
       case OperatorCode.f32x4_convert_i32x4_u:
         break;
       default:
-        this.error = new Error(`Unknown operator: ${code}`);
+        this.error = new Error(
+          `Unknown operator: 0x${code.toString(16).padStart(4, "0")}`
+        );
         this.state = BinaryReaderState.ERROR;
         return true;
     }
@@ -2452,7 +2456,9 @@ export class BinaryReader {
         break;
       }
       default:
-        this.error = new Error(`Unknown operator: ${code}`);
+        this.error = new Error(
+          `Unknown operator: 0x${code.toString(16).padStart(4, "0")}`
+        );
         this.state = BinaryReaderState.ERROR;
         return true;
     }
@@ -2764,7 +2770,9 @@ export class BinaryReader {
       case OperatorCode.ref_is_null:
         break;
       default:
-        this.error = new Error(`Unknown operator: ${code}`);
+        this.error = new Error(
+          `Unknown operator: 0x${code.toString(16).padStart(2, "0")}`
+        );
         this.state = BinaryReaderState.ERROR;
         return true;
     }
