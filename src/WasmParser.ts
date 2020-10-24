@@ -325,6 +325,8 @@ export const enum OperatorCode {
   v32x4_load_splat = 0xfd09,
   v64x2_load_splat = 0xfd0a,
   v128_store = 0xfd0b,
+  v128_load32_zero = 0xfdfc,
+  v128_load64_zero = 0xfdfd,
   v128_const = 0xfd0c,
   i8x16_shuffle = 0xfd0d,
   i8x16_swizzle = 0xfd0e,
@@ -1032,6 +1034,8 @@ export const OperatorCodeNames = [
   "i32x4.trunc_sat_f32x4_u",
   "f32x4.convert_i32x4_s",
   "f32x4.convert_i32x4_u",
+  "v128.load32_zero",
+  "v128.load64_zero",
 ].forEach((s, i) => {
   OperatorCodeNames[0xfd00 | i] = s;
 });
@@ -2205,6 +2209,8 @@ export class BinaryReader {
       case OperatorCode.v32x4_load_splat:
       case OperatorCode.v64x2_load_splat:
       case OperatorCode.v128_store:
+      case OperatorCode.v128_load32_zero:
+      case OperatorCode.v128_load64_zero:
         memoryAddress = this.readMemoryImmediate();
         break;
       case OperatorCode.v128_const:
