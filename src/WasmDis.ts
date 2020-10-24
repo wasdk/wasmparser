@@ -159,6 +159,7 @@ function memoryAddressToString(
     case OperatorCode.i64_atomic_rmw_xor:
     case OperatorCode.i64_atomic_rmw_xchg:
     case OperatorCode.i64_atomic_rmw_cmpxchg:
+    case OperatorCode.v128_load64_zero:
       defaultAlignFlags = 3;
       break;
     case OperatorCode.i32_load:
@@ -188,6 +189,7 @@ function memoryAddressToString(
     case OperatorCode.i64_atomic_rmw32_xchg_u:
     case OperatorCode.i32_atomic_rmw_cmpxchg:
     case OperatorCode.i64_atomic_rmw32_cmpxchg_u:
+    case OperatorCode.v128_load32_zero:
       defaultAlignFlags = 2;
       break;
     case OperatorCode.i32_load16_s:
@@ -786,6 +788,8 @@ export class WasmDisassembler {
       case OperatorCode.v32x4_load_splat:
       case OperatorCode.v64x2_load_splat:
       case OperatorCode.v128_store:
+      case OperatorCode.v128_load32_zero:
+      case OperatorCode.v128_load64_zero:
         var memoryAddress = memoryAddressToString(
           operator.memoryAddress,
           operator.code
