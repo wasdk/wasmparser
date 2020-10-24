@@ -1522,11 +1522,6 @@ export class BinaryReader {
   private readUint8(): number {
     return this._data[this._pos++];
   }
-  private readUint16(): number {
-    var b1 = this._data[this._pos++];
-    var b2 = this._data[this._pos++];
-    return b1 | (b2 << 8);
-  }
   private readInt32(): number {
     var b1 = this._data[this._pos++];
     var b2 = this._data[this._pos++];
@@ -1543,9 +1538,6 @@ export class BinaryReader {
     var b3 = this._data[this._pos + 2];
     var b4 = this._data[this._pos + 3];
     return b1 | (b2 << 8) | (b3 << 16) | (b4 << 24);
-  }
-  private peekUint32(): number {
-    return this.peekInt32();
   }
   private hasVarIntBytes(): boolean {
     var pos = this._pos;
