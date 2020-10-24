@@ -42,7 +42,6 @@ import {
   INameEntry,
   NameType,
   IFunctionNameEntry,
-  INaming,
   NULL_FUNCTION_INDEX,
   isTypeIndex,
   ILocalNameEntry,
@@ -473,7 +472,7 @@ export class WasmDisassembler {
     this._backrefLabels = null;
     this._labelIndex = 0;
   }
-  public get addOffsets() {
+  public get addOffsets(): boolean {
     return this._addOffsets;
   }
   public set addOffsets(value: boolean) {
@@ -481,7 +480,7 @@ export class WasmDisassembler {
       throw new Error("Cannot switch addOffsets during processing.");
     this._addOffsets = value;
   }
-  public get skipTypes() {
+  public get skipTypes(): boolean {
     return this._skipTypes;
   }
   public set skipTypes(skipTypes: boolean) {
@@ -489,7 +488,7 @@ export class WasmDisassembler {
       throw new Error("Cannot switch skipTypes during processing.");
     this._skipTypes = skipTypes;
   }
-  public get labelMode() {
+  public get labelMode(): LabelMode {
     return this._labelMode;
   }
   public set labelMode(value: LabelMode) {
@@ -497,7 +496,7 @@ export class WasmDisassembler {
       throw new Error("Cannot switch labelMode during processing.");
     this._labelMode = value;
   }
-  public get exportMetadata() {
+  public get exportMetadata(): IExportMetadata {
     return this._exportMetadata;
   }
   public set exportMetadata(exportMetadata: IExportMetadata) {
@@ -505,7 +504,7 @@ export class WasmDisassembler {
       throw new Error("Cannot switch exportMetadata during processing.");
     this._exportMetadata = exportMetadata;
   }
-  public get nameResolver() {
+  public get nameResolver(): INameResolver {
     return this._nameResolver;
   }
   public set nameResolver(resolver: INameResolver) {
