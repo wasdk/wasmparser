@@ -478,6 +478,8 @@ export const enum OperatorCode {
   f32x4_div = 0xfde7,
   f32x4_min = 0xfde8,
   f32x4_max = 0xfde9,
+  f32x4_pmin = 0xfdea,
+  f32x4_pmax = 0xfdeb,
   f64x2_abs = 0xfdec,
   f64x2_neg = 0xfded,
   f64x2_sqrt = 0xfdef,
@@ -487,6 +489,8 @@ export const enum OperatorCode {
   f64x2_div = 0xfdf3,
   f64x2_min = 0xfdf4,
   f64x2_max = 0xfdf5,
+  f64x2_pmin = 0xfdf6,
+  f64x2_pmax = 0xfdf7,
   i32x4_trunc_sat_f32x4_s = 0xfdf8,
   i32x4_trunc_sat_f32x4_u = 0xfdf9,
   f32x4_convert_i32x4_s = 0xfdfa,
@@ -1010,8 +1014,8 @@ export const OperatorCodeNames = [
   "f32x4.div",
   "f32x4.min",
   "f32x4.max",
-  undefined,
-  undefined,
+  "f32x4.pmin",
+  "f32x4.pmax",
   "f64x2.abs",
   "f64x2.neg",
   undefined,
@@ -1022,8 +1026,8 @@ export const OperatorCodeNames = [
   "f64x2.div",
   "f64x2.min",
   "f64x2.max",
-  undefined,
-  undefined,
+  "f64x2.pmin",
+  "f64x2.pmax",
   "i32x4.trunc_sat_f32x4_s",
   "i32x4.trunc_sat_f32x4_u",
   "f32x4.convert_i32x4_s",
@@ -2366,6 +2370,8 @@ export class BinaryReader {
       case OperatorCode.f32x4_div:
       case OperatorCode.f32x4_min:
       case OperatorCode.f32x4_max:
+      case OperatorCode.f32x4_pmin:
+      case OperatorCode.f32x4_pmax:
       case OperatorCode.f64x2_abs:
       case OperatorCode.f64x2_neg:
       case OperatorCode.f64x2_sqrt:
@@ -2375,6 +2381,8 @@ export class BinaryReader {
       case OperatorCode.f64x2_div:
       case OperatorCode.f64x2_min:
       case OperatorCode.f64x2_max:
+      case OperatorCode.f64x2_pmin:
+      case OperatorCode.f64x2_pmax:
       case OperatorCode.i32x4_trunc_sat_f32x4_s:
       case OperatorCode.i32x4_trunc_sat_f32x4_u:
       case OperatorCode.f32x4_convert_i32x4_s:
