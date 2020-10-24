@@ -464,6 +464,7 @@ export const enum OperatorCode {
   i32x4_min_u = 0xfdb7,
   i32x4_max_s = 0xfdb8,
   i32x4_max_u = 0xfdb9,
+  i32x4_dot_i16x8_s = 0xfdba,
   i64x2_neg = 0xfdc1,
   i64x2_shl = 0xfdcb,
   i64x2_shr_s = 0xfdcc,
@@ -968,7 +969,7 @@ export const OperatorCodeNames = [
   "i32x4.min_u",
   "i32x4.max_s",
   "i32x4.max_u",
-  undefined,
+  "i32x4.dot_i16x8_s",
   undefined,
   undefined,
   undefined,
@@ -2359,6 +2360,7 @@ export class BinaryReader {
       case OperatorCode.i32x4_min_u:
       case OperatorCode.i32x4_max_s:
       case OperatorCode.i32x4_max_u:
+      case OperatorCode.i32x4_dot_i16x8_s:
       case OperatorCode.i64x2_neg:
       case OperatorCode.i64x2_shl:
       case OperatorCode.i64x2_shr_s:
