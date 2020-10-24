@@ -1472,23 +1472,23 @@ export type BinaryReaderResult =
   | IStartEntry
   | Uint8Array;
 export class BinaryReader {
-  private _data: Uint8Array;
-  private _pos: number;
-  private _length: number;
-  private _eof: boolean;
-  public state: BinaryReaderState;
-  public result: BinaryReaderResult;
-  public error: Error;
+  private _data: Uint8Array = null;
+  private _pos = 0;
+  private _length = 0;
+  private _eof = false;
+  public state: BinaryReaderState = BinaryReaderState.INITIAL;
+  public result: BinaryReaderResult = null;
+  public error: Error = null;
   public get currentSection(): ISectionInformation {
     return <ISectionInformation>this.result; // TODO remove currentSection()
   }
   public get currentFunction(): IFunctionInformation {
     return <IFunctionInformation>this.result; // TODO remove currentFunction()
   }
-  private _sectionEntriesLeft: number;
-  private _sectionId: SectionCode;
-  private _sectionRange: DataRange;
-  private _functionRange: DataRange;
+  private _sectionEntriesLeft = 0;
+  private _sectionId: SectionCode = SectionCode.Unknown;
+  private _sectionRange: DataRange = null;
+  private _functionRange: DataRange = null;
   private _segmentFlags: number;
   public get data(): Uint8Array {
     return this._data;
@@ -1498,19 +1498,6 @@ export class BinaryReader {
   }
   public get length(): number {
     return this._length;
-  }
-  constructor() {
-    this._data = null;
-    this._pos = 0;
-    this._length = 0;
-    this._eof = false;
-    this.state = BinaryReaderState.INITIAL;
-    this.result = null;
-    this.error = null;
-    this._sectionEntriesLeft = 0;
-    this._sectionId = SectionCode.Unknown;
-    this._sectionRange = null;
-    this._functionRange = null;
   }
   public setData(
     buffer: ArrayBuffer,
