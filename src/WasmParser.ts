@@ -1479,12 +1479,6 @@ export class BinaryReader {
   public state: BinaryReaderState = BinaryReaderState.INITIAL;
   public result: BinaryReaderResult = null;
   public error: Error = null;
-  public get currentSection(): ISectionInformation {
-    return <ISectionInformation>this.result; // TODO remove currentSection()
-  }
-  public get currentFunction(): IFunctionInformation {
-    return <IFunctionInformation>this.result; // TODO remove currentFunction()
-  }
   private _sectionEntriesLeft = 0;
   private _sectionId: SectionCode = SectionCode.Unknown;
   private _sectionRange: DataRange = null;
