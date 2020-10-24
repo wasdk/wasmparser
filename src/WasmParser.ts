@@ -1221,6 +1221,27 @@ export const enum BinaryReaderState {
   END_OFFSET_EXPRESSION_BODY = 46,
 }
 
+const enum DataSegmentType {
+  Active = 0x00,
+  Passive = 0x01,
+  ActiveWithMemoryIndex = 0x02,
+}
+
+function isActiveDataSegmentType(segmentType: number): boolean {
+  switch (segmentType) {
+    case DataSegmentType.Active:
+    case DataSegmentType.ActiveWithMemoryIndex:
+      return true;
+    default:
+      return false;
+  }
+}
+
+export const enum DataMode {
+  Active,
+  Passive,
+}
+
 const enum ElementSegmentType {
   LegacyActiveFuncrefExternval = 0x00,
   PassiveExternval = 0x01,
@@ -1305,7 +1326,8 @@ export interface IElementSegmentBody {
   elementType: Type;
 }
 export interface IDataSegment {
-  index: number;
+  mode: DataMode;
+  memoryIndex?: number;
 }
 export interface IDataSegmentBody {
   data: Uint8Array;
@@ -1523,7 +1545,7 @@ export class BinaryReader {
   private _sectionId: SectionCode = SectionCode.Unknown;
   private _sectionRange: DataRange = null;
   private _functionRange: DataRange = null;
-  private _segmentType = 0;
+  private _segmentType: DataSegmentType | ElementSegmentType = 0;
   private _segmentEntriesLeft = 0;
   public get data(): Uint8Array {
     return this._data;
@@ -1888,20 +1910,37 @@ export class BinaryReader {
       this.skipSection();
       return this.read();
     }
+    const pos = this._pos;
     if (!this.hasVarIntBytes()) {
+      this.state = BinaryReaderState.DATA_SECTION_ENTRY;
       return false;
     }
-
-    this._segmentType = this.readVarUint32();
-    let index = 0;
-    if (this._segmentType === 0x02) {
-      index = this.readVarUint32();
+    const segmentType = this.readVarUint32();
+    let mode, memoryIndex;
+    switch (segmentType) {
+      case DataSegmentType.Active:
+        mode = DataMode.Active;
+        memoryIndex = 0;
+        break;
+      case DataSegmentType.Passive:
+        mode = DataMode.Passive;
+        break;
+      case DataSegmentType.ActiveWithMemoryIndex:
+        mode = DataMode.Active;
+        if (!this.hasVarIntBytes()) {
+          this._pos = pos;
+          this.state = BinaryReaderState.DATA_SECTION_ENTRY;
+          return false;
+        }
+        memoryIndex = this.readVarUint32();
+        break;
+      default:
+        throw new Error(`Unsupported data segment type ${segmentType}`);
     }
     this.state = BinaryReaderState.BEGIN_DATA_SECTION_ENTRY;
-    this.result = {
-      index,
-    };
+    this.result = { mode, memoryIndex };
     this._sectionEntriesLeft--;
+    this._segmentType = segmentType;
     return true;
   }
   private readDataEntryBody(): boolean {
@@ -3032,7 +3071,6 @@ export class BinaryReader {
       case SectionCode.Data:
         if (!this.hasVarIntBytes()) return false;
         this._sectionEntriesLeft = this.readVarUint32() >>> 0;
-        this.state = BinaryReaderState.DATA_SECTION_ENTRY;
         return this.readDataEntry();
       case SectionCode.Custom:
         var customSectionName = bytesToString(currentSection.name);
@@ -3151,10 +3189,12 @@ export class BinaryReader {
       case BinaryReaderState.END_DATA_SECTION_ENTRY:
         return this.readDataEntry();
       case BinaryReaderState.BEGIN_DATA_SECTION_ENTRY:
-        if (this._segmentType & 0x01) {
-          return this.readDataEntryBody();
+        if (isActiveDataSegmentType(this._segmentType)) {
+          // active data segment
+          return this.readOffsetExpressionBody();
         } else {
-          return this.readInitExpressionBody();
+          // passive data segment
+          return this.readDataEntryBody();
         }
       case BinaryReaderState.DATA_SECTION_ENTRY_BODY:
         this.state = BinaryReaderState.END_DATA_SECTION_ENTRY;
@@ -3165,8 +3205,6 @@ export class BinaryReader {
           case SectionCode.Global:
             this.state = BinaryReaderState.END_GLOBAL_SECTION_ENTRY;
             return true;
-          case SectionCode.Data:
-            return this.readDataEntryBody();
           case SectionCode.Element:
             if (--this._segmentEntriesLeft > 0) {
               return this.readInitExpressionBody();
@@ -3179,7 +3217,11 @@ export class BinaryReader {
         this.state = BinaryReaderState.ERROR;
         return true;
       case BinaryReaderState.END_OFFSET_EXPRESSION_BODY:
-        return this.readElementEntryBody();
+        if (this._sectionId === SectionCode.Data) {
+          return this.readDataEntryBody();
+        } else {
+          return this.readElementEntryBody();
+        }
       case BinaryReaderState.NAME_SECTION_ENTRY:
         return this.readNameEntry();
       case BinaryReaderState.RELOC_SECTION_HEADER:
