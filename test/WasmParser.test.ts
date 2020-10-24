@@ -16,6 +16,7 @@
 import {
   BinaryReader,
   BinaryReaderState,
+  DataMode,
   ElementMode,
   IModuleHeader,
   ISectionInformation,
@@ -763,6 +764,251 @@ describe("BinaryReader", () => {
     expect(reader.result).toMatchObject({ elementType: Type.externref });
     expect(reader.read()).toBe(true);
     expect(reader.state).toBe(BinaryReaderState.END_ELEMENT_SECTION_ENTRY);
+    expect(reader.read()).toBe(true);
+    expect(reader.state).toBe(BinaryReaderState.END_SECTION);
+    expect(reader.read()).toBe(true);
+    expect(reader.state).toBe(BinaryReaderState.END_WASM);
+    expect(reader.read()).toBe(false);
+  });
+
+  test("can parse Wasm module with empty Data section", () => {
+    const buffer = new Uint8Array([
+      // Wasm header
+      0x00,
+      0x61,
+      0x73,
+      0x6d,
+      0x01,
+      0x00,
+      0x00,
+      0x00,
+      // Data section
+      0x0b, // id
+      0x01, // size
+      0x00, // length
+    ]);
+    const reader = new BinaryReader();
+    reader.setData(buffer.buffer, 0, buffer.byteLength);
+    expect(reader.read()).toBe(true);
+    expect(reader.state).toBe(BinaryReaderState.BEGIN_WASM);
+    expect(reader.read()).toBe(true);
+    expect(reader.state).toBe(BinaryReaderState.BEGIN_SECTION);
+    expect((<ISectionInformation>reader.result).id).toBe(SectionCode.Data);
+    expect(reader.read()).toBe(true);
+    expect(reader.state).toBe(BinaryReaderState.END_SECTION);
+    expect(reader.read()).toBe(true);
+    expect(reader.state).toBe(BinaryReaderState.END_WASM);
+    expect(reader.read()).toBe(false);
+  });
+
+  test("can parse Wasm module with active data segment", () => {
+    const buffer = new Uint8Array([
+      // Wasm header
+      0x00,
+      0x61,
+      0x73,
+      0x6d,
+      0x01,
+      0x00,
+      0x00,
+      0x00,
+      // Data section
+      0x0b, // id
+      0x09, // size
+      0x01, // length
+      // Active
+      0x00,
+      // offset
+      0x41, // i32.const 1
+      0x01,
+      0x0b,
+      // init
+      0x03, // length
+      0x01,
+      0x02,
+      0x03,
+    ]);
+    const reader = new BinaryReader();
+    reader.setData(buffer.buffer, 0, buffer.byteLength);
+    expect(reader.read()).toBe(true);
+    expect(reader.state).toBe(BinaryReaderState.BEGIN_WASM);
+    expect(reader.read()).toBe(true);
+    expect(reader.state).toBe(BinaryReaderState.BEGIN_SECTION);
+    expect(reader.read()).toBe(true);
+    expect(reader.state).toBe(BinaryReaderState.BEGIN_DATA_SECTION_ENTRY);
+    expect(reader.result).toMatchObject({
+      mode: DataMode.Active,
+      memoryIndex: 0,
+    });
+    expect(reader.read()).toBe(true);
+    expect(reader.state).toBe(BinaryReaderState.BEGIN_OFFSET_EXPRESSION_BODY);
+    expect(reader.result).toBe(null);
+    expect(reader.read()).toBe(true);
+    expect(reader.state).toBe(BinaryReaderState.OFFSET_EXPRESSION_OPERATOR);
+    expect(reader.result).toMatchObject({
+      code: OperatorCode.i32_const,
+      literal: 1,
+    });
+    expect(reader.read()).toBe(true);
+    expect(reader.state).toBe(BinaryReaderState.OFFSET_EXPRESSION_OPERATOR);
+    expect(reader.result).toMatchObject({ code: OperatorCode.end });
+    expect(reader.read()).toBe(true);
+    expect(reader.state).toBe(BinaryReaderState.END_OFFSET_EXPRESSION_BODY);
+    expect(reader.result).toBe(null);
+    expect(reader.read()).toBe(true);
+    expect(reader.state).toBe(BinaryReaderState.DATA_SECTION_ENTRY_BODY);
+    expect(reader.result).toMatchObject({ data: new Uint8Array([1, 2, 3]) });
+    expect(reader.read()).toBe(true);
+    expect(reader.state).toBe(BinaryReaderState.END_DATA_SECTION_ENTRY);
+    expect(reader.result).toBe(null);
+    expect(reader.read()).toBe(true);
+    expect(reader.state).toBe(BinaryReaderState.END_SECTION);
+    expect(reader.read()).toBe(true);
+    expect(reader.state).toBe(BinaryReaderState.END_WASM);
+    expect(reader.read()).toBe(false);
+  });
+
+  test("can parse Wasm module with passive data segment", () => {
+    const buffer = new Uint8Array([
+      // Wasm header
+      0x00,
+      0x61,
+      0x73,
+      0x6d,
+      0x01,
+      0x00,
+      0x00,
+      0x00,
+      // Data section
+      0x0b, // id
+      0x05, // size
+      0x01, // length
+      // Passive
+      0x01,
+      // init
+      0x02, // length
+      0x42,
+      0x42,
+    ]);
+    const reader = new BinaryReader();
+    reader.setData(buffer.buffer, 0, buffer.byteLength);
+    expect(reader.read()).toBe(true);
+    expect(reader.state).toBe(BinaryReaderState.BEGIN_WASM);
+    expect(reader.read()).toBe(true);
+    expect(reader.state).toBe(BinaryReaderState.BEGIN_SECTION);
+    expect(reader.read()).toBe(true);
+    expect(reader.state).toBe(BinaryReaderState.BEGIN_DATA_SECTION_ENTRY);
+    expect(reader.result).toMatchObject({ mode: DataMode.Passive });
+    expect(reader.read()).toBe(true);
+    expect(reader.state).toBe(BinaryReaderState.DATA_SECTION_ENTRY_BODY);
+    expect(reader.result).toMatchObject({ data: new Uint8Array([0x42, 0x42]) });
+    expect(reader.read()).toBe(true);
+    expect(reader.state).toBe(BinaryReaderState.END_DATA_SECTION_ENTRY);
+    expect(reader.result).toBe(null);
+    expect(reader.read()).toBe(true);
+    expect(reader.state).toBe(BinaryReaderState.END_SECTION);
+    expect(reader.read()).toBe(true);
+    expect(reader.state).toBe(BinaryReaderState.END_WASM);
+    expect(reader.read()).toBe(false);
+  });
+
+  test("can parse Wasm module with active with memory index data segment", () => {
+    const buffer = new Uint8Array([
+      // Wasm header
+      0x00,
+      0x61,
+      0x73,
+      0x6d,
+      0x01,
+      0x00,
+      0x00,
+      0x00,
+      // Data section
+      0x0b, // id
+      0x0e, // size
+      0x02, // length
+      // Active with memory index
+      0x02,
+      // memory index
+      0x08,
+      // offset
+      0x41, // i32.const 0
+      0x00,
+      0x0b, // end
+      // init
+      0x01, // length
+      0x03,
+      // Active with memory index
+      0x02,
+      // memory index
+      0x01,
+      // offset
+      0x23, // global.get 8
+      0x08,
+      0x0b, // end
+      // init
+      0x00, // length
+    ]);
+    const reader = new BinaryReader();
+    reader.setData(buffer.buffer, 0, buffer.byteLength);
+    expect(reader.read()).toBe(true);
+    expect(reader.state).toBe(BinaryReaderState.BEGIN_WASM);
+    expect(reader.read()).toBe(true);
+    expect(reader.state).toBe(BinaryReaderState.BEGIN_SECTION);
+    expect(reader.read()).toBe(true);
+    expect(reader.state).toBe(BinaryReaderState.BEGIN_DATA_SECTION_ENTRY);
+    expect(reader.result).toMatchObject({
+      mode: DataMode.Active,
+      memoryIndex: 8,
+    });
+    expect(reader.read()).toBe(true);
+    expect(reader.state).toBe(BinaryReaderState.BEGIN_OFFSET_EXPRESSION_BODY);
+    expect(reader.result).toBe(null);
+    expect(reader.read()).toBe(true);
+    expect(reader.state).toBe(BinaryReaderState.OFFSET_EXPRESSION_OPERATOR);
+    expect(reader.result).toMatchObject({
+      code: OperatorCode.i32_const,
+      literal: 0,
+    });
+    expect(reader.read()).toBe(true);
+    expect(reader.state).toBe(BinaryReaderState.OFFSET_EXPRESSION_OPERATOR);
+    expect(reader.result).toMatchObject({ code: OperatorCode.end });
+    expect(reader.read()).toBe(true);
+    expect(reader.state).toBe(BinaryReaderState.END_OFFSET_EXPRESSION_BODY);
+    expect(reader.result).toBe(null);
+    expect(reader.read()).toBe(true);
+    expect(reader.state).toBe(BinaryReaderState.DATA_SECTION_ENTRY_BODY);
+    expect(reader.result).toMatchObject({ data: new Uint8Array([3]) });
+    expect(reader.read()).toBe(true);
+    expect(reader.state).toBe(BinaryReaderState.END_DATA_SECTION_ENTRY);
+    expect(reader.result).toBe(null);
+    expect(reader.read()).toBe(true);
+    expect(reader.state).toBe(BinaryReaderState.BEGIN_DATA_SECTION_ENTRY);
+    expect(reader.result).toMatchObject({
+      mode: DataMode.Active,
+      memoryIndex: 1,
+    });
+    expect(reader.read()).toBe(true);
+    expect(reader.state).toBe(BinaryReaderState.BEGIN_OFFSET_EXPRESSION_BODY);
+    expect(reader.result).toBe(null);
+    expect(reader.read()).toBe(true);
+    expect(reader.state).toBe(BinaryReaderState.OFFSET_EXPRESSION_OPERATOR);
+    expect(reader.result).toMatchObject({
+      code: OperatorCode.global_get,
+      globalIndex: 8,
+    });
+    expect(reader.read()).toBe(true);
+    expect(reader.state).toBe(BinaryReaderState.OFFSET_EXPRESSION_OPERATOR);
+    expect(reader.result).toMatchObject({ code: OperatorCode.end });
+    expect(reader.read()).toBe(true);
+    expect(reader.state).toBe(BinaryReaderState.END_OFFSET_EXPRESSION_BODY);
+    expect(reader.result).toBe(null);
+    expect(reader.read()).toBe(true);
+    expect(reader.state).toBe(BinaryReaderState.DATA_SECTION_ENTRY_BODY);
+    expect(reader.result).toMatchObject({ data: new Uint8Array() });
+    expect(reader.read()).toBe(true);
+    expect(reader.state).toBe(BinaryReaderState.END_DATA_SECTION_ENTRY);
+    expect(reader.result).toBe(null);
     expect(reader.read()).toBe(true);
     expect(reader.state).toBe(BinaryReaderState.END_SECTION);
     expect(reader.read()).toBe(true);
