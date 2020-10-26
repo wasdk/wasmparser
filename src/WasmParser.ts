@@ -1220,6 +1220,42 @@ export const enum BinaryReaderState {
   OFFSET_EXPRESSION_OPERATOR = 45,
   END_OFFSET_EXPRESSION_BODY = 46,
 }
+
+const enum ElementSegmentType {
+  LegacyActiveFuncrefExternval = 0x00,
+  PassiveExternval = 0x01,
+  ActiveExternval = 0x02,
+  DeclaredExternval = 0x03,
+  LegacyActiveFuncrefElemexpr = 0x04,
+  PassiveElemexpr = 0x05,
+  ActiveElemexpr = 0x06,
+  DeclaredElemexpr = 0x07,
+}
+
+function isActiveElementSegmentType(segmentType: number): boolean {
+  switch (segmentType) {
+    case ElementSegmentType.LegacyActiveFuncrefExternval:
+    case ElementSegmentType.ActiveExternval:
+    case ElementSegmentType.LegacyActiveFuncrefElemexpr:
+    case ElementSegmentType.ActiveElemexpr:
+      return true;
+    default:
+      return false;
+  }
+}
+
+function isExternvalElementSegmentType(segmentType: number): boolean {
+  switch (segmentType) {
+    case ElementSegmentType.LegacyActiveFuncrefExternval:
+    case ElementSegmentType.PassiveExternval:
+    case ElementSegmentType.ActiveExternval:
+    case ElementSegmentType.DeclaredExternval:
+      return true;
+    default:
+      return false;
+  }
+}
+
 export const enum ElementMode {
   Active,
   Passive,
@@ -1793,17 +1829,17 @@ export class BinaryReader {
     const segmentType = this.readUint8();
     let mode, tableIndex;
     switch (segmentType) {
-      case 0x00: // legacy active, funcref externval
-      case 0x04: // legacy active, funcref elemexpr
+      case ElementSegmentType.LegacyActiveFuncrefExternval:
+      case ElementSegmentType.LegacyActiveFuncrefElemexpr:
         mode = ElementMode.Active;
         tableIndex = 0;
         break;
-      case 0x01: // passive, externval
-      case 0x05: // passive, elemexpr
+      case ElementSegmentType.PassiveExternval:
+      case ElementSegmentType.PassiveElemexpr:
         mode = ElementMode.Passive;
         break;
-      case 0x02: // active, externval
-      case 0x06: // active, elemexpr
+      case ElementSegmentType.ActiveExternval:
+      case ElementSegmentType.ActiveElemexpr:
         mode = ElementMode.Active;
         if (!this.hasVarIntBytes()) {
           this.state = BinaryReaderState.ELEMENT_SECTION_ENTRY;
@@ -1812,8 +1848,8 @@ export class BinaryReader {
         }
         tableIndex = this.readVarUint32();
         break;
-      case 0x03: // declared, externval
-      case 0x07: // declared, elemexpr
+      case ElementSegmentType.DeclaredExternval:
+      case ElementSegmentType.DeclaredElemexpr:
         mode = ElementMode.Declarative;
         break;
       default:
@@ -1827,14 +1863,21 @@ export class BinaryReader {
   }
   private readElementEntryBody(): boolean {
     let elementType = Type.funcref;
-    if (this._segmentType > 0x00 && this._segmentType < 0x04) {
-      if (!this.hasMoreBytes()) return false;
-      // We just skip the 0x00 byte, the `elemkind` byte
-      // is reserved for future versions of WebAssembly.
-      this.skipBytes(1);
-    } else if (this._segmentType > 0x04) {
-      if (!this.hasMoreBytes()) return false;
-      elementType = this.readVarInt7();
+    switch (this._segmentType) {
+      case ElementSegmentType.PassiveExternval:
+      case ElementSegmentType.ActiveExternval:
+      case ElementSegmentType.DeclaredExternval:
+        if (!this.hasMoreBytes()) return false;
+        // We just skip the 0x00 byte, the `elemkind` byte
+        // is reserved for future versions of WebAssembly.
+        this.skipBytes(1);
+        break;
+      case ElementSegmentType.PassiveElemexpr:
+      case ElementSegmentType.ActiveElemexpr:
+      case ElementSegmentType.DeclaredElemexpr:
+        if (!this.hasMoreBytes()) return false;
+        elementType = this.readVarInt7();
+        break;
     }
     this.state = BinaryReaderState.ELEMENT_SECTION_ENTRY_BODY;
     this.result = { elementType };
@@ -2541,7 +2584,7 @@ export class BinaryReader {
     if (
       this.state === BinaryReaderState.INIT_EXPRESSION_OPERATOR &&
       this._sectionId === SectionCode.Element &&
-      this._segmentType < 0x04
+      isExternvalElementSegmentType(this._segmentType)
     ) {
       // We are reading a `vec(funcidx)` here, which is a dense encoding
       // for a sequence of `((ref.func y) end)` instructions.
@@ -3088,7 +3131,7 @@ export class BinaryReader {
       case BinaryReaderState.END_ELEMENT_SECTION_ENTRY:
         return this.readElementEntry();
       case BinaryReaderState.BEGIN_ELEMENT_SECTION_ENTRY:
-        if ((this._segmentType & 0x01) == 0x00) {
+        if (isActiveElementSegmentType(this._segmentType)) {
           // active element segment
           return this.readOffsetExpressionBody();
         } else {
