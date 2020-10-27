@@ -3178,7 +3178,6 @@ export class BinaryReader {
         return this.readElementEntry();
       case BinaryReaderState.BEGIN_ELEMENT_SECTION_ENTRY:
         if (isActiveElementSegmentType(this._segmentType)) {
-          // active element segment
           return this.readOffsetExpressionBody();
         } else {
           // passive or declared element segment
@@ -3198,7 +3197,6 @@ export class BinaryReader {
         return this.readDataEntry();
       case BinaryReaderState.BEGIN_DATA_SECTION_ENTRY:
         if (isActiveDataSegmentType(this._segmentType)) {
-          // active data segment
           return this.readOffsetExpressionBody();
         } else {
           // passive data segment
