@@ -1900,6 +1900,14 @@ export class BinaryReader {
         if (!this.hasMoreBytes()) return false;
         elementType = this.readVarInt7();
         break;
+      case ElementSegmentType.LegacyActiveFuncrefExternval:
+      case ElementSegmentType.LegacyActiveFuncrefElemexpr:
+        // The element type is implicitly `funcref`.
+        break;
+      default:
+        throw new Error(
+          `Unsupported element segment type ${this._segmentType}`
+        );
     }
     this.state = BinaryReaderState.ELEMENT_SECTION_ENTRY_BODY;
     this.result = { elementType };
