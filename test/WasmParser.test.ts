@@ -23,6 +23,7 @@ import {
   OperatorCode,
   SectionCode,
   Type,
+  TypeKind,
 } from "../src/WasmParser";
 
 describe("BinaryReader", () => {
@@ -504,7 +505,7 @@ describe("BinaryReader", () => {
     expect(reader.state).toBe(BinaryReaderState.INIT_EXPRESSION_OPERATOR);
     expect(reader.result).toMatchObject({
       code: OperatorCode.ref_null,
-      refType: Type.funcref,
+      refType: TypeKind.funcref,
     });
     expect(reader.read()).toBe(true);
     expect(reader.state).toBe(BinaryReaderState.INIT_EXPRESSION_OPERATOR);
@@ -569,7 +570,7 @@ describe("BinaryReader", () => {
     expect(reader.state).toBe(BinaryReaderState.INIT_EXPRESSION_OPERATOR);
     expect(reader.result).toMatchObject({
       code: OperatorCode.ref_null,
-      refType: Type.externref,
+      refType: TypeKind.externref,
     });
     expect(reader.read()).toBe(true);
     expect(reader.state).toBe(BinaryReaderState.INIT_EXPRESSION_OPERATOR);
@@ -582,7 +583,7 @@ describe("BinaryReader", () => {
     expect(reader.state).toBe(BinaryReaderState.INIT_EXPRESSION_OPERATOR);
     expect(reader.result).toMatchObject({
       code: OperatorCode.ref_null,
-      refType: Type.externref,
+      refType: TypeKind.externref,
     });
     expect(reader.read()).toBe(true);
     expect(reader.state).toBe(BinaryReaderState.INIT_EXPRESSION_OPERATOR);
@@ -595,7 +596,7 @@ describe("BinaryReader", () => {
     expect(reader.state).toBe(BinaryReaderState.INIT_EXPRESSION_OPERATOR);
     expect(reader.result).toMatchObject({
       code: OperatorCode.ref_null,
-      refType: Type.externref,
+      refType: TypeKind.externref,
     });
     expect(reader.read()).toBe(true);
     expect(reader.state).toBe(BinaryReaderState.INIT_EXPRESSION_OPERATOR);
@@ -1014,5 +1015,29 @@ describe("BinaryReader", () => {
     expect(reader.read()).toBe(true);
     expect(reader.state).toBe(BinaryReaderState.END_WASM);
     expect(reader.read()).toBe(false);
+  });
+});
+
+describe("decoding unit tests", () => {
+  test("decodeHeapType supports s33 values", () => {
+    function testCase(expected, data) {
+      const bytes = new Uint8Array(data);
+      const reader = new BinaryReader();
+      reader.setData(bytes, 0, bytes.byteLength);
+      // Access private method for testing using array notation.
+      expect(reader["readHeapType"]()).toEqual(expected);
+    }
+    testCase(0, [0x00]);
+    testCase(1, [0x01]);
+    testCase(1, [0x81, 0x80, 0x80, 0x80, 0x80]);
+    testCase(-1, [0x7f]);
+    testCase(-1, [0xff, 0x7f]);
+    testCase(-1, [0xff, 0xff, 0xff, 0xff, 0x7f]);
+    testCase(127, [0xff, 0x00]);
+    testCase(-127, [0x81, 0x7f]);
+    testCase(1023, [0xff, 0x07]);
+    testCase(4294967295, [0xff, 0xff, 0xff, 0xff, 0x0f]);
+    testCase(-2147483648, [0x80, 0x80, 0x80, 0x80, 0x78]);
+    testCase(-4294967296, [0x80, 0x80, 0x80, 0x80, 0x70]);
   });
 });

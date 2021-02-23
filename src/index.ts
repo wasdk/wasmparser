@@ -37,7 +37,7 @@ export {
   ISourceMappingURL,
   IStartEntry,
   IFunctionEntry,
-  IFunctionType,
+  ITypeEntry,
   ISectionInformation,
   ILocals,
   IFunctionInformation,
