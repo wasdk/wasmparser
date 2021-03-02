@@ -333,8 +333,6 @@ export const enum OperatorCode {
   v32x4_load_splat = 0xfd09,
   v64x2_load_splat = 0xfd0a,
   v128_store = 0xfd0b,
-  v128_load32_zero = 0xfdfc,
-  v128_load64_zero = 0xfdfd,
   v128_const = 0xfd0c,
   i8x16_shuffle = 0xfd0d,
   i8x16_swizzle = 0xfd0e,
@@ -406,13 +404,30 @@ export const enum OperatorCode {
   v128_or = 0xfd50,
   v128_xor = 0xfd51,
   v128_bitselect = 0xfd52,
+  v128_any_true = 0xfd53,
+  v128_load8_lane = 0xfd54,
+  v128_load16_lane = 0xfd55,
+  v128_load32_lane = 0xfd56,
+  v128_load64_lane = 0xfd57,
+  v128_store8_lane = 0xfd58,
+  v128_store16_lane = 0xfd59,
+  v128_store32_lane = 0xfd5a,
+  v128_store64_lane = 0xfd5b,
+  v128_load32_zero = 0xfd5c,
+  v128_load64_zero = 0xfd5d,
+  f32x4_demote_f64x2_zero = 0xfd5e,
+  f64x2_promote_low_f32x4 = 0xfd5f,
   i8x16_abs = 0xfd60,
   i8x16_neg = 0xfd61,
-  i8x16_any_true = 0xfd62,
+  i8x16_popcnt = 0xfd62,
   i8x16_all_true = 0xfd63,
   i8x16_bitmask = 0xfd64,
   i8x16_narrow_i16x8_s = 0xfd65,
   i8x16_narrow_i16x8_u = 0xfd66,
+  f32x4_ceil = 0x67,
+  f32x4_floor = 0x68,
+  f32x4_trunc = 0x69,
+  f32x4_nearest = 0x6a,
   i8x16_shl = 0xfd6b,
   i8x16_shr_s = 0xfd6c,
   i8x16_shr_u = 0xfd6d,
@@ -422,22 +437,29 @@ export const enum OperatorCode {
   i8x16_sub = 0xfd71,
   i8x16_sub_sat_s = 0xfd72,
   i8x16_sub_sat_u = 0xfd73,
+  f64x2_ceil = 0xfd74,
+  f64x2_floor = 0xfd75,
   i8x16_min_s = 0xfd76,
   i8x16_min_u = 0xfd77,
   i8x16_max_s = 0xfd78,
   i8x16_max_u = 0xfd79,
+  f64x2_trunc = 0xfd7a,
   i8x16_avgr_u = 0xfd7b,
+  i16x8_extadd_pairwise_i8x16_s = 0xfd7c,
+  i16x8_extadd_pairwise_i8x16_u = 0xfd7d,
+  i32x4_extadd_pairwise_i16x8_s = 0xfd7e,
+  i32x4_extadd_pairwise_i16x8_u = 0xfd7f,
   i16x8_abs = 0xfd80,
   i16x8_neg = 0xfd81,
-  i16x8_any_true = 0xfd82,
+  i16x8_q15mulr_sat_s = 0xfd82,
   i16x8_all_true = 0xfd83,
   i16x8_bitmask = 0xfd84,
   i16x8_narrow_i32x4_s = 0xfd85,
   i16x8_narrow_i32x4_u = 0xfd86,
-  i16x8_widen_low_i8x16_s = 0xfd87,
-  i16x8_widen_high_i8x16_s = 0xfd88,
-  i16x8_widen_low_i8x16_u = 0xfd89,
-  i16x8_widen_high_i8x16_u = 0xfd8a,
+  i16x8_extend_low_i8x16_s = 0xfd87,
+  i16x8_extend_high_i8x16_s = 0xfd88,
+  i16x8_extend_low_i8x16_u = 0xfd89,
+  i16x8_extend_high_i8x16_u = 0xfd8a,
   i16x8_shl = 0xfd8b,
   i16x8_shr_s = 0xfd8c,
   i16x8_shr_u = 0xfd8d,
@@ -447,21 +469,25 @@ export const enum OperatorCode {
   i16x8_sub = 0xfd91,
   i16x8_sub_sat_s = 0xfd92,
   i16x8_sub_sat_u = 0xfd93,
+  f64x2_nearest = 0xfd94,
   i16x8_mul = 0xfd95,
   i16x8_min_s = 0xfd96,
   i16x8_min_u = 0xfd97,
   i16x8_max_s = 0xfd98,
   i16x8_max_u = 0xfd99,
   i16x8_avgr_u = 0xfd9b,
+  i16x8_extmul_low_i8x16_s = 0xfd9c,
+  i16x8_extmul_high_i8x16_s = 0xfd9d,
+  i16x8_extmul_low_i8x16_u = 0xfd9e,
+  i16x8_extmul_high_i8x16_u = 0xfd9f,
   i32x4_abs = 0xfda0,
   i32x4_neg = 0xfda1,
-  i32x4_any_true = 0xfda2,
   i32x4_all_true = 0xfda3,
   i32x4_bitmask = 0xfda4,
-  i32x4_widen_low_i16x8_s = 0xfda7,
-  i32x4_widen_high_i16x8_s = 0xfda8,
-  i32x4_widen_low_i16x8_u = 0xfda9,
-  i32x4_widen_high_i16x8_u = 0xfdaa,
+  i32x4_extend_low_i16x8_s = 0xfda7,
+  i32x4_extend_high_i16x8_s = 0xfda8,
+  i32x4_extend_low_i16x8_u = 0xfda9,
+  i32x4_extend_high_i16x8_u = 0xfdaa,
   i32x4_shl = 0xfdab,
   i32x4_shr_s = 0xfdac,
   i32x4_shr_u = 0xfdad,
@@ -473,13 +499,34 @@ export const enum OperatorCode {
   i32x4_max_s = 0xfdb8,
   i32x4_max_u = 0xfdb9,
   i32x4_dot_i16x8_s = 0xfdba,
+  i32x4_extmul_low_i16x8_s = 0xfdbc,
+  i32x4_extmul_high_i16x8_s = 0xfdbd,
+  i32x4_extmul_low_i16x8_u = 0xfdbe,
+  i32x4_extmul_high_i16x8_u = 0xfdbf,
+  i64x2_abs = 0xfdc0,
   i64x2_neg = 0xfdc1,
+  i64x2_all_true = 0xfdc3,
+  i64x2_bitmask = 0xfdc4,
+  i64x2_extend_low_i32x4_s = 0xfdc7,
+  i64x2_extend_high_i32x4_s = 0xfdc8,
+  i64x2_extend_low_i32x4_u = 0xfdc9,
+  i64x2_extend_high_i32x4_u = 0xfdca,
   i64x2_shl = 0xfdcb,
   i64x2_shr_s = 0xfdcc,
   i64x2_shr_u = 0xfdcd,
   i64x2_add = 0xfdce,
   i64x2_sub = 0xfdd1,
   i64x2_mul = 0xfdd5,
+  i64x2_eq = 0xfdd6,
+  i64x2_ne = 0xfdd7,
+  i64x2_lt_s = 0xfdd8,
+  i64x2_gt_s = 0xfdd9,
+  i64x2_le_s = 0xfdda,
+  i64x2_ge_s = 0xfddb,
+  i64x2_extmul_low_i32x4_s = 0xfddc,
+  i64x2_extmul_high_i32x4_s = 0xfddd,
+  i64x2_extmul_low_i32x4_u = 0xfdde,
+  i64x2_extmul_high_i32x4_u = 0xfddf,
   f32x4_abs = 0xfde0,
   f32x4_neg = 0xfde1,
   f32x4_sqrt = 0xfde3,
@@ -506,6 +553,10 @@ export const enum OperatorCode {
   i32x4_trunc_sat_f32x4_u = 0xfdf9,
   f32x4_convert_i32x4_s = 0xfdfa,
   f32x4_convert_i32x4_u = 0xfdfb,
+  i32x4_trunc_sat_f64x2_s_zero = 0xfdfc,
+  i32x4_trunc_sat_f64x2_u_zero = 0xfdfd,
+  f64x2_convert_low_i32x4_s = 0xfdfe,
+  f64x2_convert_low_i32x4_u = 0xfdff,
 
   // GC proposal.
   struct_new_with_rtt = 0xfb01,
@@ -906,30 +957,30 @@ export const OperatorCodeNames = [
   "v128.or",
   "v128.xor",
   "v128.bitselect",
-  undefined,
-  undefined,
-  undefined,
-  undefined,
-  undefined,
-  undefined,
-  undefined,
-  undefined,
-  undefined,
-  undefined,
-  undefined,
-  undefined,
-  undefined,
+  "v128.any_true",
+  "v128.load8_lane",
+  "v128.load16_lane",
+  "v128.load32_lane",
+  "v128.load64_lane",
+  "v128.store8_lane",
+  "v128.store16_lane",
+  "v128.store32_lane",
+  "v128.store64_lane",
+  "v128.load32_zero",
+  "v128.load64_zero",
+  "f32x4.demote_f64x2_zero",
+  "f64x2.promote_low_f32x4",
   "i8x16.abs",
   "i8x16.neg",
-  "i8x16.any_true",
+  "i8x16_popcnt",
   "i8x16.all_true",
   "i8x16.bitmask",
   "i8x16.narrow_i16x8_s",
   "i8x16.narrow_i16x8_u",
-  undefined,
-  undefined,
-  undefined,
-  undefined,
+  "f32x4.ceil",
+  "f32x4.floor",
+  "f32x4.trunc",
+  "f32x4.nearest",
   "i8x16.shl",
   "i8x16.shr_s",
   "i8x16.shr_u",
@@ -939,29 +990,29 @@ export const OperatorCodeNames = [
   "i8x16.sub",
   "i8x16.sub_sat_s",
   "i8x16.sub_sat_u",
-  undefined,
-  undefined,
+  "f64x2.ceil",
+  "f64x2.floor",
   "i8x16.min_s",
   "i8x16.min_u",
   "i8x16.max_s",
   "i8x16.max_u",
-  undefined,
+  "f64x2.trunc",
   "i8x16.avgr_u",
-  undefined,
-  undefined,
-  undefined,
-  undefined,
+  "i16x8.extadd_pairwise_i8x16_s",
+  "i16x8.extadd_pairwise_i8x16_u",
+  "i32x4.extadd_pairwise_i16x8_s",
+  "i32x4.extadd_pairwise_i16x8_u",
   "i16x8.abs",
   "i16x8.neg",
-  "i16x8.any_true",
+  "i16x8.q15mulr_sat_s",
   "i16x8.all_true",
   "i16x8.bitmask",
   "i16x8.narrow_i32x4_s",
   "i16x8.narrow_i32x4_u",
-  "i16x8.widen_low_i8x16_s",
-  "i16x8.widen_high_i8x16_s",
-  "i16x8.widen_low_i8x16_u",
-  "i16x8.widen_high_i8x16_u",
+  "i16x8.extend_low_i8x16_s",
+  "i16x8.extend_high_i8x16_s",
+  "i16x8.extend_low_i8x16_u",
+  "i16x8.extend_high_i8x16_u",
   "i16x8.shl",
   "i16x8.shr_s",
   "i16x8.shr_u",
@@ -971,7 +1022,7 @@ export const OperatorCodeNames = [
   "i16x8.sub",
   "i16x8.sub_sat_s",
   "i16x8.sub_sat_u",
-  undefined,
+  "f64x2.nearest",
   "i16x8.mul",
   "i16x8.min_s",
   "i16x8.min_u",
@@ -979,21 +1030,21 @@ export const OperatorCodeNames = [
   "i16x8.max_u",
   undefined,
   "i16x8.avgr_u",
-  undefined,
-  undefined,
-  undefined,
-  undefined,
+  "i16x8.extmul_low_i8x16_s",
+  "i16x8.extmul_high_i8x16_s",
+  "i16x8.extmul_low_i8x16_u",
+  "i16x8.extmul_high_i8x16_u",
   "i32x4.abs",
   "i32x4.neg",
-  "i32x4.any_true",
+  undefined,
   "i32x4.all_true",
   "i32x4.bitmask",
   undefined,
   undefined,
-  "i32x4.widen_low_i16x8_s",
-  "i32x4.widen_high_i16x8_s",
-  "i32x4.widen_low_i16x8_u",
-  "i32x4.widen_high_i16x8_u",
+  "i32x4.extend_low_i16x8_s",
+  "i32x4.extend_high_i16x8_s",
+  "i32x4.extend_low_i16x8_u",
+  "i32x4.extend_high_i16x8_u",
   "i32x4.shl",
   "i32x4.shr_s",
   "i32x4.shr_u",
@@ -1011,21 +1062,21 @@ export const OperatorCodeNames = [
   "i32x4.max_u",
   "i32x4.dot_i16x8_s",
   undefined,
-  undefined,
-  undefined,
-  undefined,
-  undefined,
-  undefined,
+  "i32x4.extmul_low_i16x8_s",
+  "i32x4.extmul_high_i16x8_s",
+  "i32x4.extmul_low_i16x8_u",
+  "i32x4.extmul_high_i16x8_u",
+  "i64x2.abs",
   "i64x2.neg",
   undefined,
+  "i64x2.all_true",
+  "i64x2.bitmask",
   undefined,
   undefined,
-  undefined,
-  undefined,
-  undefined,
-  undefined,
-  undefined,
-  undefined,
+  "i64x2.extend_low_i32x4_s",
+  "i64x2.extend_high_i32x4_s",
+  "i64x2.extend_low_i32x4_u",
+  "i64x2.extend_high_i32x4_u",
   "i64x2.shl",
   "i64x2.shr_s",
   "i64x2.shr_u",
@@ -1037,16 +1088,16 @@ export const OperatorCodeNames = [
   undefined,
   undefined,
   "i64x2.mul",
-  undefined,
-  undefined,
-  undefined,
-  undefined,
-  undefined,
-  undefined,
-  undefined,
-  undefined,
-  undefined,
-  undefined,
+  "i64x2.eq",
+  "i64x2.ne",
+  "i64x2.lt_s",
+  "i64x2.gt_s",
+  "i64x2.le_s",
+  "i64x2.ge_s",
+  "i64x2.extmul_low_i32x4_s",
+  "i64x2.extmul_high_i32x4_s",
+  "i64x2.extmul_low_i32x4_u",
+  "i64x2.extmul_high_i32x4_u",
   "f32x4.abs",
   "f32x4.neg",
   undefined,
@@ -1075,8 +1126,10 @@ export const OperatorCodeNames = [
   "i32x4.trunc_sat_f32x4_u",
   "f32x4.convert_i32x4_s",
   "f32x4.convert_i32x4_u",
-  "v128.load32_zero",
-  "v128.load64_zero",
+  "i32x4.trunc_sat_f64x2_s_zero",
+  "i32x4.trunc_sat_f64x2_u_zero",
+  "f64x2.convert_low_i32x4_s",
+  "f64x2.convert_low_i32x4_u",
 ].forEach((s, i) => {
   OperatorCodeNames[0xfd00 | i] = s;
 });
@@ -2646,13 +2699,20 @@ export class BinaryReader {
       case OperatorCode.v128_or:
       case OperatorCode.v128_xor:
       case OperatorCode.v128_bitselect:
+      case OperatorCode.v128_any_true:
+      case OperatorCode.f32x4_demote_f64x2_zero:
+      case OperatorCode.f64x2_promote_low_f32x4:
       case OperatorCode.i8x16_abs:
       case OperatorCode.i8x16_neg:
-      case OperatorCode.i8x16_any_true:
+      case OperatorCode.i8x16_popcnt:
       case OperatorCode.i8x16_all_true:
       case OperatorCode.i8x16_bitmask:
       case OperatorCode.i8x16_narrow_i16x8_s:
       case OperatorCode.i8x16_narrow_i16x8_u:
+      case OperatorCode.f32x4_ceil:
+      case OperatorCode.f32x4_floor:
+      case OperatorCode.f32x4_trunc:
+      case OperatorCode.f32x4_nearest:
       case OperatorCode.i8x16_shl:
       case OperatorCode.i8x16_shr_s:
       case OperatorCode.i8x16_shr_u:
@@ -2662,22 +2722,29 @@ export class BinaryReader {
       case OperatorCode.i8x16_sub:
       case OperatorCode.i8x16_sub_sat_s:
       case OperatorCode.i8x16_sub_sat_u:
+      case OperatorCode.f64x2_ceil:
+      case OperatorCode.f64x2_floor:
       case OperatorCode.i8x16_min_s:
       case OperatorCode.i8x16_min_u:
       case OperatorCode.i8x16_max_s:
       case OperatorCode.i8x16_max_u:
+      case OperatorCode.f64x2_trunc:
       case OperatorCode.i8x16_avgr_u:
+      case OperatorCode.i16x8_extadd_pairwise_i8x16_s:
+      case OperatorCode.i16x8_extadd_pairwise_i8x16_u:
+      case OperatorCode.i32x4_extadd_pairwise_i16x8_s:
+      case OperatorCode.i32x4_extadd_pairwise_i16x8_u:
       case OperatorCode.i16x8_abs:
       case OperatorCode.i16x8_neg:
-      case OperatorCode.i16x8_any_true:
+      case OperatorCode.i16x8_q15mulr_sat_s:
       case OperatorCode.i16x8_all_true:
       case OperatorCode.i16x8_bitmask:
       case OperatorCode.i16x8_narrow_i32x4_s:
       case OperatorCode.i16x8_narrow_i32x4_u:
-      case OperatorCode.i16x8_widen_low_i8x16_s:
-      case OperatorCode.i16x8_widen_high_i8x16_s:
-      case OperatorCode.i16x8_widen_low_i8x16_u:
-      case OperatorCode.i16x8_widen_high_i8x16_u:
+      case OperatorCode.i16x8_extend_low_i8x16_s:
+      case OperatorCode.i16x8_extend_high_i8x16_s:
+      case OperatorCode.i16x8_extend_low_i8x16_u:
+      case OperatorCode.i16x8_extend_high_i8x16_u:
       case OperatorCode.i16x8_shl:
       case OperatorCode.i16x8_shr_s:
       case OperatorCode.i16x8_shr_u:
@@ -2687,21 +2754,25 @@ export class BinaryReader {
       case OperatorCode.i16x8_sub:
       case OperatorCode.i16x8_sub_sat_s:
       case OperatorCode.i16x8_sub_sat_u:
+      case OperatorCode.f64x2_nearest:
       case OperatorCode.i16x8_mul:
       case OperatorCode.i16x8_min_s:
       case OperatorCode.i16x8_min_u:
       case OperatorCode.i16x8_max_s:
       case OperatorCode.i16x8_max_u:
       case OperatorCode.i16x8_avgr_u:
+      case OperatorCode.i16x8_extmul_low_i8x16_s:
+      case OperatorCode.i16x8_extmul_high_i8x16_s:
+      case OperatorCode.i16x8_extmul_low_i8x16_u:
+      case OperatorCode.i16x8_extmul_high_i8x16_u:
       case OperatorCode.i32x4_abs:
       case OperatorCode.i32x4_neg:
-      case OperatorCode.i32x4_any_true:
       case OperatorCode.i32x4_all_true:
       case OperatorCode.i32x4_bitmask:
-      case OperatorCode.i32x4_widen_low_i16x8_s:
-      case OperatorCode.i32x4_widen_high_i16x8_s:
-      case OperatorCode.i32x4_widen_low_i16x8_u:
-      case OperatorCode.i32x4_widen_high_i16x8_u:
+      case OperatorCode.i32x4_extend_low_i16x8_s:
+      case OperatorCode.i32x4_extend_high_i16x8_s:
+      case OperatorCode.i32x4_extend_low_i16x8_u:
+      case OperatorCode.i32x4_extend_high_i16x8_u:
       case OperatorCode.i32x4_shl:
       case OperatorCode.i32x4_shr_s:
       case OperatorCode.i32x4_shr_u:
@@ -2713,13 +2784,34 @@ export class BinaryReader {
       case OperatorCode.i32x4_max_s:
       case OperatorCode.i32x4_max_u:
       case OperatorCode.i32x4_dot_i16x8_s:
+      case OperatorCode.i32x4_extmul_low_i16x8_s:
+      case OperatorCode.i32x4_extmul_high_i16x8_s:
+      case OperatorCode.i32x4_extmul_low_i16x8_u:
+      case OperatorCode.i32x4_extmul_high_i16x8_u:
+      case OperatorCode.i64x2_abs:
       case OperatorCode.i64x2_neg:
+      case OperatorCode.i64x2_all_true:
+      case OperatorCode.i64x2_bitmask:
+      case OperatorCode.i64x2_extend_low_i32x4_s:
+      case OperatorCode.i64x2_extend_high_i32x4_s:
+      case OperatorCode.i64x2_extend_low_i32x4_u:
+      case OperatorCode.i64x2_extend_high_i32x4_u:
       case OperatorCode.i64x2_shl:
       case OperatorCode.i64x2_shr_s:
       case OperatorCode.i64x2_shr_u:
       case OperatorCode.i64x2_add:
       case OperatorCode.i64x2_sub:
       case OperatorCode.i64x2_mul:
+      case OperatorCode.i64x2_eq:
+      case OperatorCode.i64x2_ne:
+      case OperatorCode.i64x2_lt_s:
+      case OperatorCode.i64x2_gt_s:
+      case OperatorCode.i64x2_le_s:
+      case OperatorCode.i64x2_ge_s:
+      case OperatorCode.i64x2_extmul_low_i32x4_s:
+      case OperatorCode.i64x2_extmul_high_i32x4_s:
+      case OperatorCode.i64x2_extmul_low_i32x4_s:
+      case OperatorCode.i64x2_extmul_high_i32x4_s:
       case OperatorCode.f32x4_abs:
       case OperatorCode.f32x4_abs:
       case OperatorCode.f32x4_neg:
@@ -2747,6 +2839,10 @@ export class BinaryReader {
       case OperatorCode.i32x4_trunc_sat_f32x4_u:
       case OperatorCode.f32x4_convert_i32x4_s:
       case OperatorCode.f32x4_convert_i32x4_u:
+      case OperatorCode.i32x4_trunc_sat_f64x2_s_zero:
+      case OperatorCode.i32x4_trunc_sat_f64x2_u_zero:
+      case OperatorCode.f64x2_convert_low_i32x4_s:
+      case OperatorCode.f64x2_convert_low_i32x4_u:
         break;
       default:
         this.error = new Error(
