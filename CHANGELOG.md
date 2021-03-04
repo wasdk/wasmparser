@@ -1,3 +1,10 @@
+## [5.0.1](https://github.com/wasdk/wasmparser/compare/v5.0.0...v5.0.1) (2021-03-04)
+
+
+### Bug Fixes
+
+* **simd:** update SIMD opcodes ([648fff5](https://github.com/wasdk/wasmparser/commit/648fff52d2a186fb6bee97dc1f37b97640e26fbf))
+
 # [5.0.0](https://github.com/wasdk/wasmparser/compare/v4.0.0...v5.0.0) (2021-02-24)
 
 
