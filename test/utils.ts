@@ -18,21 +18,11 @@ import { extname, join } from "path";
 
 const FIXTURES_DIR = join(__dirname, "__fixtures__");
 
-const broken = [
-  // Wabt opcodes for v128.any_true needs to be updated.
-  "simd_boolean.0.wasm",
-  "simd_boolean.1.wasm",
-  // Wabt does not know the new names for integer extends yet.
-  "simd_conversions.0.wasm",
-  "simd_conversions.51.wasm",
-];
-
 /**
  * @return list of pairs of Wasm fixture file name and path.
  */
 export function getWasmFixtures(): string[][] {
   return readdirSync(FIXTURES_DIR)
     .filter((fileName) => extname(fileName) === ".wasm")
-    .filter((fileName) => !broken.includes(fileName))
     .map((fileName) => [fileName, join(FIXTURES_DIR, fileName)]);
 }

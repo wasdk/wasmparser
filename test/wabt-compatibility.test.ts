@@ -33,8 +33,6 @@ const WABT_FEATURES = {
 describe("Disassembling", () => {
   describe.each(getWasmFixtures())("%s", (fileName, filePath) => {
     test("generates wabt compatible text", async () => {
-      // TODO(bmeurer): wabt still chokes on the i8x16.shuffle syntax
-      if (fileName === "simd.wasm") return;
       const { parseWat } = await wabtPromise;
       const data = new Uint8Array(readFileSync(filePath));
       const dis = new WasmDisassembler();
