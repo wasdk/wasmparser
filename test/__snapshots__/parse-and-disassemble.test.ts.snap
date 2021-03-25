@@ -36233,6 +36233,235 @@ exports[`Parsing and disassembling simd_const.491.wasm generates expected output
 "
 `;
 
+exports[`Parsing and disassembling simd_conversions.0.wasm generates expected output 1`] = `
+"(module
+  (export \\"i32x4.trunc_sat_f32x4_s\\" (func $func0))
+  (export \\"i32x4.trunc_sat_f32x4_u\\" (func $func1))
+  (export \\"f32x4.convert_i32x4_s\\" (func $func2))
+  (export \\"f32x4.convert_i32x4_u\\" (func $func3))
+  (export \\"i8x16.narrow_i16x8_s\\" (func $func4))
+  (export \\"i8x16.narrow_i16x8_u\\" (func $func5))
+  (export \\"i16x8.narrow_i32x4_s\\" (func $func6))
+  (export \\"i16x8.narrow_i32x4_u\\" (func $func7))
+  (export \\"i16x8.widen_high_i8x16_s\\" (func $func8))
+  (export \\"i16x8.widen_high_i8x16_u\\" (func $func9))
+  (export \\"i16x8.widen_low_i8x16_s\\" (func $func10))
+  (export \\"i16x8.widen_low_i8x16_u\\" (func $func11))
+  (export \\"i32x4.widen_high_i16x8_s\\" (func $func12))
+  (export \\"i32x4.widen_high_i16x8_u\\" (func $func13))
+  (export \\"i32x4.widen_low_i16x8_s\\" (func $func14))
+  (export \\"i32x4.widen_low_i16x8_u\\" (func $func15))
+  (func $func0 (param $var0 v128) (result v128)
+    local.get $var0
+    i32x4.trunc_sat_f32x4_s
+  )
+  (func $func1 (param $var0 v128) (result v128)
+    local.get $var0
+    i32x4.trunc_sat_f32x4_u
+  )
+  (func $func2 (param $var0 v128) (result v128)
+    local.get $var0
+    f32x4.convert_i32x4_s
+  )
+  (func $func3 (param $var0 v128) (result v128)
+    local.get $var0
+    f32x4.convert_i32x4_u
+  )
+  (func $func4 (param $var0 v128) (param $var1 v128) (result v128)
+    local.get $var0
+    local.get $var1
+    i8x16.narrow_i16x8_s
+  )
+  (func $func5 (param $var0 v128) (param $var1 v128) (result v128)
+    local.get $var0
+    local.get $var1
+    i8x16.narrow_i16x8_u
+  )
+  (func $func6 (param $var0 v128) (param $var1 v128) (result v128)
+    local.get $var0
+    local.get $var1
+    i16x8.narrow_i32x4_s
+  )
+  (func $func7 (param $var0 v128) (param $var1 v128) (result v128)
+    local.get $var0
+    local.get $var1
+    i16x8.narrow_i32x4_u
+  )
+  (func $func8 (param $var0 v128) (result v128)
+    local.get $var0
+    i16x8.extend_high_i8x16_s
+  )
+  (func $func9 (param $var0 v128) (result v128)
+    local.get $var0
+    i16x8.extend_high_i8x16_u
+  )
+  (func $func10 (param $var0 v128) (result v128)
+    local.get $var0
+    i16x8.extend_low_i8x16_s
+  )
+  (func $func11 (param $var0 v128) (result v128)
+    local.get $var0
+    i16x8.extend_low_i8x16_u
+  )
+  (func $func12 (param $var0 v128) (result v128)
+    local.get $var0
+    i32x4.extend_high_i16x8_s
+  )
+  (func $func13 (param $var0 v128) (result v128)
+    local.get $var0
+    i32x4.extend_high_i16x8_u
+  )
+  (func $func14 (param $var0 v128) (result v128)
+    local.get $var0
+    i32x4.extend_low_i16x8_s
+  )
+  (func $func15 (param $var0 v128) (result v128)
+    local.get $var0
+    i32x4.extend_low_i16x8_u
+  )
+)
+"
+`;
+
+exports[`Parsing and disassembling simd_conversions.51.wasm generates expected output 1`] = `
+"(module
+  (export \\"f32x4_convert_i32x4_s_add\\" (func $func0))
+  (export \\"f32x4_convert_i32x4_s_sub\\" (func $func1))
+  (export \\"f32x4_convert_i32x4_u_mul\\" (func $func2))
+  (export \\"i16x8_low_widen_narrow_ss\\" (func $func3))
+  (export \\"i16x8_low_widen_narrow_su\\" (func $func4))
+  (export \\"i16x8_high_widen_narrow_ss\\" (func $func5))
+  (export \\"i16x8_high_widen_narrow_su\\" (func $func6))
+  (export \\"i16x8_low_widen_narrow_uu\\" (func $func7))
+  (export \\"i16x8_low_widen_narrow_us\\" (func $func8))
+  (export \\"i16x8_high_widen_narrow_uu\\" (func $func9))
+  (export \\"i16x8_high_widen_narrow_us\\" (func $func10))
+  (export \\"i32x4_low_widen_narrow_ss\\" (func $func11))
+  (export \\"i32x4_low_widen_narrow_su\\" (func $func12))
+  (export \\"i32x4_high_widen_narrow_ss\\" (func $func13))
+  (export \\"i32x4_high_widen_narrow_su\\" (func $func14))
+  (export \\"i32x4_low_widen_narrow_uu\\" (func $func15))
+  (export \\"i32x4_low_widen_narrow_us\\" (func $func16))
+  (export \\"i32x4_high_widen_narrow_uu\\" (func $func17))
+  (export \\"i32x4_high_widen_narrow_us\\" (func $func18))
+  (func $func0 (param $var0 v128) (param $var1 v128) (result v128)
+    local.get $var0
+    local.get $var1
+    i32x4.add
+    f32x4.convert_i32x4_s
+  )
+  (func $func1 (param $var0 v128) (param $var1 v128) (result v128)
+    local.get $var0
+    local.get $var1
+    i32x4.sub
+    f32x4.convert_i32x4_s
+  )
+  (func $func2 (param $var0 v128) (param $var1 v128) (result v128)
+    local.get $var0
+    local.get $var1
+    i32x4.mul
+    f32x4.convert_i32x4_u
+  )
+  (func $func3 (param $var0 v128) (param $var1 v128) (result v128)
+    local.get $var0
+    local.get $var1
+    i8x16.narrow_i16x8_s
+    i16x8.extend_low_i8x16_s
+  )
+  (func $func4 (param $var0 v128) (param $var1 v128) (result v128)
+    local.get $var0
+    local.get $var1
+    i8x16.narrow_i16x8_u
+    i16x8.extend_low_i8x16_s
+  )
+  (func $func5 (param $var0 v128) (param $var1 v128) (result v128)
+    local.get $var0
+    local.get $var1
+    i8x16.narrow_i16x8_s
+    i16x8.extend_low_i8x16_s
+  )
+  (func $func6 (param $var0 v128) (param $var1 v128) (result v128)
+    local.get $var0
+    local.get $var1
+    i8x16.narrow_i16x8_u
+    i16x8.extend_low_i8x16_s
+  )
+  (func $func7 (param $var0 v128) (param $var1 v128) (result v128)
+    local.get $var0
+    local.get $var1
+    i8x16.narrow_i16x8_u
+    i16x8.extend_low_i8x16_u
+  )
+  (func $func8 (param $var0 v128) (param $var1 v128) (result v128)
+    local.get $var0
+    local.get $var1
+    i8x16.narrow_i16x8_s
+    i16x8.extend_low_i8x16_u
+  )
+  (func $func9 (param $var0 v128) (param $var1 v128) (result v128)
+    local.get $var0
+    local.get $var1
+    i8x16.narrow_i16x8_u
+    i16x8.extend_low_i8x16_u
+  )
+  (func $func10 (param $var0 v128) (param $var1 v128) (result v128)
+    local.get $var0
+    local.get $var1
+    i8x16.narrow_i16x8_s
+    i16x8.extend_low_i8x16_u
+  )
+  (func $func11 (param $var0 v128) (param $var1 v128) (result v128)
+    local.get $var0
+    local.get $var1
+    i16x8.narrow_i32x4_s
+    i32x4.extend_low_i16x8_s
+  )
+  (func $func12 (param $var0 v128) (param $var1 v128) (result v128)
+    local.get $var0
+    local.get $var1
+    i16x8.narrow_i32x4_u
+    i32x4.extend_low_i16x8_s
+  )
+  (func $func13 (param $var0 v128) (param $var1 v128) (result v128)
+    local.get $var0
+    local.get $var1
+    i16x8.narrow_i32x4_s
+    i32x4.extend_low_i16x8_s
+  )
+  (func $func14 (param $var0 v128) (param $var1 v128) (result v128)
+    local.get $var0
+    local.get $var1
+    i16x8.narrow_i32x4_u
+    i32x4.extend_low_i16x8_s
+  )
+  (func $func15 (param $var0 v128) (param $var1 v128) (result v128)
+    local.get $var0
+    local.get $var1
+    i16x8.narrow_i32x4_u
+    i32x4.extend_low_i16x8_u
+  )
+  (func $func16 (param $var0 v128) (param $var1 v128) (result v128)
+    local.get $var0
+    local.get $var1
+    i16x8.narrow_i32x4_s
+    i32x4.extend_low_i16x8_u
+  )
+  (func $func17 (param $var0 v128) (param $var1 v128) (result v128)
+    local.get $var0
+    local.get $var1
+    i16x8.narrow_i32x4_u
+    i32x4.extend_low_i16x8_u
+  )
+  (func $func18 (param $var0 v128) (param $var1 v128) (result v128)
+    local.get $var0
+    local.get $var1
+    i16x8.narrow_i32x4_s
+    i32x4.extend_low_i16x8_u
+  )
+)
+"
+`;
+
 exports[`Parsing and disassembling simd_f32x4.0.wasm generates expected output 1`] = `
 "(module
   (export \\"f32x4.min\\" (func $func0))
