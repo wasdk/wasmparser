@@ -1444,3 +1444,83 @@ describe("GC proposal support", () => {
     expect(result.lines).toEqual(expectedLines);
   });
 });
+
+describe("Exception handling support", () => {
+  test("Exception handling disassembly", async () => {
+    const { parseWat } = await wabtPromise;
+    const { buffer } = parseWat(
+      `test.wat`,
+      `(module
+        (type (func))
+        (type (func (param i32)))
+        (import "m" "ex" (event (type 0)))
+        (event (type 1))
+        (export "ex" (event 0))
+        (func (param i32) (result i32)
+         try (result i32)
+          throw 0
+         catch 0
+          i32.const 0
+         catch 1
+         catch_all
+          rethrow 0
+         end
+         try
+          throw 0
+         delegate 0
+         try
+          try
+           throw 0
+          delegate 0
+         catch 0
+         end
+         try
+          throw 0
+         unwind
+          nop
+         end
+        )
+       )`,
+      { exceptions: true }
+    ).toBinary({ write_debug_names: true });
+    const reader = new BinaryReader();
+    reader.setData(buffer.buffer, 0, buffer.byteLength);
+
+    const expectedLines = [
+      "(module",
+      '  (event $event0 (import "m" "ex"))',
+      "  (event $event1 (param i32))",
+      '  (export "ex" (event $event0))',
+      "  (func $func0 (param $var0 i32) (result i32)",
+      "    try $label0 (result i32)",
+      "      throw $event0",
+      "    catch $event0",
+      "      i32.const 0",
+      "    catch $event1",
+      "    catch_all",
+      "      rethrow $label0",
+      "    end $label0",
+      "    try",
+      "      throw $event0",
+      "    delegate 0",
+      "    try $label1",
+      "      try",
+      "        throw $event0",
+      "      delegate $label1",
+      "    catch $event0",
+      "    end",
+      "    try",
+      "      throw $event0",
+      "    unwind",
+      "      nop",
+      "    end",
+      "  )",
+      ")",
+    ];
+
+    const dis = new WasmDisassembler();
+    dis.disassembleChunk(reader);
+    const result = dis.getResult();
+    expect(result.lines).toEqual(expectedLines);
+  });
+});
