@@ -372,6 +372,28 @@ describe("DevToolsNameGenerator", () => {
     expect(nr.getGlobalName(2, true)).toBe("$42");
     expect(nr.getGlobalName(2, false)).toBe("$42 (;2;)");
   });
+
+  test("Wasm module with event names", async () => {
+    const { parseWat } = await wabtPromise;
+    const { buffer } = parseWat(
+      `test.wat`,
+      `(module
+        (event (type 1))
+        (event (type 2))
+        (export "ex" (event 0))
+       )`,
+      { exceptions: true }
+    ).toBinary({ write_debug_names: true });
+    const reader = new BinaryReader();
+    reader.setData(buffer.buffer, 0, buffer.byteLength);
+    const ng = new DevToolsNameGenerator();
+    ng.read(reader);
+    const nr = ng.getNameResolver();
+    expect(nr.getEventName(0, true)).toBe("$ex");
+    expect(nr.getEventName(0, false)).toBe("$ex (;0;)");
+    expect(nr.getEventName(1, true)).toBe("$event1");
+    expect(nr.getEventName(1, false)).toBe("$event1");
+  });
 });
 
 describe("NameSectionReader", () => {
