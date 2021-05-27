@@ -1002,21 +1002,22 @@ describe("GC proposal support", () => {
     0x00, // number of results
 
     0x03, // function section
-    0x06, // section length
-    0x05, // number of functions
+    0x07, // section length
+    0x06, // number of functions
     0x07, // function 0: signature 7
     0x07, // function 1: signature 7
     0x07, // function 2: signature 7
     0x07, // function 3: signature 7
     0x07, // function 4: signature 7
+    0x07, // function 5: signature 7
 
     /////////////////////////// CODE SECTION //////////////////////////
     0x0a, // code section
-    0xd3,
-    0x01, // section length
-    0x05, // number of functions
+    0x83,
+    0x02, // section length
+    0x06, // number of functions
 
-    0x50, // function 0: size
+    0x53, // function 0: size
     0x02, // number of locals
     0x01,
     0x6c,
@@ -1064,6 +1065,9 @@ describe("GC proposal support", () => {
     0xfb,
     0x31,
     0x01, // rtt.sub 1
+    0xfb,
+    0x32,
+    0x01, // rtt.fresh_sub 1
     0xfb,
     0x02,
     0x01, // struct.new_default_with_rtt 1
@@ -1132,7 +1136,7 @@ describe("GC proposal support", () => {
     0x15, // return_call_ref
     0x0b, // end
 
-    0x2b, // function 3: size
+    0x37, // function 3: size
     0x00, // number of locals
     0x02,
     0x40, // block <void>
@@ -1147,14 +1151,26 @@ describe("GC proposal support", () => {
     0x42,
     0x00, // br_on_cast 0
     0xfb,
+    0x43,
+    0x00, // br_on_cast_fail 0
+    0xfb,
     0x60,
     0x00, // br_on_func 0
+    0xfb,
+    0x63,
+    0x00, // br_on_non_func 0
     0xfb,
     0x61,
     0x00, // br_on_data 0
     0xfb,
+    0x64,
+    0x00, // br_on_non_data 0
+    0xfb,
     0x62,
     0x00, // br_on_i31 0
+    0xfb,
+    0x65,
+    0x00, // br_on_non_i31 0
     0xfb,
     0x58, // ref.as_func
     0xfb,
@@ -1177,7 +1193,7 @@ describe("GC proposal support", () => {
     0x0b, // end (block)
     0x0b, // end
 
-    0x36, // function 4: size
+    0x44, // function 4: size
     0x02, // number of locals
     0x01,
     0x6c,
@@ -1230,6 +1246,40 @@ describe("GC proposal support", () => {
     0xfb,
     0x15,
     0x06, // array.get_u 7
+    0x1a, // drop
+    0x20,
+    0x00, // local.get 0
+    0x41,
+    0x00, // i32.const 0
+    0x20,
+    0x00, // local.get 0
+    0x41,
+    0x02, // i32.const 2
+    0x41,
+    0x01, // i32.const 1
+    0xfb,
+    0x18,
+    0x05,
+    0x05, // array.copy 5 5
+    0x0b, // end
+
+    0x12, // function 5: size
+    0x00, // number of locals
+    0xd0,
+    0x01, // ref.null 1
+    0xd0,
+    0x01, // ref.null 1
+    0x41,
+    0x01, // i32.const 1
+    0x41,
+    0x00, // i32.const 0
+    0x41,
+    0x01, // i32.const 1
+    0x1b, // select
+    0x1c,
+    0x01,
+    0x6b,
+    0x01, // select_with_type vec(ref(1))
     0x1a, // drop
     0x0b, // end
 
@@ -1362,8 +1412,10 @@ describe("GC proposal support", () => {
     "    ref.cast",
     "    struct.get $structA $bar",
     "    drop",
+    // ---
     "    rtt.canon $structB",
     "    rtt.sub $structB",
+    "    rtt.fresh_sub $structB",
     "    struct.new_default_with_rtt $structB",
     "    local.set $var1",
     "    local.get $var1",
@@ -1372,6 +1424,7 @@ describe("GC proposal support", () => {
     "    local.get $var1",
     "    struct.get_u $structB $qux",
     "    drop",
+    // ---
     "    local.get $var1",
     "    ref.null $structB",
     "    ref.eq",
@@ -1404,9 +1457,13 @@ describe("GC proposal support", () => {
     "      br_on_null $label0",
     "      rtt.canon $structA",
     "      br_on_cast $label0",
+    "      br_on_cast_fail $label0",
     "      br_on_func $label0",
+    "      br_on_non_func $label0",
     "      br_on_data $label0",
+    "      br_on_non_data $label0",
     "      br_on_i31 $label0",
+    "      br_on_non_i31 $label0",
     "      ref.as_func",
     "      ref.as_data",
     "      ref.as_i31",
@@ -1440,6 +1497,22 @@ describe("GC proposal support", () => {
     "    i32.const 1",
     "    array.get_s $arrayB",
     "    array.get_u $arrayB",
+    "    drop",
+    "    local.get $var0",
+    "    i32.const 0",
+    "    local.get $var0",
+    "    i32.const 2",
+    "    i32.const 1",
+    "    array.copy $arrayA $arrayA",
+    "  )",
+    "  (func $unknown5",
+    "    ref.null $structB",
+    "    ref.null $structB",
+    "    i32.const 1",
+    "    i32.const 0",
+    "    i32.const 1",
+    "    select",
+    "    select (ref $structB)",
     "    drop",
     "  )",
     ")",
