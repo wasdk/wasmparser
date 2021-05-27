@@ -1013,7 +1013,7 @@ describe("GC proposal support", () => {
 
     /////////////////////////// CODE SECTION //////////////////////////
     0x0a, // code section
-    0x83,
+    0x85,
     0x02, // section length
     0x06, // number of functions
 
@@ -1136,7 +1136,7 @@ describe("GC proposal support", () => {
     0x15, // return_call_ref
     0x0b, // end
 
-    0x37, // function 3: size
+    0x39, // function 3: size
     0x00, // number of locals
     0x02,
     0x40, // block <void>
@@ -1144,6 +1144,8 @@ describe("GC proposal support", () => {
     0x6e, // ref.null any
     0xd4,
     0x00, // br_on_null 0
+    0xd6,
+    0x00, // br_on_non_null 0
     0xfb,
     0x30,
     0x00, // rtt.canon 0
@@ -1455,6 +1457,7 @@ describe("GC proposal support", () => {
     "    block $label0",
     "      ref.null any",
     "      br_on_null $label0",
+    "      br_on_non_null $label0",
     "      rtt.canon $structA",
     "      br_on_cast $label0",
     "      br_on_cast_fail $label0",

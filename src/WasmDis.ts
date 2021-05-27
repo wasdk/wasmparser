@@ -759,6 +759,7 @@ export class WasmDisassembler {
       case OperatorCode.br:
       case OperatorCode.br_if:
       case OperatorCode.br_on_null:
+      case OperatorCode.br_on_non_null:
       case OperatorCode.br_on_cast:
       case OperatorCode.br_on_cast_fail:
       case OperatorCode.br_on_func:
