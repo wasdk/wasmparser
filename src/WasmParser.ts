@@ -261,6 +261,7 @@ export const enum OperatorCode {
   ref_as_non_null = 0xd3,
   br_on_null = 0xd4,
   ref_eq = 0xd5,
+  br_on_non_null = 0xd6,
 
   atomic_notify = 0xfe00,
   i32_atomic_wait = 0xfe01,
@@ -821,7 +822,7 @@ export const OperatorCodeNames = [
   "ref.as_non_null",
   "br_on_null",
   "ref.eq",
-  undefined,
+  "br_on_non_null",
   undefined,
   undefined,
   undefined,
@@ -3146,6 +3147,7 @@ export class BinaryReader {
         case OperatorCode.br:
         case OperatorCode.br_if:
         case OperatorCode.br_on_null:
+        case OperatorCode.br_on_non_null:
           brDepth = this.readVarUint32() >>> 0;
           break;
         case OperatorCode.br_table:
