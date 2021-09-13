@@ -1209,7 +1209,7 @@ export class WasmDisassembler {
             for (const exportName of this._exportMetadata.getMemoryExportNames(
               memoryIndex
             )) {
-              this.appendBuffer(` (export "${exportName}")`);
+              this.appendBuffer(` (export ${JSON.stringify(exportName)})`);
             }
           }
           this.appendBuffer(` ${limitsToString(memoryInfo.limits)}`);
@@ -1228,7 +1228,7 @@ export class WasmDisassembler {
             for (const exportName of this._exportMetadata.getEventExportNames(
               eventIndex
             )) {
-              this.appendBuffer(` (export "${exportName}")`);
+              this.appendBuffer(` (export ${JSON.stringify(exportName)})`);
             }
           }
           this.printFuncType(eventInfo.typeIndex);
@@ -1244,7 +1244,7 @@ export class WasmDisassembler {
             for (const exportName of this._exportMetadata.getTableExportNames(
               tableIndex
             )) {
-              this.appendBuffer(` (export "${exportName}")`);
+              this.appendBuffer(` (export ${JSON.stringify(exportName)})`);
             }
           }
           this.appendBuffer(
@@ -1322,7 +1322,7 @@ export class WasmDisassembler {
                 for (const exportName of this._exportMetadata.getFunctionExportNames(
                   funcIndex
                 )) {
-                  this.appendBuffer(` (export "${exportName}")`);
+                  this.appendBuffer(` (export ${JSON.stringify(exportName)})`);
                 }
               }
               this.appendBuffer(` (import `);
@@ -1343,7 +1343,7 @@ export class WasmDisassembler {
                 for (const exportName of this._exportMetadata.getGlobalExportNames(
                   globalIndex
                 )) {
-                  this.appendBuffer(` (export "${exportName}")`);
+                  this.appendBuffer(` (export ${JSON.stringify(exportName)})`);
                 }
               }
               this.appendBuffer(` (import `);
@@ -1364,7 +1364,7 @@ export class WasmDisassembler {
                 for (const exportName of this._exportMetadata.getMemoryExportNames(
                   memoryIndex
                 )) {
-                  this.appendBuffer(` (export "${exportName}")`);
+                  this.appendBuffer(` (export ${JSON.stringify(exportName)})`);
                 }
               }
               this.appendBuffer(` (import `);
@@ -1387,7 +1387,7 @@ export class WasmDisassembler {
                 for (const exportName of this._exportMetadata.getTableExportNames(
                   tableIndex
                 )) {
-                  this.appendBuffer(` (export "${exportName}")`);
+                  this.appendBuffer(` (export ${JSON.stringify(exportName)})`);
                 }
               }
               this.appendBuffer(` (import `);
@@ -1410,7 +1410,7 @@ export class WasmDisassembler {
                 for (const exportName of this._exportMetadata.getEventExportNames(
                   eventIndex
                 )) {
-                  this.appendBuffer(` (export "${exportName}")`);
+                  this.appendBuffer(` (export ${JSON.stringify(exportName)})`);
                 }
               }
               this.appendBuffer(` (import `);
@@ -1468,7 +1468,7 @@ export class WasmDisassembler {
             for (const exportName of this._exportMetadata.getGlobalExportNames(
               globalIndex
             )) {
-              this.appendBuffer(` (export "${exportName}")`);
+              this.appendBuffer(` (export ${JSON.stringify(exportName)})`);
             }
           }
           this.appendBuffer(` ${this.globalTypeToString(globalInfo.type)}`);
@@ -1575,7 +1575,7 @@ export class WasmDisassembler {
             for (const exportName of this._exportMetadata.getFunctionExportNames(
               this._funcIndex
             )) {
-              this.appendBuffer(` (export "${exportName}")`);
+              this.appendBuffer(` (export ${JSON.stringify(exportName)})`);
             }
           }
           for (var i = 0; i < type.params.length; i++) {
