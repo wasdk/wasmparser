@@ -794,6 +794,72 @@ describe("WasmDisassembler with export metadata", () => {
     ];
     expect(await parseAndDisassemble(lines)).toEqual(lines);
   });
+
+  test("escaped inline export name strings", async () => {
+    const moduleBytes = new Uint8Array([
+      // Wasm header
+      0x00,
+      0x61,
+      0x73,
+      0x6d,
+      0x01,
+      0x00,
+      0x00,
+      0x00,
+
+      // Single type with 0 params and 0 results
+      0x01,
+      0x04,
+      0x01,
+      0x60,
+      0x00,
+      0x00,
+
+      // Single function with type index = 0
+      0x03,
+      0x02,
+      0x01,
+      0x00,
+
+      // Exported func with the name '\n"'
+      0x07,
+      0x06,
+      0x01,
+      0x02,
+      0x22,
+      0x0a,
+      0x00,
+      0x00,
+
+      // Empty code body for function 0
+      0x0a,
+      0x04,
+      0x01,
+      0x02,
+      0x00,
+      0x0b,
+    ]);
+
+    const expectedLines = [
+      `(module`,
+      `  (func $func0 (export "\\"\\n")`,
+      `  )`,
+      `)`,
+    ];
+
+    const parser = new BinaryReader();
+    parser.setData(moduleBytes.buffer, 0, moduleBytes.byteLength);
+
+    const ng = new DevToolsNameGenerator();
+    ng.read(parser);
+    parser.setData(moduleBytes.buffer, 0, moduleBytes.byteLength);
+
+    const dis = new WasmDisassembler();
+    dis.exportMetadata = ng.getExportMetadata();
+    dis.disassembleChunk(parser);
+
+    expect(dis.getResult().lines).toEqual(expectedLines);
+  });
 });
 
 describe("WasmDisassembler.getResult() with function code", () => {
