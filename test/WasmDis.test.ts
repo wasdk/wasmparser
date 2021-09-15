@@ -1002,7 +1002,7 @@ describe("GC proposal support", () => {
   // At the time of writing this test, there is no readily available tool
   // to assemble the module from wat text, so we hard-code its binary
   // contents here.
-  const module_bytes = [
+  const moduleBytes = [
     0x00,
     0x61,
     0x73,
@@ -1587,8 +1587,178 @@ describe("GC proposal support", () => {
     ")",
   ];
 
-  test("GC disassembly", async () => {
-    var data = new Uint8Array(module_bytes);
+  const moduleMilestone4 = [
+    0x00,
+    0x61,
+    0x73,
+    0x6d,
+    1,
+    0,
+    0,
+    0, // wasm magic
+
+    0x01, // type section
+    0x11, // section length: 17
+    0x04, // number of types
+    // type 0:
+    0x5d, // func_subtype
+    0x00, // param count
+    0x00, // result count
+    0x70, // supertype: func
+    // type 1:
+    0x5c, // struct_subtype
+    0x00, // field count
+    0x67, // supertype: data
+    // type 2:
+    0x5c, // struct_subtype
+    0x01, // field count
+    0x7f,
+    0x01, // mut i32
+    0x01, // supertype: type1
+    // type 3:
+    0x5b, // array_subtype
+    0x7f,
+    0x01, // mut i32
+    0x67, // supertype: data
+
+    0x03, // function section
+    0x02, // section length: 2
+    0x01, // number of functions
+    0x00, // function 0: signature 0
+
+    0x06, // globals section
+    0x18, // section length: 24
+    0x02, // globals count
+    // global #0
+    0x6b,
+    0x03, // type: ref $type3
+    0x01, // mutable
+    0x41,
+    0x2a, // ia32.const 42
+    0xfb,
+    0x30,
+    0x03, // rtt.canon $type3
+    0xfb,
+    0x19,
+    0x03,
+    0x01, // array.init $type3 length=1
+    0x0b, // end
+    // global #1
+    0x6b,
+    0x03, // type: ref $type3
+    0x00, // immutable
+    0x41,
+    0x2b, // ia32.const 43
+    0xfb,
+    0x1a,
+    0x03,
+    0x01, // array.init_static $type3 length=1
+    0x0b, // end
+
+    0x0a, // code section
+    0x3d, // section length: 61
+    0x01, // number of functions
+    0x3b, // function 0: size: 59
+    0x00, // number of locals
+    0xfb,
+    0x07,
+    0x01, // struct.new $type1
+    0xfb,
+    0x44,
+    0x01, // ref.test_static $type1
+    0x1a, // drop
+    0xfb,
+    0x08,
+    0x02, // struct.new_default $type2
+    0xfb,
+    0x45,
+    0x02, // ref.cast_static $type2
+    0x1a, // drop
+    0x41,
+    0x2a, // i32.const 42 (value)
+    0x41,
+    0x0a, // i32.const 10 (length)
+    0xfb,
+    0x1b,
+    0x03, // array.new $type3
+    0x41,
+    0x00, // i32.const 0 (dest index for array.copy)
+    0x41,
+    0x0a, // i32.const 10 (length)
+    0xfb,
+    0x1c,
+    0x03, // array.new_default $type3
+    0x41,
+    0x00, // i32.const 0 (source index for array.copy)
+    0x41,
+    0x03, // i32.const 3 (length for array.copy)
+    0xfb,
+    0x18,
+    0x03,
+    0x03, // array.copy $type3 $type3
+    0xfb,
+    0x30,
+    0x01, // rtt.canon $type1
+    0xfb,
+    0x32,
+    0x01, // rtt.fresh_sub $type1
+    0x1a, // drop
+    0x02,
+    0x40, // block <void>
+    0xd0,
+    0x6e, // ref.null any
+    0xfb,
+    0x46,
+    0x00,
+    0x01, // br_on_cast_static 0 $type1
+    0xfb,
+    0x47,
+    0x00,
+    0x02, // br_on_cast_static_fail 0 $type2
+    0x1a, // drop
+    0x0b, // end (block)
+    0x0b, // end (function)
+  ];
+
+  const expectedMilestone4 = [
+    "(module",
+    "  (type $type0 (func_subtype (supertype func)))",
+    "  (type $type1 (struct_subtype (supertype data)))",
+    "  (type $type2 (struct_subtype (field $field0 (mut i32)) (supertype $type1)))",
+    "  (type $type3 (array_subtype (field (mut i32)) (supertype data)))",
+    "  (global $global0 (mut (ref $type3)) (i32.const 42)(rtt.canon $type3)(array.init $type3 1))",
+    "  (global $global1 (ref $type3) (i32.const 43)(array.init_static $type3 1))",
+    "  (func $func0",
+    "    struct.new $type1",
+    "    ref.test_static $type1",
+    "    drop",
+    "    struct.new_default $type2",
+    "    ref.cast_static $type2",
+    "    drop",
+    "    i32.const 42", // value
+    "    i32.const 10", // length
+    "    array.new $type3",
+    "    i32.const 0", // destination index (for array.copy)
+    "    i32.const 10", // length
+    "    array.new_default $type3",
+    "    i32.const 0", // source index (for array.copy)
+    "    i32.const 3", // copy length (for array.copy)
+    "    array.copy $type3 $type3",
+    "    rtt.canon $type1",
+    "    rtt.fresh_sub $type1",
+    "    drop",
+    "    block $label0",
+    "      ref.null any",
+    "      br_on_cast_static $label0 $type1",
+    "      br_on_cast_static_fail $label0 $type2",
+    "      drop",
+    "    end $label0",
+    "  )",
+    ")",
+  ];
+
+  async function runGcTest(moduleBytes, expectedLines) {
+    var data = new Uint8Array(moduleBytes);
 
     var parser = new BinaryReader();
     parser.setData(data.buffer, 0, data.length);
@@ -1606,6 +1776,13 @@ describe("GC proposal support", () => {
     dis.disassembleChunk(parser);
     const result = dis.getResult();
     expect(result.lines).toEqual(expectedLines);
+  }
+
+  test("GC disassembly", async () => {
+    await runGcTest(moduleBytes, expectedLines);
+  });
+  test("GC milestone4", async () => {
+    await runGcTest(moduleMilestone4, expectedMilestone4);
   });
 });
 
