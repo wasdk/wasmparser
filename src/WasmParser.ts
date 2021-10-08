@@ -2371,7 +2371,7 @@ export class BinaryReader {
       this._pos = pos;
       return false;
     }
-    var payloadLength = this.readVarUint32();
+    var payloadLength = this.readVarUint32() >>> 0;
     if (!this.hasBytes(payloadLength)) {
       this._pos = pos;
       return false;
