@@ -726,6 +726,41 @@ describe("NameSectionReader", () => {
     expect(nr.getGlobalName(2, true)).toBe("$42");
     expect(nr.getGlobalName(2, false)).toBe("$42 (;2;)");
   });
+
+  test("Wasm module with negative name subsection length", () => {
+    const data = new Uint8Array([
+      // Wasm header
+      0x00,
+      0x61,
+      0x73,
+      0x6d,
+      0x01,
+      0x00,
+      0x00,
+      0x00,
+      // name section
+      0x00, // id
+      0x0b, // size
+      // 'name'
+      0x04,
+      0x6e,
+      0x61,
+      0x6d,
+      0x65,
+      // Malformed name subsection length
+      0x0f, // unsupported (invalid) id
+      0xfa,
+      0xff,
+      0xff,
+      0xff,
+      0x0f, // negative length (-6)
+    ]);
+    const reader = new BinaryReader();
+    reader.setData(data.buffer, 0, data.byteLength);
+
+    const nsr = new NameSectionReader();
+    expect(nsr.read(reader)).toBe(false);
+  });
 });
 
 describe("WasmDisassembler with export metadata", () => {
