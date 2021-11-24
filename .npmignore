@@ -4,6 +4,7 @@
 /test
 .editorconfig
 .eslint*
+.github/
 .travis.yml
 .vscode/
 jest.config.js
