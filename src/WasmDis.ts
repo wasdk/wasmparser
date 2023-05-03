@@ -1601,9 +1601,8 @@ export class WasmDisassembler {
           break;
         case BinaryReaderState.BEGIN_FUNCTION_BODY:
           var func = <IFunctionInformation>reader.result;
-          var type = this._types[
-            this._funcTypes[this._funcIndex - this._importCount]
-          ];
+          var type =
+            this._types[this._funcTypes[this._funcIndex - this._importCount]];
           this.appendBuffer("  (func ");
           this.appendBuffer(
             this._nameResolver.getFunctionName(this._funcIndex, false, false)
