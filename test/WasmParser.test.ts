@@ -30,14 +30,7 @@ describe("BinaryReader", () => {
   test("can parse empty Wasm module", () => {
     const buffer = new Uint8Array([
       // Wasm header
-      0x00,
-      0x61,
-      0x73,
-      0x6d,
-      0x01,
-      0x00,
-      0x00,
-      0x00,
+      0x00, 0x61, 0x73, 0x6d, 0x01, 0x00, 0x00, 0x00,
     ]);
     const reader = new BinaryReader();
     reader.setData(buffer.buffer, 0, buffer.byteLength);
