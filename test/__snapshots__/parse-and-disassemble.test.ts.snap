@@ -463,19 +463,19 @@ exports[`Parsing and disassembling atomic.1.wasm generates expected output 1`] =
   (func $func1 (param $var0 i32) (param $var1 i32) (result i32)
     local.get $var0
     local.get $var1
-    atomic.notify
+    memory.atomic.notify
   )
   (func $func2 (param $var0 i32) (param $var1 i64) (param $var2 i64) (result i32)
     local.get $var0
     local.get $var1
     local.get $var2
-    i64.atomic.wait
+    memory.atomic.wait64
   )
   (func $func3 (param $var0 i32) (param $var1 i32) (param $var2 i64) (result i32)
     local.get $var0
     local.get $var1
     local.get $var2
-    i32.atomic.wait
+    memory.atomic.wait32
   )
 )
 "
@@ -27382,7 +27382,7 @@ exports[`Parsing and disassembling memory.wast.13.wasm generates expected output
   (memory $memory0 0 0)
   (export "memsize" (func $func0))
   (func $func0 (result i32)
-    current_memory
+    memory.size
   )
   (data (i32.const 0) "")
 )
@@ -27394,7 +27394,7 @@ exports[`Parsing and disassembling memory.wast.14.wasm generates expected output
   (memory $memory0 0 0)
   (export "memsize" (func $func0))
   (func $func0 (result i32)
-    current_memory
+    memory.size
   )
   (data (i32.const 0) "")
 )
@@ -27406,7 +27406,7 @@ exports[`Parsing and disassembling memory.wast.15.wasm generates expected output
   (memory $memory0 1 1)
   (export "memsize" (func $func0))
   (func $func0 (result i32)
-    current_memory
+    memory.size
   )
   (data (i32.const 0) "x")
 )
@@ -27902,7 +27902,7 @@ exports[`Parsing and disassembling memory_trap.wast.0.wasm generates expected ou
   (export "load" (func $func2))
   (export "grow_memory" (func $func3))
   (func $func0 (result i32)
-    current_memory
+    memory.size
     i32.const 65536
     i32.mul
   )
@@ -30951,7 +30951,7 @@ exports[`Parsing and disassembling resizing.wast.0.wasm generates expected outpu
     memory.grow
   )
   (func $func5 (result i32)
-    current_memory
+    memory.size
   )
 )
 "
@@ -50958,7 +50958,7 @@ exports[`Parsing and disassembling threads.0.wasm generates expected output 1`] 
         local.get $var0
         i32.const 1
         i64.const -1
-        i32.atomic.wait
+        memory.atomic.wait32
         drop
         br $label1
       end $label1
@@ -50970,7 +50970,7 @@ exports[`Parsing and disassembling threads.0.wasm generates expected output 1`] 
     i32.atomic.store
     local.get $var0
     i32.const 1
-    atomic.notify
+    memory.atomic.notify
     drop
   )
 )

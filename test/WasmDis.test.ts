@@ -378,9 +378,9 @@ describe("DevToolsNameGenerator", () => {
     const { buffer } = parseWat(
       `test.wat`,
       `(module
-        (event (type 1))
-        (event (type 2))
-        (export "ex" (event 0))
+        (tag (type 1))
+        (tag (type 2))
+        (export "ex" (tag 0))
        )`,
       { exceptions: true }
     ).toBinary({ write_debug_names: true });
@@ -389,10 +389,10 @@ describe("DevToolsNameGenerator", () => {
     const ng = new DevToolsNameGenerator();
     ng.read(reader);
     const nr = ng.getNameResolver();
-    expect(nr.getEventName(0, true)).toBe("$ex");
-    expect(nr.getEventName(0, false)).toBe("$ex (;0;)");
-    expect(nr.getEventName(1, true)).toBe("$event1");
-    expect(nr.getEventName(1, false)).toBe("$event1");
+    expect(nr.getTagName(0, true)).toBe("$ex");
+    expect(nr.getTagName(0, false)).toBe("$ex (;0;)");
+    expect(nr.getTagName(1, true)).toBe("$event1");
+    expect(nr.getTagName(1, false)).toBe("$event1");
   });
 });
 
@@ -1795,9 +1795,9 @@ describe("Exception handling support", () => {
       `(module
         (type (func))
         (type (func (param i32)))
-        (import "m" "ex" (event (type 0)))
-        (event (type 1))
-        (export "ex" (event 0))
+        (import "m" "ex" (tag (type 0)))
+        (tag (type 1))
+        (export "ex" (tag 0))
         (func (param i32) (result i32)
          try (result i32)
           throw 0
@@ -1816,11 +1816,6 @@ describe("Exception handling support", () => {
           delegate 0
          catch 0
          end
-         try
-          throw 0
-         unwind
-          nop
-         end
         )
        )`,
       { exceptions: true }
@@ -1830,9 +1825,9 @@ describe("Exception handling support", () => {
 
     const expectedLines = [
       "(module",
-      '  (event $event0 (import "m" "ex"))',
-      "  (event $event1 (param i32))",
-      '  (export "ex" (event $event0))',
+      '  (tag $event0 (import "m" "ex"))',
+      "  (tag $event1 (param i32))",
+      '  (export "ex" (tag $event0))',
       "  (func $func0 (param $var0 i32) (result i32)",
       "    try $label0 (result i32)",
       "      throw $event0",
@@ -1850,11 +1845,6 @@ describe("Exception handling support", () => {
       "        throw $event0",
       "      delegate $label1",
       "    catch $event0",
-      "    end",
-      "    try",
-      "      throw $event0",
-      "    unwind",
-      "      nop",
       "    end",
       "  )",
       ")",
