@@ -31,6 +31,7 @@ export const enum SectionCode {
   Element = 9, // Elements section
   Code = 10, // Function bodies (code)
   Data = 11, // Data segments
+  DataCount = 12, // Data count section
   Tag = 13, // Tag declarations
 }
 export const enum OperatorCode {
@@ -568,7 +569,7 @@ export const enum OperatorCode {
   f64x2_convert_low_i32x4_s = 0xfdfe,
   f64x2_convert_low_i32x4_u = 0xfdff,
 
-  // GC proposal.
+  // GC proposal (milestone 6).
   struct_new_with_rtt = 0xfb01,
   struct_new_default_with_rtt = 0xfb02,
   struct_get = 0xfb03,
@@ -577,44 +578,63 @@ export const enum OperatorCode {
   struct_set = 0xfb06,
   struct_new = 0xfb07,
   struct_new_default = 0xfb08,
+  array_fill = 0xfb0f,
   array_new_with_rtt = 0xfb11,
   array_new_default_with_rtt = 0xfb12,
   array_get = 0xfb13,
   array_get_s = 0xfb14,
   array_get_u = 0xfb15,
   array_set = 0xfb16,
-  array_len = 0xfb17,
-  array_copy = 0xfb18, // Non-standard experiment in V8.
-  array_init = 0xfb19,
-  array_init_static = 0xfb1a,
+  array_len_ = 0xfb17,
+  array_len = 0xfb19,
+  array_copy = 0xfb18,
+  array_new_fixed = 0xfb1a,
   array_new = 0xfb1b,
   array_new_default = 0xfb1c,
+  array_new_data = 0xfb1d,
+  array_init_from_data = 0xfb1e,
+  array_new_elem = 0xfb1f,
   i31_new = 0xfb20,
   i31_get_s = 0xfb21,
   i31_get_u = 0xfb22,
   rtt_canon = 0xfb30,
   rtt_sub = 0xfb31,
-  rtt_fresh_sub = 0xfb32, // Non-standard experiment in V8.
+  rtt_fresh_sub = 0xfb32,
   ref_test = 0xfb40,
-  ref_test_static = 0xfb44,
   ref_cast = 0xfb41,
-  ref_cast_static = 0xfb45,
-  br_on_cast = 0xfb42,
-  br_on_cast_static = 0xfb46,
-  br_on_cast_fail = 0xfb43,
-  br_on_cast_static_fail = 0xfb47,
-  ref_is_func = 0xfb50,
-  ref_is_data = 0xfb51,
-  ref_is_i31 = 0xfb52,
-  ref_as_func = 0xfb58,
-  ref_as_data = 0xfb59,
-  ref_as_i31 = 0xfb5a,
-  br_on_func = 0xfb60,
-  br_on_data = 0xfb61,
-  br_on_i31 = 0xfb62,
-  br_on_non_func = 0xfb63,
-  br_on_non_data = 0xfb64,
-  br_on_non_i31 = 0xfb65,
+  br_on_cast_ = 0xfb42,
+  br_on_cast_fail_ = 0xfb43,
+  ref_test_ = 0xfb44,
+  ref_cast_ = 0xfb45,
+  br_on_cast__ = 0xfb46,
+  br_on_cast_fail__ = 0xfb47,
+  ref_test_null = 0xfb48,
+  ref_cast_null = 0xfb49,
+  br_on_cast_null_ = 0xfb4a,
+  br_on_cast_fail_null_ = 0xfb4b,
+  ref_cast_nop = 0xfb4c,
+  br_on_cast = 0xfb4e,
+  br_on_cast_fail = 0xfb4f,
+  ref_is_func_ = 0xfb50,
+  ref_is_data_ = 0xfb51,
+  ref_is_i31_ = 0xfb52,
+  ref_is_array_ = 0xfb53,
+  array_init_data = 0xfb54,
+  array_init_elem = 0xfb55,
+  ref_as_func_ = 0xfb58,
+  ref_as_data_ = 0xfb59,
+  ref_as_i31_ = 0xfb5a,
+  ref_as_array_ = 0xfb5b,
+  br_on_func_ = 0xfb60,
+  br_on_data_ = 0xfb61,
+  br_on_i31_ = 0xfb62,
+  br_on_non_func_ = 0xfb63,
+  br_on_non_data_ = 0xfb64,
+  br_on_non_i31_ = 0xfb65,
+  br_on_array_ = 0xfb66,
+  br_on_non_array_ = 0xfb67,
+  extern_internalize = 0xfb70,
+  extern_externalize = 0xfb71,
 }
 
 export const OperatorCodeNames = [
@@ -1252,18 +1272,22 @@ OperatorCodeNames[0xfb05] = "struct.get_u";
 OperatorCodeNames[0xfb06] = "struct.set";
 OperatorCodeNames[0xfb07] = "struct.new";
 OperatorCodeNames[0xfb08] = "struct.new_default";
+OperatorCodeNames[0xfb0f] = "array.fill";
 OperatorCodeNames[0xfb11] = "array.new_with_rtt";
 OperatorCodeNames[0xfb12] = "array.new_default_with_rtt";
 OperatorCodeNames[0xfb13] = "array.get";
 OperatorCodeNames[0xfb14] = "array.get_s";
 OperatorCodeNames[0xfb15] = "array.get_u";
 OperatorCodeNames[0xfb16] = "array.set";
-OperatorCodeNames[0xfb17] = "array.len";
+OperatorCodeNames[0xfb17] = "array.len"; // TODO remove
 OperatorCodeNames[0xfb18] = "array.copy";
-OperatorCodeNames[0xfb19] = "array.init";
-OperatorCodeNames[0xfb1a] = "array.init_static";
+OperatorCodeNames[0xfb19] = "array.len";
+OperatorCodeNames[0xfb1a] = "array.new_fixed";
 OperatorCodeNames[0xfb1b] = "array.new";
 OperatorCodeNames[0xfb1c] = "array.new_default";
+OperatorCodeNames[0xfb1d] = "array.new_data";
+OperatorCodeNames[0xfb1e] = "array.init_from_data";
+OperatorCodeNames[0xfb1f] = "array.new_elem";
 OperatorCodeNames[0xfb20] = "i31.new";
 OperatorCodeNames[0xfb21] = "i31.get_s";
 OperatorCodeNames[0xfb22] = "i31.get_u";
@@ -1278,18 +1302,33 @@ OperatorCodeNames[0xfb44] = "ref.test_static";
 OperatorCodeNames[0xfb45] = "ref.cast_static";
 OperatorCodeNames[0xfb46] = "br_on_cast_static";
 OperatorCodeNames[0xfb47] = "br_on_cast_static_fail";
+OperatorCodeNames[0xfb48] = "ref.test_null";
+OperatorCodeNames[0xfb49] = "ref.cast_null";
+OperatorCodeNames[0xfb4a] = "br_on_cast_null";
+OperatorCodeNames[0xfb4b] = "br_on_cast_fail_null";
+OperatorCodeNames[0xfb4c] = "ref.cast_nop";
+OperatorCodeNames[0xfb4e] = "br_on_cast";
+OperatorCodeNames[0xfb4f] = "br_on_cast_fail";
 OperatorCodeNames[0xfb50] = "ref.is_func";
 OperatorCodeNames[0xfb51] = "ref.is_data";
 OperatorCodeNames[0xfb52] = "ref.is_i31";
+OperatorCodeNames[0xfb53] = "ref.is_array";
+OperatorCodeNames[0xfb54] = "array.init_data";
+OperatorCodeNames[0xfb55] = "array.init_elem";
 OperatorCodeNames[0xfb58] = "ref.as_func";
 OperatorCodeNames[0xfb59] = "ref.as_data";
 OperatorCodeNames[0xfb5a] = "ref.as_i31";
+OperatorCodeNames[0xfb5b] = "ref.as_array";
 OperatorCodeNames[0xfb60] = "br_on_func";
 OperatorCodeNames[0xfb61] = "br_on_data";
 OperatorCodeNames[0xfb62] = "br_on_i31";
 OperatorCodeNames[0xfb63] = "br_on_non_func";
 OperatorCodeNames[0xfb64] = "br_on_non_data";
 OperatorCodeNames[0xfb65] = "br_on_non_i31";
+OperatorCodeNames[0xfb66] = "br_on_array";
+OperatorCodeNames[0xfb67] = "br_on_non_array";
+OperatorCodeNames[0xfb70] = "extern.internalize";
+OperatorCodeNames[0xfb71] = "extern.externalize";
 
 export const enum ExternalKind {
   Function = 0,
@@ -1311,50 +1350,62 @@ export const enum TypeKind {
   externref = -0x11,
   anyref = -0x12,
   eqref = -0x13,
-  optref = -0x14,
+  ref_null = -0x14,
   ref = -0x15,
   i31ref = -0x16,
-  rtt_d = -0x17, // RTT with depth.
-  rtt = -0x18,
-  dataref = -0x19,
+  nullexternref = -0x17,
+  nullfuncref = -0x18,
+  structref = -0x19,
+  arrayref = -0x1a,
+  nullref = -0x1b,
   func = -0x20,
   struct = -0x21,
   array = -0x22,
-  func_subtype = -0x23,
-  struct_subtype = -0x24,
-  array_subtype = -0x25,
+  subtype = -0x30,
+  rec_group = -0x31,
+  subtype_final = -0x32,
   empty_block_type = -0x40,
 }
+export class FieldDef {
+  ty: Type;
+  mutable: boolean;
+}
+export class FuncDef {
+  params: Type[];
+  results: Type[];
+}
 export class Type {
-  kind: TypeKind; // Always present.
-  index: number; // Only for reference types: ref, optref, rtt, rtt_d.
-  depth: number; // Only for RTTs with depth.
-  constructor(kind: TypeKind, index = -1, depth = -1) {
-    if (kind < 0 || (kind === 0 && index >= 0)) {
-      // all good
-    } else {
-      throw new Error(`invalid type: ${kind}/${index}/${depth}`);
-    }
-    this.kind = kind;
-    this.index = index;
-    this.depth = depth;
-    // Canonicalize (ref any) to (anyref) etc.
-    if (
-      (index === TypeKind.funcref && kind === TypeKind.optref) ||
-      (index === TypeKind.externref && kind === TypeKind.optref) ||
-      (index === TypeKind.anyref && kind === TypeKind.optref) ||
-      (index === TypeKind.eqref && kind === TypeKind.optref) ||
-      (index === TypeKind.i31ref && kind === TypeKind.ref) ||
-      (index === TypeKind.dataref && kind === TypeKind.ref)
-    ) {
-      this.kind = index;
-      this.index = -1;
-    }
+  code: number;
+  constructor(code: number) {
+    this.code = code;
+  }
+  public get isIndex(): boolean {
+    return this.code >= 0;
+  }
+  public get kind(): TypeKind {
+    return this.code >= 0 ? TypeKind.unspecified : this.code;
+  }
+  public get index(): number {
+    return this.code < 0 ? -1 : this.code;
   }
   // Convenience singletons.
   static funcref: Type = new Type(TypeKind.funcref);
   static externref: Type = new Type(TypeKind.externref);
 }
+export class RefType extends Type {
+  public ref_index: number;
+  constructor(kind: TypeKind, ref_index: number) {
+    if (kind != TypeKind.ref && kind !== TypeKind.ref_null) {
+      throw new Error(`Unexpected type kind: ${kind}}`);
+    }
+    super(kind);
+    this.ref_index = ref_index;
+  }
+  public get isNullable(): boolean {
+    return this.kind == TypeKind.ref_null;
+  }
+}
+
 export const enum RelocType {
   FunctionIndex_LEB = 0,
   TableIndex_SLEB = 1,
@@ -1372,10 +1423,13 @@ export const enum NameType {
   Module = 0,
   Function = 1,
   Local = 2,
+  Label = 3,
   Type = 4,
   Table = 5,
   Memory = 6,
   Global = 7,
+  Elem = 8,
+  Data = 9,
   Field = 10,
   Tag = 11,
 }
@@ -1433,6 +1487,11 @@ export const enum BinaryReaderState {
   BEGIN_OFFSET_EXPRESSION_BODY = 44,
   OFFSET_EXPRESSION_OPERATOR = 45,
   END_OFFSET_EXPRESSION_BODY = 46,
+
+  BEGIN_REC_GROUP = 47,
+  END_REC_GROUP = 48,
+
+  DATA_COUNT_SECTION_ENTRY = 49,
 }
 
 const enum DataSegmentType {
@@ -1640,7 +1699,8 @@ export interface ITypeEntry {
   mutabilities?: boolean[]; // For struct types.
   elementType?: Type; // For array types.
   mutability?: boolean; // For array types.
-  supertype?: number; // For *_subtype types.
+  supertypes?: number[]; // For subtype types.
+  final?: boolean; // For subtype types.
 }
 export interface ISectionInformation {
   id: SectionCode;
@@ -1677,6 +1737,7 @@ export interface IOperatorInformation {
   destinationIndex?: number;
   memoryAddress?: IMemoryAddress;
   literal?: number | Int64 | Uint8Array;
+  len?: number;
   lines: Uint8Array;
   lineIndex: number;
 }
@@ -1774,7 +1835,8 @@ export type BinaryReaderResult =
   | ISourceMappingURL
   | IModuleNameEntry
   | IStartEntry
-  | Uint8Array;
+  | Uint8Array
+  | number;
 export class BinaryReader {
   private _data: Uint8Array = null;
   private _pos = 0;
@@ -1789,6 +1851,7 @@ export class BinaryReader {
   private _functionRange: DataRange = null;
   private _segmentType: DataSegmentType | ElementSegmentType = 0;
   private _segmentEntriesLeft = 0;
+  private _recGroupTypesLeft = 0;
   public get data(): Uint8Array {
     return this._data;
   }
@@ -1905,49 +1968,53 @@ export class BinaryReader {
   // Reads any "s33" (signed 33-bit integer) value correctly; no guarantees
   // outside that range.
   private readHeapType(): number {
-    var result = 0;
-    var shift = 0;
-    var byte: number;
-    while (true) {
-      byte = this.readUint8();
-      if (shift === 28) {
-        var signed = (byte << 25) >> 25;
-        return signed * Math.pow(2, 28) + result;
-      }
-      result |= (byte & 0x7f) << shift;
-      shift += 7;
-      if ((byte & 0x80) === 0) break;
+    const lsb = this.readUint8();
+    if (lsb & 0x80) {
+      // Has more data than one byte.
+      const tail = this.readVarInt32();
+      return (tail - 1) * 128 + lsb;
+    } else {
+      return (lsb << 25) >> 25;
     }
-    shift = 32 - shift;
-    return (result << shift) >> shift;
-  }
-  private readTypeInternal(kind: TypeKind): Type {
-    if (
-      kind === TypeKind.ref ||
-      kind === TypeKind.optref ||
-      kind === TypeKind.rtt
-    ) {
-      var index = this.readHeapType();
-      return new Type(kind, index);
-    }
-    if (kind === TypeKind.rtt_d) {
-      var index = this.readHeapType();
-      var depth = this.readVarUint32();
-      return new Type(kind, index, depth);
-    }
-    return new Type(kind);
   }
   private readType(): Type {
-    var kind = this.readVarInt7();
-    return this.readTypeInternal(kind);
-  }
-  private readBlockType(): Type {
-    var block_type = this.readHeapType();
-    if (block_type < 0) {
-      return this.readTypeInternal(block_type);
+    var kind = this.readHeapType();
+    if (kind >= 0) {
+      return new Type(kind);
     }
-    var func_index = block_type;
-    return new Type(TypeKind.unspecified, func_index);
+    switch (kind) {
+      case TypeKind.ref_null:
+      case TypeKind.ref:
+        var index = this.readHeapType();
+        return new RefType(kind, index);
+      case TypeKind.i32:
+      case TypeKind.i64:
+      case TypeKind.f32:
+      case TypeKind.f64:
+      case TypeKind.v128:
+      case TypeKind.i8:
+      case TypeKind.i16:
+      case TypeKind.funcref:
+      case TypeKind.externref:
+      case TypeKind.anyref:
+      case TypeKind.eqref:
+      case TypeKind.i31ref:
+      case TypeKind.nullexternref:
+      case TypeKind.nullfuncref:
+      case TypeKind.structref:
+      case TypeKind.arrayref:
+      case TypeKind.nullref:
+      case TypeKind.func:
+      case TypeKind.struct:
+      case TypeKind.array:
+      case TypeKind.subtype:
+      case TypeKind.rec_group:
+      case TypeKind.subtype_final:
+      case TypeKind.empty_block_type:
+        return new Type(kind);
+      default:
+        throw new Error(`Unknown type kind: ${kind}`);
+    }
   }
   private readStringBytes(): Uint8Array {
     var length = this.readVarUint32();
@@ -1976,7 +2043,7 @@ export class BinaryReader {
     var paramCount = this.readVarUint32();
     var paramTypes = new Array(paramCount);
     for (var i = 0; i < paramCount; i++) paramTypes[i] = this.readType();
-    var returnCount = this.readVarUint1();
+    var returnCount = this.readVarUint32();
     var returnTypes = new Array(returnCount);
     for (var i = 0; i < returnCount; i++) returnTypes[i] = this.readType();
     return {
@@ -1985,10 +2052,28 @@ export class BinaryReader {
       returns: returnTypes,
     };
   }
-  private readFuncSubtype(): ITypeEntry {
-    var result = this.readFuncType();
-    result.form = TypeKind.func_subtype;
-    result.supertype = this.readHeapType();
+  private readBaseType(): ITypeEntry {
+    var form = this.readVarInt7();
+    switch (form) {
+      case TypeKind.func:
+        return this.readFuncType();
+      case TypeKind.struct:
+        return this.readStructType();
+      case TypeKind.array:
+        return this.readArrayType();
+      default:
+        throw new Error(`Unknown type kind: ${form}`);
+    }
+  }
+  private readSubtype(final: boolean): ITypeEntry {
+    var supertypesCount = this.readVarUint32();
+    var supertypes = new Array(supertypesCount);
+    for (var i = 0; i < supertypesCount; i++) {
+      supertypes[i] = this.readHeapType();
+    }
+    var result = this.readBaseType();
+    result.supertypes = supertypes;
+    result.final = final;
     return result;
   }
   private readStructType(): ITypeEntry {
@@ -2005,12 +2090,6 @@ export class BinaryReader {
       mutabilities: fieldMutabilities,
     };
   }
-  private readStructSubtype(): ITypeEntry {
-    var result = this.readStructType();
-    result.form = TypeKind.struct_subtype;
-    result.supertype = this.readHeapType();
-    return result;
-  }
   private readArrayType(): ITypeEntry {
     var elementType = this.readType();
     var mutability = !!this.readVarUint1();
@@ -2019,12 +2098,6 @@ export class BinaryReader {
       elementType: elementType,
       mutability: mutability,
     };
-  }
-  private readArraySubtype(): ITypeEntry {
-    var result = this.readArrayType();
-    result.form = TypeKind.array_subtype;
-    result.supertype = this.readHeapType();
-    return result;
   }
   private readResizableLimits(maxPresent: boolean): IResizableLimits {
     var initial = this.readVarUint32();
@@ -2069,36 +2142,71 @@ export class BinaryReader {
       typeIndex: typeIndex,
     };
   }
+  private readTypeEntryCommon(form) {
+    switch (form) {
+      case TypeKind.func:
+        this.result = this.readFuncType();
+        break;
+      case TypeKind.subtype:
+        this.result = this.readSubtype(false);
+        break;
+      case TypeKind.subtype_final:
+        this.result = this.readSubtype(true);
+        break;
+      case TypeKind.struct:
+        this.result = this.readStructType();
+        break;
+      case TypeKind.array:
+        this.result = this.readArrayType();
+        break;
+      case TypeKind.i32:
+      case TypeKind.i64:
+      case TypeKind.f32:
+      case TypeKind.f64:
+      case TypeKind.v128:
+      case TypeKind.i8:
+      case TypeKind.i16:
+      case TypeKind.funcref:
+      case TypeKind.externref:
+      case TypeKind.anyref:
+      case TypeKind.eqref:
+        this.result = {
+          form,
+        };
+        break;
+      default:
+        throw new Error(`Unknown type kind: ${form}`);
+    }
+  }
   private readTypeEntry() {
     if (this._sectionEntriesLeft === 0) {
       this.skipSection();
       return this.read();
     }
+    var form = this.readVarInt7();
+    if (form == TypeKind.rec_group) {
+      this.state = BinaryReaderState.BEGIN_REC_GROUP;
+      this.result = null;
+      this._recGroupTypesLeft = this.readVarUint32();
+    } else {
+      this.state = BinaryReaderState.TYPE_SECTION_ENTRY;
+      this.readTypeEntryCommon(form);
+      this._sectionEntriesLeft--;
+    }
+    return true;
+  }
+  private readRecGroupEntry() {
+    if (this._recGroupTypesLeft === 0) {
+      this.state = BinaryReaderState.END_REC_GROUP;
+      this.result = null;
+      this._sectionEntriesLeft--;
+      this._recGroupTypesLeft = -1;
+      return true;
+    }
     this.state = BinaryReaderState.TYPE_SECTION_ENTRY;
     var form = this.readVarInt7();
-    switch (form) {
-      case TypeKind.func:
-        this.result = this.readFuncType();
-        break;
-      case TypeKind.func_subtype:
-        this.result = this.readFuncSubtype();
-        break;
-      case TypeKind.struct:
-        this.result = this.readStructType();
-        break;
-      case TypeKind.struct_subtype:
-        this.result = this.readStructSubtype();
-        break;
-      case TypeKind.array:
-        this.result = this.readArrayType();
-        break;
-      case TypeKind.array_subtype:
-        this.result = this.readArraySubtype();
-        break;
-      default:
-        throw new Error(`Unknown type kind: ${form}`);
-    }
-    this._sectionEntriesLeft--;
+    this.readTypeEntryCommon(form);
+    this._recGroupTypesLeft--;
     return true;
   }
   private readImportEntry() {
@@ -2321,6 +2429,16 @@ export class BinaryReader {
     this.result = { mode, memoryIndex };
     this._sectionEntriesLeft--;
     this._segmentType = segmentType;
+    return true;
+  }
+  private readDataCountEntry(): boolean {
+    if (this._sectionEntriesLeft === 0) {
+      this.skipSection();
+      return this.read();
+    }
+    this.state = BinaryReaderState.DATA_COUNT_SECTION_ENTRY;
+    this.result = this.readVarUint32();
+    this._sectionEntriesLeft--;
     return true;
   }
   private readDataEntryBody(): boolean {
@@ -2557,29 +2675,31 @@ export class BinaryReader {
     if (!this._eof && !this.hasBytes(MAX_CODE_OPERATOR_0XFB_SIZE)) {
       return false;
     }
-    var code, brDepth, refType, srcType, fieldIndex;
+    var code, brDepth, refType, srcType, fieldIndex, segmentIndex, len, literal;
 
     code = this._data[this._pos++] | 0xfb00;
     switch (code) {
       case OperatorCode.br_on_cast:
       case OperatorCode.br_on_cast_fail:
-      case OperatorCode.br_on_func:
-      case OperatorCode.br_on_non_func:
-      case OperatorCode.br_on_data:
-      case OperatorCode.br_on_non_data:
-      case OperatorCode.br_on_i31:
-      case OperatorCode.br_on_non_i31:
+        literal = this.readUint8();
         brDepth = this.readVarUint32();
+        srcType = this.readHeapType();
+        refType = this.readHeapType();
         break;
-      case OperatorCode.br_on_cast_static:
-      case OperatorCode.br_on_cast_static_fail:
+      case OperatorCode.br_on_cast_:
+      case OperatorCode.br_on_cast_fail_:
         brDepth = this.readVarUint32();
         refType = this.readHeapType();
+        break;
+      case OperatorCode.br_on_cast__:
+      case OperatorCode.br_on_cast_fail__:
+        brDepth = this.readVarUint32();
+        refType = this.readVarUint32();
         break;
       case OperatorCode.array_get:
       case OperatorCode.array_get_s:
       case OperatorCode.array_get_u:
-      case OperatorCode.array_len:
+      case OperatorCode.array_len_:
       case OperatorCode.array_set:
       case OperatorCode.array_new:
       case OperatorCode.array_new_with_rtt:
@@ -2592,36 +2712,43 @@ export class BinaryReader {
       case OperatorCode.rtt_canon:
       case OperatorCode.rtt_sub:
       case OperatorCode.rtt_fresh_sub:
-      case OperatorCode.ref_test_static:
-      case OperatorCode.ref_cast_static:
-        refType = this.readHeapType();
+        refType = this.readVarUint32();
+        break;
+      case OperatorCode.array_new_fixed:
+        refType = this.readVarUint32();
+        len = this.readVarUint32();
         break;
       case OperatorCode.array_copy:
-        refType = this.readHeapType();
-        srcType = this.readHeapType();
+        refType = this.readVarUint32();
+        srcType = this.readVarUint32();
         break;
       case OperatorCode.struct_get:
       case OperatorCode.struct_get_s:
       case OperatorCode.struct_get_u:
       case OperatorCode.struct_set:
-        refType = this.readHeapType();
+        refType = this.readVarUint32();
         fieldIndex = this.readVarUint32();
         break;
-      case OperatorCode.array_init:
-      case OperatorCode.array_init_static:
-        refType = this.readHeapType();
-        // This really is the "length" value. Overload "brDepth" to keep the
-        // IOperatorInformation interface a little leaner.
-        brDepth = this.readVarUint32();
+      case OperatorCode.array_new_data:
+      case OperatorCode.array_new_elem:
+      case OperatorCode.array_init_data:
+      case OperatorCode.array_init_elem:
+        refType = this.readVarUint32();
+        segmentIndex = this.readVarUint32();
         break;
-      case OperatorCode.ref_is_func:
-      case OperatorCode.ref_is_data:
-      case OperatorCode.ref_is_i31:
-      case OperatorCode.ref_as_func:
-      case OperatorCode.ref_as_data:
-      case OperatorCode.ref_as_i31:
       case OperatorCode.ref_test:
+      case OperatorCode.ref_test_null:
       case OperatorCode.ref_cast:
+      case OperatorCode.ref_cast_null:
+        refType = this.readHeapType();
+        break;
+      case OperatorCode.ref_test_:
+      case OperatorCode.ref_cast_:
+        refType = this.readVarUint32();
+        break;
+      case OperatorCode.array_len:
+      case OperatorCode.extern_externalize:
+      case OperatorCode.extern_internalize:
       case OperatorCode.i31_new:
       case OperatorCode.i31_get_s:
       case OperatorCode.i31_get_u:
@@ -2647,9 +2774,10 @@ export class BinaryReader {
       globalIndex: undefined,
       fieldIndex,
       memoryAddress: undefined,
-      literal: undefined,
-      segmentIndex: undefined,
+      literal,
+      segmentIndex,
       destinationIndex: undefined,
+      len,
       lines: undefined,
       lineIndex: undefined,
     };
@@ -2726,6 +2854,7 @@ export class BinaryReader {
       literal: undefined,
       segmentIndex: segmentIndex,
       destinationIndex: destinationIndex,
+      len: undefined,
       lines: undefined,
       lineIndex: undefined,
     };
@@ -3012,6 +3141,7 @@ export class BinaryReader {
       literal: literal,
       segmentIndex: undefined,
       destinationIndex: undefined,
+      len: undefined,
       lines: lines,
       lineIndex: lineIndex,
     };
@@ -3131,6 +3261,7 @@ export class BinaryReader {
       literal: undefined,
       segmentIndex: undefined,
       destinationIndex: undefined,
+      len: undefined,
       lines: undefined,
       lineIndex: undefined,
     };
@@ -3211,7 +3342,7 @@ export class BinaryReader {
         case OperatorCode.loop:
         case OperatorCode.if:
         case OperatorCode.try:
-          blockType = this.readBlockType();
+          blockType = this.readType();
           break;
         case OperatorCode.br:
         case OperatorCode.br_if:
@@ -3269,6 +3400,10 @@ export class BinaryReader {
         case OperatorCode.table_get:
         case OperatorCode.table_set:
           tableIndex = this.readVarUint32();
+          break;
+        case OperatorCode.call_ref:
+        case OperatorCode.return_call_ref:
+          typeIndex = this.readHeapType();
           break;
         case OperatorCode.i32_load:
         case OperatorCode.i64_load:
@@ -3487,8 +3622,6 @@ export class BinaryReader {
         case OperatorCode.i64_extend8_s:
         case OperatorCode.i64_extend16_s:
         case OperatorCode.i64_extend32_s:
-        case OperatorCode.call_ref:
-        case OperatorCode.return_call_ref:
         case OperatorCode.ref_is_null:
         case OperatorCode.ref_as_non_null:
         case OperatorCode.ref_eq:
@@ -3519,6 +3652,7 @@ export class BinaryReader {
       literal,
       segmentIndex: undefined,
       destinationIndex: undefined,
+      len: undefined,
       lines: undefined,
       lineIndex: undefined,
     };
@@ -3625,6 +3759,7 @@ export class BinaryReader {
       case SectionCode.Type:
         if (!this.hasSectionPayload()) return false;
         this._sectionEntriesLeft = this.readVarUint32();
+        this._recGroupTypesLeft = -1;
         return this.readTypeEntry();
       case SectionCode.Import:
         if (!this.hasSectionPayload()) return false;
@@ -3668,6 +3803,10 @@ export class BinaryReader {
         if (!this.hasVarIntBytes()) return false;
         this._sectionEntriesLeft = this.readVarUint32();
         return this.readDataEntry();
+      case SectionCode.DataCount:
+        if (!this.hasVarIntBytes()) return false;
+        this._sectionEntriesLeft = this.readVarUint32();
+        return this.readDataCountEntry();
       case SectionCode.Tag:
         if (!this.hasVarIntBytes()) return false;
         this._sectionEntriesLeft = this.readVarUint32();
@@ -3749,6 +3888,13 @@ export class BinaryReader {
         this.result = null;
         return true;
       case BinaryReaderState.TYPE_SECTION_ENTRY:
+        if (this._recGroupTypesLeft >= 0) {
+          return this.readRecGroupEntry();
+        }
+        return this.readTypeEntry();
+      case BinaryReaderState.BEGIN_REC_GROUP:
+        return this.readRecGroupEntry();
+      case BinaryReaderState.END_REC_GROUP:
         return this.readTypeEntry();
       case BinaryReaderState.IMPORT_SECTION_ENTRY:
         return this.readImportEntry();
@@ -3786,6 +3932,8 @@ export class BinaryReader {
           return true;
         }
         return this.readInitExpressionBody();
+      case BinaryReaderState.DATA_COUNT_SECTION_ENTRY:
+        return this.readDataCountEntry();
       case BinaryReaderState.DATA_SECTION_ENTRY:
       case BinaryReaderState.END_DATA_SECTION_ENTRY:
         return this.readDataEntry();

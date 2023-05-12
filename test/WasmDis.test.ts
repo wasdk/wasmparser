@@ -1014,7 +1014,9 @@ describe("GC proposal support", () => {
     0, // wasm magic
 
     0x01, // type section
-    0x2c, // section length: 41
+    0x2e, // section length: 46
+    0x01, // number of type entries
+    0x4f, // rec group
     0x08, // number of types
     // type  0:
     0x5f, // struct
@@ -1080,11 +1082,11 @@ describe("GC proposal support", () => {
 
     /////////////////////////// CODE SECTION //////////////////////////
     0x0a, // code section
-    0x85,
-    0x02, // section length
+    0xf2,
+    0x01, // section length
     0x06, // number of functions
 
-    0x53, // function 0: size
+    0x55, // function 0: size
     0x02, // number of locals
     0x01,
     0x6c,
@@ -1120,6 +1122,7 @@ describe("GC proposal support", () => {
     0x00, // rtt.canon 0
     0xfb,
     0x41, // ref.cast
+    0x00,
     0xfb,
     0x03,
     0x00,
@@ -1167,7 +1170,8 @@ describe("GC proposal support", () => {
     0x30,
     0x00, // rtt.canon 0
     0xfb,
-    0x40, // ref.test
+    0x40,
+    0x00, // ref.test
     0x1a, // drop
     0x0b, // end
 
@@ -1186,7 +1190,7 @@ describe("GC proposal support", () => {
     0x1a, // drop
     0x0b, // end
 
-    0x0f, // function 2: size
+    0x11, // function 2: size
     0x01, // number of locals
     0x01,
     0x6c,
@@ -1198,12 +1202,14 @@ describe("GC proposal support", () => {
     0x20,
     0x00, // local.get 0
     0x14, // call_ref
+    0x07,
     0x20,
     0x00, // local.get 0
     0x15, // return_call_ref
+    0x07,
     0x0b, // end
 
-    0x39, // function 3: size
+    0x22, // function 3: size
     0x00, // number of locals
     0x02,
     0x40, // block <void>
@@ -1218,47 +1224,27 @@ describe("GC proposal support", () => {
     0x00, // rtt.canon 0
     0xfb,
     0x42,
+    0x00,
     0x00, // br_on_cast 0
     0xfb,
     0x43,
+    0x00,
     0x00, // br_on_cast_fail 0
-    0xfb,
-    0x60,
-    0x00, // br_on_func 0
-    0xfb,
-    0x63,
-    0x00, // br_on_non_func 0
-    0xfb,
-    0x61,
-    0x00, // br_on_data 0
-    0xfb,
-    0x64,
-    0x00, // br_on_non_data 0
-    0xfb,
-    0x62,
-    0x00, // br_on_i31 0
-    0xfb,
-    0x65,
-    0x00, // br_on_non_i31 0
-    0xfb,
-    0x58, // ref.as_func
-    0xfb,
-    0x59, // ref.as_data
-    0xfb,
-    0x5a, // ref.as_i31
-    0xfb,
-    0x50, // ref.is_func
-    0x1a, // drop
+
     0xd0,
     0x6e, // ref.null any
     0xfb,
-    0x51, // ref.is_data
+    0x40,
+    0x00, // ref.test $structA
     0x1a, // drop
+
     0xd0,
     0x6e, // ref.null any
     0xfb,
-    0x52, // ref.is_i31
+    0x41,
+    0x00, // ref.cast $structA
     0x1a, // drop
+
     0x0b, // end (block)
     0x0b, // end
 
@@ -1457,14 +1443,16 @@ describe("GC proposal support", () => {
 
   const expectedLines = [
     "(module",
-    "  (type $structA (;0;) (struct (field $foo (;0;) (mut i32)) (field $bar (;1;) i64)))",
-    "  (type $structB (;1;) (struct (field $baz (;0;) (mut i8)) (field $qux (;1;) i16)))",
-    "  (type $structC (;2;) (struct (field $field0 (mut f32)) (field $field1 f64)))",
-    "  (type $structD (;3;) (struct (field $field0 (mut (ref null $structA))) (field $field1 i31ref)))",
-    "  (type $structE (;4;) (struct (field $field0 (ref $structB)) (field $field1 eqref) (field $field2 dataref)))",
-    "  (type $arrayA (;5;) (array (field (mut i32)))",
-    "  (type $arrayB (;6;) (array (field (mut i8)))",
-    "  (type $type7 (func))",
+    "  (rec",
+    "    (type $structA (;0;) (struct (field $foo (;0;) (mut i32)) (field $bar (;1;) i64)))",
+    "    (type $structB (;1;) (struct (field $baz (;0;) (mut i8)) (field $qux (;1;) i16)))",
+    "    (type $structC (;2;) (struct (field $field0 (mut f32)) (field $field1 f64)))",
+    "    (type $structD (;3;) (struct (field $field0 (mut (ref null $structA))) (field $field1 i31ref)))",
+    "    (type $structE (;4;) (struct (field $field0 (ref $structB)) (field $field1 eqref) (field $field2 structref)))",
+    "    (type $arrayA (;5;) (array (field (mut i32)))",
+    "    (type $arrayB (;6;) (array (field (mut i8)))",
+    "    (type $type7 (func))",
+    "  )",
     "  (func $unknown0",
     "    (local $var0 (ref null $structA)) (local $var1 (ref null $structB))",
     "    i32.const 42",
@@ -1478,7 +1466,7 @@ describe("GC proposal support", () => {
     "    struct.set $structA $foo",
     "    local.get $var0",
     "    rtt.canon $structA",
-    "    ref.cast",
+    "    ref.cast $structA",
     "    struct.get $structA $bar",
     "    drop",
     // ---
@@ -1500,7 +1488,7 @@ describe("GC proposal support", () => {
     "    drop",
     "    ref.null eq",
     "    rtt.canon $structA",
-    "    ref.test",
+    "    ref.test $structA",
     "    drop",
     "  )",
     "  (func $unknown1",
@@ -1512,7 +1500,7 @@ describe("GC proposal support", () => {
     "    drop",
     "  )",
     "  (func $unknown2",
-    "    (local $var0 funcref)",
+    "    (local $var0 (ref null func))",
     "    ref.func $unknown1",
     "    local.set $var0",
     "    local.get $var0",
@@ -1526,24 +1514,13 @@ describe("GC proposal support", () => {
     "      br_on_null $label0",
     "      br_on_non_null $label0",
     "      rtt.canon $structA",
-    "      br_on_cast $label0",
-    "      br_on_cast_fail $label0",
-    "      br_on_func $label0",
-    "      br_on_non_func $label0",
-    "      br_on_data $label0",
-    "      br_on_non_data $label0",
-    "      br_on_i31 $label0",
-    "      br_on_non_i31 $label0",
-    "      ref.as_func",
-    "      ref.as_data",
-    "      ref.as_i31",
-    "      ref.is_func",
+    "      br_on_cast $structA $label0",
+    "      br_on_cast_fail $structA $label0",
+    "      ref.null any",
+    "      ref.test $structA",
     "      drop",
     "      ref.null any",
-    "      ref.is_data",
-    "      drop",
-    "      ref.null any",
-    "      ref.is_i31",
+    "      ref.cast $structA",
     "      drop",
     "    end $label0",
     "  )",
@@ -1588,176 +1565,6 @@ describe("GC proposal support", () => {
     ")",
   ];
 
-  const moduleMilestone4 = [
-    0x00,
-    0x61,
-    0x73,
-    0x6d,
-    1,
-    0,
-    0,
-    0, // wasm magic
-
-    0x01, // type section
-    0x11, // section length: 17
-    0x04, // number of types
-    // type 0:
-    0x5d, // func_subtype
-    0x00, // param count
-    0x00, // result count
-    0x70, // supertype: func
-    // type 1:
-    0x5c, // struct_subtype
-    0x00, // field count
-    0x67, // supertype: data
-    // type 2:
-    0x5c, // struct_subtype
-    0x01, // field count
-    0x7f,
-    0x01, // mut i32
-    0x01, // supertype: type1
-    // type 3:
-    0x5b, // array_subtype
-    0x7f,
-    0x01, // mut i32
-    0x67, // supertype: data
-
-    0x03, // function section
-    0x02, // section length: 2
-    0x01, // number of functions
-    0x00, // function 0: signature 0
-
-    0x06, // globals section
-    0x18, // section length: 24
-    0x02, // globals count
-    // global #0
-    0x6b,
-    0x03, // type: ref $type3
-    0x01, // mutable
-    0x41,
-    0x2a, // ia32.const 42
-    0xfb,
-    0x30,
-    0x03, // rtt.canon $type3
-    0xfb,
-    0x19,
-    0x03,
-    0x01, // array.init $type3 length=1
-    0x0b, // end
-    // global #1
-    0x6b,
-    0x03, // type: ref $type3
-    0x00, // immutable
-    0x41,
-    0x2b, // ia32.const 43
-    0xfb,
-    0x1a,
-    0x03,
-    0x01, // array.init_static $type3 length=1
-    0x0b, // end
-
-    0x0a, // code section
-    0x3d, // section length: 61
-    0x01, // number of functions
-    0x3b, // function 0: size: 59
-    0x00, // number of locals
-    0xfb,
-    0x07,
-    0x01, // struct.new $type1
-    0xfb,
-    0x44,
-    0x01, // ref.test_static $type1
-    0x1a, // drop
-    0xfb,
-    0x08,
-    0x02, // struct.new_default $type2
-    0xfb,
-    0x45,
-    0x02, // ref.cast_static $type2
-    0x1a, // drop
-    0x41,
-    0x2a, // i32.const 42 (value)
-    0x41,
-    0x0a, // i32.const 10 (length)
-    0xfb,
-    0x1b,
-    0x03, // array.new $type3
-    0x41,
-    0x00, // i32.const 0 (dest index for array.copy)
-    0x41,
-    0x0a, // i32.const 10 (length)
-    0xfb,
-    0x1c,
-    0x03, // array.new_default $type3
-    0x41,
-    0x00, // i32.const 0 (source index for array.copy)
-    0x41,
-    0x03, // i32.const 3 (length for array.copy)
-    0xfb,
-    0x18,
-    0x03,
-    0x03, // array.copy $type3 $type3
-    0xfb,
-    0x30,
-    0x01, // rtt.canon $type1
-    0xfb,
-    0x32,
-    0x01, // rtt.fresh_sub $type1
-    0x1a, // drop
-    0x02,
-    0x40, // block <void>
-    0xd0,
-    0x6e, // ref.null any
-    0xfb,
-    0x46,
-    0x00,
-    0x01, // br_on_cast_static 0 $type1
-    0xfb,
-    0x47,
-    0x00,
-    0x02, // br_on_cast_static_fail 0 $type2
-    0x1a, // drop
-    0x0b, // end (block)
-    0x0b, // end (function)
-  ];
-
-  const expectedMilestone4 = [
-    "(module",
-    "  (type $type0 (func_subtype (supertype func)))",
-    "  (type $type1 (struct_subtype (supertype data)))",
-    "  (type $type2 (struct_subtype (field $field0 (mut i32)) (supertype $type1)))",
-    "  (type $type3 (array_subtype (field (mut i32)) (supertype data)))",
-    "  (global $global0 (mut (ref $type3)) (i32.const 42)(rtt.canon $type3)(array.init $type3 1))",
-    "  (global $global1 (ref $type3) (i32.const 43)(array.init_static $type3 1))",
-    "  (func $func0",
-    "    struct.new $type1",
-    "    ref.test_static $type1",
-    "    drop",
-    "    struct.new_default $type2",
-    "    ref.cast_static $type2",
-    "    drop",
-    "    i32.const 42", // value
-    "    i32.const 10", // length
-    "    array.new $type3",
-    "    i32.const 0", // destination index (for array.copy)
-    "    i32.const 10", // length
-    "    array.new_default $type3",
-    "    i32.const 0", // source index (for array.copy)
-    "    i32.const 3", // copy length (for array.copy)
-    "    array.copy $type3 $type3",
-    "    rtt.canon $type1",
-    "    rtt.fresh_sub $type1",
-    "    drop",
-    "    block $label0",
-    "      ref.null any",
-    "      br_on_cast_static $label0 $type1",
-    "      br_on_cast_static_fail $label0 $type2",
-    "      drop",
-    "    end $label0",
-    "  )",
-    ")",
-  ];
-
   async function runGcTest(moduleBytes, expectedLines) {
     var data = new Uint8Array(moduleBytes);
 
@@ -1781,9 +1588,6 @@ describe("GC proposal support", () => {
 
   test("GC disassembly", async () => {
     await runGcTest(moduleBytes, expectedLines);
-  });
-  test("GC milestone4", async () => {
-    await runGcTest(moduleMilestone4, expectedMilestone4);
   });
 });
 

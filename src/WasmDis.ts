@@ -52,6 +52,7 @@ import {
   IGlobalNameEntry,
   IFieldNameEntry,
   ElementMode,
+  RefType,
 } from "./WasmParser.js";
 
 const NAME_SECTION_NAME = "name";
@@ -568,8 +569,16 @@ export class WasmDisassembler {
         return "eq";
       case TypeKind.i31ref:
         return "i31";
-      case TypeKind.dataref:
-        return "data";
+      case TypeKind.structref:
+        return "struct";
+      case TypeKind.arrayref:
+        return "array";
+      case TypeKind.nullfuncref:
+        return "nofunc";
+      case TypeKind.nullexternref:
+        return "noextern";
+      case TypeKind.nullref:
+        return "none";
     }
   }
   private typeToString(type: Type): string {
@@ -598,16 +607,22 @@ export class WasmDisassembler {
         return "eqref";
       case TypeKind.i31ref:
         return "i31ref";
-      case TypeKind.dataref:
-        return "dataref";
+      case TypeKind.structref:
+        return "structref";
+      case TypeKind.arrayref:
+        return "arrayref";
+      case TypeKind.nullfuncref:
+        return "nullfuncref";
+      case TypeKind.nullexternref:
+        return "nullexternref";
+      case TypeKind.nullref:
+        return "nullref";
       case TypeKind.ref:
-        return `(ref ${this.typeIndexToString(type.index)})`;
-      case TypeKind.optref:
-        return `(ref null ${this.typeIndexToString(type.index)})`;
-      case TypeKind.rtt:
-        return `(rtt ${this.typeIndexToString(type.index)})`;
-      case TypeKind.rtt_d:
-        return `(rtt ${type.depth} ${this.typeIndexToString(type.index)})`;
+        return `(ref ${this.typeIndexToString((type as RefType).ref_index)})`;
+      case TypeKind.ref_null:
+        return `(ref null ${this.typeIndexToString(
+          (type as RefType).ref_index
+        )})`;
       default:
         throw new Error(`Unexpected type ${JSON.stringify(type)}`);
     }
@@ -662,7 +677,13 @@ export class WasmDisassembler {
       return;
     }
     if (type.kind === TypeKind.unspecified) {
-      return this.printFuncType(type.index);
+      if (this._types[type.index].form == TypeKind.func) {
+        return this.printFuncType(type.index);
+      } else {
+        // Encoding error.
+        this.appendBuffer(` (type ${type.index})`);
+        return;
+      }
     }
     this.appendBuffer(" (result ");
     this.appendBuffer(this.typeToString(type));
@@ -760,24 +781,28 @@ export class WasmDisassembler {
       case OperatorCode.br_if:
       case OperatorCode.br_on_null:
       case OperatorCode.br_on_non_null:
-      case OperatorCode.br_on_cast:
-      case OperatorCode.br_on_cast_fail:
-      case OperatorCode.br_on_func:
-      case OperatorCode.br_on_non_func:
-      case OperatorCode.br_on_data:
-      case OperatorCode.br_on_non_data:
-      case OperatorCode.br_on_i31:
-      case OperatorCode.br_on_non_i31:
         this.appendBuffer(" ");
         this.appendBuffer(this.useLabel(operator.brDepth));
         break;
-      case OperatorCode.br_on_cast_static:
-      case OperatorCode.br_on_cast_static_fail: {
-        const label = this.useLabel(operator.brDepth);
-        const refType = this._nameResolver.getTypeName(operator.refType, true);
-        this.appendBuffer(` ${label} ${refType}`);
+      case OperatorCode.br_on_cast_:
+      case OperatorCode.br_on_cast_fail_:
+      case OperatorCode.br_on_cast__:
+      case OperatorCode.br_on_cast_fail__:
+        this.appendBuffer(" ");
+        this.appendBuffer(this.typeIndexToString(operator.refType));
+        this.appendBuffer(" ");
+        this.appendBuffer(this.useLabel(operator.brDepth));
         break;
-      }
+      case OperatorCode.br_on_cast:
+      case OperatorCode.br_on_cast_fail:
+        this.appendBuffer(" flags=" + operator.literal);
+        this.appendBuffer(" ");
+        this.appendBuffer(this.typeIndexToString(operator.srcType));
+        this.appendBuffer(" ");
+        this.appendBuffer(this.typeIndexToString(operator.refType));
+        this.appendBuffer(" ");
+        this.appendBuffer(this.useLabel(operator.brDepth));
+        break;
       case OperatorCode.br_table:
         for (var i = 0; i < operator.brTable.length; i++) {
           this.appendBuffer(" ");
@@ -1043,7 +1068,7 @@ export class WasmDisassembler {
       case OperatorCode.struct_get_s:
       case OperatorCode.struct_get_u:
       case OperatorCode.struct_set: {
-        const refType = this._nameResolver.getTypeName(operator.refType, true);
+        const refType = this.typeIndexToString(operator.refType);
         const fieldName = this._nameResolver.getFieldName(
           operator.refType,
           operator.fieldIndex,
@@ -1055,8 +1080,10 @@ export class WasmDisassembler {
       case OperatorCode.rtt_canon:
       case OperatorCode.rtt_sub:
       case OperatorCode.rtt_fresh_sub:
-      case OperatorCode.ref_test_static:
-      case OperatorCode.ref_cast_static:
+      case OperatorCode.ref_cast:
+      case OperatorCode.ref_cast_null:
+      case OperatorCode.ref_test:
+      case OperatorCode.ref_test_null:
       case OperatorCode.struct_new_default:
       case OperatorCode.struct_new_default_with_rtt:
       case OperatorCode.struct_new:
@@ -1069,21 +1096,20 @@ export class WasmDisassembler {
       case OperatorCode.array_get_s:
       case OperatorCode.array_get_u:
       case OperatorCode.array_set:
-      case OperatorCode.array_len: {
-        const refType = this._nameResolver.getTypeName(operator.refType, true);
+      case OperatorCode.array_len_: {
+        const refType = this.typeIndexToString(operator.refType);
         this.appendBuffer(` ${refType}`);
         break;
       }
       case OperatorCode.array_copy: {
-        const dstType = this._nameResolver.getTypeName(operator.refType, true);
-        const srcType = this._nameResolver.getTypeName(operator.srcType, true);
+        const dstType = this.typeIndexToString(operator.refType);
+        const srcType = this.typeIndexToString(operator.srcType);
         this.appendBuffer(` ${dstType} ${srcType}`);
         break;
       }
-      case OperatorCode.array_init:
-      case OperatorCode.array_init_static: {
-        const refType = this._nameResolver.getTypeName(operator.refType, true);
-        const length = operator.brDepth; // Overloaded field.
+      case OperatorCode.array_new_fixed: {
+        const refType = this.typeIndexToString(operator.refType);
+        const length = operator.len;
         this.appendBuffer(` ${refType} ${length}`);
         break;
       }
@@ -1212,6 +1238,8 @@ export class WasmDisassembler {
             case SectionCode.Element:
             case SectionCode.Tag:
               this._currentSectionId = sectionInfo.id;
+              this._indent = "  ";
+              this._indentLevel = 0;
               break; // reading known section;
             default:
               reader.skipSection();
@@ -1499,36 +1527,45 @@ export class WasmDisassembler {
           if (!this._skipTypes) {
             var typeName = this._nameResolver.getTypeName(typeIndex, false);
             var superTypeName = undefined;
-            if (typeEntry.supertype !== undefined) {
-              superTypeName = this.typeIndexToString(typeEntry.supertype);
+            if (typeEntry.supertypes !== undefined) {
+              superTypeName = typeEntry.supertypes
+                .map((ty) => this.typeIndexToString(ty))
+                .join("+");
+            }
+            this.appendBuffer(this._indent);
+            this.appendBuffer(`(type ${typeName} `);
+            var subtype = typeEntry.supertypes || typeEntry.final;
+            if (subtype) {
+              this.appendBuffer("(sub ");
+              if (typeEntry.final) this.appendBuffer("final ");
+              if (typeEntry.supertypes) {
+                this.appendBuffer(
+                  typeEntry.supertypes
+                    .map((ty) => this.typeIndexToString(ty))
+                    .join(" ")
+                );
+                this.appendBuffer(" ");
+              }
             }
             if (typeEntry.form === TypeKind.func) {
-              this.appendBuffer(`  (type ${typeName} (func`);
+              this.appendBuffer(`(func`);
               this.printFuncType(typeIndex);
-              this.appendBuffer("))");
-            } else if (typeEntry.form === TypeKind.func_subtype) {
-              this.appendBuffer(`  (type ${typeName} (func_subtype`);
-              this.printFuncType(typeIndex);
-              this.appendBuffer(` (supertype ${superTypeName})))`);
+              this.appendBuffer(")");
             } else if (typeEntry.form === TypeKind.struct) {
-              this.appendBuffer(`  (type ${typeName} (struct`);
+              this.appendBuffer(`(struct`);
               this.printStructType(typeIndex);
-              this.appendBuffer("))");
-            } else if (typeEntry.form === TypeKind.struct_subtype) {
-              this.appendBuffer(`  (type ${typeName} (struct_subtype`);
-              this.printStructType(typeIndex);
-              this.appendBuffer(` (supertype ${superTypeName})))`);
+              this.appendBuffer(")");
             } else if (typeEntry.form === TypeKind.array) {
-              this.appendBuffer(`  (type ${typeName} (array`);
+              this.appendBuffer(`(array`);
               this.printArrayType(typeIndex);
-              this.appendBuffer("))");
-            } else if (typeEntry.form === TypeKind.array_subtype) {
-              this.appendBuffer(`  (type ${typeName} (array_subtype`);
-              this.printArrayType(typeIndex);
-              this.appendBuffer(`) (supertype ${superTypeName})))`);
+              this.appendBuffer(")");
             } else {
               throw new Error(`Unknown type form: ${typeEntry.form}`);
             }
+            if (subtype) {
+              this.appendBuffer(")");
+            }
+            this.appendBuffer(")");
             this.newLine();
           }
           break;
@@ -1690,6 +1727,20 @@ export class WasmDisassembler {
           this._backrefLabels = null;
           this.logEndOfFunctionBodyOffset();
           // See case BinaryReaderState.CODE_OPERATOR for closing of body
+          break;
+        case BinaryReaderState.BEGIN_REC_GROUP:
+          if (!this._skipTypes) {
+            this.appendBuffer(`  (rec`);
+            this.newLine();
+            this.increaseIndent();
+          }
+          break;
+        case BinaryReaderState.END_REC_GROUP:
+          if (!this._skipTypes) {
+            this.decreaseIndent();
+            this.appendBuffer(`  )`);
+            this.newLine();
+          }
           break;
         default:
           throw new Error(`Expectected state: ${reader.state}`);
