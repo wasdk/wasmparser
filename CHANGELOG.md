@@ -1,3 +1,10 @@
+# [5.5.0](https://github.com/wasdk/wasmparser/compare/v5.4.0...v5.5.0) (2023-05-12)
+
+
+### Features
+
+* update wabt; rename memory insts and tag ops ([#134](https://github.com/wasdk/wasmparser/issues/134)) ([f895bbb](https://github.com/wasdk/wasmparser/commit/f895bbb0d3954491b3ba157a8161b1cdb0939168))
+
 # [5.4.0](https://github.com/wasdk/wasmparser/compare/v5.3.0...v5.4.0) (2021-10-12)
 
 
