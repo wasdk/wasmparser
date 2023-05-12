@@ -31,7 +31,7 @@ export const enum SectionCode {
   Element = 9, // Elements section
   Code = 10, // Function bodies (code)
   Data = 11, // Data segments
-  Event = 13, // Events
+  Tag = 13, // Tag declarations
 }
 export const enum OperatorCode {
   unreachable = 0x00,
@@ -90,8 +90,8 @@ export const enum OperatorCode {
   i64_store8 = 0x3c,
   i64_store16 = 0x3d,
   i64_store32 = 0x3e,
-  current_memory = 0x3f,
-  grow_memory = 0x40,
+  memory_size = 0x3f,
+  memory_grow = 0x40,
   i32_const = 0x41,
   i64_const = 0x42,
   f32_const = 0x43,
@@ -263,9 +263,9 @@ export const enum OperatorCode {
   ref_eq = 0xd5,
   br_on_non_null = 0xd6,
 
-  atomic_notify = 0xfe00,
-  i32_atomic_wait = 0xfe01,
-  i64_atomic_wait = 0xfe02,
+  memory_atomic_notify = 0xfe00,
+  memory_atomic_wait32 = 0xfe01,
+  memory_atomic_wait64 = 0xfe02,
   atomic_fence = 0xfe03,
   i32_atomic_load = 0xfe10,
   i64_atomic_load = 0xfe11,
@@ -681,7 +681,7 @@ export const OperatorCodeNames = [
   "i64.store8",
   "i64.store16",
   "i64.store32",
-  "current_memory",
+  "memory.size",
   "memory.grow",
   "i32.const",
   "i64.const",
@@ -1161,9 +1161,9 @@ export const OperatorCodeNames = [
 });
 
 [
-  "atomic.notify",
-  "i32.atomic.wait",
-  "i64.atomic.wait",
+  "memory.atomic.notify",
+  "memory.atomic.wait32",
+  "memory.atomic.wait64",
   "atomic.fence",
   undefined,
   undefined,
@@ -1296,7 +1296,7 @@ export const enum ExternalKind {
   Table = 1,
   Memory = 2,
   Global = 3,
-  Event = 4,
+  Tag = 4,
 }
 export const enum TypeKind {
   unspecified = 0,
@@ -1372,12 +1372,12 @@ export const enum NameType {
   Module = 0,
   Function = 1,
   Local = 2,
-  Event = 3,
   Type = 4,
   Table = 5,
   Memory = 6,
   Global = 7,
   Field = 10,
+  Tag = 11,
 }
 export const enum BinaryReaderState {
   ERROR = -1,
@@ -1402,7 +1402,7 @@ export const enum BinaryReaderState {
   ELEMENT_SECTION_ENTRY = 20,
   LINKING_SECTION_ENTRY = 21,
   START_SECTION_ENTRY = 22,
-  EVENT_SECTION_ENTRY = 23,
+  TAG_SECTION_ENTRY = 23,
 
   BEGIN_INIT_EXPRESSION_BODY = 25,
   INIT_EXPRESSION_OPERATOR = 26,
@@ -1529,8 +1529,11 @@ export interface IGlobalType {
   contentType: Type;
   mutability: number;
 }
-export interface IEventType {
-  attribute: number;
+export enum TagAttribute {
+  Exception = 0,
+}
+export interface ITagType {
+  attribute: TagAttribute;
   typeIndex: number;
 }
 export interface IGlobalVariable {
@@ -1550,11 +1553,7 @@ export interface IDataSegment {
 export interface IDataSegmentBody {
   data: Uint8Array;
 }
-export type ImportEntryType =
-  | ITableType
-  | IMemoryType
-  | IGlobalType
-  | IEventType;
+export type ImportEntryType = ITableType | IMemoryType | IGlobalType | ITagType;
 export interface IImportEntry {
   module: Uint8Array;
   field: Uint8Array;
@@ -1587,7 +1586,7 @@ export interface ILocalName {
 export interface ILocalNameEntry extends INameEntry {
   funcs: ILocalName[];
 }
-export interface IEventNameEntry extends INameEntry {
+export interface ITagNameEntry extends INameEntry {
   names: INaming[];
 }
 export interface ITypeNameEntry extends INameEntry {
@@ -1674,7 +1673,7 @@ export interface IOperatorInformation {
   fieldIndex?: number;
   globalIndex?: number;
   segmentIndex?: number;
-  eventIndex?: number;
+  tagIndex?: number;
   destinationIndex?: number;
   memoryAddress?: IMemoryAddress;
   literal?: number | Int64 | Uint8Array;
@@ -2062,7 +2061,7 @@ export class BinaryReader {
     var mutability = this.readVarUint1();
     return { contentType: contentType, mutability: mutability };
   }
-  private readEventType(): IEventType {
+  private readTagType(): ITagType {
     var attribute = this.readVarUint32();
     var typeIndex = this.readVarUint32();
     return {
@@ -2112,7 +2111,7 @@ export class BinaryReader {
     var field = this.readStringBytes();
     var kind = this.readUint8();
     var funcTypeIndex: number;
-    var type: ITableType | IMemoryType | IGlobalType | IEventType;
+    var type: ITableType | IMemoryType | IGlobalType | ITagType;
     switch (kind) {
       case ExternalKind.Function:
         funcTypeIndex = this.readVarUint32();
@@ -2126,8 +2125,8 @@ export class BinaryReader {
       case ExternalKind.Global:
         type = this.readGlobalType();
         break;
-      case ExternalKind.Event:
-        type = this.readEventType();
+      case ExternalKind.Tag:
+        type = this.readTagType();
         break;
     }
     this.result = {
@@ -2184,13 +2183,13 @@ export class BinaryReader {
     this._sectionEntriesLeft--;
     return true;
   }
-  private readEventEntry(): boolean {
+  private readTagEntry(): boolean {
     if (this._sectionEntriesLeft === 0) {
       this.skipSection();
       return this.read();
     }
-    this.state = BinaryReaderState.EVENT_SECTION_ENTRY;
-    this.result = this.readEventType();
+    this.state = BinaryReaderState.TAG_SECTION_ENTRY;
+    this.result = this.readTagType();
     this._sectionEntriesLeft--;
     return true;
   }
@@ -2380,7 +2379,7 @@ export class BinaryReader {
       | IModuleNameEntry
       | IFunctionNameEntry
       | ILocalNameEntry
-      | IEventNameEntry
+      | ITagNameEntry
       | ITypeNameEntry
       | ITableNameEntry
       | IMemoryNameEntry
@@ -2394,7 +2393,7 @@ export class BinaryReader {
         };
         break;
       case NameType.Function:
-      case NameType.Event:
+      case NameType.Tag:
       case NameType.Type:
       case NameType.Table:
       case NameType.Memory:
@@ -3031,9 +3030,9 @@ export class BinaryReader {
     var code = this.readVarUint32() | 0xfe00;
     var memoryAddress;
     switch (code) {
-      case OperatorCode.atomic_notify:
-      case OperatorCode.i32_atomic_wait:
-      case OperatorCode.i64_atomic_wait:
+      case OperatorCode.memory_atomic_notify:
+      case OperatorCode.memory_atomic_wait32:
+      case OperatorCode.memory_atomic_wait64:
       case OperatorCode.i32_atomic_load:
       case OperatorCode.i64_atomic_load:
       case OperatorCode.i32_atomic_load8_u:
@@ -3179,7 +3178,7 @@ export class BinaryReader {
       tableIndex,
       localIndex,
       globalIndex,
-      eventIndex,
+      tagIndex,
       memoryAddress,
       literal,
       reserved;
@@ -3243,7 +3242,7 @@ export class BinaryReader {
           break;
         case OperatorCode.catch:
         case OperatorCode.throw:
-          eventIndex = this.readVarInt32();
+          tagIndex = this.readVarInt32();
           break;
         case OperatorCode.ref_null:
           refType = this.readHeapType();
@@ -3296,8 +3295,8 @@ export class BinaryReader {
         case OperatorCode.i64_store32:
           memoryAddress = this.readMemoryImmediate();
           break;
-        case OperatorCode.current_memory:
-        case OperatorCode.grow_memory:
+        case OperatorCode.memory_size:
+        case OperatorCode.memory_grow:
           reserved = this.readVarUint1();
           break;
         case OperatorCode.i32_const:
@@ -3515,7 +3514,7 @@ export class BinaryReader {
       localIndex,
       globalIndex,
       fieldIndex: undefined,
-      eventIndex,
+      tagIndex,
       memoryAddress,
       literal,
       segmentIndex: undefined,
@@ -3669,10 +3668,10 @@ export class BinaryReader {
         if (!this.hasVarIntBytes()) return false;
         this._sectionEntriesLeft = this.readVarUint32();
         return this.readDataEntry();
-      case SectionCode.Event:
+      case SectionCode.Tag:
         if (!this.hasVarIntBytes()) return false;
         this._sectionEntriesLeft = this.readVarUint32();
-        return this.readEventEntry();
+        return this.readTagEntry();
       case SectionCode.Custom:
         var customSectionName = bytesToString(currentSection.name);
         if (customSectionName === "name") {
@@ -3761,8 +3760,8 @@ export class BinaryReader {
         return this.readTableEntry();
       case BinaryReaderState.MEMORY_SECTION_ENTRY:
         return this.readMemoryEntry();
-      case BinaryReaderState.EVENT_SECTION_ENTRY:
-        return this.readEventEntry();
+      case BinaryReaderState.TAG_SECTION_ENTRY:
+        return this.readTagEntry();
       case BinaryReaderState.GLOBAL_SECTION_ENTRY:
       case BinaryReaderState.END_GLOBAL_SECTION_ENTRY:
         return this.readGlobalEntry();
