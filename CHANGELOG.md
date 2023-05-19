@@ -1,3 +1,10 @@
+# [5.6.0](https://github.com/wasdk/wasmparser/compare/v5.5.0...v5.6.0) (2023-05-19)
+
+
+### Features
+
+* sync op and type codes for GC proposal ([#133](https://github.com/wasdk/wasmparser/issues/133)) ([ce821b5](https://github.com/wasdk/wasmparser/commit/ce821b50834ace574403ed78e00c8341c65254a3))
+
 # [5.5.0](https://github.com/wasdk/wasmparser/compare/v5.4.0...v5.5.0) (2023-05-12)
 
 
