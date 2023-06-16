@@ -30751,6 +30751,117 @@ exports[`Parsing and disassembling ref_types.0.wasm generates expected output 1`
 "
 `;
 
+exports[`Parsing and disassembling relaxed_simd.wasm generates expected output 1`] = `
+"(module
+  (func $func0 (param $var0 v128) (param $var1 v128) (result v128)
+    local.get $var0
+    local.get $var1
+    i8x16.relaxed_swizzle
+  )
+  (func $func1 (param $var0 v128) (result v128)
+    local.get $var0
+    i32x4.relaxed_trunc_f32x4_s
+  )
+  (func $func2 (param $var0 v128) (result v128)
+    local.get $var0
+    i32x4.relaxed_trunc_f32x4_u
+  )
+  (func $func3 (param $var0 v128) (result v128)
+    local.get $var0
+    i32x4.relaxed_trunc_f64x2_s_zero
+  )
+  (func $func4 (param $var0 v128) (result v128)
+    local.get $var0
+    i32x4.relaxed_trunc_f64x2_u_zero
+  )
+  (func $func5 (param $var0 v128) (param $var1 v128) (param $var2 v128) (result v128)
+    local.get $var0
+    local.get $var1
+    local.get $var2
+    f32x4.relaxed_madd
+  )
+  (func $func6 (param $var0 v128) (param $var1 v128) (param $var2 v128) (result v128)
+    local.get $var0
+    local.get $var1
+    local.get $var2
+    f32x4.relaxed_nmadd
+  )
+  (func $func7 (param $var0 v128) (param $var1 v128) (param $var2 v128) (result v128)
+    local.get $var0
+    local.get $var1
+    local.get $var2
+    f64x2.relaxed_madd
+  )
+  (func $func8 (param $var0 v128) (param $var1 v128) (param $var2 v128) (result v128)
+    local.get $var0
+    local.get $var1
+    local.get $var2
+    f64x2.relaxed_nmadd
+  )
+  (func $func9 (param $var0 v128) (param $var1 v128) (param $var2 v128) (result v128)
+    local.get $var0
+    local.get $var1
+    local.get $var2
+    i8x16.relaxed_laneselect
+  )
+  (func $func10 (param $var0 v128) (param $var1 v128) (param $var2 v128) (result v128)
+    local.get $var0
+    local.get $var1
+    local.get $var2
+    i16x8.relaxed_laneselect
+  )
+  (func $func11 (param $var0 v128) (param $var1 v128) (param $var2 v128) (result v128)
+    local.get $var0
+    local.get $var1
+    local.get $var2
+    i32x4.relaxed_laneselect
+  )
+  (func $func12 (param $var0 v128) (param $var1 v128) (param $var2 v128) (result v128)
+    local.get $var0
+    local.get $var1
+    local.get $var2
+    i64x2.relaxed_laneselect
+  )
+  (func $func13 (param $var0 v128) (param $var1 v128) (result v128)
+    local.get $var0
+    local.get $var1
+    f32x4.relaxed_min
+  )
+  (func $func14 (param $var0 v128) (param $var1 v128) (result v128)
+    local.get $var0
+    local.get $var1
+    f32x4.relaxed_max
+  )
+  (func $func15 (param $var0 v128) (param $var1 v128) (result v128)
+    local.get $var0
+    local.get $var1
+    f64x2.relaxed_min
+  )
+  (func $func16 (param $var0 v128) (param $var1 v128) (result v128)
+    local.get $var0
+    local.get $var1
+    f64x2.relaxed_max
+  )
+  (func $func17 (param $var0 v128) (param $var1 v128) (result v128)
+    local.get $var0
+    local.get $var1
+    i16x8.relaxed_q15mulr_s
+  )
+  (func $func18 (param $var0 v128) (param $var1 v128) (result v128)
+    local.get $var0
+    local.get $var1
+    i16x8.dot_i8x16_i7x16_s
+  )
+  (func $func19 (param $var0 v128) (param $var1 v128) (param $var2 v128) (result v128)
+    local.get $var0
+    local.get $var1
+    local.get $var2
+    i32x4.dot_i8x16_i7x16_add_s
+  )
+)
+"
+`;
+
 exports[`Parsing and disassembling reloc.wasm generates expected output 1`] = `
 "(module
   (global $global0 (import "env" "STACKTOP") i32)

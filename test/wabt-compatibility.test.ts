@@ -25,6 +25,7 @@ const WABT_FEATURES = {
   reference_types: true,
   sign_extension: true,
   simd: true,
+  relaxed_simd: true,
   sat_float_to_int: true,
   tail_call: true,
   threads: true,
