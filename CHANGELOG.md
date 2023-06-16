@@ -1,3 +1,10 @@
+# [5.7.0](https://github.com/wasdk/wasmparser/compare/v5.6.0...v5.7.0) (2023-06-16)
+
+
+### Features
+
+* extend 0xfd prefix codespace; add relaxed_simd ops. ([#135](https://github.com/wasdk/wasmparser/issues/135)) ([c6243c7](https://github.com/wasdk/wasmparser/commit/c6243c7b75df1b029e0de456568b43bc9b3075ac))
+
 # [5.6.0](https://github.com/wasdk/wasmparser/compare/v5.5.0...v5.6.0) (2023-05-19)
 
 
