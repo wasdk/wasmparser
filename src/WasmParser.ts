@@ -620,7 +620,7 @@ export const enum OperatorCode {
   br_on_cast_fail = 0xfb19,
   extern_internalize = 0xfb1a,
   extern_externalize = 0xfb1b,
-  i31_new = 0xfb1c,
+  ref_i31 = 0xfb1c,
   i31_get_s = 0xfb1d,
   i31_get_u = 0xfb1e,
 }
@@ -1301,7 +1301,7 @@ export const OperatorCodeNames = [
   "br_on_cast_fail",
   "extern.internalize",
   "extern.externalize",
-  "i31.new",
+  "ref.i31",
   "i31.get_s",
   "i31.get_u",
 ].forEach((s, i) => {
@@ -2705,7 +2705,7 @@ export class BinaryReader {
       case OperatorCode.array_len:
       case OperatorCode.extern_externalize:
       case OperatorCode.extern_internalize:
-      case OperatorCode.i31_new:
+      case OperatorCode.ref_i31:
       case OperatorCode.i31_get_s:
       case OperatorCode.i31_get_u:
         break;

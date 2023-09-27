@@ -1162,11 +1162,11 @@ describe("GC proposal support", () => {
     0x41,
     0x7f, // i32.const -1
     0xfb,
-    0x1c, // i31.new
+    0x1c, // ref.i31
     0xfb,
     0x1d, // i31.get_s
     0xfb,
-    0x1c, // i31.new
+    0x1c, // ref.i31
     0xfb,
     0x1e, // i31.get_u
     0x1a, // drop
@@ -1463,9 +1463,9 @@ describe("GC proposal support", () => {
     "  )",
     "  (func $unknown1",
     "    i32.const -1",
-    "    i31.new",
+    "    ref.i31",
     "    i31.get_s",
-    "    i31.new",
+    "    ref.i31",
     "    i31.get_u",
     "    drop",
     "  )",
