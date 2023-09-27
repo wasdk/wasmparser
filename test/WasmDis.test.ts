@@ -1016,7 +1016,7 @@ describe("GC proposal support", () => {
     0x01, // type section
     0x2e, // section length: 46
     0x01, // number of type entries
-    0x4f, // rec group
+    0x4e, // rec group
     0x08, // number of types
     // type  0:
     0x5f, // struct
@@ -1028,9 +1028,9 @@ describe("GC proposal support", () => {
     // type  1:
     0x5f, // struct
     0x02, // field count
-    0x7a,
+    0x78,
     0x01, // mut i8
-    0x79,
+    0x77,
     0x00, // i16
     // type  2:
     0x5f, // struct
@@ -1042,28 +1042,28 @@ describe("GC proposal support", () => {
     // type  3:
     0x5f, // struct
     0x02, // field count
-    0x6c,
+    0x63,
     0x00,
     0x01, // mut ref null 0
-    0x6a,
+    0x6c,
     0x00, // i31ref
     // type  4:
     0x5f, // struct
     0x03, // field count
-    0x6b,
+    0x64,
     0x01,
     0x00, // ref 1
     0x6d,
     0x00, // eqref
-    0x67,
-    0x00, // dataref
+    0x6b,
+    0x00, // structref
     // type  5:
     0x5e, // array
     0x7f,
     0x01, // mut i32
     // type  6:
     0x5e, // array
-    0x7a,
+    0x78,
     0x01, // mut i8
     // type  7:
     0x60, // signature
@@ -1082,78 +1082,63 @@ describe("GC proposal support", () => {
 
     /////////////////////////// CODE SECTION //////////////////////////
     0x0a, // code section
-    0xf2,
+    0xda,
     0x01, // section length
     0x06, // number of functions
 
-    0x55, // function 0: size
+    0x43, // function 0: size
     0x02, // number of locals
     0x01,
-    0x6c,
+    0x63,
     0x00, // one local of type: optref 0
     0x01,
-    0x6c,
+    0x63,
     0x01, // one local of type: optref 1
     0x41,
     0x2a, // i32.const: 42
     0x42,
     0x2b, // i64.const: 43
     0xfb,
-    0x30,
-    0x00, // rtt.canon 0
-    0xfb,
-    0x01,
-    0x00, // struct.new_with_rtt 0
+    0x00,
+    0x00, // struct.new 0
     0x21,
     0x00, // local.set 0
     0x20,
     0x00, // local.get 0
-    0xd3, // ref.as_non_null
+    0xd4, // ref.as_non_null
     0x41,
     0x2c, // i32.const 44
     0xfb,
-    0x06,
+    0x05,
     0x00,
     0x00, // struct.set 0 0
     0x20,
     0x00, // local.get 0
     0xfb,
-    0x30,
-    0x00, // rtt.canon 0
-    0xfb,
-    0x41, // ref.cast
+    0x16, // ref.cast
     0x00,
     0xfb,
-    0x03,
+    0x02,
     0x00,
     0x01, // struct.get 0 1
     0x1a, // drop
     // ---
     0xfb,
-    0x30,
-    0x01, // rtt.canon 1
-    0xfb,
-    0x31,
-    0x01, // rtt.sub 1
-    0xfb,
-    0x32,
-    0x01, // rtt.fresh_sub 1
-    0xfb,
-    0x02,
-    0x01, // struct.new_default_with_rtt 1
+    0x01,
+    0x01, // struct.new_default
     0x21,
     0x01, // local.set 1
     0x20,
     0x01, // local.get 1
     0xfb,
-    0x04,
+    0x03,
     0x01,
     0x00, // struct.get_s 1 0
     0x1a, // drop
     0x20,
     0x01, // local.get 1
     0xfb,
-    0x05,
+    0x04,
     0x01,
     0x01, // struct.get_u 1 1
     0x1a, // drop
@@ -1162,15 +1147,12 @@ describe("GC proposal support", () => {
     0x01, // local.get 1
     0xd0,
     0x01, // ref.null 1
-    0xd5, // ref.eq
+    0xd3, // ref.eq
     0x1a, // drop
     0xd0,
     0x6d, // ref.null eq
     0xfb,
-    0x30,
-    0x00, // rtt.canon 0
-    0xfb,
-    0x40,
+    0x14,
     0x00, // ref.test
     0x1a, // drop
     0x0b, // end
@@ -1180,20 +1162,20 @@ describe("GC proposal support", () => {
     0x41,
     0x7f, // i32.const -1
     0xfb,
-    0x20, // i31.new
+    0x1c, // i31.new
     0xfb,
-    0x21, // i31.get_s
+    0x1d, // i31.get_s
     0xfb,
-    0x20, // i31.new
+    0x1c, // i31.new
     0xfb,
-    0x22, // i31.get_u
+    0x1e, // i31.get_u
     0x1a, // drop
     0x0b, // end
 
     0x11, // function 2: size
     0x01, // number of locals
     0x01,
-    0x6c,
+    0x63,
     0x70, // one local of type: ref null func
     0xd2,
     0x01, // ref.func $func1
@@ -1209,63 +1191,61 @@ describe("GC proposal support", () => {
     0x07,
     0x0b, // end
 
-    0x22, // function 3: size
+    0x23, // function 3: size
     0x00, // number of locals
     0x02,
     0x40, // block <void>
     0xd0,
     0x6e, // ref.null any
-    0xd4,
+    0xd5,
     0x00, // br_on_null 0
     0xd6,
     0x00, // br_on_non_null 0
     0xfb,
-    0x30,
-    0x00, // rtt.canon 0
-    0xfb,
-    0x42,
+    0x18,
     0x00,
-    0x00, // br_on_cast 0
-    0xfb,
-    0x43,
     0x00,
-    0x00, // br_on_cast_fail 0
+    0x6e,
+    0x00, // br_on_cast flags=0 any $structA 0
+    0xfb,
+    0x19,
+    0x01,
+    0x00,
+    0x6e,
+    0x00, // br_on_cast_fail flags=1 any $structA 0
 
     0xd0,
     0x6e, // ref.null any
     0xfb,
-    0x40,
+    0x14,
     0x00, // ref.test $structA
     0x1a, // drop
 
     0xd0,
     0x6e, // ref.null any
     0xfb,
-    0x41,
+    0x16,
     0x00, // ref.cast $structA
     0x1a, // drop
 
     0x0b, // end (block)
     0x0b, // end
 
-    0x44, // function 4: size
+    0x3d, // function 4: size
     0x02, // number of locals
     0x01,
-    0x6c,
+    0x63,
     0x05, // one local of type: optref 5
     0x01,
-    0x6c,
+    0x63,
     0x06, // one local of type: optref 6
     0x41,
     0x01, // i32.const 1 (default value)
     0x41,
     0x02, // i32.const 2 (length)
     0xfb,
-    0x30,
-    0x05, // rtt.canon 5
-    0xfb,
-    0x11,
-    0x05, // array.new_with_rtt 5
+    0x06,
+    0x05, // array.new
     0x22,
     0x00, // local.tee 0
     0x20,
@@ -1273,22 +1253,18 @@ describe("GC proposal support", () => {
     0x41,
     0x01, // i32.const 1 (index)
     0xfb,
-    0x13,
+    0x0b,
     0x05, // array.get 5 (reuse as index)
     0x41,
     0x02, // i32.const 2 (value)
     0xfb,
-    0x16,
+    0x0e,
     0x05, // array.set 5
     0xfb,
-    0x17,
-    0x05, // array.len 5
+    0x0f, // array.len
     0xfb,
-    0x30,
-    0x06, // rtt.canon 6
-    0xfb,
-    0x12,
-    0x06, // array.new_default_with_rtt 6
+    0x07,
+    0x06, // array.new_default
     0x22,
     0x01, // local.tee 1
     0x20,
@@ -1296,10 +1272,10 @@ describe("GC proposal support", () => {
     0x41,
     0x01, // i32.const 1 (index)
     0xfb,
-    0x14,
+    0x0c,
     0x06, // array.get_s 6 (reuse as index)
     0xfb,
-    0x15,
+    0x0d,
     0x06, // array.get_u 7
     0x1a, // drop
     0x20,
@@ -1313,7 +1289,7 @@ describe("GC proposal support", () => {
     0x41,
     0x01, // i32.const 1
     0xfb,
-    0x18,
+    0x11,
     0x05,
     0x05, // array.copy 5 5
     0x0b, // end
@@ -1333,7 +1309,7 @@ describe("GC proposal support", () => {
     0x1b, // select
     0x1c,
     0x01,
-    0x6b,
+    0x64,
     0x01, // select_with_type vec(ref(1))
     0x1a, // drop
     0x0b, // end
@@ -1457,23 +1433,18 @@ describe("GC proposal support", () => {
     "    (local $var0 (ref null $structA)) (local $var1 (ref null $structB))",
     "    i32.const 42",
     "    i64.const 43",
-    "    rtt.canon $structA",
-    "    struct.new_with_rtt $structA",
+    "    struct.new $structA",
     "    local.set $var0",
     "    local.get $var0",
     "    ref.as_non_null",
     "    i32.const 44",
     "    struct.set $structA $foo",
     "    local.get $var0",
-    "    rtt.canon $structA",
     "    ref.cast $structA",
     "    struct.get $structA $bar",
     "    drop",
     // ---
-    "    rtt.canon $structB",
-    "    rtt.sub $structB",
-    "    rtt.fresh_sub $structB",
-    "    struct.new_default_with_rtt $structB",
+    "    struct.new_default $structB",
     "    local.set $var1",
     "    local.get $var1",
     "    struct.get_s $structB $baz",
@@ -1487,7 +1458,6 @@ describe("GC proposal support", () => {
     "    ref.eq",
     "    drop",
     "    ref.null eq",
-    "    rtt.canon $structA",
     "    ref.test $structA",
     "    drop",
     "  )",
@@ -1513,9 +1483,8 @@ describe("GC proposal support", () => {
     "      ref.null any",
     "      br_on_null $label0",
     "      br_on_non_null $label0",
-    "      rtt.canon $structA",
-    "      br_on_cast $structA $label0",
-    "      br_on_cast_fail $structA $label0",
+    "      br_on_cast flags=0 any $structA $label0",
+    "      br_on_cast_fail flags=1 any $structA $label0",
     "      ref.null any",
     "      ref.test $structA",
     "      drop",
@@ -1528,17 +1497,15 @@ describe("GC proposal support", () => {
     "    (local $var0 (ref null $arrayA)) (local $var1 (ref null $arrayB))",
     "    i32.const 1",
     "    i32.const 2",
-    "    rtt.canon $arrayA",
-    "    array.new_with_rtt $arrayA",
+    "    array.new $arrayA",
     "    local.tee $var0",
     "    local.get $var0",
     "    i32.const 1",
     "    array.get $arrayA",
     "    i32.const 2",
     "    array.set $arrayA",
-    "    array.len $arrayA",
-    "    rtt.canon $arrayB",
-    "    array.new_default_with_rtt $arrayB",
+    "    array.len",
+    "    array.new_default $arrayB",
     "    local.tee $var1",
     "    local.get $var1",
     "    i32.const 1",

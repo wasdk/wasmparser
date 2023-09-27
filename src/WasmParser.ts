@@ -259,9 +259,9 @@ export const enum OperatorCode {
   ref_null = 0xd0,
   ref_is_null = 0xd1,
   ref_func = 0xd2,
-  ref_as_non_null = 0xd3,
-  br_on_null = 0xd4,
-  ref_eq = 0xd5,
+  ref_eq = 0xd3,
+  ref_as_non_null = 0xd4,
+  br_on_null = 0xd5,
   br_on_non_null = 0xd6,
 
   memory_atomic_notify = 0xfe00,
@@ -591,72 +591,38 @@ export const enum OperatorCode {
   i16x8_dot_i8x16_i7x16_s = 0xfd112,
   i32x4_dot_i8x16_i7x16_add_s = 0xfd113,
 
-  // GC proposal (milestone 6).
-  struct_new_with_rtt = 0xfb01,
-  struct_new_default_with_rtt = 0xfb02,
-  struct_get = 0xfb03,
-  struct_get_s = 0xfb04,
-  struct_get_u = 0xfb05,
-  struct_set = 0xfb06,
-  struct_new = 0xfb07,
-  struct_new_default = 0xfb08,
-  array_fill = 0xfb0f,
-  array_new_with_rtt = 0xfb11,
-  array_new_default_with_rtt = 0xfb12,
-  array_get = 0xfb13,
-  array_get_s = 0xfb14,
-  array_get_u = 0xfb15,
-  array_set = 0xfb16,
-  array_len_ = 0xfb17,
-  array_len = 0xfb19,
-  array_copy = 0xfb18,
-  array_new_fixed = 0xfb1a,
-  array_new = 0xfb1b,
-  array_new_default = 0xfb1c,
-  array_new_data = 0xfb1d,
-  array_init_from_data = 0xfb1e,
-  array_new_elem = 0xfb1f,
-  i31_new = 0xfb20,
-  i31_get_s = 0xfb21,
-  i31_get_u = 0xfb22,
-  rtt_canon = 0xfb30,
-  rtt_sub = 0xfb31,
-  rtt_fresh_sub = 0xfb32,
-  ref_test = 0xfb40,
-  ref_cast = 0xfb41,
-  br_on_cast_ = 0xfb42,
-  br_on_cast_fail_ = 0xfb43,
-  ref_test_ = 0xfb44,
-  ref_cast_ = 0xfb45,
-  br_on_cast__ = 0xfb46,
-  br_on_cast_fail__ = 0xfb47,
-  ref_test_null = 0xfb48,
-  ref_cast_null = 0xfb49,
-  br_on_cast_null_ = 0xfb4a,
-  br_on_cast_fail_null_ = 0xfb4b,
-  ref_cast_nop = 0xfb4c,
-  br_on_cast = 0xfb4e,
-  br_on_cast_fail = 0xfb4f,
-  ref_is_func_ = 0xfb50,
-  ref_is_data_ = 0xfb51,
-  ref_is_i31_ = 0xfb52,
-  ref_is_array_ = 0xfb53,
-  array_init_data = 0xfb54,
-  array_init_elem = 0xfb55,
-  ref_as_func_ = 0xfb58,
-  ref_as_data_ = 0xfb59,
-  ref_as_i31_ = 0xfb5a,
-  ref_as_array_ = 0xfb5b,
-  br_on_func_ = 0xfb60,
-  br_on_data_ = 0xfb61,
-  br_on_i31_ = 0xfb62,
-  br_on_non_func_ = 0xfb63,
-  br_on_non_data_ = 0xfb64,
-  br_on_non_i31_ = 0xfb65,
-  br_on_array_ = 0xfb66,
-  br_on_non_array_ = 0xfb67,
-  extern_internalize = 0xfb70,
-  extern_externalize = 0xfb71,
+  // GC proposal.
+  struct_new = 0xfb00,
+  struct_new_default = 0xfb01,
+  struct_get = 0xfb02,
+  struct_get_s = 0xfb03,
+  struct_get_u = 0xfb04,
+  struct_set = 0xfb05,
+  array_new = 0xfb06,
+  array_new_default = 0xfb07,
+  array_new_fixed = 0xfb08,
+  array_new_data = 0xfb09,
+  array_new_elem = 0xfb0a,
+  array_get = 0xfb0b,
+  array_get_s = 0xfb0c,
+  array_get_u = 0xfb0d,
+  array_set = 0xfb0e,
+  array_len = 0xfb0f,
+  array_fill = 0xfb10,
+  array_copy = 0xfb11,
+  array_init_data = 0xfb12,
+  array_init_elem = 0xfb13,
+  ref_test = 0xfb14,
+  ref_test_null = 0xfb15,
+  ref_cast = 0xfb16,
+  ref_cast_null = 0xfb17,
+  br_on_cast = 0xfb18,
+  br_on_cast_fail = 0xfb19,
+  extern_internalize = 0xfb1a,
+  extern_externalize = 0xfb1b,
+  i31_new = 0xfb1c,
+  i31_get_s = 0xfb1d,
+  i31_get_u = 0xfb1e,
 }
 
 export const OperatorCodeNames = [
@@ -871,9 +837,9 @@ export const OperatorCodeNames = [
   "ref.null",
   "ref.is_null",
   "ref.func",
+  "ref.eq",
   "ref.as_non_null",
   "br_on_null",
-  "ref.eq",
   "br_on_non_null",
   undefined,
   undefined,
@@ -1306,71 +1272,41 @@ export const OperatorCodeNames = [
   OperatorCodeNames[0xfe00 | i] = s;
 });
 
-OperatorCodeNames[0xfb01] = "struct.new_with_rtt";
-OperatorCodeNames[0xfb02] = "struct.new_default_with_rtt";
-OperatorCodeNames[0xfb03] = "struct.get";
-OperatorCodeNames[0xfb04] = "struct.get_s";
-OperatorCodeNames[0xfb05] = "struct.get_u";
-OperatorCodeNames[0xfb06] = "struct.set";
-OperatorCodeNames[0xfb07] = "struct.new";
-OperatorCodeNames[0xfb08] = "struct.new_default";
-OperatorCodeNames[0xfb0f] = "array.fill";
-OperatorCodeNames[0xfb11] = "array.new_with_rtt";
-OperatorCodeNames[0xfb12] = "array.new_default_with_rtt";
-OperatorCodeNames[0xfb13] = "array.get";
-OperatorCodeNames[0xfb14] = "array.get_s";
-OperatorCodeNames[0xfb15] = "array.get_u";
-OperatorCodeNames[0xfb16] = "array.set";
-OperatorCodeNames[0xfb17] = "array.len"; // TODO remove
-OperatorCodeNames[0xfb18] = "array.copy";
-OperatorCodeNames[0xfb19] = "array.len";
-OperatorCodeNames[0xfb1a] = "array.new_fixed";
-OperatorCodeNames[0xfb1b] = "array.new";
-OperatorCodeNames[0xfb1c] = "array.new_default";
-OperatorCodeNames[0xfb1d] = "array.new_data";
-OperatorCodeNames[0xfb1e] = "array.init_from_data";
-OperatorCodeNames[0xfb1f] = "array.new_elem";
-OperatorCodeNames[0xfb20] = "i31.new";
-OperatorCodeNames[0xfb21] = "i31.get_s";
-OperatorCodeNames[0xfb22] = "i31.get_u";
-OperatorCodeNames[0xfb30] = "rtt.canon";
-OperatorCodeNames[0xfb31] = "rtt.sub";
-OperatorCodeNames[0xfb32] = "rtt.fresh_sub";
-OperatorCodeNames[0xfb40] = "ref.test";
-OperatorCodeNames[0xfb41] = "ref.cast";
-OperatorCodeNames[0xfb42] = "br_on_cast";
-OperatorCodeNames[0xfb43] = "br_on_cast_fail";
-OperatorCodeNames[0xfb44] = "ref.test_static";
-OperatorCodeNames[0xfb45] = "ref.cast_static";
-OperatorCodeNames[0xfb46] = "br_on_cast_static";
-OperatorCodeNames[0xfb47] = "br_on_cast_static_fail";
-OperatorCodeNames[0xfb48] = "ref.test_null";
-OperatorCodeNames[0xfb49] = "ref.cast_null";
-OperatorCodeNames[0xfb4a] = "br_on_cast_null";
-OperatorCodeNames[0xfb4b] = "br_on_cast_fail_null";
-OperatorCodeNames[0xfb4c] = "ref.cast_nop";
-OperatorCodeNames[0xfb4e] = "br_on_cast";
-OperatorCodeNames[0xfb4f] = "br_on_cast_fail";
-OperatorCodeNames[0xfb50] = "ref.is_func";
-OperatorCodeNames[0xfb51] = "ref.is_data";
-OperatorCodeNames[0xfb52] = "ref.is_i31";
-OperatorCodeNames[0xfb53] = "ref.is_array";
-OperatorCodeNames[0xfb54] = "array.init_data";
-OperatorCodeNames[0xfb55] = "array.init_elem";
-OperatorCodeNames[0xfb58] = "ref.as_func";
-OperatorCodeNames[0xfb59] = "ref.as_data";
-OperatorCodeNames[0xfb5a] = "ref.as_i31";
-OperatorCodeNames[0xfb5b] = "ref.as_array";
-OperatorCodeNames[0xfb60] = "br_on_func";
-OperatorCodeNames[0xfb61] = "br_on_data";
-OperatorCodeNames[0xfb62] = "br_on_i31";
-OperatorCodeNames[0xfb63] = "br_on_non_func";
-OperatorCodeNames[0xfb64] = "br_on_non_data";
-OperatorCodeNames[0xfb65] = "br_on_non_i31";
-OperatorCodeNames[0xfb66] = "br_on_array";
-OperatorCodeNames[0xfb67] = "br_on_non_array";
-OperatorCodeNames[0xfb70] = "extern.internalize";
-OperatorCodeNames[0xfb71] = "extern.externalize";
+[
+  "struct.new",
+  "struct.new_default",
+  "struct.get",
+  "struct.get_s",
+  "struct.get_u",
+  "struct.set",
+  "array.new",
+  "array.new_default",
+  "array.new_fixed",
+  "array.new_data",
+  "array.new_elem",
+  "array.get",
+  "array.get_s",
+  "array.get_u",
+  "array.set",
+  "array.len",
+  "array.fill",
+  "array.copy",
+  "array.init_data",
+  "array.init_elem",
+  "ref.test",
+  "ref.test null",
+  "ref.cast",
+  "ref.cast null",
+  "br_on_cast",
+  "br_on_cast_fail",
+  "extern.internalize",
+  "extern.externalize",
+  "i31.new",
+  "i31.get_s",
+  "i31.get_u",
+].forEach((s, i) => {
+  OperatorCodeNames[0xfb00 | i] = s;
+});
 
 export const enum ExternalKind {
   Function = 0,
@@ -1386,26 +1322,26 @@ export const enum TypeKind {
   f32 = -0x03,
   f64 = -0x04,
   v128 = -0x05,
-  i8 = -0x06,
-  i16 = -0x07,
+  i8 = -0x08,
+  i16 = -0x09,
+  nullfuncref = -0x0d,
+  nullref = -0x0f,
+  nullexternref = -0x0e,
   funcref = -0x10,
   externref = -0x11,
   anyref = -0x12,
   eqref = -0x13,
-  ref_null = -0x14,
-  ref = -0x15,
-  i31ref = -0x16,
-  nullexternref = -0x17,
-  nullfuncref = -0x18,
-  structref = -0x19,
-  arrayref = -0x1a,
-  nullref = -0x1b,
+  i31ref = -0x14,
+  structref = -0x15,
+  arrayref = -0x16,
+  ref = -0x1c,
+  ref_null = -0x1d,
   func = -0x20,
   struct = -0x21,
   array = -0x22,
   subtype = -0x30,
-  rec_group = -0x31,
-  subtype_final = -0x32,
+  subtype_final = -0x31,
+  rec_group = -0x32,
   empty_block_type = -0x40,
 }
 export class FieldDef {
@@ -2728,32 +2664,14 @@ export class BinaryReader {
         srcType = this.readHeapType();
         refType = this.readHeapType();
         break;
-      case OperatorCode.br_on_cast_:
-      case OperatorCode.br_on_cast_fail_:
-        brDepth = this.readVarUint32();
-        refType = this.readHeapType();
-        break;
-      case OperatorCode.br_on_cast__:
-      case OperatorCode.br_on_cast_fail__:
-        brDepth = this.readVarUint32();
-        refType = this.readVarUint32();
-        break;
       case OperatorCode.array_get:
       case OperatorCode.array_get_s:
       case OperatorCode.array_get_u:
-      case OperatorCode.array_len_:
       case OperatorCode.array_set:
       case OperatorCode.array_new:
-      case OperatorCode.array_new_with_rtt:
       case OperatorCode.array_new_default:
-      case OperatorCode.array_new_default_with_rtt:
       case OperatorCode.struct_new:
-      case OperatorCode.struct_new_with_rtt:
       case OperatorCode.struct_new_default:
-      case OperatorCode.struct_new_default_with_rtt:
-      case OperatorCode.rtt_canon:
-      case OperatorCode.rtt_sub:
-      case OperatorCode.rtt_fresh_sub:
         refType = this.readVarUint32();
         break;
       case OperatorCode.array_new_fixed:
@@ -2783,10 +2701,6 @@ export class BinaryReader {
       case OperatorCode.ref_cast:
       case OperatorCode.ref_cast_null:
         refType = this.readHeapType();
-        break;
-      case OperatorCode.ref_test_:
-      case OperatorCode.ref_cast_:
-        refType = this.readVarUint32();
         break;
       case OperatorCode.array_len:
       case OperatorCode.extern_externalize:

@@ -784,15 +784,6 @@ export class WasmDisassembler {
         this.appendBuffer(" ");
         this.appendBuffer(this.useLabel(operator.brDepth));
         break;
-      case OperatorCode.br_on_cast_:
-      case OperatorCode.br_on_cast_fail_:
-      case OperatorCode.br_on_cast__:
-      case OperatorCode.br_on_cast_fail__:
-        this.appendBuffer(" ");
-        this.appendBuffer(this.typeIndexToString(operator.refType));
-        this.appendBuffer(" ");
-        this.appendBuffer(this.useLabel(operator.brDepth));
-        break;
       case OperatorCode.br_on_cast:
       case OperatorCode.br_on_cast_fail:
         this.appendBuffer(" flags=" + operator.literal);
@@ -1077,26 +1068,18 @@ export class WasmDisassembler {
         this.appendBuffer(` ${refType} ${fieldName}`);
         break;
       }
-      case OperatorCode.rtt_canon:
-      case OperatorCode.rtt_sub:
-      case OperatorCode.rtt_fresh_sub:
       case OperatorCode.ref_cast:
       case OperatorCode.ref_cast_null:
       case OperatorCode.ref_test:
       case OperatorCode.ref_test_null:
       case OperatorCode.struct_new_default:
-      case OperatorCode.struct_new_default_with_rtt:
       case OperatorCode.struct_new:
-      case OperatorCode.struct_new_with_rtt:
       case OperatorCode.array_new_default:
-      case OperatorCode.array_new_default_with_rtt:
       case OperatorCode.array_new:
-      case OperatorCode.array_new_with_rtt:
       case OperatorCode.array_get:
       case OperatorCode.array_get_s:
       case OperatorCode.array_get_u:
-      case OperatorCode.array_set:
-      case OperatorCode.array_len_: {
+      case OperatorCode.array_set: {
         const refType = this.typeIndexToString(operator.refType);
         this.appendBuffer(` ${refType}`);
         break;
