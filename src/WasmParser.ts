@@ -2678,6 +2678,9 @@ export class BinaryReader {
         refType = this.readVarUint32();
         len = this.readVarUint32();
         break;
+      case OperatorCode.array_fill:
+        refType = this.readVarUint32();
+        break;
       case OperatorCode.array_copy:
         refType = this.readVarUint32();
         srcType = this.readVarUint32();
@@ -2873,6 +2876,17 @@ export class BinaryReader {
       case OperatorCode.f64x2_replace_lane:
         lineIndex = this.readUint8();
         break;
+      case OperatorCode.v128_load8_lane:
+      case OperatorCode.v128_load16_lane:
+      case OperatorCode.v128_load32_lane:
+      case OperatorCode.v128_load64_lane:
+      case OperatorCode.v128_store8_lane:
+      case OperatorCode.v128_store16_lane:
+      case OperatorCode.v128_store32_lane:
+      case OperatorCode.v128_store64_lane:
+        memoryAddress = this.readMemoryImmediate();
+        lineIndex = this.readUint8();
+        break;
       case OperatorCode.i8x16_swizzle:
       case OperatorCode.i8x16_splat:
       case OperatorCode.i16x8_splat:
@@ -3039,8 +3053,8 @@ export class BinaryReader {
       case OperatorCode.i64x2_ge_s:
       case OperatorCode.i64x2_extmul_low_i32x4_s:
       case OperatorCode.i64x2_extmul_high_i32x4_s:
-      case OperatorCode.i64x2_extmul_low_i32x4_s:
-      case OperatorCode.i64x2_extmul_high_i32x4_s:
+      case OperatorCode.i64x2_extmul_low_i32x4_u:
+      case OperatorCode.i64x2_extmul_high_i32x4_u:
       case OperatorCode.f32x4_abs:
       case OperatorCode.f32x4_abs:
       case OperatorCode.f32x4_neg:
