@@ -1,3 +1,10 @@
+# [5.8.0](https://github.com/wasdk/wasmparser/compare/v5.7.0...v5.8.0) (2023-09-28)
+
+
+### Features
+
+* change Wasm GC encoding ([#137](https://github.com/wasdk/wasmparser/issues/137)) ([c316e7d](https://github.com/wasdk/wasmparser/commit/c316e7dfb555dee561f16b928a64fafa370aa7b2))
+
 # [5.7.0](https://github.com/wasdk/wasmparser/compare/v5.6.0...v5.7.0) (2023-06-16)
 
 
