@@ -143,6 +143,8 @@ function memoryAddressToString(
     case OperatorCode.i64_atomic_rmw_xchg:
     case OperatorCode.i64_atomic_rmw_cmpxchg:
     case OperatorCode.v128_load64_zero:
+    case OperatorCode.v128_load64_lane:
+    case OperatorCode.v128_store64_lane:
       defaultAlignFlags = 3;
       break;
     case OperatorCode.i32_load:
@@ -173,6 +175,8 @@ function memoryAddressToString(
     case OperatorCode.i32_atomic_rmw_cmpxchg:
     case OperatorCode.i64_atomic_rmw32_cmpxchg_u:
     case OperatorCode.v128_load32_zero:
+    case OperatorCode.v128_load32_lane:
+    case OperatorCode.v128_store32_lane:
       defaultAlignFlags = 2;
       break;
     case OperatorCode.i32_load16_s:
@@ -199,6 +203,8 @@ function memoryAddressToString(
     case OperatorCode.i64_atomic_rmw16_xchg_u:
     case OperatorCode.i32_atomic_rmw16_cmpxchg_u:
     case OperatorCode.i64_atomic_rmw16_cmpxchg_u:
+    case OperatorCode.v128_load16_lane:
+    case OperatorCode.v128_store16_lane:
       defaultAlignFlags = 1;
       break;
     case OperatorCode.i32_load8_s:
@@ -225,6 +231,8 @@ function memoryAddressToString(
     case OperatorCode.i64_atomic_rmw8_xchg_u:
     case OperatorCode.i32_atomic_rmw8_cmpxchg_u:
     case OperatorCode.i64_atomic_rmw8_cmpxchg_u:
+    case OperatorCode.v128_load8_lane:
+    case OperatorCode.v128_store8_lane:
       defaultAlignFlags = 0;
       break;
   }
@@ -784,15 +792,6 @@ export class WasmDisassembler {
         this.appendBuffer(" ");
         this.appendBuffer(this.useLabel(operator.brDepth));
         break;
-      case OperatorCode.br_on_cast_:
-      case OperatorCode.br_on_cast_fail_:
-      case OperatorCode.br_on_cast__:
-      case OperatorCode.br_on_cast_fail__:
-        this.appendBuffer(" ");
-        this.appendBuffer(this.typeIndexToString(operator.refType));
-        this.appendBuffer(" ");
-        this.appendBuffer(this.useLabel(operator.brDepth));
-        break;
       case OperatorCode.br_on_cast:
       case OperatorCode.br_on_cast_fail:
         this.appendBuffer(" flags=" + operator.literal);
@@ -1012,6 +1011,24 @@ export class WasmDisassembler {
       case OperatorCode.f64x2_replace_lane:
         this.appendBuffer(` ${operator.lineIndex}`);
         break;
+      case OperatorCode.v128_load8_lane:
+      case OperatorCode.v128_load16_lane:
+      case OperatorCode.v128_load32_lane:
+      case OperatorCode.v128_load64_lane:
+      case OperatorCode.v128_store8_lane:
+      case OperatorCode.v128_store16_lane:
+      case OperatorCode.v128_store32_lane:
+      case OperatorCode.v128_store64_lane:
+        var memoryAddress = memoryAddressToString(
+          operator.memoryAddress,
+          operator.code
+        );
+        if (memoryAddress !== null) {
+          this.appendBuffer(" ");
+          this.appendBuffer(memoryAddress);
+        }
+        this.appendBuffer(` ${operator.lineIndex}`);
+        break;
       case OperatorCode.memory_init:
       case OperatorCode.data_drop:
         this.appendBuffer(` ${operator.segmentIndex}`);
@@ -1077,28 +1094,25 @@ export class WasmDisassembler {
         this.appendBuffer(` ${refType} ${fieldName}`);
         break;
       }
-      case OperatorCode.rtt_canon:
-      case OperatorCode.rtt_sub:
-      case OperatorCode.rtt_fresh_sub:
       case OperatorCode.ref_cast:
       case OperatorCode.ref_cast_null:
       case OperatorCode.ref_test:
       case OperatorCode.ref_test_null:
       case OperatorCode.struct_new_default:
-      case OperatorCode.struct_new_default_with_rtt:
       case OperatorCode.struct_new:
-      case OperatorCode.struct_new_with_rtt:
       case OperatorCode.array_new_default:
-      case OperatorCode.array_new_default_with_rtt:
       case OperatorCode.array_new:
-      case OperatorCode.array_new_with_rtt:
       case OperatorCode.array_get:
       case OperatorCode.array_get_s:
       case OperatorCode.array_get_u:
-      case OperatorCode.array_set:
-      case OperatorCode.array_len_: {
+      case OperatorCode.array_set: {
         const refType = this.typeIndexToString(operator.refType);
         this.appendBuffer(` ${refType}`);
+        break;
+      }
+      case OperatorCode.array_fill: {
+        const dstType = this.typeIndexToString(operator.refType);
+        this.appendBuffer(` ${dstType}`);
         break;
       }
       case OperatorCode.array_copy: {
