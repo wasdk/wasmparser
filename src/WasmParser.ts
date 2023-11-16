@@ -618,8 +618,8 @@ export const enum OperatorCode {
   ref_cast_null = 0xfb17,
   br_on_cast = 0xfb18,
   br_on_cast_fail = 0xfb19,
-  extern_internalize = 0xfb1a,
-  extern_externalize = 0xfb1b,
+  any_convert_extern = 0xfb1a,
+  extern_convert_any = 0xfb1b,
   ref_i31 = 0xfb1c,
   i31_get_s = 0xfb1d,
   i31_get_u = 0xfb1e,
@@ -1299,8 +1299,8 @@ export const OperatorCodeNames = [
   "ref.cast null",
   "br_on_cast",
   "br_on_cast_fail",
-  "extern.internalize",
-  "extern.externalize",
+  "any.convert_extern",
+  "extern.convert_any",
   "ref.i31",
   "i31.get_s",
   "i31.get_u",
@@ -2706,8 +2706,8 @@ export class BinaryReader {
         refType = this.readHeapType();
         break;
       case OperatorCode.array_len:
-      case OperatorCode.extern_externalize:
-      case OperatorCode.extern_internalize:
+      case OperatorCode.extern_convert_any:
+      case OperatorCode.any_convert_extern:
       case OperatorCode.ref_i31:
       case OperatorCode.i31_get_s:
       case OperatorCode.i31_get_u:
