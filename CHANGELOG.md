@@ -1,3 +1,10 @@
+# [5.9.0](https://github.com/wasdk/wasmparser/compare/v5.8.0...v5.9.0) (2023-11-16)
+
+
+### Features
+
+* rename extern.internalize and extern.externalize instructions ([#138](https://github.com/wasdk/wasmparser/issues/138)) ([040e8d8](https://github.com/wasdk/wasmparser/commit/040e8d80dda7a30c31e83d2d454fe961b87e0c27))
+
 # [5.8.0](https://github.com/wasdk/wasmparser/compare/v5.7.0...v5.8.0) (2023-09-28)
 
 
