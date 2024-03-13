@@ -391,8 +391,8 @@ describe("DevToolsNameGenerator", () => {
     const nr = ng.getNameResolver();
     expect(nr.getTagName(0, true)).toBe("$ex");
     expect(nr.getTagName(0, false)).toBe("$ex (;0;)");
-    expect(nr.getTagName(1, true)).toBe("$event1");
-    expect(nr.getTagName(1, false)).toBe("$event1");
+    expect(nr.getTagName(1, true)).toBe("$tag1");
+    expect(nr.getTagName(1, false)).toBe("$tag1");
   });
 });
 
@@ -1596,26 +1596,26 @@ describe("Exception handling support", () => {
 
     const expectedLines = [
       "(module",
-      '  (tag $event0 (import "m" "ex"))',
-      "  (tag $event1 (param i32))",
-      '  (export "ex" (tag $event0))',
+      '  (tag $tag0 (import "m" "ex"))',
+      "  (tag $tag1 (param i32))",
+      '  (export "ex" (tag $tag0))',
       "  (func $func0 (param $var0 i32) (result i32)",
       "    try $label0 (result i32)",
-      "      throw $event0",
-      "    catch $event0",
+      "      throw $tag0",
+      "    catch $tag0",
       "      i32.const 0",
-      "    catch $event1",
+      "    catch $tag1",
       "    catch_all",
       "      rethrow $label0",
       "    end $label0",
       "    try",
-      "      throw $event0",
+      "      throw $tag0",
       "    delegate 0",
       "    try $label1",
       "      try",
-      "        throw $event0",
+      "        throw $tag0",
       "      delegate $label1",
-      "    catch $event0",
+      "    catch $tag0",
       "    end",
       "  )",
       ")",

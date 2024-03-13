@@ -53,6 +53,7 @@ import {
   IFieldNameEntry,
   ElementMode,
   RefType,
+  CatchHandlerKind,
 } from "./WasmParser.js";
 
 const NAME_SECTION_NAME = "name";
@@ -301,7 +302,7 @@ export class DefaultNameResolver implements INameResolver {
     return `$elem${index}`;
   }
   public getTagName(index: number, isRef: boolean): string {
-    return `$event${index}`;
+    return `$tag${index}`;
   }
   public getFunctionName(
     index: number,
@@ -577,6 +578,8 @@ export class WasmDisassembler {
         return "eq";
       case TypeKind.i31ref:
         return "i31";
+      case TypeKind.exnref:
+        return "exnref";
       case TypeKind.structref:
         return "struct";
       case TypeKind.arrayref:
@@ -587,6 +590,8 @@ export class WasmDisassembler {
         return "noextern";
       case TypeKind.nullref:
         return "none";
+      case TypeKind.nullexnref:
+        return "noexnref";
     }
   }
   private typeToString(type: Type): string {
@@ -609,6 +614,8 @@ export class WasmDisassembler {
         return "funcref";
       case TypeKind.externref:
         return "externref";
+      case TypeKind.exnref:
+        return "exnref";
       case TypeKind.anyref:
         return "anyref";
       case TypeKind.eqref:
@@ -623,6 +630,8 @@ export class WasmDisassembler {
         return "nullfuncref";
       case TypeKind.nullexternref:
         return "nullexternref";
+      case TypeKind.nullexnref:
+        return "nullexnref";
       case TypeKind.nullref:
         return "nullref";
       case TypeKind.ref:
@@ -754,6 +763,7 @@ export class WasmDisassembler {
       case OperatorCode.loop:
       case OperatorCode.if:
       case OperatorCode.try:
+      case OperatorCode.try_table:
         if (this._labelMode !== LabelMode.Depth) {
           const backrefLabel = {
             line: this._lines.length,
@@ -774,6 +784,34 @@ export class WasmDisassembler {
           this._backrefLabels.push(backrefLabel);
         }
         this.printBlockType(operator.blockType);
+        if (operator.tryTable) {
+          for (var i = 0; i < operator.tryTable.length; i++) {
+            this.appendBuffer(" (");
+            switch (operator.tryTable[i].kind) {
+              case CatchHandlerKind.Catch:
+                this.appendBuffer("catch ");
+                break;
+              case CatchHandlerKind.CatchRef:
+                this.appendBuffer("catch_ref ");
+                break;
+              case CatchHandlerKind.CatchAll:
+                this.appendBuffer("catch_all ");
+                break;
+              case CatchHandlerKind.CatchAllRef:
+                this.appendBuffer("catch_all_ref ");
+                break;
+            }
+            if (operator.tryTable[i].tagIndex != null) {
+              var tagName = this._nameResolver.getTagName(
+                operator.tryTable[i].tagIndex,
+                true
+              );
+              this.appendBuffer(`${tagName} `);
+            }
+            this.appendBuffer(this.useLabel(operator.tryTable[i].depth + 1));
+            this.appendBuffer(")");
+          }
+        }
         break;
       case OperatorCode.end:
         if (this._labelMode === LabelMode.Depth) {
@@ -1715,7 +1753,6 @@ export class WasmDisassembler {
             case OperatorCode.else:
             case OperatorCode.catch:
             case OperatorCode.catch_all:
-            case OperatorCode.unwind:
             case OperatorCode.delegate:
               this.decreaseIndent();
               break;
@@ -1729,9 +1766,9 @@ export class WasmDisassembler {
             case OperatorCode.loop:
             case OperatorCode.else:
             case OperatorCode.try:
+            case OperatorCode.try_table:
             case OperatorCode.catch:
             case OperatorCode.catch_all:
-            case OperatorCode.unwind:
               this.increaseIndent();
               break;
           }
