@@ -5,6 +5,8 @@ export {
   OperatorCodeNames,
   ExternalKind,
   Type,
+  CatchHandlerKind,
+  CatchHandler,
   RelocType,
   LinkingType,
   NameType,

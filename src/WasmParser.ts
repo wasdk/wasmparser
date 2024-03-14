@@ -45,7 +45,7 @@ export const enum OperatorCode {
   catch = 0x07,
   throw = 0x08,
   rethrow = 0x09,
-  unwind = 0x0a,
+  throw_ref = 0x0a,
   end = 0x0b,
   br = 0x0c,
   br_if = 0x0d,
@@ -63,6 +63,7 @@ export const enum OperatorCode {
   drop = 0x1a,
   select = 0x1b,
   select_with_type = 0x1c,
+  try_table = 0x1f,
   local_get = 0x20,
   local_set = 0x21,
   local_tee = 0x22,
@@ -636,7 +637,7 @@ export const OperatorCodeNames = [
   "catch",
   "throw",
   "rethrow",
-  "unwind",
+  "throw_ref",
   "end",
   "br",
   "br_if",
@@ -657,7 +658,7 @@ export const OperatorCodeNames = [
   "select", // with types.
   undefined,
   undefined,
-  undefined,
+  "try_table",
   "local.get",
   "local.set",
   "local.tee",
@@ -1324,6 +1325,7 @@ export const enum TypeKind {
   v128 = -0x05,
   i8 = -0x08,
   i16 = -0x09,
+  nullexnref = -0x0c,
   nullfuncref = -0x0d,
   nullref = -0x0f,
   nullexternref = -0x0e,
@@ -1334,6 +1336,7 @@ export const enum TypeKind {
   i31ref = -0x14,
   structref = -0x15,
   arrayref = -0x16,
+  exnref = -0x17,
   ref = -0x1c,
   ref_null = -0x1d,
   func = -0x20,
@@ -1369,6 +1372,7 @@ export class Type {
   // Convenience singletons.
   static funcref: Type = new Type(TypeKind.funcref);
   static externref: Type = new Type(TypeKind.externref);
+  static exnref: Type = new Type(TypeKind.exnref);
 }
 export class RefType extends Type {
   public ref_index: number;
@@ -1382,6 +1386,18 @@ export class RefType extends Type {
   public get isNullable(): boolean {
     return this.kind == TypeKind.ref_null;
   }
+}
+
+export enum CatchHandlerKind {
+  Catch = 0,
+  CatchRef = 1,
+  CatchAll = 2,
+  CatchAllRef = 3,
+}
+export class CatchHandler {
+  kind: CatchHandlerKind;
+  depth: number;
+  tagIndex?: number;
 }
 
 export const enum RelocType {
@@ -1703,6 +1719,7 @@ export interface IOperatorInformation {
   srcType?: number; // "HeapType" format, a.k.a. s33
   brDepth?: number;
   brTable?: Array<number>;
+  tryTable?: Array<CatchHandler>;
   relativeDepth?: number;
   funcIndex?: number;
   typeIndex?: number;
@@ -1974,11 +1991,13 @@ export class BinaryReader {
       case TypeKind.i16:
       case TypeKind.funcref:
       case TypeKind.externref:
+      case TypeKind.exnref:
       case TypeKind.anyref:
       case TypeKind.eqref:
       case TypeKind.i31ref:
       case TypeKind.nullexternref:
       case TypeKind.nullfuncref:
+      case TypeKind.nullexnref:
       case TypeKind.structref:
       case TypeKind.arrayref:
       case TypeKind.nullref:
@@ -2146,6 +2165,7 @@ export class BinaryReader {
       case TypeKind.i16:
       case TypeKind.funcref:
       case TypeKind.externref:
+      case TypeKind.exnref:
       case TypeKind.anyref:
       case TypeKind.eqref:
         this.result = {
@@ -3294,6 +3314,7 @@ export class BinaryReader {
       refType,
       brDepth,
       brTable,
+      tryTable,
       relativeDepth,
       funcIndex,
       typeIndex,
@@ -3365,6 +3386,40 @@ export class BinaryReader {
         case OperatorCode.catch:
         case OperatorCode.throw:
           tagIndex = this.readVarInt32();
+          break;
+        case OperatorCode.try_table:
+          blockType = this.readType();
+          var tableCount = this.readVarUint32();
+          if (!this.hasBytes(2 * tableCount)) {
+            // We need at least (2 * tableCount) bytes
+            this._pos = pos;
+            return false;
+          }
+          tryTable = [];
+          for (var i = 0; i < tableCount; i++) {
+            if (!this.hasVarIntBytes()) {
+              this._pos = pos;
+              return false;
+            }
+            var kind = this.readVarUint32();
+            var tagIndex;
+            if (
+              kind == CatchHandlerKind.Catch ||
+              kind == CatchHandlerKind.CatchRef
+            ) {
+              if (!this.hasVarIntBytes()) {
+                this._pos = pos;
+                return false;
+              }
+              tagIndex = this.readVarUint32();
+            }
+            if (!this.hasVarIntBytes()) {
+              this._pos = pos;
+              return false;
+            }
+            var depth = this.readVarUint32();
+            tryTable.push({ kind, depth, tagIndex });
+          }
           break;
         case OperatorCode.ref_null:
           refType = this.readHeapType();
@@ -3479,7 +3534,6 @@ export class BinaryReader {
         case OperatorCode.unreachable:
         case OperatorCode.nop:
         case OperatorCode.else:
-        case OperatorCode.unwind:
         case OperatorCode.end:
         case OperatorCode.return:
         case OperatorCode.catch_all:
@@ -3616,6 +3670,7 @@ export class BinaryReader {
         case OperatorCode.ref_is_null:
         case OperatorCode.ref_as_non_null:
         case OperatorCode.ref_eq:
+        case OperatorCode.throw_ref:
           break;
         default:
           this.error = new Error(`Unknown operator: ${code}`);
@@ -3631,6 +3686,7 @@ export class BinaryReader {
       srcType: undefined,
       brDepth,
       brTable,
+      tryTable,
       relativeDepth,
       tableIndex,
       funcIndex,

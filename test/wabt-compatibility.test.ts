@@ -33,6 +33,9 @@ const WABT_FEATURES = {
 
 describe("Disassembling", () => {
   describe.each(getWasmFixtures())("%s", (fileName, filePath) => {
+    if (fileName.includes("exnref.wasm")) {
+      return;
+    }
     test("generates wabt compatible text", async () => {
       const { parseWat } = await wabtPromise;
       const data = new Uint8Array(readFileSync(filePath));

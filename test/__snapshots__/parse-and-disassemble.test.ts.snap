@@ -4249,6 +4249,38 @@ exports[`Parsing and disassembling endianness.wast.0.wasm generates expected out
 "
 `;
 
+exports[`Parsing and disassembling exnref.wasm generates expected output 1`] = `
+"(module
+  (tag $tag0)
+  (export "test" (func $func0))
+  (func $func0 (param $var0 i32) (result i32)
+    (local $var1 exnref)
+    block $label0 (result exnref)
+      try_table (catch_ref $tag0 $label0)
+        throw $tag0
+      end
+      unreachable
+    end $label0
+    local.set $var1
+    block $label1 (result exnref)
+      try_table (result i32) (catch_ref $tag0 $label1)
+        local.get $var0
+        i32.eqz
+        if
+          local.get $var1
+          throw_ref
+        end
+        i32.const 2
+      end
+      return
+    end $label1
+    drop
+    i32.const 1
+  )
+)
+"
+`;
+
 exports[`Parsing and disassembling exports.wast.0.wasm generates expected output 1`] = `
 "(module
   (export "a" (func $func0))
