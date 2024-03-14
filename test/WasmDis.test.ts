@@ -1217,15 +1217,15 @@ describe("GC proposal support", () => {
     0xd0,
     0x6e, // ref.null any
     0xfb,
-    0x14,
-    0x00, // ref.test $structA
+    0x15,
+    0x00, // ref.test null $structA
     0x1a, // drop
 
     0xd0,
     0x6e, // ref.null any
     0xfb,
-    0x16,
-    0x00, // ref.cast $structA
+    0x17,
+    0x00, // ref.cast null $structA
     0x1a, // drop
 
     0x0b, // end (block)
@@ -1440,7 +1440,7 @@ describe("GC proposal support", () => {
     "    i32.const 44",
     "    struct.set $structA $foo",
     "    local.get $var0",
-    "    ref.cast $structA",
+    "    ref.cast (ref $structA)",
     "    struct.get $structA $bar",
     "    drop",
     // ---
@@ -1458,7 +1458,7 @@ describe("GC proposal support", () => {
     "    ref.eq",
     "    drop",
     "    ref.null eq",
-    "    ref.test $structA",
+    "    ref.test (ref $structA)",
     "    drop",
     "  )",
     "  (func $unknown1",
@@ -1486,10 +1486,10 @@ describe("GC proposal support", () => {
     "      br_on_cast flags=0 any $structA $label0",
     "      br_on_cast_fail flags=1 any $structA $label0",
     "      ref.null any",
-    "      ref.test $structA",
+    "      ref.test (ref null $structA)",
     "      drop",
     "      ref.null any",
-    "      ref.cast $structA",
+    "      ref.cast (ref null $structA)",
     "      drop",
     "    end $label0",
     "  )",

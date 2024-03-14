@@ -594,6 +594,11 @@ export class WasmDisassembler {
         return "noexnref";
     }
   }
+  private refTypeToString(typeIndex: number, nullable: boolean): string {
+    return this.typeToString(
+      new RefType(nullable ? TypeKind.ref_null : TypeKind.ref, typeIndex)
+    );
+  }
   private typeToString(type: Type): string {
     switch (type.kind) {
       case TypeKind.i32:
@@ -1133,9 +1138,17 @@ export class WasmDisassembler {
         break;
       }
       case OperatorCode.ref_cast:
+      case OperatorCode.ref_test: {
+        const refType = this.refTypeToString(operator.refType, false);
+        this.appendBuffer(` ${refType}`);
+        break;
+      }
       case OperatorCode.ref_cast_null:
-      case OperatorCode.ref_test:
-      case OperatorCode.ref_test_null:
+      case OperatorCode.ref_test_null: {
+        const refType = this.refTypeToString(operator.refType, true);
+        this.appendBuffer(` ${refType}`);
+        break;
+      }
       case OperatorCode.struct_new_default:
       case OperatorCode.struct_new:
       case OperatorCode.array_new_default:
