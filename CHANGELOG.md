@@ -1,3 +1,10 @@
+# [5.10.0](https://github.com/wasdk/wasmparser/compare/v5.9.0...v5.10.0) (2024-03-14)
+
+
+### Features
+
+* implement exnref type and try_table opcode. ([#141](https://github.com/wasdk/wasmparser/issues/141)) ([5aa20fd](https://github.com/wasdk/wasmparser/commit/5aa20fd4dc656bd060371e281ef2617ad5b4800b))
+
 # [5.9.0](https://github.com/wasdk/wasmparser/compare/v5.8.0...v5.9.0) (2023-11-16)
 
 
