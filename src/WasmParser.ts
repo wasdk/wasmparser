@@ -589,8 +589,8 @@ export const enum OperatorCode {
   f64x2_relaxed_min = 0xfd10f,
   f64x2_relaxed_max = 0xfd110,
   i16x8_relaxed_q15mulr_s = 0xfd111,
-  i16x8_dot_i8x16_i7x16_s = 0xfd112,
-  i32x4_dot_i8x16_i7x16_add_s = 0xfd113,
+  i16x8_relaxed_dot_i8x16_i7x16_s = 0xfd112,
+  i32x4_relaxed_dot_i8x16_i7x16_add_s = 0xfd113,
 
   // GC proposal.
   struct_new = 0xfb00,
@@ -1183,8 +1183,8 @@ export const OperatorCodeNames = [
   "f64x2.relaxed_min",
   "f64x2.relaxed_max",
   "i16x8.relaxed_q15mulr_s",
-  "i16x8.dot_i8x16_i7x16_s",
-  "i32x4.dot_i8x16_i7x16_add_s",
+  "i16x8.relaxed_dot_i8x16_i7x16_s",
+  "i32x4.relaxed_dot_i8x16_i7x16_add_s",
 ].forEach((s, i) => {
   OperatorCodeNames[0xfd000 | i] = s;
 });
@@ -3125,8 +3125,8 @@ export class BinaryReader {
       case OperatorCode.f64x2_relaxed_min:
       case OperatorCode.f64x2_relaxed_max:
       case OperatorCode.i16x8_relaxed_q15mulr_s:
-      case OperatorCode.i16x8_dot_i8x16_i7x16_s:
-      case OperatorCode.i32x4_dot_i8x16_i7x16_add_s:
+      case OperatorCode.i16x8_relaxed_dot_i8x16_i7x16_s:
+      case OperatorCode.i32x4_relaxed_dot_i8x16_i7x16_add_s:
         break;
       default:
         this.error = new Error(

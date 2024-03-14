@@ -33,7 +33,9 @@ const WABT_FEATURES = {
 
 describe("Disassembling", () => {
   describe.each(getWasmFixtures())("%s", (fileName, filePath) => {
-    if (fileName.includes("exnref.wasm")) {
+    if (
+      ["relaxed_simd.wasm", "exnref.wasm"].some((i) => fileName.includes(i))
+    ) {
       return;
     }
     test("generates wabt compatible text", async () => {

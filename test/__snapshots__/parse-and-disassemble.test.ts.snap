@@ -30882,13 +30882,13 @@ exports[`Parsing and disassembling relaxed_simd.wasm generates expected output 1
   (func $func18 (param $var0 v128) (param $var1 v128) (result v128)
     local.get $var0
     local.get $var1
-    i16x8.dot_i8x16_i7x16_s
+    i16x8.relaxed_dot_i8x16_i7x16_s
   )
   (func $func19 (param $var0 v128) (param $var1 v128) (param $var2 v128) (result v128)
     local.get $var0
     local.get $var1
     local.get $var2
-    i32x4.dot_i8x16_i7x16_add_s
+    i32x4.relaxed_dot_i8x16_i7x16_add_s
   )
 )
 "
