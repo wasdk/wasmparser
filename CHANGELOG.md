@@ -1,3 +1,10 @@
+# [5.11.0](https://github.com/wasdk/wasmparser/compare/v5.10.0...v5.11.0) (2024-03-15)
+
+
+### Features
+
+* fix text representation of some ref and relaxed_simd ops ([#144](https://github.com/wasdk/wasmparser/issues/144)) ([41a16d5](https://github.com/wasdk/wasmparser/commit/41a16d5f5ff5bfada881eb7509c37cb9666cec9e))
+
 # [5.10.0](https://github.com/wasdk/wasmparser/compare/v5.9.0...v5.10.0) (2024-03-14)
 
 
