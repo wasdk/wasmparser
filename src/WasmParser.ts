@@ -3076,7 +3076,6 @@ export class BinaryReader {
       case OperatorCode.i64x2_extmul_low_i32x4_u:
       case OperatorCode.i64x2_extmul_high_i32x4_u:
       case OperatorCode.f32x4_abs:
-      case OperatorCode.f32x4_abs:
       case OperatorCode.f32x4_neg:
       case OperatorCode.f32x4_sqrt:
       case OperatorCode.f32x4_add:
