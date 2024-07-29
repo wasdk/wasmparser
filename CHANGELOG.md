@@ -1,3 +1,10 @@
+## [5.11.1](https://github.com/wasdk/wasmparser/compare/v5.11.0...v5.11.1) (2024-07-29)
+
+
+### Bug Fixes
+
+* remove duplicate entry for readCodeOperator [f32x4_abs] ([#146](https://github.com/wasdk/wasmparser/issues/146)) ([49fe9c1](https://github.com/wasdk/wasmparser/commit/49fe9c1240c3e5feff11e5248e6d2867ae760038))
+
 # [5.11.0](https://github.com/wasdk/wasmparser/compare/v5.10.0...v5.11.0) (2024-03-15)
 
 
