@@ -28092,6 +28092,33 @@ exports[`Parsing and disassembling memory_trap.wast.1.wasm generates expected ou
 "
 `;
 
+exports[`Parsing and disassembling memory64.wasm generates expected output 1`] = `
+"(module
+  (table $table0 (import "env" "table") i64 1 4294967296 funcref)
+  (table $table1 i64 2 10 externref)
+  (memory $memory0 i64 1 4294967296)
+  (export "f" (func $func0))
+  (func $func0 (param $var0 i64) (result i32)
+    local.get $var0
+    i32.load offset=2147483648
+    local.get $var0
+    i64.load offset=4886718345 align=4
+    i32.wrap_i64
+    i32.add
+    local.get $var0
+    i32.load8_u offset=12
+    i32.add
+    i64.const 0
+    i32.const 7
+    i32.store offset=8589934592
+    memory.size
+    i32.wrap_i64
+    i32.add
+  )
+)
+"
+`;
+
 exports[`Parsing and disassembling names.wast.0.wasm generates expected output 1`] = `
 "(module
   (export "foo" (func $func0))

@@ -1594,10 +1594,12 @@ export interface IResizableLimits {
 export interface ITableType {
   elementType: Type;
   limits: IResizableLimits;
+  is64?: boolean;
 }
 export interface IMemoryType {
   limits: IResizableLimits;
   shared: boolean;
+  is64?: boolean;
 }
 export interface IGlobalType {
   contentType: Type;
@@ -1960,6 +1962,19 @@ export class BinaryReader {
     }
     return result >>> 0;
   }
+  // Reads an unsigned 64-bit LEB128 value as a number: values above 2^53 lose
+  // precision, which is fine for memory and table sizes and offsets.
+  private readVarUint64AsNumber(): number {
+    var result = 0;
+    var scale = 1;
+    while (true) {
+      var byte = this.readUint8();
+      result += (byte & 0x7f) * scale;
+      scale *= 0x80;
+      if ((byte & 0x80) === 0) break;
+    }
+    return result;
+  }
   private readVarInt64(): Int64 {
     var result = new Uint8Array(8);
     var i = 0;
@@ -2120,26 +2135,32 @@ export class BinaryReader {
       mutability: mutability,
     };
   }
-  private readResizableLimits(maxPresent: boolean): IResizableLimits {
-    var initial = this.readVarUint32();
+  private readResizableLimits(
+    maxPresent: boolean,
+    is64: boolean
+  ): IResizableLimits {
+    var initial = is64 ? this.readVarUint64AsNumber() : this.readVarUint32();
     var maximum;
     if (maxPresent) {
-      maximum = this.readVarUint32();
+      maximum = is64 ? this.readVarUint64AsNumber() : this.readVarUint32();
     }
     return { initial: initial, maximum: maximum };
   }
   private readTableType(): ITableType {
     var elementType = this.readType();
     var flags = this.readVarUint32();
-    var limits = this.readResizableLimits(!!(flags & 0x01));
-    return { elementType: elementType, limits: limits };
+    var is64 = !!(flags & 0x04);
+    var limits = this.readResizableLimits(!!(flags & 0x01), is64);
+    return { elementType: elementType, limits: limits, is64: is64 };
   }
   private readMemoryType(): IMemoryType {
     var flags = this.readVarUint32();
     var shared = !!(flags & 0x02);
+    var is64 = !!(flags & 0x04);
     return {
-      limits: this.readResizableLimits(!!(flags & 0x01)),
+      limits: this.readResizableLimits(!!(flags & 0x01), is64),
       shared: shared,
+      is64: is64,
     };
   }
   private readGlobalType(): IGlobalType {
@@ -2485,7 +2506,7 @@ export class BinaryReader {
   }
   private readMemoryImmediate(): IMemoryAddress {
     var flags = this.readVarUint32();
-    var offset = this.readVarUint32();
+    var offset = this.readVarUint64AsNumber();
     return { flags: flags, offset: offset };
   }
   private readNameMap(): INaming[] {
@@ -2868,7 +2889,7 @@ export class BinaryReader {
   }
 
   private readCodeOperator_0xfd(): boolean {
-    const MAX_CODE_OPERATOR_0XFD_SIZE = 17;
+    const MAX_CODE_OPERATOR_0XFD_SIZE = 19;
     var pos = this._pos;
     if (!this._eof && pos + MAX_CODE_OPERATOR_0XFD_SIZE > this._length) {
       return false;
@@ -3187,7 +3208,7 @@ export class BinaryReader {
   }
 
   private readCodeOperator_0xfe(): boolean {
-    const MAX_CODE_OPERATOR_0XFE_SIZE = 11;
+    const MAX_CODE_OPERATOR_0XFE_SIZE = 17;
     var pos = this._pos;
     if (!this._eof && pos + MAX_CODE_OPERATOR_0XFE_SIZE > this._length) {
       return false;
@@ -3372,7 +3393,7 @@ export class BinaryReader {
         funcIndex = this.readVarUint32();
       }
     } else {
-      const MAX_CODE_OPERATOR_SIZE = 11; // i64.const or load/store
+      const MAX_CODE_OPERATOR_SIZE = 16; // load/store with a 64-bit offset
       var pos = this._pos;
       if (!this._eof && pos + MAX_CODE_OPERATOR_SIZE > this._length) {
         return false;
