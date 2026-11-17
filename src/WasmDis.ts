@@ -880,6 +880,14 @@ export class WasmDisassembler {
         break;
       case OperatorCode.call_indirect:
       case OperatorCode.return_call_indirect:
+        // Table index might be omitted and defaults to 0.
+        if (operator.tableIndex !== 0) {
+          const tableName = this._nameResolver.getTableName(
+            operator.tableIndex,
+            true
+          );
+          this.appendBuffer(` ${tableName}`);
+        }
         this.printFuncType(operator.typeIndex);
         break;
       case OperatorCode.select_with_type: {
@@ -1085,7 +1093,9 @@ export class WasmDisassembler {
         break;
       case OperatorCode.table_set:
       case OperatorCode.table_get:
-      case OperatorCode.table_fill: {
+      case OperatorCode.table_fill:
+      case OperatorCode.table_size:
+      case OperatorCode.table_grow: {
         const tableName = this._nameResolver.getTableName(
           operator.tableIndex,
           true
