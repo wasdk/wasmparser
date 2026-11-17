@@ -28119,6 +28119,63 @@ exports[`Parsing and disassembling memory64.wasm generates expected output 1`] =
 "
 `;
 
+exports[`Parsing and disassembling multi-memory.wasm generates expected output 1`] = `
+"(module
+  (memory $memory0 (import "env" "m0") 1)
+  (memory $memory1 1 2)
+  (memory $memory2 i64 3)
+  (export "f" (func $func0))
+  (func $func0 (param $var0 i32) (param $var1 i64) (result i32)
+    local.get $var0
+    i32.load offset=4
+    local.get $var0
+    i32.load $memory1 offset=8 align=2
+    i32.add
+    local.get $var1
+    i64.load8_u $memory2 offset=4294967296
+    i32.wrap_i64
+    i32.add
+    local.get $var0
+    i32.const 1
+    i32.atomic.rmw.add $memory1 offset=16
+    i32.add
+    local.get $var0
+    v128.const i32x4 0x00000000 0x00000000 0x00000000 0x00000000
+    v128.load32_lane $memory1 offset=4 1
+    drop
+    memory.size $memory1
+    i32.add
+    i32.const 1
+    memory.grow $memory1
+    i32.add
+    local.get $var0
+    i32.const 0
+    i32.const 4
+    memory.fill $memory1
+    local.get $var0
+    i32.const 0
+    i32.const 4
+    memory.copy $memory1 $memory0
+    local.get $var0
+    i32.const 0
+    i32.const 4
+    memory.copy
+    local.get $var0
+    i32.const 0
+    i32.const 3
+    memory.init $memory1 1
+    local.get $var0
+    i32.const 0
+    i32.const 3
+    memory.init 1
+    data.drop 1
+  )
+  (data (memory $memory1) (i32.const 8) "hi")
+  (data "abc")
+)
+"
+`;
+
 exports[`Parsing and disassembling names.wast.0.wasm generates expected output 1`] = `
 "(module
   (export "foo" (func $func0))
