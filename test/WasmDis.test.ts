@@ -1526,7 +1526,7 @@ describe("GC proposal support", () => {
     "    i32.const 0",
     "    i32.const 1",
     "    select",
-    "    select (ref $structB)",
+    "    select (result (ref $structB))",
     "    drop",
     "  )",
     ")",
@@ -1625,5 +1625,33 @@ describe("Exception handling support", () => {
     dis.disassembleChunk(reader);
     const result = dis.getResult();
     expect(result.lines).toEqual(expectedLines);
+  });
+});
+
+describe("WasmDisassembler text format (#150)", () => {
+  function disassembleHex(hex: string): string[] {
+    const bytes = new Uint8Array(
+      hex.match(/../g)!.map((byte) => parseInt(byte, 16))
+    );
+    const reader = new BinaryReader();
+    reader.setData(bytes.buffer, 0, bytes.length);
+    return new WasmDisassembler().disassemble(reader).trim().split("\n");
+  }
+
+  test("typed select", () => {
+    expect(
+      disassembleHex(
+        "0061736d0100000001080160036f6f7f016f030201000a0d010b002000200120021c016f0b"
+      )
+    ).toEqual([
+      "(module",
+      "  (func $func0 (param $var0 externref) (param $var1 externref) (param $var2 i32) (result externref)",
+      "    local.get $var0",
+      "    local.get $var1",
+      "    local.get $var2",
+      "    select (result externref)",
+      "  )",
+      ")",
+    ]);
   });
 });
