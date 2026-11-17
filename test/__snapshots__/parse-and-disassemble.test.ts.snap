@@ -52154,3 +52154,28 @@ exports[`Parsing and disassembling unwind.wast.0.wasm generates expected output 
 )
 "
 `;
+
+exports[`Parsing and disassembling wide-arithmetic.wasm generates expected output 1`] = `
+"(module
+  (export "f" (func $func0))
+  (func $func0 (param $var0 i64) (param $var1 i64) (param $var2 i64) (param $var3 i64) (result i64) (result i64) (result i64) (result i64) (result i64) (result i64) (result i64) (result i64)
+    local.get $var0
+    local.get $var1
+    local.get $var2
+    local.get $var3
+    i64.add128
+    local.get $var0
+    local.get $var1
+    local.get $var2
+    local.get $var3
+    i64.sub128
+    local.get $var0
+    local.get $var1
+    i64.mul_wide_s
+    local.get $var2
+    local.get $var3
+    i64.mul_wide_u
+  )
+)
+"
+`;
