@@ -1614,6 +1614,8 @@ export interface IMemoryType {
   limits: IResizableLimits;
   shared: boolean;
   is64?: boolean;
+  // Present when the memory has a custom page size.
+  pageSizeLog2?: number;
 }
 export interface IGlobalType {
   contentType: Type;
@@ -2181,10 +2183,16 @@ export class BinaryReader {
     var flags = this.readVarUint32();
     var shared = !!(flags & 0x02);
     var is64 = !!(flags & 0x04);
+    var limits = this.readResizableLimits(!!(flags & 0x01), is64);
+    var pageSizeLog2;
+    if (flags & 0x08) {
+      pageSizeLog2 = this.readVarUint32();
+    }
     return {
-      limits: this.readResizableLimits(!!(flags & 0x01), is64),
+      limits: limits,
       shared: shared,
       is64: is64,
+      pageSizeLog2: pageSizeLog2,
     };
   }
   private readGlobalType(): IGlobalType {

@@ -769,6 +769,11 @@ export class WasmDisassembler {
     }
     return backrefLabel.label || "" + depth;
   }
+  private printPageSize(memoryType: IMemoryType): void {
+    if (memoryType.pageSizeLog2 !== undefined) {
+      this.appendBuffer(` (pagesize ${Math.pow(2, memoryType.pageSizeLog2)})`);
+    }
+  }
   private printMemoryIndex(memoryIndex: number): void {
     if (memoryIndex) {
       const memoryName = this._nameResolver.getMemoryName(memoryIndex, true);
@@ -1376,6 +1381,7 @@ export class WasmDisassembler {
           if (memoryInfo.shared) {
             this.appendBuffer(` shared`);
           }
+          this.printPageSize(memoryInfo);
           this.appendBuffer(")");
           this.newLine();
           break;
@@ -1539,6 +1545,7 @@ export class WasmDisassembler {
               if (memoryImportInfo.shared) {
                 this.appendBuffer(` shared`);
               }
+              this.printPageSize(memoryImportInfo);
               this.appendBuffer(")");
               break;
             case ExternalKind.Table:

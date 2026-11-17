@@ -3563,6 +3563,22 @@ exports[`Parsing and disassembling custom_section.wast.2.wasm generates expected
 "
 `;
 
+exports[`Parsing and disassembling custom-page-sizes.wasm generates expected output 1`] = `
+"(module
+  (memory $memory0 (import "env" "m0") 1 2 (pagesize 1))
+  (memory $memory1 10 (pagesize 65536))
+  (memory $memory2 i64 1 100 shared (pagesize 1))
+  (export "f" (func $func0))
+  (func $func0 (result i32)
+    i32.const 0
+    i32.load8_u
+    memory.size $memory1
+    i32.add
+  )
+)
+"
+`;
+
 exports[`Parsing and disassembling elem.0.wasm generates expected output 1`] = `
 "(module
   (table $table0 10 funcref)
