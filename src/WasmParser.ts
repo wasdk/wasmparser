@@ -1753,6 +1753,9 @@ export interface IOperatorInformation {
   destinationIndex?: number;
   memoryAddress?: IMemoryAddress;
   literal?: number | Int64 | Uint8Array;
+  // Raw IEEE 754 bits of an f32.const literal. Converting an f32 to a JS
+  // number may quiet a signaling NaN, so the original bits are kept here.
+  literalBits?: number;
   len?: number;
   lines: Uint8Array;
   lineIndex: number;
@@ -2775,6 +2778,7 @@ export class BinaryReader {
       fieldIndex,
       memoryAddress: undefined,
       literal,
+      literalBits: undefined,
       segmentIndex,
       destinationIndex: undefined,
       len,
@@ -2853,6 +2857,7 @@ export class BinaryReader {
       fieldIndex: undefined,
       memoryAddress: undefined,
       literal: undefined,
+      literalBits: undefined,
       segmentIndex: segmentIndex,
       destinationIndex: destinationIndex,
       len: undefined,
@@ -3171,6 +3176,7 @@ export class BinaryReader {
       fieldIndex: undefined,
       memoryAddress: memoryAddress,
       literal: literal,
+      literalBits: undefined,
       segmentIndex: undefined,
       destinationIndex: undefined,
       len: undefined,
@@ -3291,6 +3297,7 @@ export class BinaryReader {
       fieldIndex: undefined,
       memoryAddress: memoryAddress,
       literal: undefined,
+      literalBits: undefined,
       segmentIndex: undefined,
       destinationIndex: undefined,
       len: undefined,
@@ -3345,6 +3352,7 @@ export class BinaryReader {
       tagIndex,
       memoryAddress,
       literal,
+      literalBits,
       reserved;
     if (
       this.state === BinaryReaderState.INIT_EXPRESSION_OPERATOR &&
@@ -3507,13 +3515,13 @@ export class BinaryReader {
         case OperatorCode.i64_const:
           literal = this.readVarInt64();
           break;
-        case OperatorCode.f32_const:
-          literal = new DataView(
-            this._data.buffer,
-            this._data.byteOffset
-          ).getFloat32(this._pos, true);
+        case OperatorCode.f32_const: {
+          const view = new DataView(this._data.buffer, this._data.byteOffset);
+          literal = view.getFloat32(this._pos, true);
+          literalBits = view.getUint32(this._pos, true);
           this._pos += 4;
           break;
+        }
         case OperatorCode.f64_const:
           literal = new DataView(
             this._data.buffer,
@@ -3718,6 +3726,7 @@ export class BinaryReader {
       tagIndex,
       memoryAddress,
       literal,
+      literalBits,
       segmentIndex: undefined,
       destinationIndex: undefined,
       len: undefined,
