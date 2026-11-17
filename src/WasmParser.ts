@@ -1731,8 +1731,10 @@ export interface IFunctionInformation {
   locals: Array<ILocals>;
 }
 export interface IMemoryAddress {
+  // Alignment, as log2.
   flags: number;
   offset: number;
+  memoryIndex?: number;
 }
 export interface IOperatorInformation {
   code: OperatorCode;
@@ -1753,6 +1755,7 @@ export interface IOperatorInformation {
   segmentIndex?: number;
   tagIndex?: number;
   destinationIndex?: number;
+  memoryIndex?: number;
   memoryAddress?: IMemoryAddress;
   literal?: number | Int64 | Uint8Array;
   // Raw IEEE 754 bits of an f32.const literal. Converting an f32 to a JS
@@ -2506,8 +2509,13 @@ export class BinaryReader {
   }
   private readMemoryImmediate(): IMemoryAddress {
     var flags = this.readVarUint32();
+    var memoryIndex = 0;
+    if (flags & 0x40) {
+      flags &= ~0x40;
+      memoryIndex = this.readVarUint32();
+    }
     var offset = this.readVarUint64AsNumber();
-    return { flags: flags, offset: offset };
+    return { flags: flags, offset: offset, memoryIndex: memoryIndex };
   }
   private readNameMap(): INaming[] {
     var count = this.readVarUint32();
@@ -2814,7 +2822,7 @@ export class BinaryReader {
       return false;
     }
     var code = this.readVarUint32() | 0xfc00;
-    var reserved, segmentIndex, destinationIndex, tableIndex;
+    var segmentIndex, destinationIndex, tableIndex, memoryIndex;
     switch (code) {
       case OperatorCode.i32_trunc_sat_f32_s:
       case OperatorCode.i32_trunc_sat_f32_u:
@@ -2826,12 +2834,12 @@ export class BinaryReader {
       case OperatorCode.i64_trunc_sat_f64_u:
         break;
       case OperatorCode.memory_copy:
-        // Currently memory index must be zero.
-        reserved = this.readVarUint1();
-        reserved = this.readVarUint1();
+        // Encoded as `memory.copy dst src`: memoryIndex is the source memory.
+        destinationIndex = this.readVarUint32();
+        memoryIndex = this.readVarUint32();
         break;
       case OperatorCode.memory_fill:
-        reserved = this.readVarUint1();
+        memoryIndex = this.readVarUint32();
         break;
       case OperatorCode.table_init:
         segmentIndex = this.readVarUint32();
@@ -2849,7 +2857,7 @@ export class BinaryReader {
         break;
       case OperatorCode.memory_init:
         segmentIndex = this.readVarUint32();
-        reserved = this.readVarUint1();
+        memoryIndex = this.readVarUint32();
         break;
       case OperatorCode.data_drop:
       case OperatorCode.elem_drop:
@@ -2881,6 +2889,7 @@ export class BinaryReader {
       literalBits: undefined,
       segmentIndex: segmentIndex,
       destinationIndex: destinationIndex,
+      memoryIndex: memoryIndex,
       len: undefined,
       lines: undefined,
       lineIndex: undefined,
@@ -2889,7 +2898,7 @@ export class BinaryReader {
   }
 
   private readCodeOperator_0xfd(): boolean {
-    const MAX_CODE_OPERATOR_0XFD_SIZE = 19;
+    const MAX_CODE_OPERATOR_0XFD_SIZE = 24;
     var pos = this._pos;
     if (!this._eof && pos + MAX_CODE_OPERATOR_0XFD_SIZE > this._length) {
       return false;
@@ -3208,7 +3217,7 @@ export class BinaryReader {
   }
 
   private readCodeOperator_0xfe(): boolean {
-    const MAX_CODE_OPERATOR_0XFE_SIZE = 17;
+    const MAX_CODE_OPERATOR_0XFE_SIZE = 22;
     var pos = this._pos;
     if (!this._eof && pos + MAX_CODE_OPERATOR_0XFE_SIZE > this._length) {
       return false;
@@ -3371,10 +3380,10 @@ export class BinaryReader {
       localIndex,
       globalIndex,
       tagIndex,
+      memoryIndex,
       memoryAddress,
       literal,
-      literalBits,
-      reserved;
+      literalBits;
     if (
       this.state === BinaryReaderState.INIT_EXPRESSION_OPERATOR &&
       this._sectionId === SectionCode.Element &&
@@ -3393,7 +3402,8 @@ export class BinaryReader {
         funcIndex = this.readVarUint32();
       }
     } else {
-      const MAX_CODE_OPERATOR_SIZE = 16; // load/store with a 64-bit offset
+      // load/store with a memory index and a 64-bit offset
+      const MAX_CODE_OPERATOR_SIZE = 21;
       var pos = this._pos;
       if (!this._eof && pos + MAX_CODE_OPERATOR_SIZE > this._length) {
         return false;
@@ -3528,7 +3538,7 @@ export class BinaryReader {
           break;
         case OperatorCode.memory_size:
         case OperatorCode.memory_grow:
-          reserved = this.readVarUint1();
+          memoryIndex = this.readVarUint32();
           break;
         case OperatorCode.i32_const:
           literal = this.readVarInt32();
@@ -3745,6 +3755,7 @@ export class BinaryReader {
       globalIndex,
       fieldIndex: undefined,
       tagIndex,
+      memoryIndex,
       memoryAddress,
       literal,
       literalBits,

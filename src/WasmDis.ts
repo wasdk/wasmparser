@@ -34,6 +34,7 @@ import {
   ITagType,
   IGlobalType,
   IResizableLimits,
+  IDataSegment,
   IDataSegmentBody,
   IGlobalVariable,
   IElementSegment,
@@ -768,6 +769,12 @@ export class WasmDisassembler {
     }
     return backrefLabel.label || "" + depth;
   }
+  private printMemoryIndex(memoryIndex: number): void {
+    if (memoryIndex) {
+      const memoryName = this._nameResolver.getMemoryName(memoryIndex, true);
+      this.appendBuffer(` ${memoryName}`);
+    }
+  }
   private printOperator(operator: IOperatorInformation): void {
     var code = operator.code;
     this.appendBuffer(OperatorCodeNames[code]);
@@ -1024,6 +1031,7 @@ export class WasmDisassembler {
       case OperatorCode.v128_store:
       case OperatorCode.v128_load32_zero:
       case OperatorCode.v128_load64_zero:
+        this.printMemoryIndex(operator.memoryAddress.memoryIndex);
         var memoryAddress = memoryAddressToString(
           operator.memoryAddress,
           operator.code
@@ -1035,6 +1043,21 @@ export class WasmDisassembler {
         break;
       case OperatorCode.memory_size:
       case OperatorCode.memory_grow:
+      case OperatorCode.memory_fill:
+        this.printMemoryIndex(operator.memoryIndex);
+        break;
+      case OperatorCode.memory_copy:
+        if (operator.destinationIndex || operator.memoryIndex) {
+          const dstName = this._nameResolver.getMemoryName(
+            operator.destinationIndex,
+            true
+          );
+          const srcName = this._nameResolver.getMemoryName(
+            operator.memoryIndex,
+            true
+          );
+          this.appendBuffer(` ${dstName} ${srcName}`);
+        }
         break;
       case OperatorCode.i32_const:
         this.appendBuffer(` ${(<number>operator.literal).toString()}`);
@@ -1080,6 +1103,7 @@ export class WasmDisassembler {
       case OperatorCode.v128_store16_lane:
       case OperatorCode.v128_store32_lane:
       case OperatorCode.v128_store64_lane:
+        this.printMemoryIndex(operator.memoryAddress.memoryIndex);
         var memoryAddress = memoryAddressToString(
           operator.memoryAddress,
           operator.code
@@ -1091,6 +1115,9 @@ export class WasmDisassembler {
         this.appendBuffer(` ${operator.lineIndex}`);
         break;
       case OperatorCode.memory_init:
+        this.printMemoryIndex(operator.memoryIndex);
+        this.appendBuffer(` ${operator.segmentIndex}`);
+        break;
       case OperatorCode.data_drop:
         this.appendBuffer(` ${operator.segmentIndex}`);
         break;
@@ -1674,7 +1701,15 @@ export class WasmDisassembler {
           this.newLine();
           break;
         case BinaryReaderState.BEGIN_DATA_SECTION_ENTRY:
+          var dataSegment = <IDataSegment>reader.result;
           this.appendBuffer("  (data");
+          if (dataSegment.memoryIndex) {
+            var dataMemoryName = this._nameResolver.getMemoryName(
+              dataSegment.memoryIndex,
+              true
+            );
+            this.appendBuffer(` (memory ${dataMemoryName})`);
+          }
           break;
         case BinaryReaderState.DATA_SECTION_ENTRY_BODY:
           var body = <IDataSegmentBody>reader.result;

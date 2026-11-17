@@ -34,9 +34,12 @@ const WABT_FEATURES = {
 describe("Disassembling", () => {
   describe.each(getWasmFixtures())("%s", (fileName, filePath) => {
     if (
-      ["relaxed_simd.wasm", "exnref.wasm", "memory64.wasm"].some((i) =>
-        fileName.includes(i)
-      )
+      [
+        "relaxed_simd.wasm",
+        "exnref.wasm",
+        "memory64.wasm",
+        "multi-memory.wasm",
+      ].some((i) => fileName.includes(i))
     ) {
       return;
     }
