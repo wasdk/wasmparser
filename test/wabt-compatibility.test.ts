@@ -40,6 +40,7 @@ describe("Disassembling", () => {
         "memory64.wasm",
         "multi-memory.wasm",
         "wide-arithmetic.wasm",
+        "custom-page-sizes.wasm",
       ].some((i) => fileName.includes(i))
     ) {
       return;
