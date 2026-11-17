@@ -254,6 +254,11 @@ export const enum OperatorCode {
   table_size = 0xfc10,
   table_fill = 0xfc11,
 
+  i64_add128 = 0xfc13,
+  i64_sub128 = 0xfc14,
+  i64_mul_wide_s = 0xfc15,
+  i64_mul_wide_u = 0xfc16,
+
   table_get = 0x25,
   table_set = 0x26,
 
@@ -925,6 +930,11 @@ export const OperatorCodeNames = [
   "table.grow",
   "table.size",
   "table.fill",
+  undefined,
+  "i64.add128",
+  "i64.sub128",
+  "i64.mul_wide_s",
+  "i64.mul_wide_u",
 ].forEach((s, i) => {
   OperatorCodeNames[0xfc00 | i] = s;
 });
@@ -2832,6 +2842,10 @@ export class BinaryReader {
       case OperatorCode.i64_trunc_sat_f32_u:
       case OperatorCode.i64_trunc_sat_f64_s:
       case OperatorCode.i64_trunc_sat_f64_u:
+      case OperatorCode.i64_add128:
+      case OperatorCode.i64_sub128:
+      case OperatorCode.i64_mul_wide_s:
+      case OperatorCode.i64_mul_wide_u:
         break;
       case OperatorCode.memory_copy:
         // Encoded as `memory.copy dst src`: memoryIndex is the source memory.

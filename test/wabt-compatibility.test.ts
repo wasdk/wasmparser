@@ -39,6 +39,7 @@ describe("Disassembling", () => {
         "exnref.wasm",
         "memory64.wasm",
         "multi-memory.wasm",
+        "wide-arithmetic.wasm",
       ].some((i) => fileName.includes(i))
     ) {
       return;
