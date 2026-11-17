@@ -1,3 +1,10 @@
+## [5.11.3](https://github.com/wasdk/wasmparser/compare/v5.11.2...v5.11.3) (2026-11-17)
+
+
+### Bug Fixes
+
+* publish 5.11.2 changes to npm ([#155](https://github.com/wasdk/wasmparser/issues/155)) ([47fb214](https://github.com/wasdk/wasmparser/commit/47fb2149cc117101d93a0114abacbf59ac6495b1)), closes [#150](https://github.com/wasdk/wasmparser/issues/150)
+
 ## [5.11.2](https://github.com/wasdk/wasmparser/compare/v5.11.1...v5.11.2) (2026-11-17)
 
 
