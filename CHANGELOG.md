@@ -1,3 +1,10 @@
+## [5.11.4](https://github.com/wasdk/wasmparser/compare/v5.11.3...v5.11.4) (2026-11-17)
+
+
+### Bug Fixes
+
+* normalize bin and repository fields in package.json ([#156](https://github.com/wasdk/wasmparser/issues/156)) ([0bfb8d8](https://github.com/wasdk/wasmparser/commit/0bfb8d814cb952ee98538f2a0042d0bb78cbdb71))
+
 ## [5.11.3](https://github.com/wasdk/wasmparser/compare/v5.11.2...v5.11.3) (2026-11-17)
 
 
