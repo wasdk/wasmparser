@@ -6,7 +6,7 @@
   "module": "dist/esm/index.js",
   "types": "dist/cjs/index.d.ts",
   "bin": {
-    "disassemble-wasm": "./disassemble-wasm.js"
+    "disassemble-wasm": "disassemble-wasm.js"
   },
   "scripts": {
     "build": "concurrently \"npm:build:cjs\" \"npm:build:esm\"",
@@ -32,7 +32,7 @@
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/wasdk/wasmparser.git"
+    "url": "git+https://github.com/wasdk/wasmparser.git"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.6.1",
