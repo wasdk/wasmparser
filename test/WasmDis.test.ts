@@ -1654,4 +1654,38 @@ describe("WasmDisassembler text format (#150)", () => {
       ")",
     ]);
   });
+
+  test("instructions with non-zero table indices", async () => {
+    const { parseWat } = await wabtPromise;
+    const { buffer } = parseWat(
+      `test.wat`,
+      `(module
+         (type $t (func))
+         (table $a 1 funcref)
+         (table $b 1 funcref)
+         (func $f
+           (drop (table.size $b))
+           (drop (table.grow $b (ref.null func) (i32.const 1)))
+           (table.copy $a $b (i32.const 0) (i32.const 0) (i32.const 1))
+           (table.copy $b $a (i32.const 0) (i32.const 0) (i32.const 1))
+           (call_indirect $b (type $t) (i32.const 0))
+           (call_indirect $a (type $t) (i32.const 0))
+           (return_call_indirect $b (type $t) (i32.const 0))))`,
+      { tail_call: true }
+    ).toBinary({ write_debug_names: false });
+    const reader = new BinaryReader();
+    reader.setData(buffer.buffer, 0, buffer.byteLength);
+    const lines = new WasmDisassembler().disassemble(reader).split("\n");
+    expect(lines).toEqual(
+      expect.arrayContaining([
+        "    table.size $table1",
+        "    table.grow $table1",
+        "    table.copy $table0 $table1",
+        "    table.copy $table1 $table0",
+        "    call_indirect $table1",
+        "    return_call_indirect $table1",
+      ])
+    );
+    expect(lines.filter((l) => l.trim() === "call_indirect")).toHaveLength(1);
+  });
 });

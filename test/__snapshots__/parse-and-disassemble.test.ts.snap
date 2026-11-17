@@ -31671,29 +31671,29 @@ exports[`Parsing and disassembling return_call_indirect.wast.2.wasm generates ex
   )
   (func $func6 (param $var0 i32) (result i32)
     local.get $var0
-    call_indirect (result i32)
+    call_indirect $table1 (result i32)
   )
   (func $func7 (param $var0 i32) (result i32)
     local.get $var0
-    return_call_indirect (result i32)
+    return_call_indirect $table1 (result i32)
   )
   (func $func8 (param $var0 i32) (result i32)
     local.get $var0
-    call_indirect (result i32)
+    call_indirect $table2 (result i32)
   )
   (func $func9 (param $var0 i32) (result i32)
     local.get $var0
-    return_call_indirect (result i32)
+    return_call_indirect $table2 (result i32)
   )
   (func $func10 (param $var0 i32) (result i32)
     local.get $var0
     local.get $var0
-    call_indirect (param i32) (result i32)
+    call_indirect $table2 (param i32) (result i32)
   )
   (func $func11 (param $var0 i32) (result i32)
     local.get $var0
     local.get $var0
-    return_call_indirect (param i32) (result i32)
+    return_call_indirect $table2 (param i32) (result i32)
   )
 )
 "

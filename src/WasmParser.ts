@@ -2792,8 +2792,9 @@ export class BinaryReader {
         tableIndex = this.readVarUint32();
         break;
       case OperatorCode.table_copy:
-        tableIndex = this.readVarUint32();
+        // Encoded as `table.copy dst src`: tableIndex is the source table.
         destinationIndex = this.readVarUint32();
+        tableIndex = this.readVarUint32();
         break;
       case OperatorCode.table_grow:
       case OperatorCode.table_size:
@@ -3431,7 +3432,7 @@ export class BinaryReader {
         case OperatorCode.call_indirect:
         case OperatorCode.return_call_indirect:
           typeIndex = this.readVarUint32();
-          reserved = this.readVarUint1();
+          tableIndex = this.readVarUint32();
           break;
         case OperatorCode.local_get:
         case OperatorCode.local_set:
