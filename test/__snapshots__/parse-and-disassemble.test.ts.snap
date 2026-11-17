@@ -3341,6 +3341,27 @@ exports[`Parsing and disassembling comments.wast.3.wasm generates expected outpu
 "
 `;
 
+exports[`Parsing and disassembling compact-imports.wasm generates expected output 1`] = `
+"(module
+  (func $import0 (import "env" "plain") (param i64))
+  (func $import1 (import "m" "f") (param i32))
+  (global $global0 (import "m" "g") i32)
+  (memory $memory0 (import "m" "mem") 1)
+  (func $import2 (import "n" "x") (result i32))
+  (func $import3 (import "n" "y") (result i32))
+  (func $import4 (import "n" "z") (result i32))
+  (table $table0 (import "n" "t1") 1 funcref)
+  (table $table1 (import "n" "t2") 1 funcref)
+  (export "run" (func $func5))
+  (func $func5 (result i32)
+    call $import3
+    global.get $global0
+    i32.add
+  )
+)
+"
+`;
+
 exports[`Parsing and disassembling conversion_sat.wasm generates expected output 1`] = `
 "(module
   (export "i32.trunc_s:sat_f32" (func $func0))

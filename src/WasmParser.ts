@@ -1340,6 +1340,10 @@ export const OperatorCodeNames = [
   OperatorCodeNames[0xfb00 | i] = s;
 });
 
+const enum CompactImportKind {
+  ModuleName = 0x7f,
+  ModuleNameAndExternType = 0x7e,
+}
 export const enum ExternalKind {
   Function = 0,
   Table = 1,
@@ -1880,6 +1884,13 @@ export class BinaryReader {
   public result: BinaryReaderResult = null;
   public error: Error = null;
   private _sectionEntriesLeft = 0;
+  private _compactImportsLeft = 0;
+  private _compactImportModule: Uint8Array = null;
+  private _compactImportDesc: {
+    kind: ExternalKind;
+    funcTypeIndex: number;
+    type: ImportEntryType;
+  } = null;
   private _sectionId: SectionCode = SectionCode.Unknown;
   private _sectionRange: DataRange = null;
   private _functionRange: DataRange = null;
@@ -2266,6 +2277,21 @@ export class BinaryReader {
     return true;
   }
   private readImportEntry() {
+    if (this._compactImportsLeft > 0) {
+      this.state = BinaryReaderState.IMPORT_SECTION_ENTRY;
+      var field = this.readStringBytes();
+      var desc =
+        this._compactImportDesc || this.readImportDesc(this.readUint8());
+      this.result = {
+        module: this._compactImportModule,
+        field: field,
+        kind: desc.kind,
+        funcTypeIndex: desc.funcTypeIndex,
+        type: desc.type,
+      };
+      this._compactImportsLeft--;
+      return true;
+    }
     if (this._sectionEntriesLeft === 0) {
       this.skipSection();
       return this.read();
@@ -2274,6 +2300,34 @@ export class BinaryReader {
     var module = this.readStringBytes();
     var field = this.readStringBytes();
     var kind = this.readUint8();
+    if (
+      field.length === 0 &&
+      (kind === CompactImportKind.ModuleName ||
+        kind === CompactImportKind.ModuleNameAndExternType)
+    ) {
+      // A group of imports from one module, either with their own types
+      // or sharing one.
+      this._compactImportModule = module;
+      this._compactImportDesc =
+        kind === CompactImportKind.ModuleNameAndExternType
+          ? this.readImportDesc(this.readUint8())
+          : null;
+      this._compactImportsLeft = this.readVarUint32();
+      this._sectionEntriesLeft--;
+      return this.readImportEntry();
+    }
+    var desc = this.readImportDesc(kind);
+    this.result = {
+      module: module,
+      field: field,
+      kind: desc.kind,
+      funcTypeIndex: desc.funcTypeIndex,
+      type: desc.type,
+    };
+    this._sectionEntriesLeft--;
+    return true;
+  }
+  private readImportDesc(kind: ExternalKind) {
     var funcTypeIndex: number;
     var type: ITableType | IMemoryType | IGlobalType | ITagType;
     switch (kind) {
@@ -2293,15 +2347,7 @@ export class BinaryReader {
         type = this.readTagType();
         break;
     }
-    this.result = {
-      module: module,
-      field: field,
-      kind: kind,
-      funcTypeIndex: funcTypeIndex,
-      type: type,
-    };
-    this._sectionEntriesLeft--;
-    return true;
+    return { kind: kind, funcTypeIndex: funcTypeIndex, type: type };
   }
   private readExportEntry(): boolean {
     if (this._sectionEntriesLeft === 0) {
