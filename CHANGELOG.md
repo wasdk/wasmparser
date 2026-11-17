@@ -1,3 +1,13 @@
+## [5.11.2](https://github.com/wasdk/wasmparser/compare/v5.11.1...v5.11.2) (2026-11-17)
+
+
+### Bug Fixes
+
+* handle non-zero table indices in table and call_indirect ops ([c4f0c9e](https://github.com/wasdk/wasmparser/commit/c4f0c9ea871607463f1d002459e67cd2ef3cf30a)), closes [#150](https://github.com/wasdk/wasmparser/issues/150)
+* preserve signaling NaN payloads in f32.const ([756a33e](https://github.com/wasdk/wasmparser/commit/756a33e76a9a94ba76b1ecb15b7b2a40af7db9d1)), closes [#150](https://github.com/wasdk/wasmparser/issues/150)
+* print typed select as `select (result <type>)` ([4369c05](https://github.com/wasdk/wasmparser/commit/4369c057e8b176e484044df337761975d9762f9d)), closes [#150](https://github.com/wasdk/wasmparser/issues/150)
+* use standard names for SIMD extending and splat loads ([a858303](https://github.com/wasdk/wasmparser/commit/a858303f0c9d8af749e852e1b4a8d168f3ccb209)), closes [#150](https://github.com/wasdk/wasmparser/issues/150)
+
 ## [5.11.1](https://github.com/wasdk/wasmparser/compare/v5.11.0...v5.11.1) (2024-07-29)
 
 
