@@ -8432,7 +8432,7 @@ exports[`Parsing and disassembling float_literals.wast.0.wasm generates expected
     i32.reinterpret_f32
   )
   (func $func4 (result i32)
-    f32.const +nan:0x600000
+    f32.const +nan:0x200000
     i32.reinterpret_f32
   )
   (func $func5 (result i32)
@@ -8440,15 +8440,15 @@ exports[`Parsing and disassembling float_literals.wast.0.wasm generates expected
     i32.reinterpret_f32
   )
   (func $func6 (result i32)
-    f32.const +nan:0x412345
+    f32.const +nan:0x12345
     i32.reinterpret_f32
   )
   (func $func7 (result i32)
-    f32.const +nan:0x704050
+    f32.const +nan:0x304050
     i32.reinterpret_f32
   )
   (func $func8 (result i32)
-    f32.const -nan:0x6abcde
+    f32.const -nan:0x2abcde
     i32.reinterpret_f32
   )
   (func $func9 (result i32)
@@ -8677,7 +8677,7 @@ exports[`Parsing and disassembling float_memory.wast.0.wasm generates expected o
   )
   (func $func2
     i32.const 0
-    f32.const +nan:0x600000
+    f32.const +nan:0x200000
     f32.store
   )
   (func $func3
@@ -8749,7 +8749,7 @@ exports[`Parsing and disassembling float_memory.wast.2.wasm generates expected o
   )
   (func $func2
     i32.const 1
-    f32.const +nan:0x600000
+    f32.const +nan:0x200000
     f32.store
   )
   (func $func3

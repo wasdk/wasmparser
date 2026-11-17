@@ -63,13 +63,19 @@ const INVALID_NAME_SYMBOLS_REGEX_GLOBAL = new RegExp(
   "g"
 );
 
-function formatFloat32(n: number): string {
+function formatFloat32(n: number, bits?: number): string {
   if (n === 0) return 1 / n < 0 ? "-0.0" : "0.0";
   if (isFinite(n)) return n.toString();
   if (!isNaN(n)) return n < 0 ? "-inf" : "inf";
-  var view = new DataView(new ArrayBuffer(8));
-  view.setFloat32(0, n, true);
-  var data = view.getInt32(0, true);
+  var data: number;
+  if (bits !== undefined) {
+    // Use the original bits: converting to a JS number may quiet a sNaN.
+    data = bits | 0;
+  } else {
+    var view = new DataView(new ArrayBuffer(8));
+    view.setFloat32(0, n, true);
+    data = view.getInt32(0, true);
+  }
   var payload = data & 0x7fffff;
   const canonicalBits = 4194304; // 0x800..0
   if (data > 0 && payload === canonicalBits) return "nan";
@@ -1035,7 +1041,9 @@ export class WasmDisassembler {
         this.appendBuffer(` ${(<Int64>operator.literal).toString()}`);
         break;
       case OperatorCode.f32_const:
-        this.appendBuffer(` ${formatFloat32(<number>operator.literal)}`);
+        this.appendBuffer(
+          ` ${formatFloat32(<number>operator.literal, operator.literalBits)}`
+        );
         break;
       case OperatorCode.f64_const:
         this.appendBuffer(` ${formatFloat64(<number>operator.literal)}`);

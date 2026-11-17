@@ -1711,4 +1711,18 @@ describe("WasmDisassembler text format (#150)", () => {
     expect(OperatorCode.i16x8_load8x8_s).toBe(OperatorCode.v128_load8x8_s);
     expect(OperatorCode.v64x2_load_splat).toBe(OperatorCode.v128_load64_splat);
   });
+
+  test("f32.const keeps signaling NaN payloads", () => {
+    expect(
+      disassembleHex(
+        "0061736d010000000105016000017d030201000a09010700430000a07f0b"
+      )
+    ).toEqual([
+      "(module",
+      "  (func $func0 (result f32)",
+      "    f32.const +nan:0x200000",
+      "  )",
+      ")",
+    ]);
+  });
 });
