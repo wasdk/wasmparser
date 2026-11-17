@@ -884,7 +884,7 @@ export class WasmDisassembler {
         break;
       case OperatorCode.select_with_type: {
         const selectType = this.typeToString(operator.selectType);
-        this.appendBuffer(` ${selectType}`);
+        this.appendBuffer(` (result ${selectType})`);
         break;
       }
       case OperatorCode.local_get:
