@@ -116,16 +116,16 @@ function memoryAddressToString(
   var defaultAlignFlags;
   switch (code) {
     case OperatorCode.v128_load:
-    case OperatorCode.i16x8_load8x8_s:
-    case OperatorCode.i16x8_load8x8_u:
-    case OperatorCode.i32x4_load16x4_s:
-    case OperatorCode.i32x4_load16x4_u:
-    case OperatorCode.i64x2_load32x2_s:
-    case OperatorCode.i64x2_load32x2_u:
-    case OperatorCode.v8x16_load_splat:
-    case OperatorCode.v16x8_load_splat:
-    case OperatorCode.v32x4_load_splat:
-    case OperatorCode.v64x2_load_splat:
+    case OperatorCode.v128_load8x8_s:
+    case OperatorCode.v128_load8x8_u:
+    case OperatorCode.v128_load16x4_s:
+    case OperatorCode.v128_load16x4_u:
+    case OperatorCode.v128_load32x2_s:
+    case OperatorCode.v128_load32x2_u:
+    case OperatorCode.v128_load8_splat:
+    case OperatorCode.v128_load16_splat:
+    case OperatorCode.v128_load32_splat:
+    case OperatorCode.v128_load64_splat:
     case OperatorCode.v128_store:
       defaultAlignFlags = 4;
       break;
@@ -1003,16 +1003,16 @@ export class WasmDisassembler {
       case OperatorCode.i64_atomic_rmw16_cmpxchg_u:
       case OperatorCode.i64_atomic_rmw32_cmpxchg_u:
       case OperatorCode.v128_load:
-      case OperatorCode.i16x8_load8x8_s:
-      case OperatorCode.i16x8_load8x8_u:
-      case OperatorCode.i32x4_load16x4_s:
-      case OperatorCode.i32x4_load16x4_u:
-      case OperatorCode.i64x2_load32x2_s:
-      case OperatorCode.i64x2_load32x2_u:
-      case OperatorCode.v8x16_load_splat:
-      case OperatorCode.v16x8_load_splat:
-      case OperatorCode.v32x4_load_splat:
-      case OperatorCode.v64x2_load_splat:
+      case OperatorCode.v128_load8x8_s:
+      case OperatorCode.v128_load8x8_u:
+      case OperatorCode.v128_load16x4_s:
+      case OperatorCode.v128_load16x4_u:
+      case OperatorCode.v128_load32x2_s:
+      case OperatorCode.v128_load32x2_u:
+      case OperatorCode.v128_load8_splat:
+      case OperatorCode.v128_load16_splat:
+      case OperatorCode.v128_load32_splat:
+      case OperatorCode.v128_load64_splat:
       case OperatorCode.v128_store:
       case OperatorCode.v128_load32_zero:
       case OperatorCode.v128_load64_zero:

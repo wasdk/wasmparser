@@ -333,17 +333,38 @@ export const enum OperatorCode {
   i64_atomic_rmw16_cmpxchg_u = 0xfe4d,
   i64_atomic_rmw32_cmpxchg_u = 0xfe4e,
 
-  v128_load = 0xfd000,
+  // Pre-standard SIMD load names, kept for backwards compatibility.
+  /** @deprecated Use v128_load8x8_s. */
   i16x8_load8x8_s = 0xfd001,
+  /** @deprecated Use v128_load8x8_u. */
   i16x8_load8x8_u = 0xfd002,
+  /** @deprecated Use v128_load16x4_s. */
   i32x4_load16x4_s = 0xfd003,
+  /** @deprecated Use v128_load16x4_u. */
   i32x4_load16x4_u = 0xfd004,
+  /** @deprecated Use v128_load32x2_s. */
   i64x2_load32x2_s = 0xfd005,
+  /** @deprecated Use v128_load32x2_u. */
   i64x2_load32x2_u = 0xfd006,
+  /** @deprecated Use v128_load8_splat. */
   v8x16_load_splat = 0xfd007,
+  /** @deprecated Use v128_load16_splat. */
   v16x8_load_splat = 0xfd008,
+  /** @deprecated Use v128_load32_splat. */
   v32x4_load_splat = 0xfd009,
+  /** @deprecated Use v128_load64_splat. */
   v64x2_load_splat = 0xfd00a,
+  v128_load = 0xfd000,
+  v128_load8x8_s = 0xfd001,
+  v128_load8x8_u = 0xfd002,
+  v128_load16x4_s = 0xfd003,
+  v128_load16x4_u = 0xfd004,
+  v128_load32x2_s = 0xfd005,
+  v128_load32x2_u = 0xfd006,
+  v128_load8_splat = 0xfd007,
+  v128_load16_splat = 0xfd008,
+  v128_load32_splat = 0xfd009,
+  v128_load64_splat = 0xfd00a,
   v128_store = 0xfd00b,
   v128_const = 0xfd00c,
   i8x16_shuffle = 0xfd00d,
@@ -910,16 +931,16 @@ export const OperatorCodeNames = [
 
 [
   "v128.load",
-  "i16x8.load8x8_s",
-  "i16x8.load8x8_u",
-  "i32x4.load16x4_s",
-  "i32x4.load16x4_u",
-  "i64x2.load32x2_s",
-  "i64x2.load32x2_u",
-  "v8x16.load_splat",
-  "v16x8.load_splat",
-  "v32x4.load_splat",
-  "v64x2.load_splat",
+  "v128.load8x8_s",
+  "v128.load8x8_u",
+  "v128.load16x4_s",
+  "v128.load16x4_u",
+  "v128.load32x2_s",
+  "v128.load32x2_u",
+  "v128.load8_splat",
+  "v128.load16_splat",
+  "v128.load32_splat",
+  "v128.load64_splat",
   "v128.store",
   "v128.const",
   "i8x16.shuffle",
@@ -2857,16 +2878,16 @@ export class BinaryReader {
     var lines;
     switch (code) {
       case OperatorCode.v128_load:
-      case OperatorCode.i16x8_load8x8_s:
-      case OperatorCode.i16x8_load8x8_u:
-      case OperatorCode.i32x4_load16x4_s:
-      case OperatorCode.i32x4_load16x4_u:
-      case OperatorCode.i64x2_load32x2_s:
-      case OperatorCode.i64x2_load32x2_u:
-      case OperatorCode.v8x16_load_splat:
-      case OperatorCode.v16x8_load_splat:
-      case OperatorCode.v32x4_load_splat:
-      case OperatorCode.v64x2_load_splat:
+      case OperatorCode.v128_load8x8_s:
+      case OperatorCode.v128_load8x8_u:
+      case OperatorCode.v128_load16x4_s:
+      case OperatorCode.v128_load16x4_u:
+      case OperatorCode.v128_load32x2_s:
+      case OperatorCode.v128_load32x2_u:
+      case OperatorCode.v128_load8_splat:
+      case OperatorCode.v128_load16_splat:
+      case OperatorCode.v128_load32_splat:
+      case OperatorCode.v128_load64_splat:
       case OperatorCode.v128_store:
       case OperatorCode.v128_load32_zero:
       case OperatorCode.v128_load64_zero:

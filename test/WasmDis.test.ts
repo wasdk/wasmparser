@@ -16,7 +16,7 @@
 
 import { NameSectionReader, WasmDisassembler } from "../src/WasmDis";
 import { DevToolsNameGenerator } from "../src/WasmDis";
-import { BinaryReader } from "../src/WasmParser";
+import { BinaryReader, OperatorCode } from "../src/WasmParser";
 
 const wabtPromise = require("wabt")();
 
@@ -1687,5 +1687,28 @@ describe("WasmDisassembler text format (#150)", () => {
       ])
     );
     expect(lines.filter((l) => l.trim() === "call_indirect")).toHaveLength(1);
+  });
+
+  test("SIMD extending and splat loads use standard names", () => {
+    expect(
+      disassembleHex(
+        "0061736d010000000104016000000302010005030100010a120110004100fd0700001a4100fd0103001a0b"
+      )
+    ).toEqual([
+      "(module",
+      "  (memory $memory0 1)",
+      "  (func $func0",
+      "    i32.const 0",
+      "    v128.load8_splat align=1",
+      "    drop",
+      "    i32.const 0",
+      "    v128.load8x8_s align=8",
+      "    drop",
+      "  )",
+      ")",
+    ]);
+    // Deprecated aliases stay available.
+    expect(OperatorCode.i16x8_load8x8_s).toBe(OperatorCode.v128_load8x8_s);
+    expect(OperatorCode.v64x2_load_splat).toBe(OperatorCode.v128_load64_splat);
   });
 });
