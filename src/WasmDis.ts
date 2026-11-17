@@ -249,11 +249,13 @@ function memoryAddressToString(
   if (!address.offset)
     // hide default offset
     return `align=${1 << address.flags}`;
-  return `offset=${address.offset | 0} align=${1 << address.flags}`;
+  return `offset=${address.offset} align=${1 << address.flags}`;
 }
-function limitsToString(limits: IResizableLimits): string {
+function limitsToString(limits: IResizableLimits, is64?: boolean): string {
   return (
-    limits.initial + (limits.maximum !== undefined ? " " + limits.maximum : "")
+    (is64 ? "i64 " : "") +
+    limits.initial +
+    (limits.maximum !== undefined ? " " + limits.maximum : "")
   );
 }
 var paddingCache = ["0", "00", "000"];
@@ -1341,7 +1343,9 @@ export class WasmDisassembler {
               this.appendBuffer(` (export ${JSON.stringify(exportName)})`);
             }
           }
-          this.appendBuffer(` ${limitsToString(memoryInfo.limits)}`);
+          this.appendBuffer(
+            ` ${limitsToString(memoryInfo.limits, memoryInfo.is64)}`
+          );
           if (memoryInfo.shared) {
             this.appendBuffer(` shared`);
           }
@@ -1377,9 +1381,10 @@ export class WasmDisassembler {
             }
           }
           this.appendBuffer(
-            ` ${limitsToString(tableInfo.limits)} ${this.typeToString(
-              tableInfo.elementType
-            )})`
+            ` ${limitsToString(
+              tableInfo.limits,
+              tableInfo.is64
+            )} ${this.typeToString(tableInfo.elementType)})`
           );
           this.newLine();
           break;
@@ -1498,7 +1503,12 @@ export class WasmDisassembler {
               }
               this.appendBuffer(` (import `);
               this.printImportSource(importInfo);
-              this.appendBuffer(`) ${limitsToString(memoryImportInfo.limits)}`);
+              this.appendBuffer(
+                `) ${limitsToString(
+                  memoryImportInfo.limits,
+                  memoryImportInfo.is64
+                )}`
+              );
               if (memoryImportInfo.shared) {
                 this.appendBuffer(` shared`);
               }
@@ -1523,7 +1533,8 @@ export class WasmDisassembler {
               this.printImportSource(importInfo);
               this.appendBuffer(
                 `) ${limitsToString(
-                  tableImportInfo.limits
+                  tableImportInfo.limits,
+                  tableImportInfo.is64
                 )} ${this.typeToString(tableImportInfo.elementType)})`
               );
               break;
