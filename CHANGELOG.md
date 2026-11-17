@@ -1,3 +1,14 @@
+# [5.12.0](https://github.com/wasdk/wasmparser/compare/v5.11.4...v5.12.0) (2026-11-17)
+
+
+### Features
+
+* support compact imports ([093ded1](https://github.com/wasdk/wasmparser/commit/093ded1d534b9690c07aaafd0c1a3846a7b1076e))
+* support custom page sizes ([c5a7c12](https://github.com/wasdk/wasmparser/commit/c5a7c12541418f50bf4a2430e13490230669d6d4))
+* support memory64 and table64 ([9285ee1](https://github.com/wasdk/wasmparser/commit/9285ee139b168a009a871621425cf1114e393cf0))
+* support multi-memory ([3aa4979](https://github.com/wasdk/wasmparser/commit/3aa49790a1abed0426e3ba6a60dc27b11810df85))
+* support wide arithmetic operators ([328ece0](https://github.com/wasdk/wasmparser/commit/328ece0adfec95ffd5e8cc58bba5dc584e682cdd))
+
 ## [5.11.4](https://github.com/wasdk/wasmparser/compare/v5.11.3...v5.11.4) (2026-11-17)
 
 
